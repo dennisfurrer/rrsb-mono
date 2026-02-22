@@ -1,0 +1,4 @@
+{
+  "extends": "@rrsb/typescript-config/vite.json",
+  "include": ["src"]
+}

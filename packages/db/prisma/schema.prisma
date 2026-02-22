@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  playerId         String   @id @default(cuid())
+  name             String   @unique
+  totalMatchesWon  Int      @default(0)
+  totalMatchesLost Int      @default(0)
+  totalFramesWon   Int      @default(0)
+  totalFramesLost  Int      @default(0)
+  highBreaks       Int[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Match {
+  id              String    @id @default(cuid())
+  player1Name     String
+  player1NationIOC   String?
+  player2Name     String
+  player2NationIOC   String?
+  active          Boolean   @default(true)
+  bestOf          Int
+  framesPlayer1   Int
+  framesPlayer2   Int
+  breaksPlayer1   Int[]
+  breaksPlayer2   Int[]
+  winner          String?
+  rawGameLog      String
+  tableNumber     Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  actions         FrameAction[]
+}
+
+model FrameAction {
+  id           String   @id @default(cuid())
+  matchId      String
+  match        Match    @relation(fields: [matchId], references: [id])
+  frameNumber  Int
+  actionType   String
+  playerIndex  Int
+  points       Int      @default(0)
+  metadata     String?
+  wasUndone    Boolean  @default(false)
+  timestamp    DateTime @default(now())
+  createdAt    DateTime @default(now())
+}
