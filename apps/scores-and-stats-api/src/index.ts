@@ -1,3 +1,4 @@
+import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import { matchesRouter } from "./routes/matches.js";
@@ -16,7 +17,7 @@ const app = express();
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 7200;
 
 app.get("/health", (_req, res) => {
   res.send("RRSB Scoreboard API");

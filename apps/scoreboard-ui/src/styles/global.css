@@ -162,22 +162,22 @@ html, body, #root {
 
 .setup-content {
   width: 100%;
-  max-width: 1000px;
-  padding: 24px 16px;
+  max-width: 1200px;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
 .setup-player-section {
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .setup-player-header {
   text-align: center;
-  font-size: 1.8em;
+  font-size: 2em;
   font-weight: bold;
-  padding: 14px 0;
+  padding: 16px 0;
 }
 
 .setup-player1-header {
@@ -190,27 +190,21 @@ html, body, #root {
   color: #f00;
 }
 
-.setup-player-input {
+.setup-player-select {
   width: 100%;
-  padding: 14px 16px;
+  padding: 16px 16px;
   font-size: 1.3em;
-  border: 1px solid #555;
+  border: 1px solid #888;
   border-radius: 0;
   background: #fff;
   color: #000;
   outline: none;
-}
-
-.setup-nat-input {
-  font-size: 1em;
-  padding: 10px 16px;
-  background: #eee;
-  color: #333;
-  border-top: none;
+  appearance: auto;
+  cursor: pointer;
 }
 
 .setup-bestof-section {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .setup-bestof-label {

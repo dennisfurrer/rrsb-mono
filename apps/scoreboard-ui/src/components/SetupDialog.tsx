@@ -1,4 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+interface PlayerEntry {
+  name: string;
+  ioc: string;
+}
+
+function parseCSV(text: string): PlayerEntry[] {
+  const rows = text.split("\n");
+  const players: PlayerEntry[] = [];
+  for (let i = 2; i < rows.length; i++) {
+    const cols = rows[i].split(";");
+    const name = (cols[4] || "").trim();
+    if (!name) continue;
+    const ioc = (cols[24] || "").replace(/\r|\n/g, "").trim();
+    players.push({ name, ioc });
+  }
+  return players;
+}
 
 interface Props {
   onComplete: (
@@ -12,16 +30,26 @@ interface Props {
 }
 
 export function SetupDialog({ onComplete, defaultBestOf }: Props) {
+  const [players, setPlayers] = useState<PlayerEntry[]>([]);
   const [name1, setName1] = useState("");
   const [name2, setName2] = useState("");
-  const [nat1, setNat1] = useState("SUI");
-  const [nat2, setNat2] = useState("SUI");
   const [bestOf, setBestOf] = useState(defaultBestOf);
 
+  useEffect(() => {
+    fetch("/spielerliste.csv")
+      .then((r) => r.text())
+      .then((text) => setPlayers(parseCSV(text)))
+      .catch(console.error);
+  }, []);
+
+  function getIOC(name: string): string {
+    return players.find((p) => p.name === name)?.ioc || "SUI";
+  }
+
   const handleOk = () => {
-    const p1 = name1.trim() || "Player 1";
-    const p2 = name2.trim() || "Player 2";
-    onComplete(p1, p2, nat1, nat2, bestOf);
+    const p1 = name1 || "Player 1";
+    const p2 = name2 || "Player 2";
+    onComplete(p1, p2, getIOC(p1), getIOC(p2), bestOf);
   };
 
   return (
@@ -30,40 +58,43 @@ export function SetupDialog({ onComplete, defaultBestOf }: Props) {
         {/* Player 1 */}
         <div className="setup-player-section">
           <div className="setup-player-header setup-player1-header">
-            Player 1:
+            Name Spieler 1:
           </div>
-          <input
-            className="setup-player-input"
+          <select
+            className="setup-player-select"
             value={name1}
             onChange={(e) => setName1(e.target.value)}
-            placeholder="Player 1"
-            autoFocus
-          />
-          <input
-            className="setup-player-input setup-nat-input"
-            value={nat1}
-            onChange={(e) => setNat1(e.target.value.toUpperCase())}
-            placeholder="IOC (e.g. SUI)"
-          />
+          >
+            <option value="" disabled>
+              Player 1
+            </option>
+            {players.map((p) => (
+              <option key={p.name} value={p.name}>
+                {p.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Player 2 */}
         <div className="setup-player-section">
           <div className="setup-player-header setup-player2-header">
-            Player 2:
+            Name Spieler 2:
           </div>
-          <input
-            className="setup-player-input"
+          <select
+            className="setup-player-select"
             value={name2}
             onChange={(e) => setName2(e.target.value)}
-            placeholder="Player 2"
-          />
-          <input
-            className="setup-player-input setup-nat-input"
-            value={nat2}
-            onChange={(e) => setNat2(e.target.value.toUpperCase())}
-            placeholder="IOC (e.g. GER)"
-          />
+          >
+            <option value="" disabled>
+              Player 2
+            </option>
+            {players.map((p) => (
+              <option key={p.name} value={p.name}>
+                {p.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Best of */}
