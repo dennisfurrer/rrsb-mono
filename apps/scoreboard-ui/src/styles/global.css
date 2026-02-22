@@ -17,97 +17,119 @@ html, body, #root {
 }
 
 /* ===== SCOREBOARD LAYOUT ===== */
+div { font-weight: bold; }
+
+.lc { border-radius: 0.1em 0 0 0.1em; }
+.rc { border-radius: 0 0.1em 0.1em 0; }
+
 .scoreboard {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   height: 100vh;
-  width: 100vw;
+  background: #000;
 }
 
-.scoreboard-main {
-  flex: 1;
+.sb-main {
+  height: 90%;
   display: flex;
-  flex-direction: row;
 }
 
-/* Player panels */
-.player-panel {
-  width: 40%;
+.sb-left { width: 40%; height: 100%; cursor: pointer; }
+.sb-center { width: 20%; height: 100%; }
+.sb-right { width: 40%; height: 100%; cursor: pointer; }
+
+/* Row heights */
+.sb-name-row { height: 30%; color: #fff; }
+.sb-frames-row { height: 25%; }
+.sb-score-row { height: 40%; color: #fff; }
+.sb-break-row { height: 5%; background: #00003a; color: #0000ff; overflow: hidden; }
+
+/* Left column — push text to right (toward center) */
+.sb-left .sb-name-row { text-align: right; }
+.sb-left .sb-frames-row { text-align: right; }
+.sb-left .sb-score-row { text-align: right; }
+.sb-left .sb-break-row { text-align: right; }
+
+/* Right column — push text to left (toward center) */
+.sb-right .sb-name-row { text-align: left; }
+.sb-right .sb-frames-row { text-align: left; }
+.sb-right .sb-score-row { text-align: left; }
+.sb-right .sb-break-row { text-align: left; }
+
+/* Center column */
+.sb-name-row-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #666;
+}
+
+.sb-frames-row-center {
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-}
-
-.player-panel.inactive .player-name { color: #777; }
-.player-panel.inactive .player-score { color: #aaa; }
-
-.center-panel {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-/* Rows */
-.player-name {
-  height: 30%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: bold;
-  overflow: hidden;
-}
-
-.player-frames {
-  height: 25%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffff00;
+  background: yellow;
   color: #000;
-  font-weight: bold;
 }
 
-.player-score {
-  height: 40%;
+.sb-score-row-center {
   display: flex;
   align-items: center;
   justify-content: center;
   background: #333;
-  color: #fff;
-  font-weight: bold;
+  color: #555;
 }
 
-.player-breaks {
-  height: 5%;
+.sb-break-row-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   background: #00003a;
-  color: #4444ff;
-  font-size: 0.8em;
-  overflow: hidden;
+  color: #000099;
 }
 
-/* Center panel labels */
-.center-row {
-  display: flex;
+/* Inline text elements — sized by auto-font-size hook */
+.name-text {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  white-space: nowrap;
+  vertical-align: top;
 }
-.center-row.name-row { height: 30%; }
-.center-row.frames-row { height: 25%; background: #ffff00; color: #000; }
-.center-row.score-row { height: 40%; background: #333; color: #fff; }
-.center-row.breaks-row { height: 5%; background: #00003a; color: #4444ff; font-size: 0.7em; }
 
-/* Trophy */
-.trophy {
-  width: 40px;
-  height: 40px;
+.name-inactive .name-text { color: #777; }
+
+.frames-text {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  background: yellow;
+  color: #000;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.score-text {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  background: #333;
+  color: #fff;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+.score-inactive .score-text { color: #aaa; }
+
+/* Break row text */
+.break-text {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
 }
 
 /* ===== BOTTOM BAR ===== */
@@ -115,27 +137,31 @@ html, body, #root {
   height: 10%;
   display: flex;
   align-items: center;
-  background: #111;
-  border-top: 1px solid #333;
+  background: #000;
 }
 
 .history-log {
   flex: 1;
-  overflow-x: auto;
+  overflow: hidden;
   white-space: nowrap;
-  padding: 0 8px;
-  font-size: 0.75em;
-  color: #888;
+  text-align: right;
+  padding: 0 10px;
+  font-weight: normal;
+  color: #ccc;
 }
 
 .menu-btn {
-  padding: 8px 16px;
-  background: #333;
+  width: 10%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3em;
+  background: #005500;
   color: #fff;
-  border: none;
   cursor: pointer;
-  font-size: 1em;
-  font-weight: bold;
+  border: 0.05em solid green;
+  margin-right: 8px;
 }
 
 /* ===== OVERLAYS ===== */
@@ -376,10 +402,3 @@ html, body, #root {
 .menu-btn-match-end { background: #358d35; color: #0f0; }
 .menu-btn-new-game { background: #000066; color: #0ff; }
 
-/* ===== RESPONSIVE FONT SIZING ===== */
-.auto-size {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}

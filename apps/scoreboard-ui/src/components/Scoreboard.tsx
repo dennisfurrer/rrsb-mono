@@ -8,16 +8,18 @@ interface Props {
   history: { label: string }[];
 }
 
-function AutoSizeText({
+function AutoSize({
   text,
   deps,
+  className,
 }: {
   text: string;
   deps: unknown[];
+  className?: string;
 }) {
   const ref = useAutoFontSize(deps);
   return (
-    <div ref={ref} style={{ whiteSpace: "nowrap" }}>
+    <div ref={ref} className={className}>
       {text}
     </div>
   );
@@ -25,78 +27,66 @@ function AutoSizeText({
 
 export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props) {
   const [p1, p2] = match.players;
+  const p1Active = match.activePlayerIndex === 0;
+  const p2Active = match.activePlayerIndex === 1;
 
   return (
     <div className="scoreboard">
-      <div className="scoreboard-main">
-        {/* Player 1 */}
-        <div
-          className={`player-panel ${match.activePlayerIndex !== 0 ? "inactive" : ""}`}
-          onClick={() => onPlayerClick(0)}
-        >
-          <div className="player-name auto-size">
-            <AutoSizeText text={p1.name} deps={[p1.name]} />
+      <div className="sb-main">
+        {/* Left 40% */}
+        <div className="sb-left" onClick={() => onPlayerClick(0)}>
+          <div className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}>
+            <AutoSize text={p1.name} deps={[p1.name]} className="name-text lc" />
           </div>
-          <div className="player-frames auto-size">
-            <AutoSizeText text={String(p1.frames)} deps={[p1.frames]} />
+          <div className="sb-frames-row">
+            <AutoSize text={String(p1.frames)} deps={[p1.frames]} className="frames-text lc" />
           </div>
-          <div className="player-score auto-size">
-            <AutoSizeText text={String(p1.score)} deps={[p1.score]} />
+          <div className={`sb-score-row ${!p1Active ? "score-inactive" : ""}`}>
+            <AutoSize text={String(p1.score)} deps={[p1.score]} className="score-text lc" />
           </div>
-          <div className="player-breaks">
-            {p1.highbreaks
-              .slice(0, 5)
-              .map((b, i) => (
-                <span key={i}>{b}</span>
-              ))}
+          <div className="sb-break-row">
+            <div className="break-text" style={{ textAlign: "right" }}>
+              {p1.highbreaks.slice(0, 5).join(", ")}
+            </div>
           </div>
         </div>
 
-        {/* Center */}
-        <div className="center-panel">
-          <div className="center-row name-row">
+        {/* Center 20% */}
+        <div className="sb-center">
+          <div className="sb-name-row sb-name-row-center">
             {p1.winner && <span>🏆</span>}
             {p2.winner && <span>🏆</span>}
             {!p1.winner && !p2.winner && (
-              <span style={{ fontSize: "0.6em", color: "#666" }}>
-                Best of {match.bestOf}
-              </span>
+              <span>Best of {match.bestOf}</span>
             )}
           </div>
-          <div className="center-row frames-row">
-            <AutoSizeText text="Frames" deps={[]} />
+          <div className="sb-frames-row sb-frames-row-center">
+            <div>Frames</div>
+            <div>({match.bestOf})</div>
           </div>
-          <div className="center-row score-row">
-            <AutoSizeText text="Score" deps={[]} />
-          </div>
-          <div className="center-row breaks-row">Breaks &gt;7</div>
+          <div className="sb-score-row sb-score-row-center">Score</div>
+          <div className="sb-break-row sb-break-row-center">« Breaks &gt;7 »</div>
         </div>
 
-        {/* Player 2 */}
-        <div
-          className={`player-panel ${match.activePlayerIndex !== 1 ? "inactive" : ""}`}
-          onClick={() => onPlayerClick(1)}
-        >
-          <div className="player-name auto-size">
-            <AutoSizeText text={p2.name} deps={[p2.name]} />
+        {/* Right 40% */}
+        <div className="sb-right" onClick={() => onPlayerClick(1)}>
+          <div className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}>
+            <AutoSize text={p2.name} deps={[p2.name]} className="name-text rc" />
           </div>
-          <div className="player-frames auto-size">
-            <AutoSizeText text={String(p2.frames)} deps={[p2.frames]} />
+          <div className="sb-frames-row">
+            <AutoSize text={String(p2.frames)} deps={[p2.frames]} className="frames-text rc" />
           </div>
-          <div className="player-score auto-size">
-            <AutoSizeText text={String(p2.score)} deps={[p2.score]} />
+          <div className={`sb-score-row ${!p2Active ? "score-inactive" : ""}`}>
+            <AutoSize text={String(p2.score)} deps={[p2.score]} className="score-text rc" />
           </div>
-          <div className="player-breaks">
-            {p2.highbreaks
-              .slice(0, 5)
-              .map((b, i) => (
-                <span key={i}>{b}</span>
-              ))}
+          <div className="sb-break-row">
+            <div className="break-text" style={{ textAlign: "left" }}>
+              {p2.highbreaks.slice(0, 5).join(", ")}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="bottom-bar">
         <div className="history-log">
           {history.map((h, i) => (
@@ -105,9 +95,9 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props
             </span>
           ))}
         </div>
-        <button className="menu-btn" onClick={onMenuClick}>
+        <div className="menu-btn" onClick={onMenuClick}>
           Menu
-        </button>
+        </div>
       </div>
     </div>
   );
