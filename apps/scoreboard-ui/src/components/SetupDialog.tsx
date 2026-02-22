@@ -55,65 +55,54 @@ export function SetupDialog({ onComplete, defaultBestOf }: Props) {
   return (
     <div className="setup-overlay">
       <div className="setup-content">
-        {/* Player 1 */}
-        <div className="setup-player-section">
-          <div className="setup-player-header setup-player1-header">
-            Name Spieler 1:
-          </div>
-          <select
-            className="setup-player-select"
-            value={name1}
-            onChange={(e) => setName1(e.target.value)}
-          >
-            <option value="" disabled>
-              Player 1
+        <div className="setup-player-header setup-player1-header">
+          Name Spieler 1:
+        </div>
+        <select
+          className="setup-player-select"
+          value={name1}
+          onChange={(e) => setName1(e.target.value)}
+        >
+          <option value="" disabled>
+            Spieler 1
+          </option>
+          {players.map((p) => (
+            <option key={p.name} value={p.name}>
+              {p.name}
             </option>
-            {players.map((p) => (
-              <option key={p.name} value={p.name}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+          ))}
+        </select>
 
-        {/* Player 2 */}
-        <div className="setup-player-section">
-          <div className="setup-player-header setup-player2-header">
-            Name Spieler 2:
-          </div>
-          <select
-            className="setup-player-select"
-            value={name2}
-            onChange={(e) => setName2(e.target.value)}
-          >
-            <option value="" disabled>
-              Player 2
+        <div className="setup-player-header setup-player2-header">
+          Name Spieler 2:
+        </div>
+        <select
+          className="setup-player-select"
+          value={name2}
+          onChange={(e) => setName2(e.target.value)}
+        >
+          <option value="" disabled>
+            Spieler 2
+          </option>
+          {players.map((p) => (
+            <option key={p.name} value={p.name}>
+              {p.name}
             </option>
-            {players.map((p) => (
-              <option key={p.name} value={p.name}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+          ))}
+        </select>
 
-        {/* Best of */}
-        <div className="setup-bestof-section">
-          <div className="setup-bestof-label">Best of frames:</div>
-          <div className="setup-bestof-row">
-            <button onClick={() => setBestOf((v) => Math.max(1, v - 5))}>
-              --
-            </button>
-            <button onClick={() => setBestOf((v) => Math.max(1, v - 1))}>
-              -
-            </button>
-            <div className="setup-bestof-value">{bestOf}</div>
-            <button onClick={() => setBestOf((v) => v + 1)}>+</button>
-            <button onClick={() => setBestOf((v) => v + 5)}>++</button>
-          </div>
+        <div className="setup-bestof-label">Best of frames:</div>
+        <div className="setup-bestof-buttons">
+          <button onClick={() => setBestOf((v) => Math.max(1, v - 5))}>
+            --
+          </button>
+          <button onClick={() => setBestOf((v) => Math.max(1, v - 1))}>
+            -
+          </button>
+          <div className="setup-bestof-value">{bestOf}</div>
+          <button onClick={() => setBestOf((v) => v + 1)}>+</button>
+          <button onClick={() => setBestOf((v) => v + 5)}>++</button>
         </div>
-
-        {/* OK */}
         <button className="setup-ok" onClick={handleOk}>
           OK
         </button>
