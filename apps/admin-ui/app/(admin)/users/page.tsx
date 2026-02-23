@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Plus, X, Trash2, ChevronDown } from "lucide-react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -86,14 +87,32 @@ export default function UsersPage() {
     }
   };
 
-  if (loading) return <div className="text-muted-foreground">{t("loading")}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-text-muted">
+        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        {t("loading")}
+      </div>
+    );
+  }
+
+  const selectClasses = "flex h-9 w-full rounded-lg bg-white/[0.02] border border-border px-3 pr-8 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-brand/20 focus:border-brand/20 transition-all duration-150";
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{t("users.title")}</h1>
-        <Button onClick={() => setShowCreate(!showCreate)}>
-          {showCreate ? t("cancel") : t("users.createUser")}
+        <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
+          {t("users.title")}
+        </h1>
+        <Button
+          variant={showCreate ? "ghost" : "brand"}
+          onClick={() => setShowCreate(!showCreate)}
+        >
+          {showCreate ? (
+            <><X className="w-4 h-4" /> {t("cancel")}</>
+          ) : (
+            <><Plus className="w-4 h-4" /> {t("users.createUser")}</>
+          )}
         </Button>
       </div>
 
@@ -103,8 +122,8 @@ export default function UsersPage() {
             <CardTitle>{t("users.newUser")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleCreate} className="space-y-3 max-w-md">
-              <div className="space-y-1">
+            <form onSubmit={handleCreate} className="space-y-4 max-w-md">
+              <div className="space-y-2">
                 <Label>{t("users.email")}</Label>
                 <Input
                   type="email"
@@ -113,7 +132,7 @@ export default function UsersPage() {
                   required
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label>{t("users.password")}</Label>
                 <Input
                   type="password"
@@ -122,7 +141,7 @@ export default function UsersPage() {
                   required
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label>{t("users.displayName")}</Label>
                 <Input
                   value={displayName}
@@ -130,34 +149,40 @@ export default function UsersPage() {
                   required
                 />
               </div>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label>{t("users.role")}</Label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                >
-                  <option value="PARTNER_ADMIN">{t("users.roles.PARTNER_ADMIN")}</option>
-                  <option value="ADMIN">{t("users.roles.ADMIN")}</option>
-                  <option value="SUPER_ADMIN">{t("users.roles.SUPER_ADMIN")}</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className={selectClasses}
+                  >
+                    <option value="PARTNER_ADMIN">{t("users.roles.PARTNER_ADMIN")}</option>
+                    <option value="ADMIN">{t("users.roles.ADMIN")}</option>
+                    <option value="SUPER_ADMIN">{t("users.roles.SUPER_ADMIN")}</option>
+                  </select>
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
+                </div>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label>{t("users.location")}</Label>
-                <select
-                  value={locationId}
-                  onChange={(e) => setLocationId(e.target.value)}
-                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                >
-                  <option value="">{t("none")}</option>
-                  {locations.map((loc) => (
-                    <option key={loc.id} value={loc.id}>
-                      {loc.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={locationId}
+                    onChange={(e) => setLocationId(e.target.value)}
+                    className={selectClasses}
+                  >
+                    <option value="">{t("none")}</option>
+                    {locations.map((loc) => (
+                      <option key={loc.id} value={loc.id}>
+                        {loc.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
+                </div>
               </div>
-              <Button type="submit" disabled={creating}>
+              <Button variant="brand" type="submit" disabled={creating}>
                 {creating ? t("creating") : t("create")}
               </Button>
             </form>
@@ -178,20 +203,26 @@ export default function UsersPage() {
         <TableBody>
           {users.map((u) => (
             <TableRow key={u.id}>
-              <TableCell>{u.displayName}</TableCell>
-              <TableCell className="text-sm">{u.email}</TableCell>
+              <TableCell className="text-text-primary">{u.displayName}</TableCell>
+              <TableCell className="text-sm text-text-secondary">{u.email}</TableCell>
               <TableCell>
-                <Badge variant="secondary">{t(`users.roles.${u.role}`)}</Badge>
+                <Badge variant={
+                  u.role === "SUPER_ADMIN" ? "brand" :
+                  u.role === "ADMIN" ? "info" :
+                  "default"
+                }>
+                  {t(`users.roles.${u.role}`)}
+                </Badge>
               </TableCell>
-              <TableCell>{u.location?.name || "-"}</TableCell>
+              <TableCell className="text-text-secondary">{u.location?.name || "-"}</TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-destructive"
+                  className="text-danger h-7 w-7 p-0"
                   onClick={() => handleDelete(u.id)}
                 >
-                  {t("delete")}
+                  <Trash2 className="w-3.5 h-3.5" />
                 </Button>
               </TableCell>
             </TableRow>

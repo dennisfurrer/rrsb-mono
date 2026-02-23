@@ -46,11 +46,20 @@ export default function NamesListsPage() {
     }
   };
 
-  if (loading) return <div className="text-muted-foreground">{t("loading")}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-text-muted">
+        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        {t("loading")}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">{t("namesLists.title")}</h1>
+      <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
+        {t("namesLists.title")}
+      </h1>
 
       <div className="flex gap-2 max-w-md">
         <Input
@@ -59,7 +68,7 @@ export default function NamesListsPage() {
           onChange={(e) => setNewName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleCreate()}
         />
-        <Button onClick={handleCreate} disabled={creating}>
+        <Button variant="brand" onClick={handleCreate} disabled={creating}>
           {creating ? t("creating") : t("create")}
         </Button>
       </div>
@@ -78,20 +87,20 @@ export default function NamesListsPage() {
               <TableCell>
                 <Link
                   href={`/names-lists/${list.id}`}
-                  className="text-primary hover:underline"
+                  className="text-brand hover:text-brand-dim transition-colors"
                 >
                   {list.name}
                 </Link>
               </TableCell>
-              <TableCell>{list._count?.entries ?? 0}</TableCell>
-              <TableCell className="text-xs text-muted-foreground">
+              <TableCell className="font-mono text-text-secondary">{list._count?.entries ?? 0}</TableCell>
+              <TableCell className="text-xs text-text-muted">
                 {new Date(list.createdAt).toLocaleDateString()}
               </TableCell>
             </TableRow>
           ))}
           {lists.length === 0 && (
             <TableRow>
-              <TableCell colSpan={3} className="text-center text-muted-foreground">
+              <TableCell colSpan={3} className="text-center text-text-muted py-8">
                 {t("namesLists.empty")}
               </TableCell>
             </TableRow>

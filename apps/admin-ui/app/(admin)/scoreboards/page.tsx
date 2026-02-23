@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Power, Trash2 } from "lucide-react";
 
 export default function ScoreboardsPage() {
   const [scoreboards, setScoreboards] = useState<ScoreboardConfig[]>([]);
@@ -60,35 +61,44 @@ export default function ScoreboardsPage() {
     }
   };
 
-  if (loading) return <div className="text-muted-foreground">{t("loading")}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-text-muted">
+        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        {t("loading")}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">{t("scoreboards.title")}</h1>
+      <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
+        {t("scoreboards.title")}
+      </h1>
 
       {scoreboards.length === 0 ? (
-        <Card className="border-dashed">
+        <Card className="border-dashed border-border">
           <CardHeader>
             <CardTitle>{t("scoreboards.onboarding.title")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-text-muted">
               {t("scoreboards.onboarding.description")}
             </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm">
+            <ol className="list-decimal list-inside space-y-2 text-sm text-text-secondary">
               <li>{t("scoreboards.onboarding.step1")}</li>
               <li>{t("scoreboards.onboarding.step2")}</li>
               <li>{t("scoreboards.onboarding.step3")}</li>
             </ol>
-            <div className="rounded-md bg-muted p-3">
-              <p className="text-xs font-medium text-muted-foreground mb-1">
+            <div className="rounded-lg bg-surface-2 p-3">
+              <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
                 {t("scoreboards.onboarding.url")}
               </p>
-              <code className="text-sm font-mono">
+              <code className="text-sm font-mono text-brand">
                 http://&lt;server-ip&gt;:7201
               </code>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-text-muted">
               {t("scoreboards.onboarding.hint")}
             </p>
           </CardContent>
@@ -103,7 +113,7 @@ export default function ScoreboardsPage() {
               <TableHead>{t("scoreboards.location")}</TableHead>
               <TableHead>{t("scoreboards.namesList")}</TableHead>
               <TableHead>{t("scoreboards.lastPing")}</TableHead>
-              <TableHead></TableHead>
+              <TableHead>{t("scoreboards.disconnect")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -112,22 +122,22 @@ export default function ScoreboardsPage() {
                 <TableCell>
                   <span
                     className={`inline-block h-2.5 w-2.5 rounded-full ${
-                      sb.online ? "bg-green-500" : "bg-gray-400"
+                      sb.online ? "bg-success" : "bg-text-muted"
                     }`}
                   />
                 </TableCell>
                 <TableCell>
                   <Link
                     href={`/scoreboards/${sb.deviceId}`}
-                    className="text-primary hover:underline font-mono text-xs"
+                    className="text-brand hover:text-brand-dim font-mono text-xs transition-colors"
                   >
                     {sb.deviceId.slice(0, 8)}...
                   </Link>
                 </TableCell>
-                <TableCell>{sb.tableNumber ?? "-"}</TableCell>
-                <TableCell>{sb.location?.name ?? "-"}</TableCell>
-                <TableCell>{sb.namesList?.name ?? "-"}</TableCell>
-                <TableCell className="text-xs text-muted-foreground">
+                <TableCell className="text-text-secondary">{sb.tableNumber ?? "-"}</TableCell>
+                <TableCell className="text-text-secondary">{sb.location?.name ?? "-"}</TableCell>
+                <TableCell className="text-text-secondary">{sb.namesList?.name ?? "-"}</TableCell>
+                <TableCell className="text-xs text-text-muted">
                   {sb.lastPingAt
                     ? new Date(sb.lastPingAt).toLocaleString()
                     : t("scoreboards.never")}
@@ -136,24 +146,11 @@ export default function ScoreboardsPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-destructive h-8 w-8 p-0"
+                    className="text-danger h-8 w-8 p-0"
                     title={t("scoreboards.disconnect")}
                     onClick={() => handleDisconnect(sb.deviceId)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
-                      <line x1="12" y1="2" x2="12" y2="12" />
-                    </svg>
+                    <Power className="w-4 h-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -165,9 +162,11 @@ export default function ScoreboardsPage() {
       {/* Match Assignments */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{t("matchSetup.assignments")}</h2>
+          <h2 className="text-xl font-display font-extrabold text-text-primary tracking-tight">
+            {t("matchSetup.assignments")}
+          </h2>
           <Link href="/match-setup">
-            <Button size="sm">{t("matchSetup.createAssignment")}</Button>
+            <Button variant="brand" size="sm">{t("matchSetup.createAssignment")}</Button>
           </Link>
         </div>
         <Table>
@@ -185,21 +184,21 @@ export default function ScoreboardsPage() {
           <TableBody>
             {assignments.map((a) => (
               <TableRow key={a.id}>
-                <TableCell>{a.player1Name}</TableCell>
-                <TableCell>{a.player2Name}</TableCell>
-                <TableCell>{a.bestOf}</TableCell>
-                <TableCell>{a.tableNumber ?? "-"}</TableCell>
+                <TableCell className="text-text-primary">{a.player1Name}</TableCell>
+                <TableCell className="text-text-primary">{a.player2Name}</TableCell>
+                <TableCell className="font-mono text-text-secondary">{a.bestOf}</TableCell>
+                <TableCell className="text-text-secondary">{a.tableNumber ?? "-"}</TableCell>
                 <TableCell>
                   <Badge variant={
-                    a.status === "PENDING" ? "default" :
-                    a.status === "CLAIMED" ? "secondary" :
-                    a.status === "CANCELLED" ? "destructive" :
-                    "outline"
+                    a.status === "PENDING" ? "info" :
+                    a.status === "CLAIMED" ? "success" :
+                    a.status === "CANCELLED" ? "danger" :
+                    "default"
                   }>
                     {t(`matchSetup.status.${a.status}`)}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
+                <TableCell className="text-xs text-text-muted">
                   {new Date(a.createdAt).toLocaleString()}
                 </TableCell>
                 <TableCell>
@@ -207,10 +206,10 @@ export default function ScoreboardsPage() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-destructive"
+                      className="text-danger"
                       onClick={() => handleDeleteAssignment(a.id)}
                     >
-                      {t("delete")}
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   )}
                 </TableCell>
@@ -218,7 +217,7 @@ export default function ScoreboardsPage() {
             ))}
             {assignments.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                <TableCell colSpan={7} className="text-center text-text-muted py-8">
                   {t("matchSetup.noAssignments")}
                 </TableCell>
               </TableRow>

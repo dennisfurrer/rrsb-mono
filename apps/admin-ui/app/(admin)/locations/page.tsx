@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Pencil, Check, X } from "lucide-react";
 
 export default function LocationsPage() {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -65,14 +66,23 @@ export default function LocationsPage() {
     }
   };
 
-  if (loading) return <div className="text-muted-foreground">{t("loading")}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-text-muted">
+        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        {t("loading")}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">{t("locations.title")}</h1>
+      <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
+        {t("locations.title")}
+      </h1>
 
       <div className="flex gap-2 max-w-lg items-end">
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>{t("locations.name")}</Label>
           <Input
             value={newName}
@@ -80,7 +90,7 @@ export default function LocationsPage() {
             placeholder={t("locations.namePlaceholder")}
           />
         </div>
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>{t("locations.address")}</Label>
           <Input
             value={newAddress}
@@ -88,7 +98,7 @@ export default function LocationsPage() {
             placeholder={t("locations.addressPlaceholder")}
           />
         </div>
-        <Button onClick={handleCreate} disabled={creating}>
+        <Button variant="brand" onClick={handleCreate} disabled={creating}>
           {creating ? t("creating") : t("create")}
         </Button>
       </div>
@@ -115,13 +125,13 @@ export default function LocationsPage() {
                     className="h-7 text-sm"
                   />
                 ) : (
-                  <span>
+                  <span className="text-text-primary">
                     {loc.name}{" "}
-                    {loc.isDefault && <Badge variant="secondary">{t("default")}</Badge>}
+                    {loc.isDefault && <Badge variant="brand">{t("default")}</Badge>}
                   </span>
                 )}
               </TableCell>
-              <TableCell className="text-xs text-muted-foreground">
+              <TableCell className="text-xs text-text-muted font-mono">
                 {loc.slug}
               </TableCell>
               <TableCell>
@@ -132,23 +142,23 @@ export default function LocationsPage() {
                     className="h-7 text-sm"
                   />
                 ) : (
-                  loc.address || "-"
+                  <span className="text-text-secondary">{loc.address || "-"}</span>
                 )}
               </TableCell>
-              <TableCell>{loc._count?.scoreboardConfigs ?? 0}</TableCell>
-              <TableCell>{loc._count?.users ?? 0}</TableCell>
+              <TableCell className="font-mono text-text-secondary">{loc._count?.scoreboardConfigs ?? 0}</TableCell>
+              <TableCell className="font-mono text-text-secondary">{loc._count?.users ?? 0}</TableCell>
               <TableCell>
                 {editingId === loc.id ? (
                   <div className="flex gap-1">
-                    <Button size="sm" onClick={() => handleUpdate(loc.id)}>
-                      {t("save")}
+                    <Button size="sm" variant="brand" onClick={() => handleUpdate(loc.id)}>
+                      <Check className="w-3 h-3" />
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       onClick={() => setEditingId(null)}
                     >
-                      {t("cancel")}
+                      <X className="w-3 h-3" />
                     </Button>
                   </div>
                 ) : (
@@ -161,7 +171,7 @@ export default function LocationsPage() {
                       setEditAddress(loc.address || "");
                     }}
                   >
-                    {t("edit")}
+                    <Pencil className="w-3 h-3" />
                   </Button>
                 )}
               </TableCell>

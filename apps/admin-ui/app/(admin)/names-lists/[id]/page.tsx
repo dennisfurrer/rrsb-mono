@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Trash2, Upload } from "lucide-react";
 
 export default function NamesListDetailPage() {
   const params = useParams();
@@ -80,15 +81,24 @@ export default function NamesListDetailPage() {
     }
   };
 
-  if (loading) return <div className="text-muted-foreground">{t("loading")}</div>;
-  if (!list) return <div>{t("namesLists.detail.notFound")}</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-text-muted">
+        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        {t("loading")}
+      </div>
+    );
+  }
+  if (!list) return <div className="text-text-muted">{t("namesLists.detail.notFound")}</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">{list.name}</h1>
+      <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
+        {list.name}
+      </h1>
 
       <div className="flex gap-2 items-end max-w-lg">
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>{t("namesLists.detail.playerName")}</Label>
           <Input
             value={newName}
@@ -97,7 +107,7 @@ export default function NamesListDetailPage() {
             placeholder={t("namesLists.detail.namePlaceholder")}
           />
         </div>
-        <div className="w-24 space-y-1">
+        <div className="w-24 space-y-2">
           <Label>IOC</Label>
           <Input
             value={newIOC}
@@ -105,19 +115,26 @@ export default function NamesListDetailPage() {
             placeholder="SUI"
           />
         </div>
-        <Button onClick={handleAdd}>{t("create")}</Button>
+        <Button variant="brand" onClick={handleAdd}>{t("create")}</Button>
       </div>
 
-      <div className="flex gap-2 items-center">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".csv"
-          onChange={handleUpload}
-          className="text-sm"
-        />
+      <div className="flex gap-3 items-center">
+        <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.02] border border-border text-xs text-text-secondary hover:text-text-primary hover:bg-white/[0.04] transition-all duration-150 cursor-pointer">
+          <Upload className="w-3.5 h-3.5" />
+          CSV
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv"
+            onChange={handleUpload}
+            className="hidden"
+          />
+        </label>
         {uploading && (
-          <span className="text-sm text-muted-foreground">{t("namesLists.detail.uploading")}</span>
+          <span className="flex items-center gap-1.5 text-xs text-text-muted">
+            <span className="w-3 h-3 border-[1.5px] border-brand border-t-transparent rounded-full animate-spin" />
+            {t("namesLists.detail.uploading")}
+          </span>
         )}
       </div>
 
@@ -133,24 +150,24 @@ export default function NamesListDetailPage() {
         <TableBody>
           {list.entries?.map((entry, i) => (
             <TableRow key={entry.id}>
-              <TableCell className="text-muted-foreground">{i + 1}</TableCell>
-              <TableCell>{entry.playerName}</TableCell>
-              <TableCell>{entry.nationalityIOC}</TableCell>
+              <TableCell className="text-text-muted font-mono text-xs">{i + 1}</TableCell>
+              <TableCell className="text-text-primary">{entry.playerName}</TableCell>
+              <TableCell className="text-text-secondary font-mono text-xs">{entry.nationalityIOC}</TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDelete(entry.id)}
-                  className="text-destructive"
+                  className="text-danger h-7 w-7 p-0"
                 >
-                  {t("remove")}
+                  <Trash2 className="w-3.5 h-3.5" />
                 </Button>
               </TableCell>
             </TableRow>
           ))}
           {(!list.entries || list.entries.length === 0) && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-muted-foreground">
+              <TableCell colSpan={4} className="text-center text-text-muted py-8">
                 {t("namesLists.detail.empty")}
               </TableCell>
             </TableRow>
