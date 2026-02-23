@@ -183,7 +183,7 @@ export function Sidebar() {
                   </div>
 
                   {/* Section items — indented relative to heading, right padding to match */}
-                  <div className="space-y-0.5 pl-6 pr-3">
+                  <div className="space-y-0.5 pl-6 pr-6">
                     {section.items.map((item) => {
                       const isActive = !item.disabled && (pathname === item.href || pathname.startsWith(item.href + "/"));
                       const Icon = item.icon;

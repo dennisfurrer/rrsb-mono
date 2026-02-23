@@ -8,7 +8,7 @@
   --brand: #34d399;
   --brand-dim: #10b981;
   --brand-text: #022c22;
-  --brand-glow: rgba(52, 211, 153, 0.10);
+  --brand-glow: rgba(52, 211, 153, 0.06);
 
   /* Secondary — warm gold */
   --accent: #D4A843;
@@ -16,13 +16,13 @@
   --accent-text: #1a1408;
 
   /* Surfaces — dark with green tint */
-  --surface-0: #0c100e;
-  --surface-1: #131917;
-  --surface-2: #1a211f;
-  --surface-3: #242d29;
+  --surface-0: #080b09;
+  --surface-1: #0d110f;
+  --surface-2: #121715;
+  --surface-3: #1a201d;
 
   /* Sidebar */
-  --sidebar: #080c0a;
+  --sidebar: #060907;
 
   /* Text — soft green-white */
   --text-primary: #e2e8e4;
