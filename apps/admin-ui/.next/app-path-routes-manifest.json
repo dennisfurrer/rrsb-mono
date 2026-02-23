@@ -3,11 +3,11 @@
   "/login/page": "/login",
   "/page": "/",
   "/(admin)/locations/page": "/locations",
-  "/(admin)/match-setup/page": "/match-setup",
-  "/(admin)/names-lists/page": "/names-lists",
   "/(admin)/dashboard/page": "/dashboard",
+  "/(admin)/names-lists/page": "/names-lists",
+  "/(admin)/match-setup/page": "/match-setup",
   "/(admin)/names-lists/[id]/page": "/names-lists/[id]",
-  "/(admin)/scoreboards/page": "/scoreboards",
   "/(admin)/scoreboards/[deviceId]/page": "/scoreboards/[deviceId]",
+  "/(admin)/scoreboards/page": "/scoreboards",
   "/(admin)/users/page": "/users"
 }

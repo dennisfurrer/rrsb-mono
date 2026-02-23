@@ -3,11 +3,11 @@
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/(admin)/locations/page": "app/(admin)/locations/page.js",
-  "/(admin)/match-setup/page": "app/(admin)/match-setup/page.js",
-  "/(admin)/names-lists/page": "app/(admin)/names-lists/page.js",
   "/(admin)/dashboard/page": "app/(admin)/dashboard/page.js",
+  "/(admin)/names-lists/page": "app/(admin)/names-lists/page.js",
+  "/(admin)/match-setup/page": "app/(admin)/match-setup/page.js",
   "/(admin)/names-lists/[id]/page": "app/(admin)/names-lists/[id]/page.js",
-  "/(admin)/scoreboards/page": "app/(admin)/scoreboards/page.js",
   "/(admin)/scoreboards/[deviceId]/page": "app/(admin)/scoreboards/[deviceId]/page.js",
+  "/(admin)/scoreboards/page": "app/(admin)/scoreboards/page.js",
   "/(admin)/users/page": "app/(admin)/users/page.js"
 }
