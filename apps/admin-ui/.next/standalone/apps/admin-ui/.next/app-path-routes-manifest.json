@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/login/page": "/login",
+  "/page": "/",
+  "/(admin)/dashboard/page": "/dashboard",
+  "/(admin)/match-setup/page": "/match-setup",
+  "/(admin)/locations/page": "/locations",
+  "/(admin)/names-lists/[id]/page": "/names-lists/[id]",
+  "/(admin)/users/page": "/users",
+  "/(admin)/scoreboards/[deviceId]/page": "/scoreboards/[deviceId]",
+  "/(admin)/names-lists/page": "/names-lists",
+  "/(admin)/scoreboards/page": "/scoreboards"
+}
