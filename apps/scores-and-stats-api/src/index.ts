@@ -11,6 +11,8 @@ import {
   dataYearsHandler,
 } from "./routes/breaks.js";
 import { highlightsRouter } from "./routes/highlights.js";
+import { adminRouter } from "./routes/admin/index.js";
+import { scoreboardsPublicRouter } from "./routes/admin/ping.js";
 
 const app = express();
 
@@ -23,6 +25,7 @@ app.get("/health", (_req, res) => {
   res.send("RRSB Scoreboard API");
 });
 
+// Existing routes
 app.use("/api/matches", matchesRouter);
 app.use("/api/frame-actions", frameActionsRouter);
 app.use("/players", playersRouter);
@@ -31,6 +34,12 @@ app.use("/breaks", breaksRouter);
 app.get("/breaks-matrix", breaksMatrixHandler);
 app.get("/data/years", dataYearsHandler);
 app.use("/highlights", highlightsRouter);
+
+// Admin routes (JWT-protected, except auth endpoints)
+app.use("/api/admin", adminRouter);
+
+// Public scoreboard routes (ping, names list)
+app.use("/api/scoreboards", scoreboardsPublicRouter);
 
 app.use(
   (

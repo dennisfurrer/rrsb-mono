@@ -109,6 +109,28 @@ frameActionsRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
+// PATCH /api/frame-actions/:id/flag — toggle manualFlagToIgnore
+frameActionsRouter.patch("/:id/flag", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const existing = await prisma.frameAction.findUnique({ where: { id } });
+    if (!existing) {
+      res.status(404).json({ error: "FrameAction not found" });
+      return;
+    }
+
+    const updated = await prisma.frameAction.update({
+      where: { id },
+      data: { manualFlagToIgnore: !existing.manualFlagToIgnore },
+    });
+
+    res.json({ data: updated });
+  } catch (e) {
+    console.error("Error toggling flag:", e);
+    res.status(500).json({ error: "Failed to toggle flag" });
+  }
+});
+
 // GET /api/frame-actions/:matchId
 frameActionsRouter.get("/:matchId", async (req: Request, res: Response) => {
   try {
@@ -123,3 +145,36 @@ frameActionsRouter.get("/:matchId", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch frame actions" });
   }
 });
+
+// GET /api/frame-actions/:matchId/breaks/:playerIndex — breaks for a player (top 10)
+frameActionsRouter.get(
+  "/:matchId/breaks/:playerIndex",
+  async (req: Request, res: Response) => {
+    try {
+      const { matchId, playerIndex } = req.params;
+      const breaks = await prisma.frameAction.findMany({
+        where: {
+          matchId,
+          playerIndex: Number(playerIndex),
+          actionType: "break",
+          wasUndone: false,
+          points: { gt: 7 },
+        },
+        orderBy: { points: "desc" },
+        take: 10,
+        select: {
+          id: true,
+          points: true,
+          frameNumber: true,
+          manualFlagToIgnore: true,
+          timestamp: true,
+        },
+      });
+
+      res.json({ data: breaks });
+    } catch (e) {
+      console.error("Error fetching breaks:", e);
+      res.status(500).json({ error: "Failed to fetch breaks" });
+    }
+  }
+);

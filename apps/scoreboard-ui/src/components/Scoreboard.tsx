@@ -7,6 +7,7 @@ interface Props {
   match: MatchState;
   onPlayerClick: (playerIndex: number) => void;
   onMenuClick: () => void;
+  onBreaksClick: (playerIndex: number) => void;
   history: { label: string }[];
 }
 
@@ -29,7 +30,7 @@ function AutoSize({
   );
 }
 
-export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props) {
+export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, history }: Props) {
   const [p1, p2] = match.players;
   const p1Active = match.activePlayerIndex === 0;
   const p2Active = match.activePlayerIndex === 1;
@@ -55,7 +56,13 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props
           <div className={`sb-score-row ${!p1Active ? "score-inactive" : ""}`}>
             <AutoSize text={String(p1.score)} deps={[p1.score]} className="score-text lc" scale={1.32} />
           </div>
-          <div className="sb-break-row">
+          <div
+            className="sb-break-row sb-break-row-clickable"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (match.matchId) onBreaksClick(0);
+            }}
+          >
             <div className="break-text">
               {p1.highbreaks.slice(0, 5).join(", ")}
             </div>
@@ -73,7 +80,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props
             <div>({match.bestOf})</div>
           </div>
           <div className="sb-score-row sb-score-row-center">Score</div>
-          <div className="sb-break-row sb-break-row-center">« Breaks &gt;7 »</div>
+          <div className="sb-break-row sb-break-row-center">&laquo; Breaks &gt;7 &raquo;</div>
         </div>
 
         {/* Right 40% */}
@@ -87,7 +94,13 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props
           <div className={`sb-score-row ${!p2Active ? "score-inactive" : ""}`}>
             <AutoSize text={String(p2.score)} deps={[p2.score]} className="score-text rc" scale={1.32} />
           </div>
-          <div className="sb-break-row">
+          <div
+            className="sb-break-row sb-break-row-clickable"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (match.matchId) onBreaksClick(1);
+            }}
+          >
             <div className="break-text">
               {p2.highbreaks.slice(0, 5).join(", ")}
             </div>

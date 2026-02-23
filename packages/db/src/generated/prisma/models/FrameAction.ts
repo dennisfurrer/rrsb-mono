@@ -47,6 +47,7 @@ export type FrameActionMinAggregateOutputType = {
   points: number | null
   metadata: string | null
   wasUndone: boolean | null
+  manualFlagToIgnore: boolean | null
   timestamp: Date | null
   createdAt: Date | null
 }
@@ -60,6 +61,7 @@ export type FrameActionMaxAggregateOutputType = {
   points: number | null
   metadata: string | null
   wasUndone: boolean | null
+  manualFlagToIgnore: boolean | null
   timestamp: Date | null
   createdAt: Date | null
 }
@@ -73,6 +75,7 @@ export type FrameActionCountAggregateOutputType = {
   points: number
   metadata: number
   wasUndone: number
+  manualFlagToIgnore: number
   timestamp: number
   createdAt: number
   _all: number
@@ -100,6 +103,7 @@ export type FrameActionMinAggregateInputType = {
   points?: true
   metadata?: true
   wasUndone?: true
+  manualFlagToIgnore?: true
   timestamp?: true
   createdAt?: true
 }
@@ -113,6 +117,7 @@ export type FrameActionMaxAggregateInputType = {
   points?: true
   metadata?: true
   wasUndone?: true
+  manualFlagToIgnore?: true
   timestamp?: true
   createdAt?: true
 }
@@ -126,6 +131,7 @@ export type FrameActionCountAggregateInputType = {
   points?: true
   metadata?: true
   wasUndone?: true
+  manualFlagToIgnore?: true
   timestamp?: true
   createdAt?: true
   _all?: true
@@ -226,6 +232,7 @@ export type FrameActionGroupByOutputType = {
   points: number
   metadata: string | null
   wasUndone: boolean
+  manualFlagToIgnore: boolean
   timestamp: Date
   createdAt: Date
   _count: FrameActionCountAggregateOutputType | null
@@ -262,6 +269,7 @@ export type FrameActionWhereInput = {
   points?: Prisma.IntFilter<"FrameAction"> | number
   metadata?: Prisma.StringNullableFilter<"FrameAction"> | string | null
   wasUndone?: Prisma.BoolFilter<"FrameAction"> | boolean
+  manualFlagToIgnore?: Prisma.BoolFilter<"FrameAction"> | boolean
   timestamp?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
@@ -276,6 +284,7 @@ export type FrameActionOrderByWithRelationInput = {
   points?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   wasUndone?: Prisma.SortOrder
+  manualFlagToIgnore?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   match?: Prisma.MatchOrderByWithRelationInput
@@ -293,6 +302,7 @@ export type FrameActionWhereUniqueInput = Prisma.AtLeast<{
   points?: Prisma.IntFilter<"FrameAction"> | number
   metadata?: Prisma.StringNullableFilter<"FrameAction"> | string | null
   wasUndone?: Prisma.BoolFilter<"FrameAction"> | boolean
+  manualFlagToIgnore?: Prisma.BoolFilter<"FrameAction"> | boolean
   timestamp?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
   match?: Prisma.XOR<Prisma.MatchScalarRelationFilter, Prisma.MatchWhereInput>
@@ -307,6 +317,7 @@ export type FrameActionOrderByWithAggregationInput = {
   points?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   wasUndone?: Prisma.SortOrder
+  manualFlagToIgnore?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.FrameActionCountOrderByAggregateInput
@@ -328,6 +339,7 @@ export type FrameActionScalarWhereWithAggregatesInput = {
   points?: Prisma.IntWithAggregatesFilter<"FrameAction"> | number
   metadata?: Prisma.StringNullableWithAggregatesFilter<"FrameAction"> | string | null
   wasUndone?: Prisma.BoolWithAggregatesFilter<"FrameAction"> | boolean
+  manualFlagToIgnore?: Prisma.BoolWithAggregatesFilter<"FrameAction"> | boolean
   timestamp?: Prisma.DateTimeWithAggregatesFilter<"FrameAction"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FrameAction"> | Date | string
 }
@@ -340,6 +352,7 @@ export type FrameActionCreateInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
   match: Prisma.MatchCreateNestedOneWithoutActionsInput
@@ -354,6 +367,7 @@ export type FrameActionUncheckedCreateInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
 }
@@ -366,6 +380,7 @@ export type FrameActionUpdateInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   match?: Prisma.MatchUpdateOneRequiredWithoutActionsNestedInput
@@ -380,6 +395,7 @@ export type FrameActionUncheckedUpdateInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -393,6 +409,7 @@ export type FrameActionCreateManyInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
 }
@@ -405,6 +422,7 @@ export type FrameActionUpdateManyMutationInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -418,6 +436,7 @@ export type FrameActionUncheckedUpdateManyInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -441,6 +460,7 @@ export type FrameActionCountOrderByAggregateInput = {
   points?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   wasUndone?: Prisma.SortOrder
+  manualFlagToIgnore?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -460,6 +480,7 @@ export type FrameActionMaxOrderByAggregateInput = {
   points?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   wasUndone?: Prisma.SortOrder
+  manualFlagToIgnore?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -473,6 +494,7 @@ export type FrameActionMinOrderByAggregateInput = {
   points?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   wasUndone?: Prisma.SortOrder
+  manualFlagToIgnore?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -533,6 +555,7 @@ export type FrameActionCreateWithoutMatchInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
 }
@@ -545,6 +568,7 @@ export type FrameActionUncheckedCreateWithoutMatchInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
 }
@@ -587,6 +611,7 @@ export type FrameActionScalarWhereInput = {
   points?: Prisma.IntFilter<"FrameAction"> | number
   metadata?: Prisma.StringNullableFilter<"FrameAction"> | string | null
   wasUndone?: Prisma.BoolFilter<"FrameAction"> | boolean
+  manualFlagToIgnore?: Prisma.BoolFilter<"FrameAction"> | boolean
   timestamp?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"FrameAction"> | Date | string
 }
@@ -599,6 +624,7 @@ export type FrameActionCreateManyMatchInput = {
   points?: number
   metadata?: string | null
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: Date | string
   createdAt?: Date | string
 }
@@ -611,6 +637,7 @@ export type FrameActionUpdateWithoutMatchInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -623,6 +650,7 @@ export type FrameActionUncheckedUpdateWithoutMatchInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -635,6 +663,7 @@ export type FrameActionUncheckedUpdateManyWithoutMatchInput = {
   points?: Prisma.IntFieldUpdateOperationsInput | number
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   wasUndone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  manualFlagToIgnore?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -650,6 +679,7 @@ export type FrameActionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   points?: boolean
   metadata?: boolean
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
@@ -664,6 +694,7 @@ export type FrameActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   points?: boolean
   metadata?: boolean
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
@@ -678,6 +709,7 @@ export type FrameActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   points?: boolean
   metadata?: boolean
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: boolean
   createdAt?: boolean
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
@@ -692,11 +724,12 @@ export type FrameActionSelectScalar = {
   points?: boolean
   metadata?: boolean
   wasUndone?: boolean
+  manualFlagToIgnore?: boolean
   timestamp?: boolean
   createdAt?: boolean
 }
 
-export type FrameActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchId" | "frameNumber" | "actionType" | "playerIndex" | "points" | "metadata" | "wasUndone" | "timestamp" | "createdAt", ExtArgs["result"]["frameAction"]>
+export type FrameActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchId" | "frameNumber" | "actionType" | "playerIndex" | "points" | "metadata" | "wasUndone" | "manualFlagToIgnore" | "timestamp" | "createdAt", ExtArgs["result"]["frameAction"]>
 export type FrameActionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   match?: boolean | Prisma.MatchDefaultArgs<ExtArgs>
 }
@@ -721,6 +754,7 @@ export type $FrameActionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     points: number
     metadata: string | null
     wasUndone: boolean
+    manualFlagToIgnore: boolean
     timestamp: Date
     createdAt: Date
   }, ExtArgs["result"]["frameAction"]>
@@ -1155,6 +1189,7 @@ export interface FrameActionFieldRefs {
   readonly points: Prisma.FieldRef<"FrameAction", 'Int'>
   readonly metadata: Prisma.FieldRef<"FrameAction", 'String'>
   readonly wasUndone: Prisma.FieldRef<"FrameAction", 'Boolean'>
+  readonly manualFlagToIgnore: Prisma.FieldRef<"FrameAction", 'Boolean'>
   readonly timestamp: Prisma.FieldRef<"FrameAction", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"FrameAction", 'DateTime'>
 }

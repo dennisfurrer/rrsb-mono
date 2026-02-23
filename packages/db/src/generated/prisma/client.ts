@@ -45,6 +45,31 @@ export { Prisma }
  */
 export type Player = Prisma.PlayerModel
 /**
+ * Model Location
+ * 
+ */
+export type Location = Prisma.LocationModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model ScoreboardConfig
+ * 
+ */
+export type ScoreboardConfig = Prisma.ScoreboardConfigModel
+/**
+ * Model NamesList
+ * 
+ */
+export type NamesList = Prisma.NamesListModel
+/**
+ * Model NamesListEntry
+ * 
+ */
+export type NamesListEntry = Prisma.NamesListEntryModel
+/**
  * Model Match
  * 
  */
@@ -54,3 +79,8 @@ export type Match = Prisma.MatchModel
  * 
  */
 export type FrameAction = Prisma.FrameActionModel
+/**
+ * Model MatchAssignment
+ * 
+ */
+export type MatchAssignment = Prisma.MatchAssignmentModel

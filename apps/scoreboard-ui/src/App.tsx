@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   createInitialMatchState,
   createPlayer,
@@ -8,11 +8,27 @@ import {
   isMatchOver,
   type MatchState,
 } from "./lib/model";
-import { createMatch, sendFrameAction, updateMatch } from "./lib/api";
+import {
+  cancelAssignment,
+  claimAssignment,
+  completeAssignment,
+  createMatch,
+  fetchNamesList,
+  fetchPendingAssignment,
+  getDeviceId,
+  pingScoreboard,
+  sendFrameAction,
+  updateMatch,
+  type MatchAssignment,
+  type NamesListEntry,
+  type ScoreboardConfig,
+} from "./lib/api";
 import { Scoreboard } from "./components/Scoreboard";
 import { SetupDialog } from "./components/SetupDialog";
 import { CalculatorDialog } from "./components/CalculatorDialog";
 import { MenuDialog } from "./components/MenuDialog";
+import { SettingsDialog } from "./components/SettingsDialog";
+import { BreaksDialog } from "./components/BreaksDialog";
 
 type HistoryEntry = {
   label: string;
@@ -36,11 +52,152 @@ export function App() {
   const [showSetup, setShowSetup] = useState(!match.matchId);
   const [calcPlayer, setCalcPlayer] = useState<0 | 1 | null>(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [breaksPlayer, setBreaksPlayer] = useState<0 | 1 | null>(null);
+  const [scoreboardConfig, setScoreboardConfig] =
+    useState<ScoreboardConfig | null>(() => {
+      const savedLocation = localStorage.getItem("scoreboardLocationName");
+      const savedTable = localStorage.getItem("tableNumber");
+      if (savedLocation || savedTable) {
+        return {
+          locationName: savedLocation || "",
+          tableNumber: savedTable ? Number(savedTable) : null,
+          namesListId: localStorage.getItem("scoreboardNamesListId"),
+        };
+      }
+      return null;
+    });
+  const [playerList, setPlayerList] = useState<NamesListEntry[] | null>(null);
+  const [activeAssignmentId, setActiveAssignmentId] = useState<string | null>(null);
+  const [pendingAssignment, setPendingAssignment] = useState<MatchAssignment | null>(null);
+
+  const deviceId = useRef(getDeviceId());
 
   // Persist match state to sessionStorage on every change
   useEffect(() => {
     sessionStorage.setItem("matchState", JSON.stringify(match));
   }, [match]);
+
+  // Ping loop - every 30s
+  useEffect(() => {
+    let active = true;
+
+    const doPing = async () => {
+      const config = await pingScoreboard(deviceId.current);
+      if (active && config) {
+        setScoreboardConfig(config);
+
+        // Persist location name
+        if (config.locationName) {
+          localStorage.setItem("scoreboardLocationName", config.locationName);
+        }
+        // Persist names list id
+        if (config.namesListId) {
+          localStorage.setItem("scoreboardNamesListId", config.namesListId);
+        }
+
+        // Update table number from config if set remotely
+        if (config.tableNumber !== null) {
+          setMatch((prev) => ({
+            ...prev,
+            tableNumber: String(config.tableNumber),
+          }));
+          localStorage.setItem("tableNumber", String(config.tableNumber));
+        }
+      }
+    };
+
+    doPing();
+    const interval = setInterval(doPing, 30_000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Fetch names list when config changes
+  useEffect(() => {
+    if (!scoreboardConfig?.namesListId) return;
+
+    const cachedKey = `namesList_${scoreboardConfig.namesListId}`;
+    const cached = localStorage.getItem(cachedKey);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        setPlayerList(parsed.entries);
+      } catch {
+        /* ignore */
+      }
+    }
+
+    fetchNamesList(scoreboardConfig.namesListId).then((entries) => {
+      if (entries) {
+        setPlayerList(entries);
+        localStorage.setItem(
+          cachedKey,
+          JSON.stringify({ entries, ts: Date.now() })
+        );
+      }
+    });
+  }, [scoreboardConfig?.namesListId]);
+
+  // Fetch pending assignment when setup is showing
+  useEffect(() => {
+    if (!showSetup || match.matchId) return;
+
+    const tableNum = scoreboardConfig?.tableNumber ?? null;
+    fetchPendingAssignment(tableNum, deviceId.current).then((a) => {
+      setPendingAssignment(a);
+    });
+  }, [showSetup, match.matchId, scoreboardConfig?.tableNumber]);
+
+  // Start an assigned match (called from SetupDialog button or auto-start)
+  const startAssignedMatch = useCallback(
+    async (a: MatchAssignment) => {
+      const getIOC = (name: string) => {
+        if (playerList) {
+          const found = playerList.find((p) => p.playerName === name);
+          if (found) return found.nationalityIOC;
+        }
+        return "";
+      };
+
+      const nat1 = getIOC(a.player1Name);
+      const nat2 = getIOC(a.player2Name);
+
+      const newState: MatchState = {
+        ...createInitialMatchState(),
+        players: [
+          createPlayer(a.player1Name, nat1 || "SUI"),
+          createPlayer(a.player2Name, nat2 || "SUI"),
+        ],
+        bestOf: a.bestOf,
+      };
+
+      const matchId = await createMatch({
+        players: [
+          { name: a.player1Name, nationalityIOC: nat1 || "SUI", frames: 0, highbreaks: [], winner: false },
+          { name: a.player2Name, nationalityIOC: nat2 || "SUI", frames: 0, highbreaks: [], winner: false },
+        ],
+        bestOf: a.bestOf,
+        tableNumber: newState.tableNumber,
+      });
+
+      newState.matchId = matchId;
+
+      if (a.handicap && a.handicap > 0) {
+        newState.players[1].score = a.handicap;
+      }
+
+      setMatch(newState);
+      setHistory([]);
+      setShowSetup(false);
+      setActiveAssignmentId(a.id);
+      setPendingAssignment(null);
+      claimAssignment(a.id);
+    },
+    [playerList]
+  );
 
   const pushHistory = useCallback(
     (label: string, state: MatchState) => {
@@ -174,11 +331,17 @@ export function App() {
     const winScore = Math.max(s0, s1);
     const loseScore = Math.min(s0, s1);
     const newFrames = frameWinner !== null ? match.players[frameWinner].frames + 1 : 0;
-    if (newFrames >= framesToWin(match.bestOf)) {
+    const willMatchEnd = newFrames >= framesToWin(match.bestOf);
+    if (willMatchEnd) {
       const loserIdx = frameWinner === 0 ? 1 : 0;
       pushHistory(`${winnerName} gewinnt Match ${newFrames}:${match.players[loserIdx].frames}`, match);
     } else {
       pushHistory(`${winnerName} gewinnt Frame ${winScore}:${loseScore}`, match);
+    }
+    // Complete the assignment if the match ends naturally
+    if (willMatchEnd && activeAssignmentId) {
+      completeAssignment(activeAssignmentId);
+      setActiveAssignmentId(null);
     }
     setMatch((prev) => {
       const next = structuredClone(prev);
@@ -263,7 +426,7 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [match, pushHistory]);
+  }, [match, pushHistory, activeAssignmentId]);
 
   // ===== RE-RACK =====
   const rerack = useCallback(() => {
@@ -360,16 +523,42 @@ export function App() {
 
       return next;
     });
+    // Cancel active assignment (match ended without natural completion)
+    if (activeAssignmentId) {
+      cancelAssignment(activeAssignmentId);
+      setActiveAssignmentId(null);
+    }
     setShowMenu(false);
-  }, [match, pushHistory]);
+  }, [match, pushHistory, activeAssignmentId]);
 
   // ===== NEW GAME =====
   const newGame = useCallback(() => {
+    // Cancel active assignment if match wasn't completed naturally
+    if (activeAssignmentId) {
+      cancelAssignment(activeAssignmentId);
+      setActiveAssignmentId(null);
+    }
     setMatch(createInitialMatchState());
     setHistory([]);
     setShowSetup(true);
     setShowMenu(false);
-  }, []);
+  }, [activeAssignmentId]);
+
+  // ===== SETTINGS =====
+  const handleSettingsSave = useCallback(
+    (tableNum: string) => {
+      localStorage.setItem("tableNumber", tableNum);
+      setMatch((prev) => ({ ...prev, tableNumber: tableNum }));
+      // Sync table number to server
+      const num = Number(tableNum);
+      if (num > 0) {
+        import("./lib/api").then(({ updateTableNumber }) =>
+          updateTableNumber(deviceId.current, num)
+        );
+      }
+    },
+    []
+  );
 
   const canEndMatchEarly =
     !match.finished &&
@@ -386,6 +575,7 @@ export function App() {
           if (!match.finished) setCalcPlayer(idx as 0 | 1);
         }}
         onMenuClick={() => setShowMenu(true)}
+        onBreaksClick={(idx) => setBreaksPlayer(idx as 0 | 1)}
         history={history}
       />
 
@@ -393,6 +583,10 @@ export function App() {
         <SetupDialog
           onComplete={handleSetupComplete}
           defaultBestOf={match.bestOf}
+          playerList={playerList}
+          pendingAssignment={pendingAssignment}
+          onStartAssignment={startAssignedMatch}
+          onSettingsClick={() => setShowSettings(true)}
         />
       )}
 
@@ -424,6 +618,27 @@ export function App() {
               ? match.players[0].name
               : match.players[1].name
           }
+          framesP1={match.players[0].frames}
+          framesP2={match.players[1].frames}
+          nameP1={match.players[0].name}
+          nameP2={match.players[1].name}
+        />
+      )}
+
+      {showSettings && (
+        <SettingsDialog
+          currentTableNumber={match.tableNumber}
+          onSave={handleSettingsSave}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {breaksPlayer !== null && match.matchId && (
+        <BreaksDialog
+          matchId={match.matchId}
+          playerIndex={breaksPlayer}
+          playerName={match.players[breaksPlayer].name}
+          onClose={() => setBreaksPlayer(null)}
         />
       )}
     </>

@@ -52,8 +52,14 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Player: 'Player',
+  Location: 'Location',
+  User: 'User',
+  ScoreboardConfig: 'ScoreboardConfig',
+  NamesList: 'NamesList',
+  NamesListEntry: 'NamesListEntry',
   Match: 'Match',
-  FrameAction: 'FrameAction'
+  FrameAction: 'FrameAction',
+  MatchAssignment: 'MatchAssignment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,6 +93,70 @@ export const PlayerScalarFieldEnum = {
 export type PlayerScalarFieldEnum = (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum]
 
 
+export const LocationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  address: 'address',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  displayName: 'displayName',
+  role: 'role',
+  locationId: 'locationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const ScoreboardConfigScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  tableNumber: 'tableNumber',
+  locationId: 'locationId',
+  namesListId: 'namesListId',
+  lastPingAt: 'lastPingAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ScoreboardConfigScalarFieldEnum = (typeof ScoreboardConfigScalarFieldEnum)[keyof typeof ScoreboardConfigScalarFieldEnum]
+
+
+export const NamesListScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  locationId: 'locationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NamesListScalarFieldEnum = (typeof NamesListScalarFieldEnum)[keyof typeof NamesListScalarFieldEnum]
+
+
+export const NamesListEntryScalarFieldEnum = {
+  id: 'id',
+  namesListId: 'namesListId',
+  playerName: 'playerName',
+  nationalityIOC: 'nationalityIOC',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type NamesListEntryScalarFieldEnum = (typeof NamesListEntryScalarFieldEnum)[keyof typeof NamesListEntryScalarFieldEnum]
+
+
 export const MatchScalarFieldEnum = {
   id: 'id',
   player1Name: 'player1Name',
@@ -102,6 +172,7 @@ export const MatchScalarFieldEnum = {
   winner: 'winner',
   rawGameLog: 'rawGameLog',
   tableNumber: 'tableNumber',
+  locationId: 'locationId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -118,11 +189,27 @@ export const FrameActionScalarFieldEnum = {
   points: 'points',
   metadata: 'metadata',
   wasUndone: 'wasUndone',
+  manualFlagToIgnore: 'manualFlagToIgnore',
   timestamp: 'timestamp',
   createdAt: 'createdAt'
 } as const
 
 export type FrameActionScalarFieldEnum = (typeof FrameActionScalarFieldEnum)[keyof typeof FrameActionScalarFieldEnum]
+
+
+export const MatchAssignmentScalarFieldEnum = {
+  id: 'id',
+  player1Name: 'player1Name',
+  player2Name: 'player2Name',
+  bestOf: 'bestOf',
+  handicap: 'handicap',
+  deviceId: 'deviceId',
+  tableNumber: 'tableNumber',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type MatchAssignmentScalarFieldEnum = (typeof MatchAssignmentScalarFieldEnum)[keyof typeof MatchAssignmentScalarFieldEnum]
 
 
 export const SortOrder = {

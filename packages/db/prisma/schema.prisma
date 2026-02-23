@@ -7,6 +7,19 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  PARTNER_ADMIN
+}
+
+enum AssignmentStatus {
+  PENDING
+  CLAIMED
+  CANCELLED
+  COMPLETED
+}
+
 model Player {
   playerId         String   @id @default(cuid())
   name             String   @unique
@@ -19,36 +32,111 @@ model Player {
   updatedAt        DateTime @updatedAt
 }
 
+model Location {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  address   String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scoreboardConfigs ScoreboardConfig[]
+  matches           Match[]
+  users             User[]
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  displayName  String
+  role         Role      @default(PARTNER_ADMIN)
+  locationId   String?
+  location     Location? @relation(fields: [locationId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model ScoreboardConfig {
+  id          String     @id @default(cuid())
+  deviceId    String     @unique
+  tableNumber Int?
+  locationId  String
+  location    Location   @relation(fields: [locationId], references: [id])
+  namesListId String?
+  namesList   NamesList? @relation(fields: [namesListId], references: [id])
+  lastPingAt  DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model NamesList {
+  id         String   @id @default(cuid())
+  name       String
+  locationId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  scoreboardConfigs ScoreboardConfig[]
+  entries           NamesListEntry[]
+}
+
+model NamesListEntry {
+  id             String    @id @default(cuid())
+  namesListId    String
+  namesList      NamesList @relation(fields: [namesListId], references: [id], onDelete: Cascade)
+  playerName     String
+  nationalityIOC String    @default("")
+  sortOrder      Int       @default(0)
+  createdAt      DateTime  @default(now())
+}
+
 model Match {
-  id              String    @id @default(cuid())
-  player1Name     String
-  player1NationIOC   String?
-  player2Name     String
-  player2NationIOC   String?
-  active          Boolean   @default(true)
-  bestOf          Int
-  framesPlayer1   Int
-  framesPlayer2   Int
-  breaksPlayer1   Int[]
-  breaksPlayer2   Int[]
-  winner          String?
-  rawGameLog      String
-  tableNumber     Int?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  actions         FrameAction[]
+  id               String    @id @default(cuid())
+  player1Name      String
+  player1NationIOC String?
+  player2Name      String
+  player2NationIOC String?
+  active           Boolean   @default(true)
+  bestOf           Int
+  framesPlayer1    Int
+  framesPlayer2    Int
+  breaksPlayer1    Int[]
+  breaksPlayer2    Int[]
+  winner           String?
+  rawGameLog       String
+  tableNumber      Int?
+  locationId       String?
+  location         Location? @relation(fields: [locationId], references: [id])
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  actions          FrameAction[]
 }
 
 model FrameAction {
-  id           String   @id @default(cuid())
-  matchId      String
-  match        Match    @relation(fields: [matchId], references: [id])
-  frameNumber  Int
-  actionType   String
-  playerIndex  Int
-  points       Int      @default(0)
-  metadata     String?
-  wasUndone    Boolean  @default(false)
-  timestamp    DateTime @default(now())
-  createdAt    DateTime @default(now())
+  id                  String   @id @default(cuid())
+  matchId             String
+  match               Match    @relation(fields: [matchId], references: [id])
+  frameNumber         Int
+  actionType          String
+  playerIndex         Int
+  points              Int      @default(0)
+  metadata            String?
+  wasUndone           Boolean  @default(false)
+  manualFlagToIgnore  Boolean  @default(false)
+  timestamp           DateTime @default(now())
+  createdAt           DateTime @default(now())
+}
+
+model MatchAssignment {
+  id          String           @id @default(cuid())
+  player1Name String
+  player2Name String
+  bestOf      Int
+  handicap    Int?
+  deviceId    String?
+  tableNumber Int?
+  status      AssignmentStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
 }

@@ -142,6 +142,9 @@ div { font-weight: bold; }
 .sb-left .break-text { justify-content: flex-end; }
 .sb-right .break-text { justify-content: flex-start; }
 
+.sb-break-row-clickable { cursor: pointer; }
+.sb-break-row-clickable:active { background: #000066; }
+
 /* ===== BOTTOM BAR ===== */
 .bottom-bar {
   height: 10%;
@@ -284,6 +287,42 @@ div { font-weight: bold; }
   font-size: 4vw;
 }
 
+.setup-assignment-banner {
+  flex: 0 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #003366;
+  border: 2px solid #0066cc;
+  cursor: pointer;
+  padding: 0 1.5vw;
+}
+
+.setup-assignment-info {
+  color: #99ccff;
+  font-size: 2vw;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.setup-assignment-start {
+  background: #006600;
+  color: #00ff00;
+  border: 2px solid #009900;
+  border-radius: 0.3em;
+  padding: 0.3em 1.5em;
+  font-size: 2vw;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.setup-assignment-start:active {
+  background: #008800;
+}
+
 .setup-ok {
   flex: 0 0 22.23%;
   width: 100%;
@@ -358,6 +397,7 @@ div { font-weight: bold; }
   align-items: center;
   justify-content: center;
   gap: 1vw;
+  overflow: hidden;
 }
 
 .calc-break-for {
@@ -373,6 +413,10 @@ div { font-weight: bold; }
   color: yellow;
   font-size: 2.625vw;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .calc-break-value {

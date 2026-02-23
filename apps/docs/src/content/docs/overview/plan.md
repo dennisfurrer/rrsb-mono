@@ -6,19 +6,32 @@ description: What we're building and how far along we are.
 ## Overview
 
 ```mermaid
-flowchart LR
-    A["1. Monorepo<br/>setup"]:::done
-    B["2. Copy<br/>code in"]:::done
-    C["3. Scoreboard<br/>UI"]:::done
-    D["4. Data model<br/>+ API"]:::next
-    E["5. Admin UI<br/>+ Scoreboard"]:::planned
-    F["6.<br/>..."]:::planned
+block-beta
+    columns 7
+    L1["Index →"] I1["1"] I2["2"] I3["3"] I4["4"] I5["5"] I6["6"]
+    L2["Step →"] A["Monorepo<br/>setup"] B["Copy old apps<br/>into monorepo"] C["New Scoreboard UI<br/>with clean code"] D["Implement new data model<br/>+ add support to API"] E["Create new Admin UI<br/>+ add support to scoreboard"] F["..."]
+    L3["Status →"] S1["✅ Completed"] S2["✅ Completed"] S3["✅ Completed"] S4["Implemented &<br/>currently testing"] S5["Implemented &<br/>currently testing"] space
 
-    A --> B --> C --> D --> E --> F
-
-    classDef done fill:#16a34a,color:#fff,stroke:#15803d
-    classDef next fill:#2563eb,color:#fff,stroke:#1d4ed8
-    classDef planned fill:#6b7280,color:#fff,stroke:#4b5563
+    style L1 fill:transparent,stroke:none,color:#9ca3af
+    style L2 fill:transparent,stroke:none,color:#9ca3af
+    style L3 fill:transparent,stroke:none,color:#9ca3af
+    style I1 fill:transparent,stroke:none,color:#d1d5db
+    style I2 fill:transparent,stroke:none,color:#d1d5db
+    style I3 fill:transparent,stroke:none,color:#d1d5db
+    style I4 fill:transparent,stroke:none,color:#d1d5db
+    style I5 fill:transparent,stroke:none,color:#d1d5db
+    style I6 fill:transparent,stroke:none,color:#d1d5db
+    style A fill:#16a34a,color:#fff,stroke:#15803d,font-size:16px
+    style B fill:#16a34a,color:#fff,stroke:#15803d,font-size:16px
+    style C fill:#16a34a,color:#fff,stroke:#15803d,font-size:16px
+    style D fill:#2563eb,color:#fff,stroke:#1d4ed8,font-size:16px
+    style E fill:#6b7280,color:#fff,stroke:#4b5563,font-size:16px
+    style F fill:#6b7280,color:#fff,stroke:#4b5563,font-size:16px
+    style S1 fill:transparent,stroke:none,color:#9ca3af
+    style S2 fill:transparent,stroke:none,color:#9ca3af
+    style S3 fill:transparent,stroke:none,color:#9ca3af
+    style S4 fill:transparent,stroke:none,color:#9ca3af
+    style S5 fill:transparent,stroke:none,color:#9ca3af
 ```
 
 ## The plan

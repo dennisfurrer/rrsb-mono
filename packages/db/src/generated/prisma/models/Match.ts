@@ -57,6 +57,7 @@ export type MatchMinAggregateOutputType = {
   winner: string | null
   rawGameLog: string | null
   tableNumber: number | null
+  locationId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,6 +75,7 @@ export type MatchMaxAggregateOutputType = {
   winner: string | null
   rawGameLog: string | null
   tableNumber: number | null
+  locationId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -93,6 +95,7 @@ export type MatchCountAggregateOutputType = {
   winner: number
   rawGameLog: number
   tableNumber: number
+  locationId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -130,6 +133,7 @@ export type MatchMinAggregateInputType = {
   winner?: true
   rawGameLog?: true
   tableNumber?: true
+  locationId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -147,6 +151,7 @@ export type MatchMaxAggregateInputType = {
   winner?: true
   rawGameLog?: true
   tableNumber?: true
+  locationId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -166,6 +171,7 @@ export type MatchCountAggregateInputType = {
   winner?: true
   rawGameLog?: true
   tableNumber?: true
+  locationId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -272,6 +278,7 @@ export type MatchGroupByOutputType = {
   winner: string | null
   rawGameLog: string
   tableNumber: number | null
+  locationId: string | null
   createdAt: Date
   updatedAt: Date
   _count: MatchCountAggregateOutputType | null
@@ -314,8 +321,10 @@ export type MatchWhereInput = {
   winner?: Prisma.StringNullableFilter<"Match"> | string | null
   rawGameLog?: Prisma.StringFilter<"Match"> | string
   tableNumber?: Prisma.IntNullableFilter<"Match"> | number | null
+  locationId?: Prisma.StringNullableFilter<"Match"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   actions?: Prisma.FrameActionListRelationFilter
 }
 
@@ -334,8 +343,10 @@ export type MatchOrderByWithRelationInput = {
   winner?: Prisma.SortOrderInput | Prisma.SortOrder
   rawGameLog?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  location?: Prisma.LocationOrderByWithRelationInput
   actions?: Prisma.FrameActionOrderByRelationAggregateInput
 }
 
@@ -357,8 +368,10 @@ export type MatchWhereUniqueInput = Prisma.AtLeast<{
   winner?: Prisma.StringNullableFilter<"Match"> | string | null
   rawGameLog?: Prisma.StringFilter<"Match"> | string
   tableNumber?: Prisma.IntNullableFilter<"Match"> | number | null
+  locationId?: Prisma.StringNullableFilter<"Match"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   actions?: Prisma.FrameActionListRelationFilter
 }, "id">
 
@@ -377,6 +390,7 @@ export type MatchOrderByWithAggregationInput = {
   winner?: Prisma.SortOrderInput | Prisma.SortOrder
   rawGameLog?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MatchCountOrderByAggregateInput
@@ -404,6 +418,7 @@ export type MatchScalarWhereWithAggregatesInput = {
   winner?: Prisma.StringNullableWithAggregatesFilter<"Match"> | string | null
   rawGameLog?: Prisma.StringWithAggregatesFilter<"Match"> | string
   tableNumber?: Prisma.IntNullableWithAggregatesFilter<"Match"> | number | null
+  locationId?: Prisma.StringNullableWithAggregatesFilter<"Match"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Match"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Match"> | Date | string
 }
@@ -425,6 +440,7 @@ export type MatchCreateInput = {
   tableNumber?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  location?: Prisma.LocationCreateNestedOneWithoutMatchesInput
   actions?: Prisma.FrameActionCreateNestedManyWithoutMatchInput
 }
 
@@ -443,6 +459,7 @@ export type MatchUncheckedCreateInput = {
   winner?: string | null
   rawGameLog: string
   tableNumber?: number | null
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   actions?: Prisma.FrameActionUncheckedCreateNestedManyWithoutMatchInput
@@ -465,6 +482,7 @@ export type MatchUpdateInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.LocationUpdateOneWithoutMatchesNestedInput
   actions?: Prisma.FrameActionUpdateManyWithoutMatchNestedInput
 }
 
@@ -483,6 +501,7 @@ export type MatchUncheckedUpdateInput = {
   winner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawGameLog?: Prisma.StringFieldUpdateOperationsInput | string
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actions?: Prisma.FrameActionUncheckedUpdateManyWithoutMatchNestedInput
@@ -503,6 +522,7 @@ export type MatchCreateManyInput = {
   winner?: string | null
   rawGameLog: string
   tableNumber?: number | null
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -541,8 +561,19 @@ export type MatchUncheckedUpdateManyInput = {
   winner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rawGameLog?: Prisma.StringFieldUpdateOperationsInput | string
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MatchListRelationFilter = {
+  every?: Prisma.MatchWhereInput
+  some?: Prisma.MatchWhereInput
+  none?: Prisma.MatchWhereInput
+}
+
+export type MatchOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type MatchCountOrderByAggregateInput = {
@@ -560,6 +591,7 @@ export type MatchCountOrderByAggregateInput = {
   winner?: Prisma.SortOrder
   rawGameLog?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -586,6 +618,7 @@ export type MatchMaxOrderByAggregateInput = {
   winner?: Prisma.SortOrder
   rawGameLog?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -603,6 +636,7 @@ export type MatchMinOrderByAggregateInput = {
   winner?: Prisma.SortOrder
   rawGameLog?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
+  locationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -621,20 +655,54 @@ export type MatchScalarRelationFilter = {
   isNot?: Prisma.MatchWhereInput
 }
 
+export type MatchCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput> | Prisma.MatchCreateWithoutLocationInput[] | Prisma.MatchUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLocationInput | Prisma.MatchCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.MatchCreateManyLocationInputEnvelope
+  connect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+}
+
+export type MatchUncheckedCreateNestedManyWithoutLocationInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput> | Prisma.MatchCreateWithoutLocationInput[] | Prisma.MatchUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLocationInput | Prisma.MatchCreateOrConnectWithoutLocationInput[]
+  createMany?: Prisma.MatchCreateManyLocationInputEnvelope
+  connect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+}
+
+export type MatchUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput> | Prisma.MatchCreateWithoutLocationInput[] | Prisma.MatchUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLocationInput | Prisma.MatchCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.MatchUpsertWithWhereUniqueWithoutLocationInput | Prisma.MatchUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.MatchCreateManyLocationInputEnvelope
+  set?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  disconnect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  delete?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  connect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  update?: Prisma.MatchUpdateWithWhereUniqueWithoutLocationInput | Prisma.MatchUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.MatchUpdateManyWithWhereWithoutLocationInput | Prisma.MatchUpdateManyWithWhereWithoutLocationInput[]
+  deleteMany?: Prisma.MatchScalarWhereInput | Prisma.MatchScalarWhereInput[]
+}
+
+export type MatchUncheckedUpdateManyWithoutLocationNestedInput = {
+  create?: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput> | Prisma.MatchCreateWithoutLocationInput[] | Prisma.MatchUncheckedCreateWithoutLocationInput[]
+  connectOrCreate?: Prisma.MatchCreateOrConnectWithoutLocationInput | Prisma.MatchCreateOrConnectWithoutLocationInput[]
+  upsert?: Prisma.MatchUpsertWithWhereUniqueWithoutLocationInput | Prisma.MatchUpsertWithWhereUniqueWithoutLocationInput[]
+  createMany?: Prisma.MatchCreateManyLocationInputEnvelope
+  set?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  disconnect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  delete?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  connect?: Prisma.MatchWhereUniqueInput | Prisma.MatchWhereUniqueInput[]
+  update?: Prisma.MatchUpdateWithWhereUniqueWithoutLocationInput | Prisma.MatchUpdateWithWhereUniqueWithoutLocationInput[]
+  updateMany?: Prisma.MatchUpdateManyWithWhereWithoutLocationInput | Prisma.MatchUpdateManyWithWhereWithoutLocationInput[]
+  deleteMany?: Prisma.MatchScalarWhereInput | Prisma.MatchScalarWhereInput[]
+}
+
 export type MatchCreatebreaksPlayer1Input = {
   set: number[]
 }
 
 export type MatchCreatebreaksPlayer2Input = {
   set: number[]
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type MatchUpdatebreaksPlayer1Input = {
@@ -645,14 +713,6 @@ export type MatchUpdatebreaksPlayer1Input = {
 export type MatchUpdatebreaksPlayer2Input = {
   set?: number[]
   push?: number | number[]
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type MatchCreateNestedOneWithoutActionsInput = {
@@ -667,6 +727,95 @@ export type MatchUpdateOneRequiredWithoutActionsNestedInput = {
   upsert?: Prisma.MatchUpsertWithoutActionsInput
   connect?: Prisma.MatchWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.MatchUpdateToOneWithWhereWithoutActionsInput, Prisma.MatchUpdateWithoutActionsInput>, Prisma.MatchUncheckedUpdateWithoutActionsInput>
+}
+
+export type MatchCreateWithoutLocationInput = {
+  id?: string
+  player1Name: string
+  player1NationIOC?: string | null
+  player2Name: string
+  player2NationIOC?: string | null
+  active?: boolean
+  bestOf: number
+  framesPlayer1: number
+  framesPlayer2: number
+  breaksPlayer1?: Prisma.MatchCreatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchCreatebreaksPlayer2Input | number[]
+  winner?: string | null
+  rawGameLog: string
+  tableNumber?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  actions?: Prisma.FrameActionCreateNestedManyWithoutMatchInput
+}
+
+export type MatchUncheckedCreateWithoutLocationInput = {
+  id?: string
+  player1Name: string
+  player1NationIOC?: string | null
+  player2Name: string
+  player2NationIOC?: string | null
+  active?: boolean
+  bestOf: number
+  framesPlayer1: number
+  framesPlayer2: number
+  breaksPlayer1?: Prisma.MatchCreatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchCreatebreaksPlayer2Input | number[]
+  winner?: string | null
+  rawGameLog: string
+  tableNumber?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  actions?: Prisma.FrameActionUncheckedCreateNestedManyWithoutMatchInput
+}
+
+export type MatchCreateOrConnectWithoutLocationInput = {
+  where: Prisma.MatchWhereUniqueInput
+  create: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput>
+}
+
+export type MatchCreateManyLocationInputEnvelope = {
+  data: Prisma.MatchCreateManyLocationInput | Prisma.MatchCreateManyLocationInput[]
+  skipDuplicates?: boolean
+}
+
+export type MatchUpsertWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.MatchWhereUniqueInput
+  update: Prisma.XOR<Prisma.MatchUpdateWithoutLocationInput, Prisma.MatchUncheckedUpdateWithoutLocationInput>
+  create: Prisma.XOR<Prisma.MatchCreateWithoutLocationInput, Prisma.MatchUncheckedCreateWithoutLocationInput>
+}
+
+export type MatchUpdateWithWhereUniqueWithoutLocationInput = {
+  where: Prisma.MatchWhereUniqueInput
+  data: Prisma.XOR<Prisma.MatchUpdateWithoutLocationInput, Prisma.MatchUncheckedUpdateWithoutLocationInput>
+}
+
+export type MatchUpdateManyWithWhereWithoutLocationInput = {
+  where: Prisma.MatchScalarWhereInput
+  data: Prisma.XOR<Prisma.MatchUpdateManyMutationInput, Prisma.MatchUncheckedUpdateManyWithoutLocationInput>
+}
+
+export type MatchScalarWhereInput = {
+  AND?: Prisma.MatchScalarWhereInput | Prisma.MatchScalarWhereInput[]
+  OR?: Prisma.MatchScalarWhereInput[]
+  NOT?: Prisma.MatchScalarWhereInput | Prisma.MatchScalarWhereInput[]
+  id?: Prisma.StringFilter<"Match"> | string
+  player1Name?: Prisma.StringFilter<"Match"> | string
+  player1NationIOC?: Prisma.StringNullableFilter<"Match"> | string | null
+  player2Name?: Prisma.StringFilter<"Match"> | string
+  player2NationIOC?: Prisma.StringNullableFilter<"Match"> | string | null
+  active?: Prisma.BoolFilter<"Match"> | boolean
+  bestOf?: Prisma.IntFilter<"Match"> | number
+  framesPlayer1?: Prisma.IntFilter<"Match"> | number
+  framesPlayer2?: Prisma.IntFilter<"Match"> | number
+  breaksPlayer1?: Prisma.IntNullableListFilter<"Match">
+  breaksPlayer2?: Prisma.IntNullableListFilter<"Match">
+  winner?: Prisma.StringNullableFilter<"Match"> | string | null
+  rawGameLog?: Prisma.StringFilter<"Match"> | string
+  tableNumber?: Prisma.IntNullableFilter<"Match"> | number | null
+  locationId?: Prisma.StringNullableFilter<"Match"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Match"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Match"> | Date | string
 }
 
 export type MatchCreateWithoutActionsInput = {
@@ -686,6 +835,7 @@ export type MatchCreateWithoutActionsInput = {
   tableNumber?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  location?: Prisma.LocationCreateNestedOneWithoutMatchesInput
 }
 
 export type MatchUncheckedCreateWithoutActionsInput = {
@@ -703,6 +853,7 @@ export type MatchUncheckedCreateWithoutActionsInput = {
   winner?: string | null
   rawGameLog: string
   tableNumber?: number | null
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -740,9 +891,89 @@ export type MatchUpdateWithoutActionsInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  location?: Prisma.LocationUpdateOneWithoutMatchesNestedInput
 }
 
 export type MatchUncheckedUpdateWithoutActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  player1Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player1NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  player2Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player2NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bestOf?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer1?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer2?: Prisma.IntFieldUpdateOperationsInput | number
+  breaksPlayer1?: Prisma.MatchUpdatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchUpdatebreaksPlayer2Input | number[]
+  winner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawGameLog?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MatchCreateManyLocationInput = {
+  id?: string
+  player1Name: string
+  player1NationIOC?: string | null
+  player2Name: string
+  player2NationIOC?: string | null
+  active?: boolean
+  bestOf: number
+  framesPlayer1: number
+  framesPlayer2: number
+  breaksPlayer1?: Prisma.MatchCreatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchCreatebreaksPlayer2Input | number[]
+  winner?: string | null
+  rawGameLog: string
+  tableNumber?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type MatchUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  player1Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player1NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  player2Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player2NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bestOf?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer1?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer2?: Prisma.IntFieldUpdateOperationsInput | number
+  breaksPlayer1?: Prisma.MatchUpdatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchUpdatebreaksPlayer2Input | number[]
+  winner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawGameLog?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actions?: Prisma.FrameActionUpdateManyWithoutMatchNestedInput
+}
+
+export type MatchUncheckedUpdateWithoutLocationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  player1Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player1NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  player2Name?: Prisma.StringFieldUpdateOperationsInput | string
+  player2NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  bestOf?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer1?: Prisma.IntFieldUpdateOperationsInput | number
+  framesPlayer2?: Prisma.IntFieldUpdateOperationsInput | number
+  breaksPlayer1?: Prisma.MatchUpdatebreaksPlayer1Input | number[]
+  breaksPlayer2?: Prisma.MatchUpdatebreaksPlayer2Input | number[]
+  winner?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rawGameLog?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actions?: Prisma.FrameActionUncheckedUpdateManyWithoutMatchNestedInput
+}
+
+export type MatchUncheckedUpdateManyWithoutLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   player1Name?: Prisma.StringFieldUpdateOperationsInput | string
   player1NationIOC?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -807,8 +1038,10 @@ export type MatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   winner?: boolean
   rawGameLog?: boolean
   tableNumber?: boolean
+  locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
   actions?: boolean | Prisma.Match$actionsArgs<ExtArgs>
   _count?: boolean | Prisma.MatchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["match"]>
@@ -828,8 +1061,10 @@ export type MatchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   winner?: boolean
   rawGameLog?: boolean
   tableNumber?: boolean
+  locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
 }, ExtArgs["result"]["match"]>
 
 export type MatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -847,8 +1082,10 @@ export type MatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   winner?: boolean
   rawGameLog?: boolean
   tableNumber?: boolean
+  locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
 }, ExtArgs["result"]["match"]>
 
 export type MatchSelectScalar = {
@@ -866,21 +1103,28 @@ export type MatchSelectScalar = {
   winner?: boolean
   rawGameLog?: boolean
   tableNumber?: boolean
+  locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "player1Name" | "player1NationIOC" | "player2Name" | "player2NationIOC" | "active" | "bestOf" | "framesPlayer1" | "framesPlayer2" | "breaksPlayer1" | "breaksPlayer2" | "winner" | "rawGameLog" | "tableNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["match"]>
+export type MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "player1Name" | "player1NationIOC" | "player2Name" | "player2NationIOC" | "active" | "bestOf" | "framesPlayer1" | "framesPlayer2" | "breaksPlayer1" | "breaksPlayer2" | "winner" | "rawGameLog" | "tableNumber" | "locationId" | "createdAt" | "updatedAt", ExtArgs["result"]["match"]>
 export type MatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
   actions?: boolean | Prisma.Match$actionsArgs<ExtArgs>
   _count?: boolean | Prisma.MatchCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type MatchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type MatchIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type MatchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
+}
+export type MatchIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  location?: boolean | Prisma.Match$locationArgs<ExtArgs>
+}
 
 export type $MatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Match"
   objects: {
+    location: Prisma.$LocationPayload<ExtArgs> | null
     actions: Prisma.$FrameActionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -898,6 +1142,7 @@ export type $MatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     winner: string | null
     rawGameLog: string
     tableNumber: number | null
+    locationId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["match"]>
@@ -1294,6 +1539,7 @@ readonly fields: MatchFieldRefs;
  */
 export interface Prisma__MatchClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  location<T extends Prisma.Match$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$locationArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   actions<T extends Prisma.Match$actionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Match$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FrameActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1338,6 +1584,7 @@ export interface MatchFieldRefs {
   readonly winner: Prisma.FieldRef<"Match", 'String'>
   readonly rawGameLog: Prisma.FieldRef<"Match", 'String'>
   readonly tableNumber: Prisma.FieldRef<"Match", 'Int'>
+  readonly locationId: Prisma.FieldRef<"Match", 'String'>
   readonly createdAt: Prisma.FieldRef<"Match", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Match", 'DateTime'>
 }
@@ -1589,6 +1836,10 @@ export type MatchCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.MatchCreateManyInput | Prisma.MatchCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MatchIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1659,6 +1910,10 @@ export type MatchUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Matches to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MatchIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1725,6 +1980,25 @@ export type MatchDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Matches to delete.
    */
   limit?: number
+}
+
+/**
+ * Match.location
+ */
+export type Match$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Location
+   */
+  select?: Prisma.LocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Location
+   */
+  omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  where?: Prisma.LocationWhereInput
 }
 
 /**
