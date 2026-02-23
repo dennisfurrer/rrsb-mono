@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef } from "react";
  * The ref should be on an inline-level element (inline-block/inline-flex)
  * inside a fixed-size parent. The parent's dimensions define the max bounds.
  */
-export function useAutoFontSize(deps: unknown[]) {
+export function useAutoFontSize(deps: unknown[], scale = 1) {
   const ref = useRef<HTMLDivElement>(null);
 
   const resize = useCallback(() => {
@@ -13,8 +13,8 @@ export function useAutoFontSize(deps: unknown[]) {
     if (!el || !el.parentElement) return;
 
     const parent = el.parentElement;
-    const maxW = parent.clientWidth * 0.95;
-    const maxH = parent.clientHeight * 0.9;
+    const maxW = parent.clientWidth * 0.95 * scale;
+    const maxH = parent.clientHeight * 0.9 * scale;
 
     if (maxW <= 0 || maxH <= 0) return;
 
@@ -37,7 +37,7 @@ export function useAutoFontSize(deps: unknown[]) {
 
     el.style.fontSize = `${lo}px`;
     el.style.height = "";
-  }, []);
+  }, [scale]);
 
   useEffect(() => {
     resize();

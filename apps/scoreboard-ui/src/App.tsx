@@ -104,12 +104,10 @@ export function App() {
       isFoul: boolean,
       isHandicap: boolean
     ) => {
-      setMatch((prev) => {
-        pushHistory(
-          `${prev.players[playerIndex].name} ${isFoul ? "Foul" : isHandicap ? "HC" : ""} ${points}`,
-          prev
-        );
+      const label = `${match.players[playerIndex].name} ${isFoul ? "Foul" : isHandicap ? "HC" : ""} ${points}`;
+      pushHistory(label, match);
 
+      setMatch((prev) => {
         const next = structuredClone(prev);
         const actionType = isHandicap
           ? "handicap"
@@ -118,11 +116,9 @@ export function App() {
             : "break";
 
         if (isFoul) {
-          // Foul: points go to opponent
           const opponentIndex = playerIndex === 0 ? 1 : 0;
           next.players[opponentIndex].score += points;
         } else {
-          // Break or handicap: points go to active player
           next.players[playerIndex].score += points;
           if (!isHandicap) {
             next.players[playerIndex].highbreaks = insertHighBreak(
@@ -132,12 +128,10 @@ export function App() {
           }
         }
 
-        // Switch active player (unless handicap)
         if (!isHandicap) {
           next.activePlayerIndex = next.activePlayerIndex === 0 ? 1 : 0;
         }
 
-        // Fire-and-forget API calls
         if (next.matchId) {
           sendFrameAction({
             matchId: next.matchId,
@@ -168,13 +162,25 @@ export function App() {
 
       setCalcPlayer(null);
     },
-    [pushHistory]
+    [match, pushHistory]
   );
 
   // ===== FRAME END =====
   const endFrame = useCallback(() => {
+    const frameWinner = determineFrameWinner(match);
+    const winnerName = frameWinner !== null ? match.players[frameWinner].name : "?";
+    const s0 = match.players[0].score;
+    const s1 = match.players[1].score;
+    const winScore = Math.max(s0, s1);
+    const loseScore = Math.min(s0, s1);
+    const newFrames = frameWinner !== null ? match.players[frameWinner].frames + 1 : 0;
+    if (newFrames >= framesToWin(match.bestOf)) {
+      const loserIdx = frameWinner === 0 ? 1 : 0;
+      pushHistory(`${winnerName} gewinnt Match ${newFrames}:${match.players[loserIdx].frames}`, match);
+    } else {
+      pushHistory(`${winnerName} gewinnt Frame ${winScore}:${loseScore}`, match);
+    }
     setMatch((prev) => {
-      pushHistory("Frame End", prev);
       const next = structuredClone(prev);
       const winner = determineFrameWinner(next);
 
@@ -257,12 +263,12 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [pushHistory]);
+  }, [match, pushHistory]);
 
   // ===== RE-RACK =====
   const rerack = useCallback(() => {
+    pushHistory("Re-rack", match);
     setMatch((prev) => {
-      pushHistory("Re-rack", prev);
       const next = structuredClone(prev);
       next.players[0].score = 0;
       next.players[1].score = 0;
@@ -280,7 +286,7 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [pushHistory]);
+  }, [match, pushHistory]);
 
   // ===== UNDO =====
   const undo = useCallback(() => {
@@ -307,8 +313,8 @@ export function App() {
 
   // ===== MATCH END (EARLY) =====
   const endMatchEarly = useCallback(() => {
+    pushHistory("Match End (Early)", match);
     setMatch((prev) => {
-      pushHistory("Match End (Early)", prev);
       const next = structuredClone(prev);
 
       // Determine who's leading
@@ -355,7 +361,7 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [pushHistory]);
+  }, [match, pushHistory]);
 
   // ===== NEW GAME =====
   const newGame = useCallback(() => {

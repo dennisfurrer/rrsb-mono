@@ -34,33 +34,44 @@ Chosen because:
 ## Translation workflow
 
 ```
-src/content/docs/en/guide/getting-started.md   (author writes in English)
+src/content/docs/overview/welcome.md       (author writes in English)
         |
         v  AI translation (Claude)
         |
-src/content/docs/de/guide/getting-started.md   (Markus reviews German)
+src/content/docs/de/overview/welcome.md    (Markus reviews German)
 ```
 
-## Project structure (planned)
+English content lives at the root of `src/content/docs/`. German translations mirror the same path under `de/`.
+
+## Project structure
 
 ```
 apps/docs/
 ├── astro.config.mjs
 ├── package.json
+├── tsconfig.json
 ├── src/
-│   ├── content/
-│   │   └── docs/
-│   │       ├── en/
-│   │       │   ├── index.mdx
-│   │       │   ├── getting-started/
-│   │       │   ├── architecture/
-│   │       │   ├── apps/
-│   │       │   ├── operations/
-│   │       │   └── contributing/
-│   │       └── de/
-│   │           └── (mirrors en/ structure)
-│   └── assets/
-│       └── (diagrams, screenshots)
-└── public/
-    └── (static assets)
+│   ├── content.config.ts
+│   └── content/
+│       └── docs/
+│           ├── index.mdx                    # EN landing page
+│           ├── overview/
+│           │   ├── welcome.md               # EN - what this is about
+│           │   ├── plan.md                  # EN - plan & progress
+│           │   └── tech-stack.md            # EN - old vs new tech
+│           └── de/
+│               ├── index.mdx                # DE landing page
+│               └── overview/
+│                   ├── welcome.md           # DE - worum es geht
+│                   ├── plan.md              # DE - Plan & Fortschritt
+│                   └── tech-stack.md        # DE - Alt vs Neu
+└── dist/                                    # build output (gitignored)
+```
+
+## Development
+
+```bash
+pnpm dev      # start dev server
+pnpm build    # build static site
+pnpm preview  # preview built site
 ```
