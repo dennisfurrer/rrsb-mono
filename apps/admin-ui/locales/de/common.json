@@ -125,7 +125,9 @@
       "COMPLETED": "Abgeschlossen"
     },
     "noAssignments": "Noch keine Spielzuweisungen.",
-    "confirmDelete": "Diese Zuweisung löschen?"
+    "confirmDelete": "Diese Zuweisung löschen?",
+    "actions": "Aktionen",
+    "seeScore": "Score ansehen"
   },
   "locations": {
     "title": "Standorte",
@@ -165,6 +167,8 @@
     "summary": "Alles bereit.",
     "summarySubtext": "Leg los",
     "skip": "Tour überspringen",
+    "desktopOnly": "Tour am Desktop ansehen",
+    "desktopOnlySubtext": "Die interaktive Tour braucht einen größeren Bildschirm.",
     "steps": {
       "sidebar": {
         "question": "Ihre Navigationszentrale",

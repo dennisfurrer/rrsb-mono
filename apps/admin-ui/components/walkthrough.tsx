@@ -23,7 +23,7 @@ const STEPS: WalkthroughStep[] = [
     questionKey: "walkthrough.steps.sidebar.question",
     subtextKey: "walkthrough.steps.sidebar.subtext",
     arrowDirection: "right",
-    offsetX: 80,
+    offsetX: 120,
   },
   {
     id: "stats",
@@ -38,6 +38,7 @@ const STEPS: WalkthroughStep[] = [
     questionKey: "walkthrough.steps.matchSetup.question",
     subtextKey: "walkthrough.steps.matchSetup.subtext",
     arrowDirection: "left",
+    offsetX: -140,
   },
   {
     id: "assignments",
@@ -45,6 +46,7 @@ const STEPS: WalkthroughStep[] = [
     questionKey: "walkthrough.steps.assignments.question",
     subtextKey: "walkthrough.steps.assignments.subtext",
     arrowDirection: "right",
+    offsetX: 140,
   },
 ];
 
@@ -518,7 +520,7 @@ export function Walkthrough() {
 
   /* Check localStorage on mount — skip on mobile */
   useEffect(() => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1024) {
       setDismissed(true);
       setIsInitialized(true);
       return;

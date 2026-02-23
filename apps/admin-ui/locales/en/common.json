@@ -125,7 +125,9 @@
       "COMPLETED": "Completed"
     },
     "noAssignments": "No match assignments yet.",
-    "confirmDelete": "Delete this assignment?"
+    "confirmDelete": "Delete this assignment?",
+    "actions": "Actions",
+    "seeScore": "See Score"
   },
   "locations": {
     "title": "Locations",
@@ -165,6 +167,8 @@
     "summary": "You're all set.",
     "summarySubtext": "Do your thing",
     "skip": "Skip tour",
+    "desktopOnly": "Watch the tour on desktop",
+    "desktopOnlySubtext": "The interactive tour needs a larger screen to shine.",
     "steps": {
       "sidebar": {
         "question": "Your navigation hub",

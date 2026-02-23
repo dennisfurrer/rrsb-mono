@@ -12,7 +12,7 @@ import {
 } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/sidebar";
-import { Menu, Sun, Moon, Compass } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
 
 function Breadcrumbs() {
   const pathname = usePathname();
@@ -49,6 +49,7 @@ export default function AdminLayout({
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTourModal, setShowTourModal] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -149,19 +150,23 @@ export default function AdminLayout({
                 <Moon className="w-4 h-4" />
               )}
             </button>
+            <div className="w-px h-5 bg-border-strong mx-1" />
             <button
               onClick={() => {
-                localStorage.removeItem("rrsb-walkthrough-dismissed");
-                if (pathname === "/dashboard") {
-                  window.dispatchEvent(new CustomEvent("rrsb-restart-walkthrough"));
+                if (window.innerWidth < 1024) {
+                  setShowTourModal(true);
                 } else {
-                  router.push("/dashboard");
+                  localStorage.removeItem("rrsb-walkthrough-dismissed");
+                  if (pathname === "/dashboard") {
+                    window.dispatchEvent(new CustomEvent("rrsb-restart-walkthrough"));
+                  } else {
+                    router.push("/dashboard");
+                  }
                 }
               }}
-              className="rounded-md px-2 py-1.5 text-xs font-semibold text-text-muted hover:text-text-secondary transition-all duration-150 flex items-center gap-1"
+              className="rounded-md px-2.5 py-1 text-xs font-bold bg-accent text-surface-0 hover:bg-accent-dim transition-all duration-150"
               title="Tour"
             >
-              <Compass className="w-3.5 h-3.5" />
               Tour
             </button>
           </div>
@@ -172,6 +177,71 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
+
+      {/* Tour desktop-only modal */}
+      {showTourModal && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          onClick={() => setShowTourModal(false)}
+        >
+          <div className="absolute inset-0 bg-[rgba(6,9,7,0.85)] backdrop-blur-md" />
+          <div
+            className="relative z-10 text-center px-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <link
+              href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap"
+              rel="stylesheet"
+            />
+            <div
+              style={{
+                fontFamily: "'Caveat', cursive",
+                fontSize: "52px",
+                fontWeight: 700,
+                color: "#D4A843",
+                lineHeight: 1.1,
+                textShadow: "0 4px 24px rgba(0,0,0,0.8)",
+                marginBottom: "12px",
+              }}
+            >
+              {t("walkthrough.desktopOnly")}
+            </div>
+            <p
+              style={{
+                fontSize: "18px",
+                color: "#839088",
+                fontFamily: "monospace",
+                lineHeight: 1.6,
+                textShadow: "0 2px 12px rgba(0,0,0,0.8)",
+                marginBottom: "32px",
+              }}
+            >
+              {t("walkthrough.desktopOnlySubtext")}
+            </p>
+            <button
+              onClick={() => setShowTourModal(false)}
+              style={{
+                width: "46px",
+                height: "46px",
+                background: "linear-gradient(135deg, #D4A843 0%, #B8923A 100%)",
+                border: "none",
+                borderRadius: "50%",
+                color: "#080b09",
+                fontSize: "20px",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto",
+                boxShadow: "0 4px 24px rgba(212, 168, 67, 0.3)",
+              }}
+            >
+              ✓
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

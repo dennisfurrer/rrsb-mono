@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MatchSetupForm } from "@/components/match-setup-form";
 import { getScoreboards, getMatchAssignments } from "@/lib/api";
 import type { ScoreboardConfig, MatchAssignment } from "@/lib/types";
-import { Monitor, Swords, ArrowRight, Wifi, WifiOff, Circle } from "lucide-react";
+import { Monitor, Swords, ArrowRight, Wifi, WifiOff, Circle, Eye } from "lucide-react";
 import { Walkthrough } from "@/components/walkthrough";
 
 export default function DashboardPage() {
@@ -158,6 +158,15 @@ export default function DashboardPage() {
                           )}
                         </div>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled
+                        className="gap-1.5 text-text-muted shrink-0"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        {t("matchSetup.seeScore")}
+                      </Button>
                       <Badge variant={
                         a.status === "PENDING" ? "info" :
                         a.status === "CLAIMED" ? "success" :
