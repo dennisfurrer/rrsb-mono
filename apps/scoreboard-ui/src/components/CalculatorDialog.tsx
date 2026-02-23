@@ -8,7 +8,7 @@ interface Props {
     playerIndex: 0 | 1,
     points: number,
     isFoul: boolean,
-    isHandicap: boolean
+    isHandicap: boolean,
   ) => void;
   onClose: () => void;
 }
@@ -56,28 +56,25 @@ export function CalculatorDialog({
 
   return (
     <div className="overlay" onClick={onClose}>
-      <div className="calc-dialog" onClick={(e) => e.stopPropagation()}>
-        <div className="calc-player-name">{playerName}</div>
-        <div className={`calc-display ${foulMode ? "foul-mode" : ""}`}>
-          {display || "0"}
-        </div>
-
-        <div className="calc-grid">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((d) => (
-            <button key={d} onClick={() => appendDigit(d)}>
-              {d}
-            </button>
-          ))}
-          <button onClick={clear}>C</button>
-          <button onClick={() => appendDigit(0)}>0</button>
-          <button className="calc-btn-ok" onClick={submit}>
-            OK
-          </button>
-        </div>
-
-        <div className="calc-actions">
-          <button
-            className={`calc-btn-foul ${foulMode ? "active" : ""}`}
+      <div
+        className={`calc-fullscreen ${showHandicap ? "has-handicap" : ""}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Row 1: Display + Foul */}
+        <div className="calc-line">
+          <div className="calc-display">
+            <div className="calc-display-title">
+              <div className={`calc-break-for ${foulMode ? "foul-label" : ""}`}>
+                {foulMode ? "Foul für" : "Break für"}
+              </div>
+              <div className="calc-break-name">{playerName}</div>
+            </div>
+            <div className={`calc-break-value ${foulMode ? "foul-mode" : ""}`}>
+              {display || "0"}
+            </div>
+          </div>
+          <div
+            className={`calc-butt calc-foul ${foulMode ? "active" : ""}`}
             onClick={() => {
               if (foulMode) {
                 submitFoul();
@@ -87,13 +84,69 @@ export function CalculatorDialog({
             }}
           >
             Foul
-          </button>
-          {showHandicap && (
-            <button className="calc-btn-handicap" onClick={submitHandicap}>
-              Handicap
-            </button>
-          )}
+          </div>
         </div>
+
+        {/* Row 2: 1 2 3 */}
+        <div className="calc-line">
+          <div className="calc-butt" onClick={() => appendDigit(1)}>
+            1
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(2)}>
+            2
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(3)}>
+            3
+          </div>
+        </div>
+
+        {/* Row 3: 4 5 6 */}
+        <div className="calc-line">
+          <div className="calc-butt" onClick={() => appendDigit(4)}>
+            4
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(5)}>
+            5
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(6)}>
+            6
+          </div>
+        </div>
+
+        {/* Row 4: 7 8 9 */}
+        <div className="calc-line">
+          <div className="calc-butt" onClick={() => appendDigit(7)}>
+            7
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(8)}>
+            8
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(9)}>
+            9
+          </div>
+        </div>
+
+        {/* Row 5: Löschen 0 OK */}
+        <div className="calc-line">
+          <div className="calc-butt calc-clear" onClick={clear}>
+            Löschen
+          </div>
+          <div className="calc-butt" onClick={() => appendDigit(0)}>
+            0
+          </div>
+          <div className="calc-butt calc-ok" onClick={submit}>
+            OK
+          </div>
+        </div>
+
+        {/* Row 6: Handicap (conditional) */}
+        {showHandicap && (
+          <div className="calc-line">
+            <div className="calc-butt calc-handicap" onClick={submitHandicap}>
+              Handicap
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
