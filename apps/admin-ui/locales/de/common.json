@@ -158,5 +158,30 @@
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System"
+  },
+  "walkthrough": {
+    "welcome": "Willkommen",
+    "welcomeSubtext": "Eine kurze Tour durch die Seite",
+    "summary": "Alles bereit.",
+    "summarySubtext": "Leg los",
+    "skip": "Tour überspringen",
+    "steps": {
+      "sidebar": {
+        "question": "Ihre Navigationszentrale",
+        "subtext": "Wechseln Sie zwischen Scoreboards, Spielen, Spielerlisten und Einstellungen."
+      },
+      "stats": {
+        "question": "Alles auf einen Blick",
+        "subtext": "Sehen Sie, welche Scoreboards online, belegt oder verfügbar sind."
+      },
+      "matchSetup": {
+        "question": "Spiel einrichten",
+        "subtext": "Spieler wählen, Format festlegen und Scoreboard zuweisen."
+      },
+      "assignments": {
+        "question": "Spiele verfolgen",
+        "subtext": "Spielzuweisungen und deren Status im Überblick."
+      }
+    }
   }
 }

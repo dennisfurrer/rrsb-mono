@@ -1,7 +1,7 @@
 {
   "/login/page": "app/login/page.js",
-  "/(admin)/scoreboards/page": "app/(admin)/scoreboards/page.js",
-  "/(admin)/match-setup/page": "app/(admin)/match-setup/page.js",
   "/(admin)/dashboard/page": "app/(admin)/dashboard/page.js",
-  "/(admin)/locations/page": "app/(admin)/locations/page.js"
+  "/(admin)/match-setup/page": "app/(admin)/match-setup/page.js",
+  "/(admin)/scoreboards/page": "app/(admin)/scoreboards/page.js",
+  "/(admin)/scoreboards/[deviceId]/page": "app/(admin)/scoreboards/[deviceId]/page.js"
 }

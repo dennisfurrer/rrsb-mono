@@ -26,35 +26,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/login/page.js"
     ],
-    "/(admin)/scoreboards/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(admin)/scoreboards/page.js"
-    ],
-    "/(admin)/names-lists/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(admin)/names-lists/page.js"
-    ],
     "/(admin)/match-setup/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(admin)/match-setup/page.js"
     ],
-    "/(admin)/locations/page": [
+    "/(admin)/scoreboards/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(admin)/locations/page.js"
+      "static/chunks/app/(admin)/scoreboards/page.js"
     ],
-    "/(admin)/users/page": [
+    "/(admin)/scoreboards/[deviceId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(admin)/users/page.js"
-    ],
-    "/(admin)/names-lists/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(admin)/names-lists/[id]/page.js"
+      "static/chunks/app/(admin)/scoreboards/[deviceId]/page.js"
     ]
   }
 }

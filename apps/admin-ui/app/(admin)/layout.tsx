@@ -12,7 +12,7 @@ import {
 } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/sidebar";
-import { Menu, Sun, Moon } from "lucide-react";
+import { Menu, Sun, Moon, Compass } from "lucide-react";
 
 function Breadcrumbs() {
   const pathname = usePathname();
@@ -148,6 +148,21 @@ export default function AdminLayout({
               ) : (
                 <Moon className="w-4 h-4" />
               )}
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem("rrsb-walkthrough-dismissed");
+                if (pathname === "/dashboard") {
+                  window.dispatchEvent(new CustomEvent("rrsb-restart-walkthrough"));
+                } else {
+                  router.push("/dashboard");
+                }
+              }}
+              className="rounded-md px-2 py-1.5 text-xs font-semibold text-text-muted hover:text-text-secondary transition-all duration-150 flex items-center gap-1"
+              title="Tour"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              Tour
             </button>
           </div>
         </header>
