@@ -64,7 +64,7 @@ export default function ScoreboardsPage() {
   if (loading) {
     return (
       <div className="flex items-center gap-2 text-text-muted">
-        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        <span className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
         {t("loading")}
       </div>
     );
@@ -94,7 +94,7 @@ export default function ScoreboardsPage() {
               <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
                 {t("scoreboards.onboarding.url")}
               </p>
-              <code className="text-sm font-mono text-brand">
+              <code className="text-sm font-mono text-accent">
                 http://&lt;server-ip&gt;:7201
               </code>
             </div>
@@ -129,7 +129,7 @@ export default function ScoreboardsPage() {
                 <TableCell>
                   <Link
                     href={`/scoreboards/${sb.deviceId}`}
-                    className="text-brand hover:text-brand-dim font-mono text-xs transition-colors"
+                    className="text-accent hover:text-accent-dim font-mono text-xs transition-colors"
                   >
                     {sb.deviceId.slice(0, 8)}...
                   </Link>

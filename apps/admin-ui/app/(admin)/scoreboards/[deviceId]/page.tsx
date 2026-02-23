@@ -68,7 +68,7 @@ export default function ScoreboardDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center gap-2 text-text-muted">
-        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        <span className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
         {t("loading")}
       </div>
     );
@@ -117,7 +117,7 @@ export default function ScoreboardDetailPage() {
               id="namesList"
               value={selectedList}
               onChange={(e) => setSelectedList(e.target.value)}
-              className="flex h-9 w-full rounded-lg bg-white/[0.02] border border-border px-3 pr-8 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-brand/20 focus:border-brand/20 transition-all duration-150"
+              className="flex h-9 w-full rounded-lg bg-white/[0.02] border border-border px-3 pr-8 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-accent/20 focus:border-accent/20 transition-all duration-150"
             >
               <option value="">{t("none")}</option>
               {namesLists.map((nl) => (

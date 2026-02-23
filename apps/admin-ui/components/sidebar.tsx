@@ -109,9 +109,9 @@ export function Sidebar() {
     : user?.role === "SUPER_ADMIN" ? "SA" : "AD";
 
   return (
-    <aside className="w-60 md:w-64 lg:w-72 h-full bg-sidebar border-r border-border flex flex-col shrink-0 relative">
+    <aside className="w-72 md:w-64 lg:w-72 h-full bg-sidebar border-r border-border flex flex-col shrink-0 relative">
       {/* Subtle right-edge gradient */}
-      <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-brand/[0.08] via-transparent to-brand/[0.04] z-10" />
+      <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-accent/[0.08] via-transparent to-accent/[0.04] z-10" />
 
       {/* Logo + Brand */}
       <div className="shrink-0 border-b border-border px-4 py-4">
@@ -119,13 +119,14 @@ export function Sidebar() {
           <Image
             src="/round-robin-logo.png"
             alt="Round Robin Sports"
-            width={40}
-            height={40}
-            className="w-10 h-10 object-contain shrink-0"
+            width={48}
+            height={48}
+            className="w-12 h-12 object-contain shrink-0"
             priority
           />
-          <span className="text-sm font-display font-extrabold text-text-primary tracking-tight">
-            RRSB Admin
+          <span className="text-base font-display font-extrabold tracking-tight">
+            <span className="text-text-primary">RRSB</span>{" "}
+            <span className="text-accent/70">Admin</span>
           </span>
         </Link>
       </div>
@@ -146,12 +147,12 @@ export function Sidebar() {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 mb-1",
                     pathname === section.href
-                      ? "bg-brand/[0.10] text-brand font-semibold shadow-[inset_0_0_0_1px_rgba(52,211,153,0.12)]"
-                      : "text-text-primary hover:text-brand hover:bg-white/[0.04]"
+                      ? "bg-accent/[0.10] text-accent font-semibold shadow-[inset_0_0_0_1px_rgba(212,168,67,0.12)]"
+                      : "text-text-primary hover:text-accent hover:bg-white/[0.04]"
                   )}
                 >
                   {section.icon && (
-                    <section.icon className={cn("w-[18px] h-[18px] shrink-0", pathname === section.href && "drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]")} />
+                    <section.icon className={cn("w-[18px] h-[18px] shrink-0", pathname === section.href && "drop-shadow-[0_0_4px_rgba(212,168,67,0.3)]")} />
                   )}
                   {t(section.labelKey)}
                 </Link>
@@ -160,11 +161,11 @@ export function Sidebar() {
                   {/* Section header */}
                   <div className="flex items-center gap-2 px-2 mb-1.5 mt-2">
                     {section.icon && (
-                      <section.icon className={cn("w-3.5 h-3.5 shrink-0", section.dimmed ? "text-text-muted" : "text-brand/30")} />
+                      <section.icon className={cn("w-3.5 h-3.5 shrink-0", section.dimmed ? "text-text-muted" : "text-text-secondary")} />
                     )}
                     <p className={cn(
                       "text-[0.7rem] font-bold uppercase tracking-[0.15em]",
-                      section.dimmed ? "text-text-muted" : "text-brand/30 italic"
+                      section.dimmed ? "text-text-muted" : "text-text-secondary italic"
                     )}>
                       {t(section.labelKey)}
                     </p>
@@ -172,7 +173,7 @@ export function Sidebar() {
                       <span className={cn(
                         "text-[0.55rem] font-bold uppercase tracking-wider leading-none",
                         section.dimmed
-                          ? "rounded-full bg-text-muted/[0.12] text-text-muted px-2.5 py-1 border border-text-muted/[0.10]"
+                          ? "rounded-full bg-accent/[0.08] text-accent/60 px-2.5 py-1 border border-accent/[0.12]"
                           : "text-text-muted/40 bg-text-muted/[0.05] border border-text-muted/[0.06] rounded-full px-2 py-0.5",
                         section.badgeRight && "ml-auto"
                       )}>
@@ -181,8 +182,8 @@ export function Sidebar() {
                     )}
                   </div>
 
-                  {/* Section items — indented relative to heading */}
-                  <div className="space-y-0.5 pl-6">
+                  {/* Section items — indented relative to heading, right padding to match */}
+                  <div className="space-y-0.5 pl-6 pr-3">
                     {section.items.map((item) => {
                       const isActive = !item.disabled && (pathname === item.href || pathname.startsWith(item.href + "/"));
                       const Icon = item.icon;
@@ -209,8 +210,8 @@ export function Sidebar() {
                             className={cn(
                               "flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[0.7rem] font-medium transition-all duration-150",
                               isActive
-                                ? "text-brand"
-                                : "text-text-secondary/80 hover:text-brand hover:bg-white/[0.04]"
+                                ? "text-accent"
+                                : "text-text-secondary/80 hover:text-accent hover:bg-white/[0.04]"
                             )}
                           >
                             {t(item.labelKey)}
@@ -226,11 +227,11 @@ export function Sidebar() {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[0.92rem] leading-[1.3rem] transition-all duration-150",
                             isActive
-                              ? "bg-brand/[0.10] text-brand font-semibold shadow-[inset_0_0_0_1px_rgba(52,211,153,0.12)]"
-                              : "text-text-primary/[0.92] hover:text-brand hover:bg-white/[0.04]"
+                              ? "bg-accent/[0.10] text-accent font-semibold shadow-[inset_0_0_0_1px_rgba(212,168,67,0.12)]"
+                              : "text-text-primary/[0.92] hover:text-accent hover:bg-white/[0.04]"
                           )}
                         >
-                          <Icon className={cn("w-[17px] h-[17px] shrink-0", isActive && "drop-shadow-[0_0_4px_rgba(52,211,153,0.3)]")} />
+                          <Icon className={cn("w-[17px] h-[17px] shrink-0", isActive && "drop-shadow-[0_0_4px_rgba(212,168,67,0.3)]")} />
                           {t(item.labelKey)}
                         </Link>
                       );

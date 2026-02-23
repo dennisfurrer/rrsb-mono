@@ -82,7 +82,7 @@ export function MatchSetupForm({ onCreated }: MatchSetupFormProps) {
     }
   };
 
-  const selectClasses = "flex h-10 w-full rounded-lg bg-white/[0.02] border border-border px-3.5 pr-8 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-brand/20 focus:border-brand/20 transition-all duration-150";
+  const selectClasses = "flex h-10 w-full rounded-lg bg-white/[0.02] border border-border px-3.5 pr-8 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-accent/20 focus:border-accent/20 transition-all duration-150";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -159,7 +159,7 @@ export function MatchSetupForm({ onCreated }: MatchSetupFormProps) {
           <Label className="shrink-0">{t("matchSetup.handicap")}</Label>
           {handicapAmount && Number(handicapAmount) > 0 && (
             <span className="text-xs text-text-muted">
-              <span className="text-brand font-semibold">{t("matchSetup.handicapGivenTo")}</span>{" "}
+              <span className="text-accent font-semibold">{t("matchSetup.handicapGivenTo")}</span>{" "}
               {handicapPlayer === "player1" ? (player1 || t("matchSetup.player1")) : (player2 || t("matchSetup.player2"))}
             </span>
           )}

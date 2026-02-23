@@ -75,7 +75,7 @@ export default function AdminLayout({
     return (
       <div className="flex min-h-screen items-center justify-center bg-surface-0">
         <div className="flex items-center gap-2 text-text-muted">
-          <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+          <span className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
           Loading...
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function AdminLayout({
       {/* Sidebar: hidden on mobile by default, shown as overlay when open */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 w-60 md:w-64 lg:w-72 transform transition-transform duration-200 ease-in-out
+          fixed inset-y-0 left-0 z-50 w-72 md:w-64 lg:w-72 transform transition-transform duration-200 ease-in-out
           md:relative md:translate-x-0 md:z-auto
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
@@ -131,7 +131,7 @@ export default function AdminLayout({
                 className={cn(
                   "rounded-md px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-150",
                   i18n.language === locale
-                    ? "bg-brand/[0.08] text-brand"
+                    ? "bg-accent/[0.08] text-accent"
                     : "text-text-muted hover:text-text-secondary"
                 )}
               >

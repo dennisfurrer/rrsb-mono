@@ -16,6 +16,11 @@ const config: Config = {
           text: "var(--brand-text)",
           glow: "var(--brand-glow)",
         },
+        accent: {
+          DEFAULT: "var(--accent)",
+          dim: "var(--accent-dim)",
+          text: "var(--accent-text)",
+        },
         surface: {
           "0": "var(--surface-0)",
           "1": "var(--surface-1)",

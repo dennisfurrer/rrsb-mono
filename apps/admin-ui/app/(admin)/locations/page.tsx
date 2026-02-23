@@ -69,7 +69,7 @@ export default function LocationsPage() {
   if (loading) {
     return (
       <div className="flex items-center gap-2 text-text-muted">
-        <span className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+        <span className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full animate-spin" />
         {t("loading")}
       </div>
     );

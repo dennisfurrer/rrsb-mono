@@ -10,6 +10,11 @@
   --brand-text: #022c22;
   --brand-glow: rgba(52, 211, 153, 0.10);
 
+  /* Secondary — warm gold */
+  --accent: #D4A843;
+  --accent-dim: #B8923A;
+  --accent-text: #1a1408;
+
   /* Surfaces — dark with green tint */
   --surface-0: #0c100e;
   --surface-1: #131917;
@@ -42,6 +47,10 @@
   --brand-dim: #047857;
   --brand-text: #ffffff;
   --brand-glow: rgba(5, 150, 105, 0.08);
+
+  --accent: #B8923A;
+  --accent-dim: #9E7D32;
+  --accent-text: #ffffff;
 
   --surface-0: #ffffff;
   --surface-1: #f7faf8;
@@ -204,7 +213,7 @@
   outline: none;
   box-shadow:
     0 0 0 2px var(--surface-0),
-    0 0 0 4px var(--brand-glow);
+    0 0 0 4px rgba(212, 168, 67, 0.3);
 }
 
 /* ─── Drawer slide animation ─── */

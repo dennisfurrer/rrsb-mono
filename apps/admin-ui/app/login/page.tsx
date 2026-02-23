@@ -100,7 +100,7 @@ export default function LoginPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/[0.06] text-sm text-text-primary placeholder:text-text-muted/30 outline-none focus:border-brand/40 focus:ring-1 focus:ring-brand/15 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/[0.06] text-sm text-text-primary placeholder:text-text-muted/30 outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all"
                 />
               </div>
 
@@ -116,7 +116,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/[0.06] text-sm text-text-primary placeholder:text-text-muted/30 outline-none focus:border-brand/40 focus:ring-1 focus:ring-brand/15 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/[0.06] text-sm text-text-primary placeholder:text-text-muted/30 outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all"
                 />
               </div>
 
@@ -150,7 +150,7 @@ export default function LoginPage() {
                 className={cn(
                   "px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all duration-150",
                   i18n.language === locale
-                    ? "text-brand bg-brand/[0.08] border border-brand/10"
+                    ? "text-accent bg-accent/[0.08] border border-accent/10"
                     : "text-text-muted/40 hover:text-text-muted border border-transparent"
                 )}
               >

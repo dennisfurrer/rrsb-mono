@@ -12,7 +12,7 @@ const badgeVariants = cva(
         danger: "bg-danger/[0.08] text-danger border-danger/10",
         warning: "bg-warning/[0.08] text-warning border-warning/10",
         info: "bg-info/[0.08] text-info border-info/10",
-        brand: "bg-brand/[0.08] text-brand border-brand/10",
+        brand: "bg-accent/[0.08] text-accent border-accent/10",
         secondary: "bg-surface-2 text-text-secondary border-border",
         destructive: "bg-danger/[0.08] text-danger border-danger/10",
         outline: "text-text-secondary border-border",
