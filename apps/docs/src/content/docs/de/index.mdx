@@ -1,15 +1,104 @@
 ---
-title: RRSB Dokumentation
-description: Dokumentation für die digitalen Systeme des RRSB Snooker-Clubs.
-template: splash
-hero:
-  title: RRSB Dokumentation
-  tagline: Alles über die digitalen Systeme des Snooker-Clubs — auf Deutsch und Englisch.
-  actions:
-    - text: Überblick lesen
-      link: /de/overview/welcome/
-      icon: right-arrow
-    - text: Plan & Fortschritt
-      link: /de/overview/plan/
-      variant: minimal
+title: Willkommen
+description: Worum es bei diesem Projekt geht und warum es existiert.
 ---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Hey Markus,
+
+Diese Dokumentationsseite ist für uns beide — damit wir verstehen, wie alle RRSB-Clubsysteme funktionieren, wie sie zusammenhängen und wie man daran arbeiten kann.
+
+Die Seite wird noch aufgebaut. Du kannst aber jetzt schon in der linken Navigation sehen, wie alles organisiert sein wird. Die Seiten sind ausgegraut, weil sie noch keinen Inhalt haben, aber sie zeigen dir die grobe Struktur von dem, was kommt — Datenbank-Doku, API-Referenz, App-Anleitungen und Betriebsthemen wie zum Beispiel, wie man alles lokal startet.
+
+## Was machen wir hier?
+
+Wir haben vier Ziele:
+
+<Tabs>
+  <TabItem label="1. Ein Ort">
+    Das Scoreboard, die Statistik-Website, das Backend-API und die Datenbank waren alles separate Projekte in separaten Repositories. Das hat es schwer gemacht, den Überblick zu behalten, und Änderungen an einer Stelle konnten etwas anderes kaputtmachen, ohne dass wir es bemerkt haben.
+
+    Jetzt lebt alles in einem einzigen **Monorepo** — einem GitHub-Repository, das alle Apps und den gemeinsam genutzten Code enthält. Stell es dir vor wie einen Werkzeugkasten, in dem alle Werkzeuge zusammen sind, statt in verschiedenen Schubladen verstreut zu liegen.
+  </TabItem>
+  <TabItem label="2. Qualität">
+    Der alte Code wurde über 15 Jahre hinweg schnell geschrieben, ohne viel aufzuräumen. Manches war unsicher, manches schwer zu lesen, und manches einfach nur chaotisch. Wir schreiben jedes Teil mit modernem, sauberem, gut strukturiertem Code neu.
+
+    Ein großer Teil davon ist die Verwendung **eines einheitlichen Tech Stacks**. Das alte System war auf drei verschiedene Sprachen und Frameworks verteilt — PHP für die Website, eine Mischung aus rohem JavaScript für das Scoreboard und ein separates Backend-Setup. Das bedeutete, drei verschiedene Welten zu lernen und zu pflegen. Jetzt ist alles TypeScript und React. Eine Sprache, ein Satz von Mustern. Das macht das gesamte System einfacher zu warten, und es bedeutet, dass du nur einen Stack lernen musst statt drei.
+
+    Wir fügen auch **Dokumentation direkt im Code** hinzu — klare Funktionsnamen, Typ-Annotationen die erklären wie die Daten aussehen, und Inline-Kommentare wo die Logik nicht offensichtlich ist. Die Code-Dokumentation und diese Seite verweisen aufeinander: wenn du hier über ein Feature liest, findest du Verweise auf die tatsächlichen Quelldateien, und wenn du den Code liest, verweisen Kommentare auf die entsprechende Doku-Seite.
+  </TabItem>
+  <TabItem label="3. Verständlich">
+    Code sollte lesbar sein. Wenn man eine Datei öffnet, sollte klar sein, was sie tut. Wir dokumentieren alles — sowohl im Code selbst als auch hier auf dieser Seite.
+  </TabItem>
+  <TabItem label="4. Diese Seite">
+    Du liest sie gerade. Sie existiert auf Deutsch und Englisch (Umschalten mit dem Sprach-Toggle oben in der Leiste). Das Ziel ist, dass du das gesamte System verstehen, fundierte Fragen stellen und dich mit der Zeit mit JavaScript/TypeScript vertraut machen kannst, wenn du möchtest.
+  </TabItem>
+</Tabs>
+
+Hier ist der Plan und wo wir stehen:
+
+```mermaid
+flowchart LR
+    A["1. Monorepo<br/>Setup"]:::done
+    B["2. Code<br/>übernehmen"]:::done
+    C["3. Scoreboard<br/>UI"]:::done
+    D["4. Datenmodell<br/>+ API"]:::next
+    E["5. Admin UI<br/>+ Scoreboard"]:::planned
+    F["6.<br/>..."]:::planned
+
+    A --> B --> C --> D --> E --> F
+
+    classDef done fill:#16a34a,color:#fff,stroke:#15803d
+    classDef next fill:#2563eb,color:#fff,stroke:#1d4ed8
+    classDef planned fill:#6b7280,color:#fff,stroke:#4b5563
+```
+
+## Die Apps
+
+| App | Was sie tut |
+|---|---|
+| **scoreboard-ui** | Das Scoreboard, das man auf den Bildschirmen während der Matches sieht. Spieler tippen, um Punkte zu vergeben. |
+| **scores-and-stats-api** | Der Backend-Server. Empfängt Ergebnisse vom Scoreboard, speichert sie in der Datenbank und liefert Daten an die Statistik-Seite. |
+| **statistics-ui** | Die Statistik-Website. Breaks, Ranglisten, Spielerprofile, Live-Ergebnisse, Highlights. |
+| **db** | Die gemeinsame Datenbank. Speichert Spieler, Matches, Frame-Aktionen und alles andere. |
+
+## Wie sie zusammenhängen
+
+```mermaid
+flowchart LR
+    S[Scoreboard UI] -- sendet Ergebnisse --> A[API Server]
+    A -- speichert --> D[(Datenbank)]
+    A -- liest Daten --> T[Statistik UI]
+```
+
+Wenn jemand ein Match auf dem Scoreboard spielt, wird jede Aktion (Pot, Foul, Frame-Ende) an das API geschickt, das sie in der Datenbank speichert. Die Statistik-Seite liest aus derselben Datenbank, um Breaks, Ranglisten und Live-Ergebnisse anzuzeigen.
+
+## Die Monorepo-Struktur
+
+Ein **Monorepo** (kurz für "monolithisches Repository") ist ein einzelnes Git-Repository, das mehrere Projekte zusammen enthält. Statt dass jede App ein eigenes Repo mit eigenem Setup, eigenen Abhängigkeiten und eigenem Deploy-Prozess hat, lebt alles nebeneinander. Gemeinsamer Code (wie der Datenbank-Client oder die TypeScript-Konfiguration) wird einmal geschrieben und von allen Apps genutzt. Tools wie [pnpm Workspaces](https://pnpm.io/workspaces) und [Turborepo](https://turbo.build/repo) sorgen dafür, dass das reibungslos funktioniert.
+
+Unser Monorepo: [github.com/dennisfurrer/rrsb-mono](https://github.com/dennisfurrer/rrsb-mono/tree/main)
+
+```mermaid
+flowchart TB
+    subgraph apps [" Apps "]
+        direction LR
+        SB[scoreboard-ui]
+        API[scores-and-stats-api]
+        STATS[statistics-ui]
+    end
+
+    subgraph packages [" Gemeinsame Pakete "]
+        direction LR
+        DB[(db)]
+        TS[typescript-config]
+    end
+
+    SB --> API
+    STATS --> API
+    API --> DB
+    SB -.-> TS
+    API -.-> TS
+    STATS -.-> TS
+```
