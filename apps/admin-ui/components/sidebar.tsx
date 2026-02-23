@@ -82,7 +82,6 @@ const navSections: NavSection[] = [
     labelKey: "nav.superAdmin",
     roles: ["SUPER_ADMIN"],
     separatorBefore: true,
-    compact: true,
     items: [
       { href: "/users", labelKey: "nav.manageAccess", icon: Shield },
       { href: "/locations", labelKey: "nav.manageLocations", icon: MapPin },
@@ -159,19 +158,22 @@ export function Sidebar() {
               ) : (
                 <>
                   {/* Section header */}
-                  <div className={cn(
-                    "flex items-center gap-2 px-2 mb-1.5 mt-2",
-                    section.dimmed && "opacity-[0.25]"
-                  )}>
+                  <div className="flex items-center gap-2 px-2 mb-1.5 mt-2">
                     {section.icon && (
-                      <section.icon className="w-3.5 h-3.5 shrink-0 text-brand/40" />
+                      <section.icon className={cn("w-3.5 h-3.5 shrink-0", section.dimmed ? "text-text-muted" : "text-brand/30")} />
                     )}
-                    <p className="text-[0.7rem] font-bold uppercase tracking-[0.15em] text-brand/40">
+                    <p className={cn(
+                      "text-[0.7rem] font-bold uppercase tracking-[0.15em]",
+                      section.dimmed ? "text-text-muted" : "text-brand/30 italic"
+                    )}>
                       {t(section.labelKey)}
                     </p>
                     {section.badge && (
                       <span className={cn(
-                        "text-[0.6rem] font-bold uppercase tracking-wider text-text-muted/40 bg-text-muted/[0.05] border border-text-muted/[0.06] rounded px-1.5 py-0.5 leading-none",
+                        "text-[0.55rem] font-bold uppercase tracking-wider leading-none",
+                        section.dimmed
+                          ? "rounded-full bg-text-muted/[0.12] text-text-muted px-2.5 py-1 border border-text-muted/[0.10]"
+                          : "text-text-muted/40 bg-text-muted/[0.05] border border-text-muted/[0.06] rounded-full px-2 py-0.5",
                         section.badgeRight && "ml-auto"
                       )}>
                         {t(section.badge)}
@@ -180,7 +182,7 @@ export function Sidebar() {
                   </div>
 
                   {/* Section items — indented relative to heading */}
-                  <div className="space-y-0.5 pl-2">
+                  <div className="space-y-0.5 pl-6">
                     {section.items.map((item) => {
                       const isActive = !item.disabled && (pathname === item.href || pathname.startsWith(item.href + "/"));
                       const Icon = item.icon;
@@ -190,10 +192,10 @@ export function Sidebar() {
                         return (
                           <div
                             key={item.labelKey}
-                            className="flex items-center gap-2.5 px-3 py-1.5 text-[0.7rem] font-medium text-text-muted/[0.2] cursor-not-allowed select-none"
+                            className="flex items-center gap-2.5 px-3 py-1.5 text-[0.7rem] font-medium text-text-muted cursor-not-allowed select-none"
                           >
                             {t(item.labelKey)}
-                            <Lock className="w-2.5 h-2.5 ml-auto" />
+                            <Lock className="w-2.5 h-2.5 ml-auto text-text-muted" />
                           </div>
                         );
                       }
