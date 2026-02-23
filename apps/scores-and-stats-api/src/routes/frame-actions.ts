@@ -112,7 +112,7 @@ frameActionsRouter.post("/", async (req: Request, res: Response) => {
 // PATCH /api/frame-actions/:id/flag — toggle manualFlagToIgnore
 frameActionsRouter.patch("/:id/flag", async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const existing = await prisma.frameAction.findUnique({ where: { id } });
     if (!existing) {
       res.status(404).json({ error: "FrameAction not found" });
@@ -151,7 +151,8 @@ frameActionsRouter.get(
   "/:matchId/breaks/:playerIndex",
   async (req: Request, res: Response) => {
     try {
-      const { matchId, playerIndex } = req.params;
+      const matchId = req.params.matchId as string;
+      const playerIndex = req.params.playerIndex as string;
       const breaks = await prisma.frameAction.findMany({
         where: {
           matchId,

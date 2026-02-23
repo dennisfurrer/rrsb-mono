@@ -44,7 +44,7 @@ scoreboardsAdminRouter.patch(
       const { tableNumber, namesListId, locationId } = req.body;
 
       const config = await prisma.scoreboardConfig.findUnique({
-        where: { deviceId },
+        where: { deviceId: deviceId as string },
       });
 
       if (!config) {
@@ -53,7 +53,7 @@ scoreboardsAdminRouter.patch(
       }
 
       const updated = await prisma.scoreboardConfig.update({
-        where: { deviceId },
+        where: { deviceId: deviceId as string },
         data: {
           ...(tableNumber !== undefined && { tableNumber }),
           ...(namesListId !== undefined && { namesListId }),
@@ -79,7 +79,7 @@ scoreboardsAdminRouter.delete(
   requireRole("SUPER_ADMIN"),
   async (req: Request, res: Response) => {
     try {
-      const { deviceId } = req.params;
+      const deviceId = req.params.deviceId as string;
       await prisma.scoreboardConfig.delete({ where: { deviceId } });
       res.json({ success: true });
     } catch (e) {

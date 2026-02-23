@@ -71,7 +71,7 @@ locationsRouter.patch(
       if (address !== undefined) data.address = address;
 
       const location = await prisma.location.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         data,
       });
       res.json({ data: location });

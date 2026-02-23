@@ -166,7 +166,7 @@ scoreboardsPublicRouter.get(
   async (req: Request, res: Response) => {
     try {
       const list = await prisma.namesList.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: {
           entries: { orderBy: { sortOrder: "asc" } },
         },
@@ -181,7 +181,7 @@ scoreboardsPublicRouter.get(
         data: {
           id: list.id,
           name: list.name,
-          entries: list.entries.map((e) => ({
+          entries: list.entries.map((e: { playerName: string; nationalityIOC: string }) => ({
             playerName: e.playerName,
             nationalityIOC: e.nationalityIOC,
           })),

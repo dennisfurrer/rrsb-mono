@@ -85,7 +85,7 @@ usersRouter.patch(
       if (password) data.passwordHash = await hash(password, 12);
 
       const user = await prisma.user.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         data,
         select: {
           id: true,
@@ -109,7 +109,7 @@ usersRouter.delete(
   requireRole("SUPER_ADMIN"),
   async (req: Request, res: Response) => {
     try {
-      await prisma.user.delete({ where: { id: req.params.id } });
+      await prisma.user.delete({ where: { id: req.params.id as string } });
       res.json({ success: true });
     } catch (e) {
       console.error("Error deleting user:", e);

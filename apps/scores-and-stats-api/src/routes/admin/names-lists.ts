@@ -56,7 +56,7 @@ namesListsRouter.get(
   async (req: Request, res: Response) => {
     try {
       const list = await prisma.namesList.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: {
           entries: { orderBy: { sortOrder: "asc" } },
         },
@@ -86,7 +86,7 @@ namesListsRouter.post(
       }
       const entry = await prisma.namesListEntry.create({
         data: {
-          namesListId: req.params.id,
+          namesListId: req.params.id as string,
           playerName,
           nationalityIOC: nationalityIOC || "",
           sortOrder: sortOrder ?? 0,
@@ -107,7 +107,7 @@ namesListsRouter.delete(
   async (req: Request, res: Response) => {
     try {
       await prisma.namesListEntry.delete({
-        where: { id: req.params.entryId },
+        where: { id: req.params.entryId as string },
       });
       res.json({ success: true });
     } catch (e) {
@@ -164,11 +164,11 @@ namesListsRouter.post(
       // Replace all entries
       await prisma.$transaction([
         prisma.namesListEntry.deleteMany({
-          where: { namesListId: req.params.id },
+          where: { namesListId: req.params.id as string },
         }),
         ...entries.map((entry) =>
           prisma.namesListEntry.create({
-            data: { namesListId: req.params.id, ...entry },
+            data: { namesListId: req.params.id as string, ...entry },
           })
         ),
       ]);

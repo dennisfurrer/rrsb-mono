@@ -63,7 +63,7 @@ matchSetupRouter.delete(
   requireRole("SUPER_ADMIN", "ADMIN"),
   async (req: Request, res: Response) => {
     try {
-      await prisma.matchAssignment.delete({ where: { id: req.params.id } });
+      await prisma.matchAssignment.delete({ where: { id: req.params.id as string } });
       res.json({ success: true });
     } catch (e) {
       console.error("Error deleting match assignment:", e);
