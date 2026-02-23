@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
   "scripts": {
+    "build": "tsc",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "push": "prisma db push",
@@ -18,13 +19,14 @@
     "seed:admin": "tsx scripts/seed-admin.ts"
   },
   "dependencies": {
-    "@prisma/client": "^7.0.0",
     "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.19.11",
     "prisma": "^7.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
