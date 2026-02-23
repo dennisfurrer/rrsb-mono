@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { MatchState } from "../lib/model";
 import { useAutoFontSize } from "../hooks/useAutoFontSize";
+import trophyGif from "../assets/trophy.gif";
 
 interface Props {
   match: MatchState;
@@ -64,8 +65,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, history }: Props
         {/* Center 20% */}
         <div className="sb-center">
           <div className="sb-name-row sb-name-row-center" style={p1.winner ? { justifyContent: "flex-start" } : p2.winner ? { justifyContent: "flex-end" } : undefined}>
-            {p1.winner && <img src="/trophy.gif" alt="trophy" style={{ height: "48%" }} />}
-            {p2.winner && <img src="/trophy.gif" alt="trophy" style={{ height: "48%" }} />}
+            {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
+            {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
           </div>
           <div className="sb-frames-row sb-frames-row-center">
             <div>Frames</div>

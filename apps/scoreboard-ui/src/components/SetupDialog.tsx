@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import csvText from "../assets/spielerliste.csv?raw";
 
 interface PlayerEntry {
   name: string;
@@ -30,17 +31,10 @@ interface Props {
 }
 
 export function SetupDialog({ onComplete, defaultBestOf }: Props) {
-  const [players, setPlayers] = useState<PlayerEntry[]>([]);
+  const [players] = useState<PlayerEntry[]>(() => parseCSV(csvText));
   const [name1, setName1] = useState("");
   const [name2, setName2] = useState("");
   const [bestOf, setBestOf] = useState(defaultBestOf);
-
-  useEffect(() => {
-    fetch("/spielerliste.csv")
-      .then((r) => r.text())
-      .then((text) => setPlayers(parseCSV(text)))
-      .catch(console.error);
-  }, []);
 
   function getIOC(name: string): string {
     return players.find((p) => p.name === name)?.ioc || "SUI";
