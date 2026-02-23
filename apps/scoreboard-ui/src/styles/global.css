@@ -386,31 +386,28 @@ div { font-weight: bold; }
   color: #88f;
 }
 
-/* ===== MENU DIALOG ===== */
-.menu-dialog {
-  background: #222;
-  padding: 8px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 360px;
+/* ===== MENU (full-width bars) ===== */
+.menu-fullscreen {
+  position: absolute;
+  top: 30%;
+  left: 20%;
+  width: 60%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-.menu-dialog button {
-  padding: 18px;
-  font-size: 1.1em;
+.menu-fullscreen button {
+  padding: 3.59vh 2vw;
+  font-size: 2.42vw;
   font-weight: bold;
-  border: none;
-  border-radius: 4px;
+  border: 1px solid #000;
   cursor: pointer;
-  text-align: center;
+  text-align: left;
 }
 
-.menu-btn-undo { background: #660000; color: #f00; }
-.menu-btn-frame-end { background: #006600; color: #0f0; }
-.menu-btn-rerack { background: #333; color: #fff; }
-.menu-btn-match-end { background: #358d35; color: #0f0; }
-.menu-btn-new-game { background: #000066; color: #0ff; }
+.menu-btn-undo { background: #660000; color: #e60000; }
+.menu-btn-frame-end { background: #265c26; color: #00e600; }
+.menu-btn-rerack { background: #444; color: #e6e6e6; }
+.menu-btn-match-end { background: #5a8a5a; color: #00e600; }
+.menu-btn-new-game { background: #000088; color: #00e6e6; }
 

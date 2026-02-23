@@ -5,6 +5,8 @@ interface Props {
   onMatchEnd?: () => void;
   onNewGame: () => void;
   onClose: () => void;
+  frameLeader: string;
+  matchLeader: string;
 }
 
 export function MenuDialog({
@@ -14,26 +16,28 @@ export function MenuDialog({
   onMatchEnd,
   onNewGame,
   onClose,
+  frameLeader,
+  matchLeader,
 }: Props) {
   return (
     <div className="overlay" onClick={onClose}>
-      <div className="menu-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="menu-fullscreen" onClick={(e) => e.stopPropagation()}>
         <button className="menu-btn-undo" onClick={onUndo}>
-          Undo
+          Undo / Letzte Eingabe löschen
         </button>
         <button className="menu-btn-frame-end" onClick={onFrameEnd}>
-          Frame End
+          Frame-Ende ({frameLeader} gewinnt)
         </button>
         <button className="menu-btn-rerack" onClick={onRerack}>
           Re-rack
         </button>
         {onMatchEnd && (
           <button className="menu-btn-match-end" onClick={onMatchEnd}>
-            Match End
+            Match-Ende ({matchLeader} gewinnt)
           </button>
         )}
         <button className="menu-btn-new-game" onClick={onNewGame}>
-          New Game
+          New game / Neues Spiel
         </button>
       </div>
     </div>

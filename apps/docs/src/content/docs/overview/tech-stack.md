@@ -6,31 +6,29 @@ description: What we had before and what we're replacing it with.
 ## Architecture comparison
 
 ```mermaid
-flowchart TB
-    subgraph old ["Old: 3 separate repos"]
+flowchart LR
+    subgraph old [" OLD "]
         direction TB
-        O1["scoreboard/\nJS + jQuery + PHP + CSS"]
-        O2["scoreboard-be/\nExpress + Prisma\n(messy)"]
-        O3["rrsb-breaks-calendar/\n1 HTML file, 6555 lines"]
-        O1 -. "no shared code" .- O2
-        O2 -. "no shared code" .- O3
+        O1[scoreboard]
+        O2[scoreboard-be]
+        O3[rrsb-breaks-calendar]
     end
 
-    subgraph new ["New: 1 monorepo"]
+    old -- rewrite --> new
+
+    subgraph new [" NEW "]
         direction TB
-        N1["scoreboard-ui\nReact 19 + Vite + TS"]
-        N2["scores-and-stats-api\nExpress + Zod + Prisma v7"]
-        N3["statistics-ui\nReact 19 + Vite + Chart.js"]
-        DB["packages/db\nPrisma v7 + PostgreSQL"]
-        N1 --> DB
-        N2 --> DB
+        N1[scoreboard-ui]
+        N2[scores-and-stats-api]
+        N3[statistics-ui]
+        DB[(packages/db)]
+        N1 --> N2
         N3 --> N2
+        N2 --> DB
     end
 
-    old -- "rewrite" --> new
-
-    style old fill:#fef2f2,stroke:#dc2626
-    style new fill:#f0fdf4,stroke:#16a34a
+    style old fill:#fef2f2,stroke:#dc2626,color:#991b1b
+    style new fill:#f0fdf4,stroke:#16a34a,color:#166534
 ```
 
 ## The old setup

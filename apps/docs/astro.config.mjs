@@ -1,11 +1,11 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import starlightClientMermaid from "@pasqal-io/starlight-client-mermaid";
+import mermaid from "astro-mermaid";
 
 export default defineConfig({
   integrations: [
+    mermaid(),
     starlight({
-      plugins: [starlightClientMermaid()],
       title: {
         en: "RRSB Docs",
         de: "RRSB Dokumentation",

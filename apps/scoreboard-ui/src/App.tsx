@@ -414,6 +414,16 @@ export function App() {
           onMatchEnd={canEndMatchEarly ? endMatchEarly : undefined}
           onNewGame={newGame}
           onClose={() => setShowMenu(false)}
+          frameLeader={
+            match.players[0].score >= match.players[1].score
+              ? match.players[0].name
+              : match.players[1].name
+          }
+          matchLeader={
+            match.players[0].frames >= match.players[1].frames
+              ? match.players[0].name
+              : match.players[1].name
+          }
         />
       )}
     </>

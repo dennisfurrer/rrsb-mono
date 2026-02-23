@@ -7,12 +7,12 @@ description: Was wir bauen und wie weit wir sind.
 
 ```mermaid
 flowchart LR
-    A["1. Monorepo\neinrichten"]:::done
-    B["2. Code\nübernehmen"]:::done
-    C["3. Scoreboard\nneu schreiben"]:::done
-    D["4. Datenmodell\n+ API erweitern"]:::next
-    E["5. Admin\nUI"]:::planned
-    F["6. Statistik-\nWebsite"]:::planned
+    A[1. Monorepo einrichten]:::done
+    B[2. Code übernehmen]:::done
+    C[3. Scoreboard UI]:::done
+    D[4. Datenmodell + API]:::next
+    E[5. Admin UI]:::planned
+    F[6. Statistik-Website]:::planned
 
     A --> B --> C --> D --> E --> F
 

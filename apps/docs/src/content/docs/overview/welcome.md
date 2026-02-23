@@ -42,14 +42,9 @@ You're reading it. It exists in both English and German (switch with the languag
 
 ```mermaid
 flowchart LR
-    S["🎱 Scoreboard UI"]
-    A["⚙️ API"]
-    D[("🗄️ Database")]
-    T["📊 Statistics UI"]
-
-    S -- "sends scores" --> A
-    A -- "stores" --> D
-    D -- "reads data" --> T
+    S[Scoreboard UI] -- sends scores --> A[API Server]
+    A -- stores --> D[(Database)]
+    A -- reads data --> T[Statistics UI]
 ```
 
 When someone plays a match on the scoreboard, every action (pot, foul, frame end) gets sent to the API, which saves it to the database. The statistics site reads from the same database to show breaks, leaderboards, and live scores.
@@ -58,22 +53,23 @@ When someone plays a match on the scoreboard, every action (pot, foul, frame end
 
 ```mermaid
 flowchart TB
-    subgraph apps ["Apps"]
-        SB["scoreboard-ui\n(React)"]
-        API["scores-and-stats-api\n(Express)"]
-        STATS["statistics-ui\n(React)"]
+    subgraph apps [" Apps "]
+        direction LR
+        SB[scoreboard-ui]
+        API[scores-and-stats-api]
+        STATS[statistics-ui]
     end
 
-    subgraph packages ["Shared Packages"]
-        DB["db\n(Prisma + PostgreSQL)"]
-        TS["typescript-config"]
+    subgraph packages [" Shared Packages "]
+        direction LR
+        DB[(db)]
+        TS[typescript-config]
     end
 
     SB --> API
-    API --> DB
     STATS --> API
+    API --> DB
     SB -.-> TS
     API -.-> TS
     STATS -.-> TS
-    API -.-> DB
 ```

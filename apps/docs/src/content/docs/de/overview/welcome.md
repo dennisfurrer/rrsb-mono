@@ -42,14 +42,9 @@ Du liest sie gerade. Sie existiert auf Deutsch und Englisch (Umschalten mit dem 
 
 ```mermaid
 flowchart LR
-    S["🎱 Scoreboard UI"]
-    A["⚙️ API"]
-    D[("🗄️ Datenbank")]
-    T["📊 Statistik UI"]
-
-    S -- "sendet Ergebnisse" --> A
-    A -- "speichert" --> D
-    D -- "liest Daten" --> T
+    S[Scoreboard UI] -- sendet Ergebnisse --> A[API Server]
+    A -- speichert --> D[(Datenbank)]
+    A -- liest Daten --> T[Statistik UI]
 ```
 
 Wenn jemand ein Match auf dem Scoreboard spielt, wird jede Aktion (Pot, Foul, Frame-Ende) an das API geschickt, das sie in der Datenbank speichert. Die Statistik-Seite liest aus derselben Datenbank, um Breaks, Ranglisten und Live-Ergebnisse anzuzeigen.
@@ -58,22 +53,23 @@ Wenn jemand ein Match auf dem Scoreboard spielt, wird jede Aktion (Pot, Foul, Fr
 
 ```mermaid
 flowchart TB
-    subgraph apps ["Apps"]
-        SB["scoreboard-ui\n(React)"]
-        API["scores-and-stats-api\n(Express)"]
-        STATS["statistics-ui\n(React)"]
+    subgraph apps [" Apps "]
+        direction LR
+        SB[scoreboard-ui]
+        API[scores-and-stats-api]
+        STATS[statistics-ui]
     end
 
-    subgraph packages ["Gemeinsame Pakete"]
-        DB["db\n(Prisma + PostgreSQL)"]
-        TS["typescript-config"]
+    subgraph packages [" Gemeinsame Pakete "]
+        direction LR
+        DB[(db)]
+        TS[typescript-config]
     end
 
     SB --> API
-    API --> DB
     STATS --> API
+    API --> DB
     SB -.-> TS
     API -.-> TS
     STATS -.-> TS
-    API -.-> DB
 ```
