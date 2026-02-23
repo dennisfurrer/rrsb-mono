@@ -7,7 +7,7 @@
  *   npx tsx scripts/seed-admin.ts --email admin@rrsb.ch --password <password> --db postgres://user:pass@host/db
  */
 import "dotenv/config";
-import { PrismaClient } from "../src/generated/prisma/client.js";
+import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { readFileSync } from "fs";

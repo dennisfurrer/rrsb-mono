@@ -1,0 +1,1466 @@
+import type * as runtime from "@prisma/client/runtime/client";
+import type * as Prisma from "../internal/prismaNamespace";
+/**
+ * Model ScoreboardConfig
+ *
+ */
+export type ScoreboardConfigModel = runtime.Types.Result.DefaultSelection<Prisma.$ScoreboardConfigPayload>;
+export type AggregateScoreboardConfig = {
+    _count: ScoreboardConfigCountAggregateOutputType | null;
+    _avg: ScoreboardConfigAvgAggregateOutputType | null;
+    _sum: ScoreboardConfigSumAggregateOutputType | null;
+    _min: ScoreboardConfigMinAggregateOutputType | null;
+    _max: ScoreboardConfigMaxAggregateOutputType | null;
+};
+export type ScoreboardConfigAvgAggregateOutputType = {
+    tableNumber: number | null;
+};
+export type ScoreboardConfigSumAggregateOutputType = {
+    tableNumber: number | null;
+};
+export type ScoreboardConfigMinAggregateOutputType = {
+    id: string | null;
+    deviceId: string | null;
+    tableNumber: number | null;
+    locationId: string | null;
+    namesListId: string | null;
+    lastPingAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type ScoreboardConfigMaxAggregateOutputType = {
+    id: string | null;
+    deviceId: string | null;
+    tableNumber: number | null;
+    locationId: string | null;
+    namesListId: string | null;
+    lastPingAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type ScoreboardConfigCountAggregateOutputType = {
+    id: number;
+    deviceId: number;
+    tableNumber: number;
+    locationId: number;
+    namesListId: number;
+    lastPingAt: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+};
+export type ScoreboardConfigAvgAggregateInputType = {
+    tableNumber?: true;
+};
+export type ScoreboardConfigSumAggregateInputType = {
+    tableNumber?: true;
+};
+export type ScoreboardConfigMinAggregateInputType = {
+    id?: true;
+    deviceId?: true;
+    tableNumber?: true;
+    locationId?: true;
+    namesListId?: true;
+    lastPingAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type ScoreboardConfigMaxAggregateInputType = {
+    id?: true;
+    deviceId?: true;
+    tableNumber?: true;
+    locationId?: true;
+    namesListId?: true;
+    lastPingAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type ScoreboardConfigCountAggregateInputType = {
+    id?: true;
+    deviceId?: true;
+    tableNumber?: true;
+    locationId?: true;
+    namesListId?: true;
+    lastPingAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+};
+export type ScoreboardConfigAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreboardConfig to aggregate.
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ScoreboardConfigs to fetch.
+     */
+    orderBy?: Prisma.ScoreboardConfigOrderByWithRelationInput | Prisma.ScoreboardConfigOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: Prisma.ScoreboardConfigWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ScoreboardConfigs from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ScoreboardConfigs.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ScoreboardConfigs
+    **/
+    _count?: true | ScoreboardConfigCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: ScoreboardConfigAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: ScoreboardConfigSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScoreboardConfigMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScoreboardConfigMaxAggregateInputType;
+};
+export type GetScoreboardConfigAggregateType<T extends ScoreboardConfigAggregateArgs> = {
+    [P in keyof T & keyof AggregateScoreboardConfig]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateScoreboardConfig[P]> : Prisma.GetScalarType<T[P], AggregateScoreboardConfig[P]>;
+};
+export type ScoreboardConfigGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ScoreboardConfigWhereInput;
+    orderBy?: Prisma.ScoreboardConfigOrderByWithAggregationInput | Prisma.ScoreboardConfigOrderByWithAggregationInput[];
+    by: Prisma.ScoreboardConfigScalarFieldEnum[] | Prisma.ScoreboardConfigScalarFieldEnum;
+    having?: Prisma.ScoreboardConfigScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ScoreboardConfigCountAggregateInputType | true;
+    _avg?: ScoreboardConfigAvgAggregateInputType;
+    _sum?: ScoreboardConfigSumAggregateInputType;
+    _min?: ScoreboardConfigMinAggregateInputType;
+    _max?: ScoreboardConfigMaxAggregateInputType;
+};
+export type ScoreboardConfigGroupByOutputType = {
+    id: string;
+    deviceId: string;
+    tableNumber: number | null;
+    locationId: string;
+    namesListId: string | null;
+    lastPingAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: ScoreboardConfigCountAggregateOutputType | null;
+    _avg: ScoreboardConfigAvgAggregateOutputType | null;
+    _sum: ScoreboardConfigSumAggregateOutputType | null;
+    _min: ScoreboardConfigMinAggregateOutputType | null;
+    _max: ScoreboardConfigMaxAggregateOutputType | null;
+};
+type GetScoreboardConfigGroupByPayload<T extends ScoreboardConfigGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<ScoreboardConfigGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof ScoreboardConfigGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], ScoreboardConfigGroupByOutputType[P]> : Prisma.GetScalarType<T[P], ScoreboardConfigGroupByOutputType[P]>;
+}>>;
+export type ScoreboardConfigWhereInput = {
+    AND?: Prisma.ScoreboardConfigWhereInput | Prisma.ScoreboardConfigWhereInput[];
+    OR?: Prisma.ScoreboardConfigWhereInput[];
+    NOT?: Prisma.ScoreboardConfigWhereInput | Prisma.ScoreboardConfigWhereInput[];
+    id?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    deviceId?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    tableNumber?: Prisma.IntNullableFilter<"ScoreboardConfig"> | number | null;
+    locationId?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    namesListId?: Prisma.StringNullableFilter<"ScoreboardConfig"> | string | null;
+    lastPingAt?: Prisma.DateTimeNullableFilter<"ScoreboardConfig"> | Date | string | null;
+    createdAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+    location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>;
+    namesList?: Prisma.XOR<Prisma.NamesListNullableScalarRelationFilter, Prisma.NamesListWhereInput> | null;
+};
+export type ScoreboardConfigOrderByWithRelationInput = {
+    id?: Prisma.SortOrder;
+    deviceId?: Prisma.SortOrder;
+    tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
+    namesListId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    lastPingAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    location?: Prisma.LocationOrderByWithRelationInput;
+    namesList?: Prisma.NamesListOrderByWithRelationInput;
+};
+export type ScoreboardConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string;
+    deviceId?: string;
+    AND?: Prisma.ScoreboardConfigWhereInput | Prisma.ScoreboardConfigWhereInput[];
+    OR?: Prisma.ScoreboardConfigWhereInput[];
+    NOT?: Prisma.ScoreboardConfigWhereInput | Prisma.ScoreboardConfigWhereInput[];
+    tableNumber?: Prisma.IntNullableFilter<"ScoreboardConfig"> | number | null;
+    locationId?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    namesListId?: Prisma.StringNullableFilter<"ScoreboardConfig"> | string | null;
+    lastPingAt?: Prisma.DateTimeNullableFilter<"ScoreboardConfig"> | Date | string | null;
+    createdAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+    location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>;
+    namesList?: Prisma.XOR<Prisma.NamesListNullableScalarRelationFilter, Prisma.NamesListWhereInput> | null;
+}, "id" | "deviceId">;
+export type ScoreboardConfigOrderByWithAggregationInput = {
+    id?: Prisma.SortOrder;
+    deviceId?: Prisma.SortOrder;
+    tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
+    namesListId?: Prisma.SortOrderInput | Prisma.SortOrder;
+    lastPingAt?: Prisma.SortOrderInput | Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    _count?: Prisma.ScoreboardConfigCountOrderByAggregateInput;
+    _avg?: Prisma.ScoreboardConfigAvgOrderByAggregateInput;
+    _max?: Prisma.ScoreboardConfigMaxOrderByAggregateInput;
+    _min?: Prisma.ScoreboardConfigMinOrderByAggregateInput;
+    _sum?: Prisma.ScoreboardConfigSumOrderByAggregateInput;
+};
+export type ScoreboardConfigScalarWhereWithAggregatesInput = {
+    AND?: Prisma.ScoreboardConfigScalarWhereWithAggregatesInput | Prisma.ScoreboardConfigScalarWhereWithAggregatesInput[];
+    OR?: Prisma.ScoreboardConfigScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.ScoreboardConfigScalarWhereWithAggregatesInput | Prisma.ScoreboardConfigScalarWhereWithAggregatesInput[];
+    id?: Prisma.StringWithAggregatesFilter<"ScoreboardConfig"> | string;
+    deviceId?: Prisma.StringWithAggregatesFilter<"ScoreboardConfig"> | string;
+    tableNumber?: Prisma.IntNullableWithAggregatesFilter<"ScoreboardConfig"> | number | null;
+    locationId?: Prisma.StringWithAggregatesFilter<"ScoreboardConfig"> | string;
+    namesListId?: Prisma.StringNullableWithAggregatesFilter<"ScoreboardConfig"> | string | null;
+    lastPingAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ScoreboardConfig"> | Date | string | null;
+    createdAt?: Prisma.DateTimeWithAggregatesFilter<"ScoreboardConfig"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ScoreboardConfig"> | Date | string;
+};
+export type ScoreboardConfigCreateInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    location: Prisma.LocationCreateNestedOneWithoutScoreboardConfigsInput;
+    namesList?: Prisma.NamesListCreateNestedOneWithoutScoreboardConfigsInput;
+};
+export type ScoreboardConfigUncheckedCreateInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    locationId: string;
+    namesListId?: string | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: Prisma.LocationUpdateOneRequiredWithoutScoreboardConfigsNestedInput;
+    namesList?: Prisma.NamesListUpdateOneWithoutScoreboardConfigsNestedInput;
+};
+export type ScoreboardConfigUncheckedUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    locationId?: Prisma.StringFieldUpdateOperationsInput | string;
+    namesListId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigCreateManyInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    locationId: string;
+    namesListId?: string | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigUpdateManyMutationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigUncheckedUpdateManyInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    locationId?: Prisma.StringFieldUpdateOperationsInput | string;
+    namesListId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigListRelationFilter = {
+    every?: Prisma.ScoreboardConfigWhereInput;
+    some?: Prisma.ScoreboardConfigWhereInput;
+    none?: Prisma.ScoreboardConfigWhereInput;
+};
+export type ScoreboardConfigOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type ScoreboardConfigCountOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    deviceId?: Prisma.SortOrder;
+    tableNumber?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
+    namesListId?: Prisma.SortOrder;
+    lastPingAt?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ScoreboardConfigAvgOrderByAggregateInput = {
+    tableNumber?: Prisma.SortOrder;
+};
+export type ScoreboardConfigMaxOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    deviceId?: Prisma.SortOrder;
+    tableNumber?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
+    namesListId?: Prisma.SortOrder;
+    lastPingAt?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ScoreboardConfigMinOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    deviceId?: Prisma.SortOrder;
+    tableNumber?: Prisma.SortOrder;
+    locationId?: Prisma.SortOrder;
+    namesListId?: Prisma.SortOrder;
+    lastPingAt?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type ScoreboardConfigSumOrderByAggregateInput = {
+    tableNumber?: Prisma.SortOrder;
+};
+export type ScoreboardConfigCreateNestedManyWithoutLocationInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput> | Prisma.ScoreboardConfigCreateWithoutLocationInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput | Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyLocationInputEnvelope;
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+};
+export type ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput> | Prisma.ScoreboardConfigCreateWithoutLocationInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput | Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyLocationInputEnvelope;
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+};
+export type ScoreboardConfigUpdateManyWithoutLocationNestedInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput> | Prisma.ScoreboardConfigCreateWithoutLocationInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput | Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput[];
+    upsert?: Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutLocationInput | Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutLocationInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyLocationInputEnvelope;
+    set?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    disconnect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    delete?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    update?: Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutLocationInput | Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutLocationInput[];
+    updateMany?: Prisma.ScoreboardConfigUpdateManyWithWhereWithoutLocationInput | Prisma.ScoreboardConfigUpdateManyWithWhereWithoutLocationInput[];
+    deleteMany?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+};
+export type ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput> | Prisma.ScoreboardConfigCreateWithoutLocationInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput | Prisma.ScoreboardConfigCreateOrConnectWithoutLocationInput[];
+    upsert?: Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutLocationInput | Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutLocationInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyLocationInputEnvelope;
+    set?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    disconnect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    delete?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    update?: Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutLocationInput | Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutLocationInput[];
+    updateMany?: Prisma.ScoreboardConfigUpdateManyWithWhereWithoutLocationInput | Prisma.ScoreboardConfigUpdateManyWithWhereWithoutLocationInput[];
+    deleteMany?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+};
+export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+};
+export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null;
+};
+export type ScoreboardConfigCreateNestedManyWithoutNamesListInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput> | Prisma.ScoreboardConfigCreateWithoutNamesListInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput | Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyNamesListInputEnvelope;
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+};
+export type ScoreboardConfigUncheckedCreateNestedManyWithoutNamesListInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput> | Prisma.ScoreboardConfigCreateWithoutNamesListInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput | Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyNamesListInputEnvelope;
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+};
+export type ScoreboardConfigUpdateManyWithoutNamesListNestedInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput> | Prisma.ScoreboardConfigCreateWithoutNamesListInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput | Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput[];
+    upsert?: Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutNamesListInput | Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutNamesListInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyNamesListInputEnvelope;
+    set?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    disconnect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    delete?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    update?: Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutNamesListInput | Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutNamesListInput[];
+    updateMany?: Prisma.ScoreboardConfigUpdateManyWithWhereWithoutNamesListInput | Prisma.ScoreboardConfigUpdateManyWithWhereWithoutNamesListInput[];
+    deleteMany?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+};
+export type ScoreboardConfigUncheckedUpdateManyWithoutNamesListNestedInput = {
+    create?: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput> | Prisma.ScoreboardConfigCreateWithoutNamesListInput[] | Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput[];
+    connectOrCreate?: Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput | Prisma.ScoreboardConfigCreateOrConnectWithoutNamesListInput[];
+    upsert?: Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutNamesListInput | Prisma.ScoreboardConfigUpsertWithWhereUniqueWithoutNamesListInput[];
+    createMany?: Prisma.ScoreboardConfigCreateManyNamesListInputEnvelope;
+    set?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    disconnect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    delete?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    connect?: Prisma.ScoreboardConfigWhereUniqueInput | Prisma.ScoreboardConfigWhereUniqueInput[];
+    update?: Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutNamesListInput | Prisma.ScoreboardConfigUpdateWithWhereUniqueWithoutNamesListInput[];
+    updateMany?: Prisma.ScoreboardConfigUpdateManyWithWhereWithoutNamesListInput | Prisma.ScoreboardConfigUpdateManyWithWhereWithoutNamesListInput[];
+    deleteMany?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+};
+export type ScoreboardConfigCreateWithoutLocationInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    namesList?: Prisma.NamesListCreateNestedOneWithoutScoreboardConfigsInput;
+};
+export type ScoreboardConfigUncheckedCreateWithoutLocationInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    namesListId?: string | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigCreateOrConnectWithoutLocationInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput>;
+};
+export type ScoreboardConfigCreateManyLocationInputEnvelope = {
+    data: Prisma.ScoreboardConfigCreateManyLocationInput | Prisma.ScoreboardConfigCreateManyLocationInput[];
+    skipDuplicates?: boolean;
+};
+export type ScoreboardConfigUpsertWithWhereUniqueWithoutLocationInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    update: Prisma.XOR<Prisma.ScoreboardConfigUpdateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedUpdateWithoutLocationInput>;
+    create: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedCreateWithoutLocationInput>;
+};
+export type ScoreboardConfigUpdateWithWhereUniqueWithoutLocationInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateWithoutLocationInput, Prisma.ScoreboardConfigUncheckedUpdateWithoutLocationInput>;
+};
+export type ScoreboardConfigUpdateManyWithWhereWithoutLocationInput = {
+    where: Prisma.ScoreboardConfigScalarWhereInput;
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateManyMutationInput, Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationInput>;
+};
+export type ScoreboardConfigScalarWhereInput = {
+    AND?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+    OR?: Prisma.ScoreboardConfigScalarWhereInput[];
+    NOT?: Prisma.ScoreboardConfigScalarWhereInput | Prisma.ScoreboardConfigScalarWhereInput[];
+    id?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    deviceId?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    tableNumber?: Prisma.IntNullableFilter<"ScoreboardConfig"> | number | null;
+    locationId?: Prisma.StringFilter<"ScoreboardConfig"> | string;
+    namesListId?: Prisma.StringNullableFilter<"ScoreboardConfig"> | string | null;
+    lastPingAt?: Prisma.DateTimeNullableFilter<"ScoreboardConfig"> | Date | string | null;
+    createdAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"ScoreboardConfig"> | Date | string;
+};
+export type ScoreboardConfigCreateWithoutNamesListInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    location: Prisma.LocationCreateNestedOneWithoutScoreboardConfigsInput;
+};
+export type ScoreboardConfigUncheckedCreateWithoutNamesListInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    locationId: string;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigCreateOrConnectWithoutNamesListInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    create: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput>;
+};
+export type ScoreboardConfigCreateManyNamesListInputEnvelope = {
+    data: Prisma.ScoreboardConfigCreateManyNamesListInput | Prisma.ScoreboardConfigCreateManyNamesListInput[];
+    skipDuplicates?: boolean;
+};
+export type ScoreboardConfigUpsertWithWhereUniqueWithoutNamesListInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    update: Prisma.XOR<Prisma.ScoreboardConfigUpdateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedUpdateWithoutNamesListInput>;
+    create: Prisma.XOR<Prisma.ScoreboardConfigCreateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedCreateWithoutNamesListInput>;
+};
+export type ScoreboardConfigUpdateWithWhereUniqueWithoutNamesListInput = {
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateWithoutNamesListInput, Prisma.ScoreboardConfigUncheckedUpdateWithoutNamesListInput>;
+};
+export type ScoreboardConfigUpdateManyWithWhereWithoutNamesListInput = {
+    where: Prisma.ScoreboardConfigScalarWhereInput;
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateManyMutationInput, Prisma.ScoreboardConfigUncheckedUpdateManyWithoutNamesListInput>;
+};
+export type ScoreboardConfigCreateManyLocationInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    namesListId?: string | null;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigUpdateWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    namesList?: Prisma.NamesListUpdateOneWithoutScoreboardConfigsNestedInput;
+};
+export type ScoreboardConfigUncheckedUpdateWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    namesListId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigUncheckedUpdateManyWithoutLocationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    namesListId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigCreateManyNamesListInput = {
+    id?: string;
+    deviceId: string;
+    tableNumber?: number | null;
+    locationId: string;
+    lastPingAt?: Date | string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type ScoreboardConfigUpdateWithoutNamesListInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    location?: Prisma.LocationUpdateOneRequiredWithoutScoreboardConfigsNestedInput;
+};
+export type ScoreboardConfigUncheckedUpdateWithoutNamesListInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    locationId?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigUncheckedUpdateManyWithoutNamesListInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    deviceId?: Prisma.StringFieldUpdateOperationsInput | string;
+    tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    locationId?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastPingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type ScoreboardConfigSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    deviceId?: boolean;
+    tableNumber?: boolean;
+    locationId?: boolean;
+    namesListId?: boolean;
+    lastPingAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+}, ExtArgs["result"]["scoreboardConfig"]>;
+export type ScoreboardConfigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    deviceId?: boolean;
+    tableNumber?: boolean;
+    locationId?: boolean;
+    namesListId?: boolean;
+    lastPingAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+}, ExtArgs["result"]["scoreboardConfig"]>;
+export type ScoreboardConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    deviceId?: boolean;
+    tableNumber?: boolean;
+    locationId?: boolean;
+    namesListId?: boolean;
+    lastPingAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+}, ExtArgs["result"]["scoreboardConfig"]>;
+export type ScoreboardConfigSelectScalar = {
+    id?: boolean;
+    deviceId?: boolean;
+    tableNumber?: boolean;
+    locationId?: boolean;
+    namesListId?: boolean;
+    lastPingAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+};
+export type ScoreboardConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "deviceId" | "tableNumber" | "locationId" | "namesListId" | "lastPingAt" | "createdAt" | "updatedAt", ExtArgs["result"]["scoreboardConfig"]>;
+export type ScoreboardConfigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+};
+export type ScoreboardConfigIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+};
+export type ScoreboardConfigIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>;
+    namesList?: boolean | Prisma.ScoreboardConfig$namesListArgs<ExtArgs>;
+};
+export type $ScoreboardConfigPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "ScoreboardConfig";
+    objects: {
+        location: Prisma.$LocationPayload<ExtArgs>;
+        namesList: Prisma.$NamesListPayload<ExtArgs> | null;
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        id: string;
+        deviceId: string;
+        tableNumber: number | null;
+        locationId: string;
+        namesListId: string | null;
+        lastPingAt: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }, ExtArgs["result"]["scoreboardConfig"]>;
+    composites: {};
+};
+export type ScoreboardConfigGetPayload<S extends boolean | null | undefined | ScoreboardConfigDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload, S>;
+export type ScoreboardConfigCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<ScoreboardConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: ScoreboardConfigCountAggregateInputType | true;
+};
+export interface ScoreboardConfigDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['ScoreboardConfig'];
+        meta: {
+            name: 'ScoreboardConfig';
+        };
+    };
+    /**
+     * Find zero or one ScoreboardConfig that matches the filter.
+     * @param {ScoreboardConfigFindUniqueArgs} args - Arguments to find a ScoreboardConfig
+     * @example
+     * // Get one ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScoreboardConfigFindUniqueArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find one ScoreboardConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScoreboardConfigFindUniqueOrThrowArgs} args - Arguments to find a ScoreboardConfig
+     * @example
+     * // Get one ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScoreboardConfigFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first ScoreboardConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigFindFirstArgs} args - Arguments to find a ScoreboardConfig
+     * @example
+     * // Get one ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScoreboardConfigFindFirstArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigFindFirstArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first ScoreboardConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigFindFirstOrThrowArgs} args - Arguments to find a ScoreboardConfig
+     * @example
+     * // Get one ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScoreboardConfigFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find zero or more ScoreboardConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScoreboardConfigs
+     * const scoreboardConfigs = await prisma.scoreboardConfig.findMany()
+     *
+     * // Get first 10 ScoreboardConfigs
+     * const scoreboardConfigs = await prisma.scoreboardConfig.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const scoreboardConfigWithIdOnly = await prisma.scoreboardConfig.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ScoreboardConfigFindManyArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    /**
+     * Create a ScoreboardConfig.
+     * @param {ScoreboardConfigCreateArgs} args - Arguments to create a ScoreboardConfig.
+     * @example
+     * // Create one ScoreboardConfig
+     * const ScoreboardConfig = await prisma.scoreboardConfig.create({
+     *   data: {
+     *     // ... data to create a ScoreboardConfig
+     *   }
+     * })
+     *
+     */
+    create<T extends ScoreboardConfigCreateArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigCreateArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Create many ScoreboardConfigs.
+     * @param {ScoreboardConfigCreateManyArgs} args - Arguments to create many ScoreboardConfigs.
+     * @example
+     * // Create many ScoreboardConfigs
+     * const scoreboardConfig = await prisma.scoreboardConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ScoreboardConfigCreateManyArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Create many ScoreboardConfigs and returns the data saved in the database.
+     * @param {ScoreboardConfigCreateManyAndReturnArgs} args - Arguments to create many ScoreboardConfigs.
+     * @example
+     * // Create many ScoreboardConfigs
+     * const scoreboardConfig = await prisma.scoreboardConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ScoreboardConfigs and only return the `id`
+     * const scoreboardConfigWithIdOnly = await prisma.scoreboardConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ScoreboardConfigCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Delete a ScoreboardConfig.
+     * @param {ScoreboardConfigDeleteArgs} args - Arguments to delete one ScoreboardConfig.
+     * @example
+     * // Delete one ScoreboardConfig
+     * const ScoreboardConfig = await prisma.scoreboardConfig.delete({
+     *   where: {
+     *     // ... filter to delete one ScoreboardConfig
+     *   }
+     * })
+     *
+     */
+    delete<T extends ScoreboardConfigDeleteArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigDeleteArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Update one ScoreboardConfig.
+     * @param {ScoreboardConfigUpdateArgs} args - Arguments to update one ScoreboardConfig.
+     * @example
+     * // Update one ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ScoreboardConfigUpdateArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigUpdateArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Delete zero or more ScoreboardConfigs.
+     * @param {ScoreboardConfigDeleteManyArgs} args - Arguments to filter ScoreboardConfigs to delete.
+     * @example
+     * // Delete a few ScoreboardConfigs
+     * const { count } = await prisma.scoreboardConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ScoreboardConfigDeleteManyArgs>(args?: Prisma.SelectSubset<T, ScoreboardConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more ScoreboardConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScoreboardConfigs
+     * const scoreboardConfig = await prisma.scoreboardConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ScoreboardConfigUpdateManyArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more ScoreboardConfigs and returns the data updated in the database.
+     * @param {ScoreboardConfigUpdateManyAndReturnArgs} args - Arguments to update many ScoreboardConfigs.
+     * @example
+     * // Update many ScoreboardConfigs
+     * const scoreboardConfig = await prisma.scoreboardConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ScoreboardConfigs and only return the `id`
+     * const scoreboardConfigWithIdOnly = await prisma.scoreboardConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ScoreboardConfigUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Create or update one ScoreboardConfig.
+     * @param {ScoreboardConfigUpsertArgs} args - Arguments to update or create a ScoreboardConfig.
+     * @example
+     * // Update or create a ScoreboardConfig
+     * const scoreboardConfig = await prisma.scoreboardConfig.upsert({
+     *   create: {
+     *     // ... data to create a ScoreboardConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScoreboardConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScoreboardConfigUpsertArgs>(args: Prisma.SelectSubset<T, ScoreboardConfigUpsertArgs<ExtArgs>>): Prisma.Prisma__ScoreboardConfigClient<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Count the number of ScoreboardConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigCountArgs} args - Arguments to filter ScoreboardConfigs to count.
+     * @example
+     * // Count the number of ScoreboardConfigs
+     * const count = await prisma.scoreboardConfig.count({
+     *   where: {
+     *     // ... the filter for the ScoreboardConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScoreboardConfigCountArgs>(args?: Prisma.Subset<T, ScoreboardConfigCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], ScoreboardConfigCountAggregateOutputType> : number>;
+    /**
+     * Allows you to perform aggregations operations on a ScoreboardConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScoreboardConfigAggregateArgs>(args: Prisma.Subset<T, ScoreboardConfigAggregateArgs>): Prisma.PrismaPromise<GetScoreboardConfigAggregateType<T>>;
+    /**
+     * Group by ScoreboardConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScoreboardConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<T extends ScoreboardConfigGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: ScoreboardConfigGroupByArgs['orderBy'];
+    } : {
+        orderBy?: ScoreboardConfigGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, ScoreboardConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScoreboardConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ScoreboardConfig model
+     */
+    readonly fields: ScoreboardConfigFieldRefs;
+}
+/**
+ * The delegate class that acts as a "Promise-like" for ScoreboardConfig.
+ * Why is this prefixed with `Prisma__`?
+ * Because we want to prevent naming conflicts as mentioned in
+ * https://github.com/prisma/prisma-client-js/issues/707
+ */
+export interface Prisma__ScoreboardConfigClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    location<T extends Prisma.LocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LocationDefaultArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+    namesList<T extends Prisma.ScoreboardConfig$namesListArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ScoreboardConfig$namesListArgs<ExtArgs>>): Prisma.Prisma__NamesListClient<runtime.Types.Result.GetResult<Prisma.$NamesListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+/**
+ * Fields of the ScoreboardConfig model
+ */
+export interface ScoreboardConfigFieldRefs {
+    readonly id: Prisma.FieldRef<"ScoreboardConfig", 'String'>;
+    readonly deviceId: Prisma.FieldRef<"ScoreboardConfig", 'String'>;
+    readonly tableNumber: Prisma.FieldRef<"ScoreboardConfig", 'Int'>;
+    readonly locationId: Prisma.FieldRef<"ScoreboardConfig", 'String'>;
+    readonly namesListId: Prisma.FieldRef<"ScoreboardConfig", 'String'>;
+    readonly lastPingAt: Prisma.FieldRef<"ScoreboardConfig", 'DateTime'>;
+    readonly createdAt: Prisma.FieldRef<"ScoreboardConfig", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"ScoreboardConfig", 'DateTime'>;
+}
+/**
+ * ScoreboardConfig findUnique
+ */
+export type ScoreboardConfigFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter, which ScoreboardConfig to fetch.
+     */
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+};
+/**
+ * ScoreboardConfig findUniqueOrThrow
+ */
+export type ScoreboardConfigFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter, which ScoreboardConfig to fetch.
+     */
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+};
+/**
+ * ScoreboardConfig findFirst
+ */
+export type ScoreboardConfigFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter, which ScoreboardConfig to fetch.
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ScoreboardConfigs to fetch.
+     */
+    orderBy?: Prisma.ScoreboardConfigOrderByWithRelationInput | Prisma.ScoreboardConfigOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ScoreboardConfigs.
+     */
+    cursor?: Prisma.ScoreboardConfigWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ScoreboardConfigs from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ScoreboardConfigs.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ScoreboardConfigs.
+     */
+    distinct?: Prisma.ScoreboardConfigScalarFieldEnum | Prisma.ScoreboardConfigScalarFieldEnum[];
+};
+/**
+ * ScoreboardConfig findFirstOrThrow
+ */
+export type ScoreboardConfigFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter, which ScoreboardConfig to fetch.
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ScoreboardConfigs to fetch.
+     */
+    orderBy?: Prisma.ScoreboardConfigOrderByWithRelationInput | Prisma.ScoreboardConfigOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ScoreboardConfigs.
+     */
+    cursor?: Prisma.ScoreboardConfigWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ScoreboardConfigs from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ScoreboardConfigs.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ScoreboardConfigs.
+     */
+    distinct?: Prisma.ScoreboardConfigScalarFieldEnum | Prisma.ScoreboardConfigScalarFieldEnum[];
+};
+/**
+ * ScoreboardConfig findMany
+ */
+export type ScoreboardConfigFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter, which ScoreboardConfigs to fetch.
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ScoreboardConfigs to fetch.
+     */
+    orderBy?: Prisma.ScoreboardConfigOrderByWithRelationInput | Prisma.ScoreboardConfigOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ScoreboardConfigs.
+     */
+    cursor?: Prisma.ScoreboardConfigWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ScoreboardConfigs from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ScoreboardConfigs.
+     */
+    skip?: number;
+    distinct?: Prisma.ScoreboardConfigScalarFieldEnum | Prisma.ScoreboardConfigScalarFieldEnum[];
+};
+/**
+ * ScoreboardConfig create
+ */
+export type ScoreboardConfigCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ScoreboardConfig.
+     */
+    data: Prisma.XOR<Prisma.ScoreboardConfigCreateInput, Prisma.ScoreboardConfigUncheckedCreateInput>;
+};
+/**
+ * ScoreboardConfig createMany
+ */
+export type ScoreboardConfigCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScoreboardConfigs.
+     */
+    data: Prisma.ScoreboardConfigCreateManyInput | Prisma.ScoreboardConfigCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+/**
+ * ScoreboardConfig createManyAndReturn
+ */
+export type ScoreboardConfigCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * The data used to create many ScoreboardConfigs.
+     */
+    data: Prisma.ScoreboardConfigCreateManyInput | Prisma.ScoreboardConfigCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * ScoreboardConfig update
+ */
+export type ScoreboardConfigUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ScoreboardConfig.
+     */
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateInput, Prisma.ScoreboardConfigUncheckedUpdateInput>;
+    /**
+     * Choose, which ScoreboardConfig to update.
+     */
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+};
+/**
+ * ScoreboardConfig updateMany
+ */
+export type ScoreboardConfigUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScoreboardConfigs.
+     */
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateManyMutationInput, Prisma.ScoreboardConfigUncheckedUpdateManyInput>;
+    /**
+     * Filter which ScoreboardConfigs to update
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * Limit how many ScoreboardConfigs to update.
+     */
+    limit?: number;
+};
+/**
+ * ScoreboardConfig updateManyAndReturn
+ */
+export type ScoreboardConfigUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * The data used to update ScoreboardConfigs.
+     */
+    data: Prisma.XOR<Prisma.ScoreboardConfigUpdateManyMutationInput, Prisma.ScoreboardConfigUncheckedUpdateManyInput>;
+    /**
+     * Filter which ScoreboardConfigs to update
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * Limit how many ScoreboardConfigs to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+/**
+ * ScoreboardConfig upsert
+ */
+export type ScoreboardConfigUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ScoreboardConfig to update in case it exists.
+     */
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+    /**
+     * In case the ScoreboardConfig found by the `where` argument doesn't exist, create a new ScoreboardConfig with this data.
+     */
+    create: Prisma.XOR<Prisma.ScoreboardConfigCreateInput, Prisma.ScoreboardConfigUncheckedCreateInput>;
+    /**
+     * In case the ScoreboardConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: Prisma.XOR<Prisma.ScoreboardConfigUpdateInput, Prisma.ScoreboardConfigUncheckedUpdateInput>;
+};
+/**
+ * ScoreboardConfig delete
+ */
+export type ScoreboardConfigDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    /**
+     * Filter which ScoreboardConfig to delete.
+     */
+    where: Prisma.ScoreboardConfigWhereUniqueInput;
+};
+/**
+ * ScoreboardConfig deleteMany
+ */
+export type ScoreboardConfigDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScoreboardConfigs to delete
+     */
+    where?: Prisma.ScoreboardConfigWhereInput;
+    /**
+     * Limit how many ScoreboardConfigs to delete.
+     */
+    limit?: number;
+};
+/**
+ * ScoreboardConfig.namesList
+ */
+export type ScoreboardConfig$namesListArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NamesList
+     */
+    select?: Prisma.NamesListSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the NamesList
+     */
+    omit?: Prisma.NamesListOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.NamesListInclude<ExtArgs> | null;
+    where?: Prisma.NamesListWhereInput;
+};
+/**
+ * ScoreboardConfig without action
+ */
+export type ScoreboardConfigDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+};
+export {};
+//# sourceMappingURL=ScoreboardConfig.d.ts.map

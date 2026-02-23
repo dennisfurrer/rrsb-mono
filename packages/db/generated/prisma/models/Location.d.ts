@@ -1,0 +1,1464 @@
+import type * as runtime from "@prisma/client/runtime/client";
+import type * as Prisma from "../internal/prismaNamespace";
+/**
+ * Model Location
+ *
+ */
+export type LocationModel = runtime.Types.Result.DefaultSelection<Prisma.$LocationPayload>;
+export type AggregateLocation = {
+    _count: LocationCountAggregateOutputType | null;
+    _min: LocationMinAggregateOutputType | null;
+    _max: LocationMaxAggregateOutputType | null;
+};
+export type LocationMinAggregateOutputType = {
+    id: string | null;
+    name: string | null;
+    slug: string | null;
+    address: string | null;
+    isDefault: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type LocationMaxAggregateOutputType = {
+    id: string | null;
+    name: string | null;
+    slug: string | null;
+    address: string | null;
+    isDefault: boolean | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+};
+export type LocationCountAggregateOutputType = {
+    id: number;
+    name: number;
+    slug: number;
+    address: number;
+    isDefault: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+};
+export type LocationMinAggregateInputType = {
+    id?: true;
+    name?: true;
+    slug?: true;
+    address?: true;
+    isDefault?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type LocationMaxAggregateInputType = {
+    id?: true;
+    name?: true;
+    slug?: true;
+    address?: true;
+    isDefault?: true;
+    createdAt?: true;
+    updatedAt?: true;
+};
+export type LocationCountAggregateInputType = {
+    id?: true;
+    name?: true;
+    slug?: true;
+    address?: true;
+    isDefault?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+};
+export type LocationAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which Location to aggregate.
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: Prisma.LocationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Locations.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Locations
+    **/
+    _count?: true | LocationCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: LocationMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: LocationMaxAggregateInputType;
+};
+export type GetLocationAggregateType<T extends LocationAggregateArgs> = {
+    [P in keyof T & keyof AggregateLocation]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateLocation[P]> : Prisma.GetScalarType<T[P], AggregateLocation[P]>;
+};
+export type LocationGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.LocationWhereInput;
+    orderBy?: Prisma.LocationOrderByWithAggregationInput | Prisma.LocationOrderByWithAggregationInput[];
+    by: Prisma.LocationScalarFieldEnum[] | Prisma.LocationScalarFieldEnum;
+    having?: Prisma.LocationScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: LocationCountAggregateInputType | true;
+    _min?: LocationMinAggregateInputType;
+    _max?: LocationMaxAggregateInputType;
+};
+export type LocationGroupByOutputType = {
+    id: string;
+    name: string;
+    slug: string;
+    address: string | null;
+    isDefault: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: LocationCountAggregateOutputType | null;
+    _min: LocationMinAggregateOutputType | null;
+    _max: LocationMaxAggregateOutputType | null;
+};
+type GetLocationGroupByPayload<T extends LocationGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<LocationGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof LocationGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], LocationGroupByOutputType[P]> : Prisma.GetScalarType<T[P], LocationGroupByOutputType[P]>;
+}>>;
+export type LocationWhereInput = {
+    AND?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[];
+    OR?: Prisma.LocationWhereInput[];
+    NOT?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[];
+    id?: Prisma.StringFilter<"Location"> | string;
+    name?: Prisma.StringFilter<"Location"> | string;
+    slug?: Prisma.StringFilter<"Location"> | string;
+    address?: Prisma.StringNullableFilter<"Location"> | string | null;
+    isDefault?: Prisma.BoolFilter<"Location"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"Location"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Location"> | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigListRelationFilter;
+    matches?: Prisma.MatchListRelationFilter;
+    users?: Prisma.UserListRelationFilter;
+};
+export type LocationOrderByWithRelationInput = {
+    id?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    slug?: Prisma.SortOrder;
+    address?: Prisma.SortOrderInput | Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    scoreboardConfigs?: Prisma.ScoreboardConfigOrderByRelationAggregateInput;
+    matches?: Prisma.MatchOrderByRelationAggregateInput;
+    users?: Prisma.UserOrderByRelationAggregateInput;
+};
+export type LocationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string;
+    name?: string;
+    slug?: string;
+    AND?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[];
+    OR?: Prisma.LocationWhereInput[];
+    NOT?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[];
+    address?: Prisma.StringNullableFilter<"Location"> | string | null;
+    isDefault?: Prisma.BoolFilter<"Location"> | boolean;
+    createdAt?: Prisma.DateTimeFilter<"Location"> | Date | string;
+    updatedAt?: Prisma.DateTimeFilter<"Location"> | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigListRelationFilter;
+    matches?: Prisma.MatchListRelationFilter;
+    users?: Prisma.UserListRelationFilter;
+}, "id" | "name" | "slug">;
+export type LocationOrderByWithAggregationInput = {
+    id?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    slug?: Prisma.SortOrder;
+    address?: Prisma.SortOrderInput | Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+    _count?: Prisma.LocationCountOrderByAggregateInput;
+    _max?: Prisma.LocationMaxOrderByAggregateInput;
+    _min?: Prisma.LocationMinOrderByAggregateInput;
+};
+export type LocationScalarWhereWithAggregatesInput = {
+    AND?: Prisma.LocationScalarWhereWithAggregatesInput | Prisma.LocationScalarWhereWithAggregatesInput[];
+    OR?: Prisma.LocationScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.LocationScalarWhereWithAggregatesInput | Prisma.LocationScalarWhereWithAggregatesInput[];
+    id?: Prisma.StringWithAggregatesFilter<"Location"> | string;
+    name?: Prisma.StringWithAggregatesFilter<"Location"> | string;
+    slug?: Prisma.StringWithAggregatesFilter<"Location"> | string;
+    address?: Prisma.StringNullableWithAggregatesFilter<"Location"> | string | null;
+    isDefault?: Prisma.BoolWithAggregatesFilter<"Location"> | boolean;
+    createdAt?: Prisma.DateTimeWithAggregatesFilter<"Location"> | Date | string;
+    updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Location"> | Date | string;
+};
+export type LocationCreateInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput;
+    matches?: Prisma.MatchCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
+};
+export type LocationUncheckedCreateInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput;
+    matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
+};
+export type LocationUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput;
+    matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
+};
+export type LocationUncheckedUpdateInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput;
+    matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
+};
+export type LocationCreateManyInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+};
+export type LocationUpdateManyMutationInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type LocationUncheckedUpdateManyInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type LocationCountOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    slug?: Prisma.SortOrder;
+    address?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type LocationMaxOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    slug?: Prisma.SortOrder;
+    address?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type LocationMinOrderByAggregateInput = {
+    id?: Prisma.SortOrder;
+    name?: Prisma.SortOrder;
+    slug?: Prisma.SortOrder;
+    address?: Prisma.SortOrder;
+    isDefault?: Prisma.SortOrder;
+    createdAt?: Prisma.SortOrder;
+    updatedAt?: Prisma.SortOrder;
+};
+export type LocationNullableScalarRelationFilter = {
+    is?: Prisma.LocationWhereInput | null;
+    isNot?: Prisma.LocationWhereInput | null;
+};
+export type LocationScalarRelationFilter = {
+    is?: Prisma.LocationWhereInput;
+    isNot?: Prisma.LocationWhereInput;
+};
+export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null;
+};
+export type BoolFieldUpdateOperationsInput = {
+    set?: boolean;
+};
+export type LocationCreateNestedOneWithoutUsersInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutUsersInput, Prisma.LocationUncheckedCreateWithoutUsersInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutUsersInput;
+    connect?: Prisma.LocationWhereUniqueInput;
+};
+export type LocationUpdateOneWithoutUsersNestedInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutUsersInput, Prisma.LocationUncheckedCreateWithoutUsersInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutUsersInput;
+    upsert?: Prisma.LocationUpsertWithoutUsersInput;
+    disconnect?: Prisma.LocationWhereInput | boolean;
+    delete?: Prisma.LocationWhereInput | boolean;
+    connect?: Prisma.LocationWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutUsersInput, Prisma.LocationUpdateWithoutUsersInput>, Prisma.LocationUncheckedUpdateWithoutUsersInput>;
+};
+export type LocationCreateNestedOneWithoutScoreboardConfigsInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedCreateWithoutScoreboardConfigsInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutScoreboardConfigsInput;
+    connect?: Prisma.LocationWhereUniqueInput;
+};
+export type LocationUpdateOneRequiredWithoutScoreboardConfigsNestedInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedCreateWithoutScoreboardConfigsInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutScoreboardConfigsInput;
+    upsert?: Prisma.LocationUpsertWithoutScoreboardConfigsInput;
+    connect?: Prisma.LocationWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutScoreboardConfigsInput, Prisma.LocationUpdateWithoutScoreboardConfigsInput>, Prisma.LocationUncheckedUpdateWithoutScoreboardConfigsInput>;
+};
+export type LocationCreateNestedOneWithoutMatchesInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutMatchesInput, Prisma.LocationUncheckedCreateWithoutMatchesInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutMatchesInput;
+    connect?: Prisma.LocationWhereUniqueInput;
+};
+export type LocationUpdateOneWithoutMatchesNestedInput = {
+    create?: Prisma.XOR<Prisma.LocationCreateWithoutMatchesInput, Prisma.LocationUncheckedCreateWithoutMatchesInput>;
+    connectOrCreate?: Prisma.LocationCreateOrConnectWithoutMatchesInput;
+    upsert?: Prisma.LocationUpsertWithoutMatchesInput;
+    disconnect?: Prisma.LocationWhereInput | boolean;
+    delete?: Prisma.LocationWhereInput | boolean;
+    connect?: Prisma.LocationWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutMatchesInput, Prisma.LocationUpdateWithoutMatchesInput>, Prisma.LocationUncheckedUpdateWithoutMatchesInput>;
+};
+export type LocationCreateWithoutUsersInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput;
+    matches?: Prisma.MatchCreateNestedManyWithoutLocationInput;
+};
+export type LocationUncheckedCreateWithoutUsersInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput;
+    matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput;
+};
+export type LocationCreateOrConnectWithoutUsersInput = {
+    where: Prisma.LocationWhereUniqueInput;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutUsersInput, Prisma.LocationUncheckedCreateWithoutUsersInput>;
+};
+export type LocationUpsertWithoutUsersInput = {
+    update: Prisma.XOR<Prisma.LocationUpdateWithoutUsersInput, Prisma.LocationUncheckedUpdateWithoutUsersInput>;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutUsersInput, Prisma.LocationUncheckedCreateWithoutUsersInput>;
+    where?: Prisma.LocationWhereInput;
+};
+export type LocationUpdateToOneWithWhereWithoutUsersInput = {
+    where?: Prisma.LocationWhereInput;
+    data: Prisma.XOR<Prisma.LocationUpdateWithoutUsersInput, Prisma.LocationUncheckedUpdateWithoutUsersInput>;
+};
+export type LocationUpdateWithoutUsersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput;
+    matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput;
+};
+export type LocationUncheckedUpdateWithoutUsersInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput;
+    matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput;
+};
+export type LocationCreateWithoutScoreboardConfigsInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    matches?: Prisma.MatchCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
+};
+export type LocationUncheckedCreateWithoutScoreboardConfigsInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
+};
+export type LocationCreateOrConnectWithoutScoreboardConfigsInput = {
+    where: Prisma.LocationWhereUniqueInput;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedCreateWithoutScoreboardConfigsInput>;
+};
+export type LocationUpsertWithoutScoreboardConfigsInput = {
+    update: Prisma.XOR<Prisma.LocationUpdateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedUpdateWithoutScoreboardConfigsInput>;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedCreateWithoutScoreboardConfigsInput>;
+    where?: Prisma.LocationWhereInput;
+};
+export type LocationUpdateToOneWithWhereWithoutScoreboardConfigsInput = {
+    where?: Prisma.LocationWhereInput;
+    data: Prisma.XOR<Prisma.LocationUpdateWithoutScoreboardConfigsInput, Prisma.LocationUncheckedUpdateWithoutScoreboardConfigsInput>;
+};
+export type LocationUpdateWithoutScoreboardConfigsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
+};
+export type LocationUncheckedUpdateWithoutScoreboardConfigsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
+};
+export type LocationCreateWithoutMatchesInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserCreateNestedManyWithoutLocationInput;
+};
+export type LocationUncheckedCreateWithoutMatchesInput = {
+    id?: string;
+    name: string;
+    slug: string;
+    address?: string | null;
+    isDefault?: boolean;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput;
+    users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput;
+};
+export type LocationCreateOrConnectWithoutMatchesInput = {
+    where: Prisma.LocationWhereUniqueInput;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutMatchesInput, Prisma.LocationUncheckedCreateWithoutMatchesInput>;
+};
+export type LocationUpsertWithoutMatchesInput = {
+    update: Prisma.XOR<Prisma.LocationUpdateWithoutMatchesInput, Prisma.LocationUncheckedUpdateWithoutMatchesInput>;
+    create: Prisma.XOR<Prisma.LocationCreateWithoutMatchesInput, Prisma.LocationUncheckedCreateWithoutMatchesInput>;
+    where?: Prisma.LocationWhereInput;
+};
+export type LocationUpdateToOneWithWhereWithoutMatchesInput = {
+    where?: Prisma.LocationWhereInput;
+    data: Prisma.XOR<Prisma.LocationUpdateWithoutMatchesInput, Prisma.LocationUncheckedUpdateWithoutMatchesInput>;
+};
+export type LocationUpdateWithoutMatchesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUpdateManyWithoutLocationNestedInput;
+};
+export type LocationUncheckedUpdateWithoutMatchesInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    name?: Prisma.StringFieldUpdateOperationsInput | string;
+    slug?: Prisma.StringFieldUpdateOperationsInput | string;
+    address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput;
+    users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput;
+};
+/**
+ * Count Type LocationCountOutputType
+ */
+export type LocationCountOutputType = {
+    scoreboardConfigs: number;
+    matches: number;
+    users: number;
+};
+export type LocationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    scoreboardConfigs?: boolean | LocationCountOutputTypeCountScoreboardConfigsArgs;
+    matches?: boolean | LocationCountOutputTypeCountMatchesArgs;
+    users?: boolean | LocationCountOutputTypeCountUsersArgs;
+};
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationCountOutputType
+     */
+    select?: Prisma.LocationCountOutputTypeSelect<ExtArgs> | null;
+};
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountScoreboardConfigsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ScoreboardConfigWhereInput;
+};
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountMatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.MatchWhereInput;
+};
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.UserWhereInput;
+};
+export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    name?: boolean;
+    slug?: boolean;
+    address?: boolean;
+    isDefault?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    scoreboardConfigs?: boolean | Prisma.Location$scoreboardConfigsArgs<ExtArgs>;
+    matches?: boolean | Prisma.Location$matchesArgs<ExtArgs>;
+    users?: boolean | Prisma.Location$usersArgs<ExtArgs>;
+    _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["location"]>;
+export type LocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    name?: boolean;
+    slug?: boolean;
+    address?: boolean;
+    isDefault?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+}, ExtArgs["result"]["location"]>;
+export type LocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    id?: boolean;
+    name?: boolean;
+    slug?: boolean;
+    address?: boolean;
+    isDefault?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+}, ExtArgs["result"]["location"]>;
+export type LocationSelectScalar = {
+    id?: boolean;
+    name?: boolean;
+    slug?: boolean;
+    address?: boolean;
+    isDefault?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+};
+export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "address" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["location"]>;
+export type LocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    scoreboardConfigs?: boolean | Prisma.Location$scoreboardConfigsArgs<ExtArgs>;
+    matches?: boolean | Prisma.Location$matchesArgs<ExtArgs>;
+    users?: boolean | Prisma.Location$usersArgs<ExtArgs>;
+    _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>;
+};
+export type LocationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
+export type LocationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
+export type $LocationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "Location";
+    objects: {
+        scoreboardConfigs: Prisma.$ScoreboardConfigPayload<ExtArgs>[];
+        matches: Prisma.$MatchPayload<ExtArgs>[];
+        users: Prisma.$UserPayload<ExtArgs>[];
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        id: string;
+        name: string;
+        slug: string;
+        address: string | null;
+        isDefault: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }, ExtArgs["result"]["location"]>;
+    composites: {};
+};
+export type LocationGetPayload<S extends boolean | null | undefined | LocationDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$LocationPayload, S>;
+export type LocationCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<LocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: LocationCountAggregateInputType | true;
+};
+export interface LocationDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['Location'];
+        meta: {
+            name: 'Location';
+        };
+    };
+    /**
+     * Find zero or one Location that matches the filter.
+     * @param {LocationFindUniqueArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LocationFindUniqueArgs>(args: Prisma.SelectSubset<T, LocationFindUniqueArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find one Location that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LocationFindUniqueOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LocationFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, LocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first Location that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LocationFindFirstArgs>(args?: Prisma.SelectSubset<T, LocationFindFirstArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find the first Location that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LocationFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, LocationFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Find zero or more Locations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Locations
+     * const locations = await prisma.location.findMany()
+     *
+     * // Get first 10 Locations
+     * const locations = await prisma.location.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const locationWithIdOnly = await prisma.location.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends LocationFindManyArgs>(args?: Prisma.SelectSubset<T, LocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    /**
+     * Create a Location.
+     * @param {LocationCreateArgs} args - Arguments to create a Location.
+     * @example
+     * // Create one Location
+     * const Location = await prisma.location.create({
+     *   data: {
+     *     // ... data to create a Location
+     *   }
+     * })
+     *
+     */
+    create<T extends LocationCreateArgs>(args: Prisma.SelectSubset<T, LocationCreateArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Create many Locations.
+     * @param {LocationCreateManyArgs} args - Arguments to create many Locations.
+     * @example
+     * // Create many Locations
+     * const location = await prisma.location.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends LocationCreateManyArgs>(args?: Prisma.SelectSubset<T, LocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Create many Locations and returns the data saved in the database.
+     * @param {LocationCreateManyAndReturnArgs} args - Arguments to create many Locations.
+     * @example
+     * // Create many Locations
+     * const location = await prisma.location.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Locations and only return the `id`
+     * const locationWithIdOnly = await prisma.location.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends LocationCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, LocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Delete a Location.
+     * @param {LocationDeleteArgs} args - Arguments to delete one Location.
+     * @example
+     * // Delete one Location
+     * const Location = await prisma.location.delete({
+     *   where: {
+     *     // ... filter to delete one Location
+     *   }
+     * })
+     *
+     */
+    delete<T extends LocationDeleteArgs>(args: Prisma.SelectSubset<T, LocationDeleteArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Update one Location.
+     * @param {LocationUpdateArgs} args - Arguments to update one Location.
+     * @example
+     * // Update one Location
+     * const location = await prisma.location.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends LocationUpdateArgs>(args: Prisma.SelectSubset<T, LocationUpdateArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Delete zero or more Locations.
+     * @param {LocationDeleteManyArgs} args - Arguments to filter Locations to delete.
+     * @example
+     * // Delete a few Locations
+     * const { count } = await prisma.location.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends LocationDeleteManyArgs>(args?: Prisma.SelectSubset<T, LocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends LocationUpdateManyArgs>(args: Prisma.SelectSubset<T, LocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    /**
+     * Update zero or more Locations and returns the data updated in the database.
+     * @param {LocationUpdateManyAndReturnArgs} args - Arguments to update many Locations.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more Locations and only return the `id`
+     * const locationWithIdOnly = await prisma.location.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends LocationUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, LocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    /**
+     * Create or update one Location.
+     * @param {LocationUpsertArgs} args - Arguments to update or create a Location.
+     * @example
+     * // Update or create a Location
+     * const location = await prisma.location.upsert({
+     *   create: {
+     *     // ... data to create a Location
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Location we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LocationUpsertArgs>(args: Prisma.SelectSubset<T, LocationUpsertArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    /**
+     * Count the number of Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationCountArgs} args - Arguments to filter Locations to count.
+     * @example
+     * // Count the number of Locations
+     * const count = await prisma.location.count({
+     *   where: {
+     *     // ... the filter for the Locations we want to count
+     *   }
+     * })
+    **/
+    count<T extends LocationCountArgs>(args?: Prisma.Subset<T, LocationCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], LocationCountAggregateOutputType> : number>;
+    /**
+     * Allows you to perform aggregations operations on a Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LocationAggregateArgs>(args: Prisma.Subset<T, LocationAggregateArgs>): Prisma.PrismaPromise<GetLocationAggregateType<T>>;
+    /**
+     * Group by Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<T extends LocationGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: LocationGroupByArgs['orderBy'];
+    } : {
+        orderBy?: LocationGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, LocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Location model
+     */
+    readonly fields: LocationFieldRefs;
+}
+/**
+ * The delegate class that acts as a "Promise-like" for Location.
+ * Why is this prefixed with `Prisma__`?
+ * Because we want to prevent naming conflicts as mentioned in
+ * https://github.com/prisma/prisma-client-js/issues/707
+ */
+export interface Prisma__LocationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    scoreboardConfigs<T extends Prisma.Location$scoreboardConfigsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$scoreboardConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    matches<T extends Prisma.Location$matchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$matchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    users<T extends Prisma.Location$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+/**
+ * Fields of the Location model
+ */
+export interface LocationFieldRefs {
+    readonly id: Prisma.FieldRef<"Location", 'String'>;
+    readonly name: Prisma.FieldRef<"Location", 'String'>;
+    readonly slug: Prisma.FieldRef<"Location", 'String'>;
+    readonly address: Prisma.FieldRef<"Location", 'String'>;
+    readonly isDefault: Prisma.FieldRef<"Location", 'Boolean'>;
+    readonly createdAt: Prisma.FieldRef<"Location", 'DateTime'>;
+    readonly updatedAt: Prisma.FieldRef<"Location", 'DateTime'>;
+}
+/**
+ * Location findUnique
+ */
+export type LocationFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: Prisma.LocationWhereUniqueInput;
+};
+/**
+ * Location findUniqueOrThrow
+ */
+export type LocationFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: Prisma.LocationWhereUniqueInput;
+};
+/**
+ * Location findFirst
+ */
+export type LocationFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Locations.
+     */
+    cursor?: Prisma.LocationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Locations.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: Prisma.LocationScalarFieldEnum | Prisma.LocationScalarFieldEnum[];
+};
+/**
+ * Location findFirstOrThrow
+ */
+export type LocationFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Locations.
+     */
+    cursor?: Prisma.LocationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Locations.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: Prisma.LocationScalarFieldEnum | Prisma.LocationScalarFieldEnum[];
+};
+/**
+ * Location findMany
+ */
+export type LocationFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter, which Locations to fetch.
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: Prisma.LocationOrderByWithRelationInput | Prisma.LocationOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Locations.
+     */
+    cursor?: Prisma.LocationWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Locations.
+     */
+    skip?: number;
+    distinct?: Prisma.LocationScalarFieldEnum | Prisma.LocationScalarFieldEnum[];
+};
+/**
+ * Location create
+ */
+export type LocationCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Location.
+     */
+    data: Prisma.XOR<Prisma.LocationCreateInput, Prisma.LocationUncheckedCreateInput>;
+};
+/**
+ * Location createMany
+ */
+export type LocationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Locations.
+     */
+    data: Prisma.LocationCreateManyInput | Prisma.LocationCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+/**
+ * Location createManyAndReturn
+ */
+export type LocationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * The data used to create many Locations.
+     */
+    data: Prisma.LocationCreateManyInput | Prisma.LocationCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+/**
+ * Location update
+ */
+export type LocationUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Location.
+     */
+    data: Prisma.XOR<Prisma.LocationUpdateInput, Prisma.LocationUncheckedUpdateInput>;
+    /**
+     * Choose, which Location to update.
+     */
+    where: Prisma.LocationWhereUniqueInput;
+};
+/**
+ * Location updateMany
+ */
+export type LocationUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Locations.
+     */
+    data: Prisma.XOR<Prisma.LocationUpdateManyMutationInput, Prisma.LocationUncheckedUpdateManyInput>;
+    /**
+     * Filter which Locations to update
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number;
+};
+/**
+ * Location updateManyAndReturn
+ */
+export type LocationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * The data used to update Locations.
+     */
+    data: Prisma.XOR<Prisma.LocationUpdateManyMutationInput, Prisma.LocationUncheckedUpdateManyInput>;
+    /**
+     * Filter which Locations to update
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number;
+};
+/**
+ * Location upsert
+ */
+export type LocationUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Location to update in case it exists.
+     */
+    where: Prisma.LocationWhereUniqueInput;
+    /**
+     * In case the Location found by the `where` argument doesn't exist, create a new Location with this data.
+     */
+    create: Prisma.XOR<Prisma.LocationCreateInput, Prisma.LocationUncheckedCreateInput>;
+    /**
+     * In case the Location was found with the provided `where` argument, update it with this data.
+     */
+    update: Prisma.XOR<Prisma.LocationUpdateInput, Prisma.LocationUncheckedUpdateInput>;
+};
+/**
+ * Location delete
+ */
+export type LocationDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+    /**
+     * Filter which Location to delete.
+     */
+    where: Prisma.LocationWhereUniqueInput;
+};
+/**
+ * Location deleteMany
+ */
+export type LocationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Filter which Locations to delete
+     */
+    where?: Prisma.LocationWhereInput;
+    /**
+     * Limit how many Locations to delete.
+     */
+    limit?: number;
+};
+/**
+ * Location.scoreboardConfigs
+ */
+export type Location$scoreboardConfigsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScoreboardConfig
+     */
+    select?: Prisma.ScoreboardConfigSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ScoreboardConfig
+     */
+    omit?: Prisma.ScoreboardConfigOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ScoreboardConfigInclude<ExtArgs> | null;
+    where?: Prisma.ScoreboardConfigWhereInput;
+    orderBy?: Prisma.ScoreboardConfigOrderByWithRelationInput | Prisma.ScoreboardConfigOrderByWithRelationInput[];
+    cursor?: Prisma.ScoreboardConfigWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ScoreboardConfigScalarFieldEnum | Prisma.ScoreboardConfigScalarFieldEnum[];
+};
+/**
+ * Location.matches
+ */
+export type Location$matchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Match
+     */
+    select?: Prisma.MatchSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Match
+     */
+    omit?: Prisma.MatchOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.MatchInclude<ExtArgs> | null;
+    where?: Prisma.MatchWhereInput;
+    orderBy?: Prisma.MatchOrderByWithRelationInput | Prisma.MatchOrderByWithRelationInput[];
+    cursor?: Prisma.MatchWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.MatchScalarFieldEnum | Prisma.MatchScalarFieldEnum[];
+};
+/**
+ * Location.users
+ */
+export type Location$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: Prisma.UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: Prisma.UserOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.UserInclude<ExtArgs> | null;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[];
+    cursor?: Prisma.UserWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[];
+};
+/**
+ * Location without action
+ */
+export type LocationDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: Prisma.LocationSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: Prisma.LocationOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.LocationInclude<ExtArgs> | null;
+};
+export {};
+//# sourceMappingURL=Location.d.ts.map

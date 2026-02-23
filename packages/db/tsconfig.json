@@ -12,9 +12,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2022",
-    "outDir": "dist",
-    "rootDir": "src"
+    "outDir": "dist"
   },
-  "include": ["src"],
-  "exclude": ["src/generated"]
+  "include": ["src", "generated"]
 }
