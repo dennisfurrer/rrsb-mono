@@ -54,20 +54,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 md:space-y-10">
       <Walkthrough />
 
       <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
         {t("dashboard.title")}
       </h1>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-6 md:gap-8 lg:grid-cols-2">
         {/* ── Left Column: Scoreboards ── */}
         <div className="space-y-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Monitor className="w-5 h-5 text-text-muted" />
-              <h2 className="text-base font-semibold text-text-primary uppercase tracking-wider">
+              <Monitor className="w-4 h-4 md:w-5 md:h-5 text-text-muted" />
+              <h2 className="text-xs md:text-base font-semibold text-text-primary uppercase tracking-wider">
                 {t("dashboard.scoreboardsSection")}
               </h2>
             </div>
@@ -79,38 +79,38 @@ export default function DashboardPage() {
           </div>
 
           {/* Scoreboard stats */}
-          <div className="grid grid-cols-3 gap-4" data-walkthrough="stats-grid">
+          <div className="grid grid-cols-3 gap-2.5 md:gap-4" data-walkthrough="stats-grid">
             <Card>
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+              <CardContent className="p-3 md:p-5">
+                <div className="flex items-center justify-between mb-1 md:mb-2">
+                  <span className="text-[0.6rem] md:text-xs font-semibold text-text-muted uppercase tracking-wider">
                     {t("online")}
                   </span>
-                  <Wifi className="w-4 h-4 text-success" />
+                  <Wifi className="w-3.5 h-3.5 md:w-4 md:h-4 text-success" />
                 </div>
-                <span className="text-3xl font-mono font-bold text-text-primary">{onlineCount}</span>
+                <span className="text-xl md:text-3xl font-mono font-bold text-text-primary">{onlineCount}</span>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+              <CardContent className="p-3 md:p-5">
+                <div className="flex items-center justify-between mb-1 md:mb-2">
+                  <span className="text-[0.6rem] md:text-xs font-semibold text-text-muted uppercase tracking-wider">
                     {t("dashboard.inUse")}
                   </span>
-                  <Circle className="w-4 h-4 text-warning fill-warning/20" />
+                  <Circle className="w-3.5 h-3.5 md:w-4 md:h-4 text-warning fill-warning/20" />
                 </div>
-                <span className="text-3xl font-mono font-bold text-text-primary">{inUseCount}</span>
+                <span className="text-xl md:text-3xl font-mono font-bold text-text-primary">{inUseCount}</span>
               </CardContent>
             </Card>
             <Card>
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+              <CardContent className="p-3 md:p-5">
+                <div className="flex items-center justify-between mb-1 md:mb-2">
+                  <span className="text-[0.6rem] md:text-xs font-semibold text-text-muted uppercase tracking-wider">
                     {t("dashboard.available")}
                   </span>
-                  <WifiOff className="w-4 h-4 text-text-muted" />
+                  <WifiOff className="w-3.5 h-3.5 md:w-4 md:h-4 text-text-muted" />
                 </div>
-                <span className="text-3xl font-mono font-bold text-text-primary">
+                <span className="text-xl md:text-3xl font-mono font-bold text-text-primary">
                   {availableCount < 0 ? 0 : availableCount}
                 </span>
               </CardContent>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
           <Card data-walkthrough="recent-assignments">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-semibold text-text-muted uppercase tracking-wider">
+                <CardTitle className="text-xs md:text-sm font-semibold text-text-muted uppercase tracking-wider">
                   {t("dashboard.recentAssignments")}
                 </CardTitle>
                 <Link href="/scoreboards" className="text-xs text-text-muted hover:text-text-secondary transition-colors">
@@ -162,10 +162,10 @@ export default function DashboardPage() {
                         variant="ghost"
                         size="sm"
                         disabled
-                        className="gap-1.5 text-text-muted shrink-0"
+                        className="gap-1 md:gap-1.5 text-text-muted shrink-0 text-[0.65rem] md:text-xs"
                       >
-                        <Eye className="w-3.5 h-3.5" />
-                        {t("matchSetup.seeScore")}
+                        <Eye className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                        <span className="hidden sm:inline">{t("matchSetup.seeScore")}</span>
                       </Button>
                       <Badge variant={
                         a.status === "PENDING" ? "info" :
@@ -187,8 +187,8 @@ export default function DashboardPage() {
         <div className="space-y-5" data-walkthrough="match-setup">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <Swords className="w-5 h-5 text-text-muted" />
-              <h2 className="text-base font-semibold text-text-primary uppercase tracking-wider">
+              <Swords className="w-4 h-4 md:w-5 md:h-5 text-text-muted" />
+              <h2 className="text-xs md:text-base font-semibold text-text-primary uppercase tracking-wider">
                 {t("dashboard.matchSetupSection")}
               </h2>
             </div>

@@ -62,6 +62,7 @@ export default function AdminLayout({
   useEffect(() => {
     setSidebarOpen(false);
     mainRef.current?.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   const handleToggle = useCallback(() => {
@@ -108,7 +109,7 @@ export default function AdminLayout({
 
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="h-14 bg-sidebar/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-4 sm:px-6 shrink-0">
+        <header className="h-11 md:h-14 bg-sidebar/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-3 sm:px-4 md:px-6 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
@@ -123,34 +124,36 @@ export default function AdminLayout({
             </div>
           </div>
 
-          {/* Language switcher + Theme toggle */}
+          {/* Language switcher + Theme toggle (desktop) + Tour */}
           <div className="flex items-center gap-1">
-            {SUPPORTED_LOCALES.map((locale) => (
+            <div className="hidden md:flex items-center gap-1">
+              {SUPPORTED_LOCALES.map((locale) => (
+                <button
+                  key={locale}
+                  onClick={() => changeLanguage(locale)}
+                  className={cn(
+                    "rounded-md px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-150",
+                    i18n.language === locale
+                      ? "bg-accent/[0.08] text-accent"
+                      : "text-text-muted hover:text-text-secondary"
+                  )}
+                >
+                  {LOCALE_LABELS[locale]}
+                </button>
+              ))}
               <button
-                key={locale}
-                onClick={() => changeLanguage(locale)}
-                className={cn(
-                  "rounded-md px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-150",
-                  i18n.language === locale
-                    ? "bg-accent/[0.08] text-accent"
-                    : "text-text-muted hover:text-text-secondary"
-                )}
+                onClick={toggleTheme}
+                className="rounded-md p-1.5 text-text-muted hover:text-text-secondary transition-all duration-150"
+                title={theme === "dark" ? t("theme.light") : t("theme.dark")}
               >
-                {LOCALE_LABELS[locale]}
+                {theme === "dark" ? (
+                  <Sun className="w-4 h-4" />
+                ) : (
+                  <Moon className="w-4 h-4" />
+                )}
               </button>
-            ))}
-            <button
-              onClick={toggleTheme}
-              className="rounded-md p-1.5 text-text-muted hover:text-text-secondary transition-all duration-150"
-              title={theme === "dark" ? t("theme.light") : t("theme.dark")}
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </button>
-            <div className="w-px h-5 bg-border-strong mx-1" />
+              <div className="w-px h-5 bg-border-strong mx-1" />
+            </div>
             <button
               onClick={() => {
                 if (window.innerWidth < 1024) {
