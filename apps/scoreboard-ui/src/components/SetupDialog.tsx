@@ -93,15 +93,15 @@ export function SetupDialog({ onComplete, defaultBestOf }: Props) {
 
         <div className="setup-bestof-label">Best of frames:</div>
         <div className="setup-bestof-buttons">
-          <button onClick={() => setBestOf((v) => Math.max(1, v - 5))}>
+          <button className="bestof-double" onClick={() => setBestOf((v) => Math.max(1, v - 5))}>
             --
           </button>
-          <button onClick={() => setBestOf((v) => Math.max(1, v - 1))}>
+          <button className="bestof-single" onClick={() => setBestOf((v) => Math.max(1, v - 1))}>
             -
           </button>
           <div className="setup-bestof-value">{bestOf}</div>
-          <button onClick={() => setBestOf((v) => v + 1)}>+</button>
-          <button onClick={() => setBestOf((v) => v + 5)}>++</button>
+          <button className="bestof-single" onClick={() => setBestOf((v) => v + 1)}>+</button>
+          <button className="bestof-double" onClick={() => setBestOf((v) => v + 5)}>++</button>
         </div>
         <button className="setup-ok" onClick={handleOk}>
           OK

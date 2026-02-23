@@ -211,7 +211,7 @@ div { font-weight: bold; }
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 3vw;
+  font-size: 2.7vw;
 }
 
 .setup-player1-header {
@@ -235,7 +235,7 @@ div { font-weight: bold; }
   appearance: auto;
   cursor: pointer;
   padding: 0 12px;
-  font-size: 2vw;
+  font-size: 1.6vw;
 }
 
 .setup-bestof-label {
@@ -246,11 +246,11 @@ div { font-weight: bold; }
   font-weight: bold;
   color: #fff;
   background: #333;
-  font-size: 3vw;
+  font-size: 2.7vw;
 }
 
 .setup-bestof-buttons {
-  flex: 0 0 13.3%;
+  flex: 0 0 23.34%;
   display: flex;
 }
 
@@ -261,8 +261,11 @@ div { font-weight: bold; }
   border: 2px solid #777;
   cursor: pointer;
   font-weight: bold;
-  font-size: 3vw;
+  font-size: 4.6vw;
 }
+
+.setup-bestof-buttons button.bestof-single { background: #444444; }
+.setup-bestof-buttons button.bestof-double { background: #333333; }
 
 .setup-bestof-buttons button:active {
   background: #666;
@@ -282,7 +285,7 @@ div { font-weight: bold; }
 }
 
 .setup-ok {
-  flex: 0 0 16.7%;
+  flex: 0 0 22.23%;
   width: 100%;
   background: #006600;
   color: #00ff00;
