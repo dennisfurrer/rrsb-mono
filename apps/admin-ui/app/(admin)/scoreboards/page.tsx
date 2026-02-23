@@ -8,8 +8,10 @@ import {
   deleteScoreboard,
   getMatchAssignments,
   deleteMatchAssignment,
+  getLocations,
 } from "@/lib/api";
 import type { ScoreboardConfig, MatchAssignment } from "@/lib/types";
+import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,25 +23,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TableGrid } from "@/components/table-grid";
 import { Power, Trash2, Eye } from "lucide-react";
 
 export default function ScoreboardsPage() {
   const [scoreboards, setScoreboards] = useState<ScoreboardConfig[]>([]);
   const [assignments, setAssignments] = useState<MatchAssignment[]>([]);
+  const [tableNumbers, setTableNumbers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const { t } = useTranslation();
 
   const loadData = () => {
-    Promise.all([getScoreboards(), getMatchAssignments()])
-      .then(([sbRes, maRes]) => {
+    Promise.all([getScoreboards(), getMatchAssignments(), getLocations()])
+      .then(([sbRes, maRes, locRes]) => {
         setScoreboards(sbRes.data);
         setAssignments(maRes.data);
+        const loc = user?.locationId
+          ? locRes.data.find((l) => l.id === user.locationId)
+          : locRes.data[0];
+        setTableNumbers(loc?.tableNumbers ?? []);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   };
 
-  useEffect(loadData, []);
+  useEffect(loadData, [user]);
 
   const handleDisconnect = async (deviceId: string) => {
     if (!confirm(t("scoreboards.detail.confirmDelete"))) return;
@@ -75,6 +84,8 @@ export default function ScoreboardsPage() {
       <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
         {t("scoreboards.title")}
       </h1>
+
+      {tableNumbers.length > 0 && <TableGrid tableNumbers={tableNumbers} />}
 
       {scoreboards.length === 0 ? (
         <Card className="border-dashed border-border">

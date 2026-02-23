@@ -32,7 +32,7 @@ locationsRouter.post(
   requireRole("SUPER_ADMIN"),
   async (req: Request, res: Response) => {
     try {
-      const { name, address } = req.body;
+      const { name, address, tableNumbers } = req.body;
       if (!name) {
         res.status(400).json({ error: "Name is required" });
         return;
@@ -43,7 +43,12 @@ locationsRouter.post(
         .replace(/^-|-$/g, "");
 
       const location = await prisma.location.create({
-        data: { name, slug, address: address || null },
+        data: {
+          name,
+          slug,
+          address: address || null,
+          ...(Array.isArray(tableNumbers) && { tableNumbers }),
+        },
       });
       res.json({ data: location });
     } catch (e) {
@@ -59,8 +64,8 @@ locationsRouter.patch(
   requireRole("SUPER_ADMIN"),
   async (req: Request, res: Response) => {
     try {
-      const { name, address } = req.body;
-      const data: Record<string, any> = {};
+      const { name, address, tableNumbers } = req.body;
+      const data: { name?: string; slug?: string; address?: string; tableNumbers?: number[] } = {};
       if (name !== undefined) {
         data.name = name;
         data.slug = name
@@ -69,6 +74,7 @@ locationsRouter.patch(
           .replace(/^-|-$/g, "");
       }
       if (address !== undefined) data.address = address;
+      if (Array.isArray(tableNumbers)) data.tableNumbers = tableNumbers;
 
       const location = await prisma.location.update({
         where: { id: req.params.id as string },

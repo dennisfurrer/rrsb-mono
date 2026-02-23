@@ -129,6 +129,17 @@
     "actions": "Actions",
     "seeScore": "See Score"
   },
+  "tables": {
+    "table": "Table {{n}}",
+    "noMatch": "No match",
+    "matchPaused": "Paused",
+    "matchEnded": "Ended",
+    "live": "Live",
+    "score": "Score",
+    "frames": "Frames",
+    "breaks": "Breaks",
+    "pending": "Pending"
+  },
   "locations": {
     "title": "Locations",
     "name": "Name",
@@ -136,6 +147,8 @@
     "address": "Address",
     "addressPlaceholder": "Optional...",
     "namePlaceholder": "Location name...",
+    "tableNumbers": "Table Numbers",
+    "tableNumbersPlaceholder": "e.g. 1-9",
     "scoreboards": "Scoreboards",
     "users": "Users"
   },

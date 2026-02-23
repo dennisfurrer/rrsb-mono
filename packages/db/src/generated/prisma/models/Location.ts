@@ -20,8 +20,18 @@ export type LocationModel = runtime.Types.Result.DefaultSelection<Prisma.$Locati
 
 export type AggregateLocation = {
   _count: LocationCountAggregateOutputType | null
+  _avg: LocationAvgAggregateOutputType | null
+  _sum: LocationSumAggregateOutputType | null
   _min: LocationMinAggregateOutputType | null
   _max: LocationMaxAggregateOutputType | null
+}
+
+export type LocationAvgAggregateOutputType = {
+  tableNumbers: number | null
+}
+
+export type LocationSumAggregateOutputType = {
+  tableNumbers: number[]
 }
 
 export type LocationMinAggregateOutputType = {
@@ -49,12 +59,21 @@ export type LocationCountAggregateOutputType = {
   name: number
   slug: number
   address: number
+  tableNumbers: number
   isDefault: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type LocationAvgAggregateInputType = {
+  tableNumbers?: true
+}
+
+export type LocationSumAggregateInputType = {
+  tableNumbers?: true
+}
 
 export type LocationMinAggregateInputType = {
   id?: true
@@ -81,6 +100,7 @@ export type LocationCountAggregateInputType = {
   name?: true
   slug?: true
   address?: true
+  tableNumbers?: true
   isDefault?: true
   createdAt?: true
   updatedAt?: true
@@ -125,6 +145,18 @@ export type LocationAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: LocationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: LocationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: LocationMinAggregateInputType
@@ -155,6 +187,8 @@ export type LocationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: LocationCountAggregateInputType | true
+  _avg?: LocationAvgAggregateInputType
+  _sum?: LocationSumAggregateInputType
   _min?: LocationMinAggregateInputType
   _max?: LocationMaxAggregateInputType
 }
@@ -164,10 +198,13 @@ export type LocationGroupByOutputType = {
   name: string
   slug: string
   address: string | null
+  tableNumbers: number[]
   isDefault: boolean
   createdAt: Date
   updatedAt: Date
   _count: LocationCountAggregateOutputType | null
+  _avg: LocationAvgAggregateOutputType | null
+  _sum: LocationSumAggregateOutputType | null
   _min: LocationMinAggregateOutputType | null
   _max: LocationMaxAggregateOutputType | null
 }
@@ -195,6 +232,7 @@ export type LocationWhereInput = {
   name?: Prisma.StringFilter<"Location"> | string
   slug?: Prisma.StringFilter<"Location"> | string
   address?: Prisma.StringNullableFilter<"Location"> | string | null
+  tableNumbers?: Prisma.IntNullableListFilter<"Location">
   isDefault?: Prisma.BoolFilter<"Location"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Location"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Location"> | Date | string
@@ -208,6 +246,7 @@ export type LocationOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableNumbers?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -224,6 +263,7 @@ export type LocationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LocationWhereInput[]
   NOT?: Prisma.LocationWhereInput | Prisma.LocationWhereInput[]
   address?: Prisma.StringNullableFilter<"Location"> | string | null
+  tableNumbers?: Prisma.IntNullableListFilter<"Location">
   isDefault?: Prisma.BoolFilter<"Location"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Location"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Location"> | Date | string
@@ -237,12 +277,15 @@ export type LocationOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableNumbers?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.LocationCountOrderByAggregateInput
+  _avg?: Prisma.LocationAvgOrderByAggregateInput
   _max?: Prisma.LocationMaxOrderByAggregateInput
   _min?: Prisma.LocationMinOrderByAggregateInput
+  _sum?: Prisma.LocationSumOrderByAggregateInput
 }
 
 export type LocationScalarWhereWithAggregatesInput = {
@@ -253,6 +296,7 @@ export type LocationScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Location"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Location"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Location"> | string | null
+  tableNumbers?: Prisma.IntNullableListFilter<"Location">
   isDefault?: Prisma.BoolWithAggregatesFilter<"Location"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Location"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Location"> | Date | string
@@ -263,6 +307,7 @@ export type LocationCreateInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -276,6 +321,7 @@ export type LocationUncheckedCreateInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -289,6 +335,7 @@ export type LocationUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -302,6 +349,7 @@ export type LocationUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -315,6 +363,7 @@ export type LocationCreateManyInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -325,6 +374,7 @@ export type LocationUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -335,6 +385,7 @@ export type LocationUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,9 +396,14 @@ export type LocationCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  tableNumbers?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type LocationAvgOrderByAggregateInput = {
+  tableNumbers?: Prisma.SortOrder
 }
 
 export type LocationMaxOrderByAggregateInput = {
@@ -370,6 +426,10 @@ export type LocationMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type LocationSumOrderByAggregateInput = {
+  tableNumbers?: Prisma.SortOrder
+}
+
 export type LocationNullableScalarRelationFilter = {
   is?: Prisma.LocationWhereInput | null
   isNot?: Prisma.LocationWhereInput | null
@@ -380,8 +440,17 @@ export type LocationScalarRelationFilter = {
   isNot?: Prisma.LocationWhereInput
 }
 
+export type LocationCreatetableNumbersInput = {
+  set: number[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type LocationUpdatetableNumbersInput = {
+  set?: number[]
+  push?: number | number[]
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -439,6 +508,7 @@ export type LocationCreateWithoutUsersInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -451,6 +521,7 @@ export type LocationUncheckedCreateWithoutUsersInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -479,6 +550,7 @@ export type LocationUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -491,6 +563,7 @@ export type LocationUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -503,6 +576,7 @@ export type LocationCreateWithoutScoreboardConfigsInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -515,6 +589,7 @@ export type LocationUncheckedCreateWithoutScoreboardConfigsInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -543,6 +618,7 @@ export type LocationUpdateWithoutScoreboardConfigsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -555,6 +631,7 @@ export type LocationUncheckedUpdateWithoutScoreboardConfigsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,6 +644,7 @@ export type LocationCreateWithoutMatchesInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -579,6 +657,7 @@ export type LocationUncheckedCreateWithoutMatchesInput = {
   name: string
   slug: string
   address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -607,6 +686,7 @@ export type LocationUpdateWithoutMatchesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -619,6 +699,7 @@ export type LocationUncheckedUpdateWithoutMatchesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -680,6 +761,7 @@ export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   slug?: boolean
   address?: boolean
+  tableNumbers?: boolean
   isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -694,6 +776,7 @@ export type LocationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   slug?: boolean
   address?: boolean
+  tableNumbers?: boolean
   isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -704,6 +787,7 @@ export type LocationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   slug?: boolean
   address?: boolean
+  tableNumbers?: boolean
   isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -714,12 +798,13 @@ export type LocationSelectScalar = {
   name?: boolean
   slug?: boolean
   address?: boolean
+  tableNumbers?: boolean
   isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "address" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["location"]>
+export type LocationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "address" | "tableNumbers" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["location"]>
 export type LocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scoreboardConfigs?: boolean | Prisma.Location$scoreboardConfigsArgs<ExtArgs>
   matches?: boolean | Prisma.Location$matchesArgs<ExtArgs>
@@ -741,6 +826,7 @@ export type $LocationPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     slug: string
     address: string | null
+    tableNumbers: number[]
     isDefault: boolean
     createdAt: Date
     updatedAt: Date
@@ -1174,6 +1260,7 @@ export interface LocationFieldRefs {
   readonly name: Prisma.FieldRef<"Location", 'String'>
   readonly slug: Prisma.FieldRef<"Location", 'String'>
   readonly address: Prisma.FieldRef<"Location", 'String'>
+  readonly tableNumbers: Prisma.FieldRef<"Location", 'Int[]'>
   readonly isDefault: Prisma.FieldRef<"Location", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Location", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Location", 'DateTime'>

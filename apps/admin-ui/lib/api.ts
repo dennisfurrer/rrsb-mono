@@ -131,16 +131,16 @@ export async function getLocations() {
   );
 }
 
-export async function createLocation(name: string, address?: string) {
+export async function createLocation(name: string, address?: string, tableNumbers?: number[]) {
   return apiFetch<{ data: import("./types").Location }>(
     "/api/admin/locations",
-    { method: "POST", body: JSON.stringify({ name, address }) }
+    { method: "POST", body: JSON.stringify({ name, address, tableNumbers }) }
   );
 }
 
 export async function updateLocation(
   id: string,
-  data: { name?: string; address?: string }
+  data: { name?: string; address?: string; tableNumbers?: number[] }
 ) {
   return apiFetch<{ data: import("./types").Location }>(
     `/api/admin/locations/${id}`,
@@ -207,4 +207,9 @@ export async function deleteMatchAssignment(id: string) {
   return apiFetch<{ success: boolean }>(`/api/admin/match-setup/${id}`, {
     method: "DELETE",
   });
+}
+
+// Live Matches (public endpoint)
+export async function getLiveMatches() {
+  return apiFetch<{ data: import("./types").Match[] }>("/api/matches/live");
 }

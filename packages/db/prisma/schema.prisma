@@ -33,13 +33,14 @@ model Player {
 }
 
 model Location {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
-  address   String?
-  isDefault Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String   @unique
+  slug         String   @unique
+  address      String?
+  tableNumbers Int[]    @default([])
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   scoreboardConfigs ScoreboardConfig[]
   matches           Match[]

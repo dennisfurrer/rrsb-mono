@@ -14,6 +14,7 @@ export interface Location {
   name: string;
   slug: string;
   address: string | null;
+  tableNumbers: number[];
   isDefault: boolean;
   createdAt: string;
   _count?: {
@@ -21,6 +22,25 @@ export interface Location {
     matches: number;
     users: number;
   };
+}
+
+export interface Match {
+  id: string;
+  player1Name: string;
+  player1NationIOC: string | null;
+  player2Name: string;
+  player2NationIOC: string | null;
+  active: boolean;
+  bestOf: number;
+  framesPlayer1: number;
+  framesPlayer2: number;
+  breaksPlayer1: number[];
+  breaksPlayer2: number[];
+  winner: string | null;
+  rawGameLog: string;
+  tableNumber: number | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ScoreboardConfig {

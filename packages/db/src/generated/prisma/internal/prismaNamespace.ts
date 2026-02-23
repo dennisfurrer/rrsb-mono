@@ -1137,6 +1137,7 @@ export const LocationScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   address: 'address',
+  tableNumbers: 'tableNumbers',
   isDefault: 'isDefault',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

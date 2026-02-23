@@ -18,15 +18,51 @@ import {
 } from "@/components/ui/table";
 import { Pencil, Check, X } from "lucide-react";
 
+function parseTableNumbers(input: string): number[] {
+  const nums = new Set<number>();
+  for (const part of input.split(",")) {
+    const trimmed = part.trim();
+    const range = trimmed.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (range) {
+      const start = parseInt(range[1], 10);
+      const end = parseInt(range[2], 10);
+      for (let i = Math.min(start, end); i <= Math.max(start, end); i++) nums.add(i);
+    } else {
+      const n = parseInt(trimmed, 10);
+      if (!isNaN(n)) nums.add(n);
+    }
+  }
+  return Array.from(nums).sort((a, b) => a - b);
+}
+
+function formatTableNumbers(nums: number[]): string {
+  if (nums.length === 0) return "";
+  const sorted = [...nums].sort((a, b) => a - b);
+  const ranges: string[] = [];
+  let start = sorted[0], end = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === end + 1) {
+      end = sorted[i];
+    } else {
+      ranges.push(start === end ? `${start}` : `${start}-${end}`);
+      start = end = sorted[i];
+    }
+  }
+  ranges.push(start === end ? `${start}` : `${start}-${end}`);
+  return ranges.join(", ");
+}
+
 export default function LocationsPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
   const [newAddress, setNewAddress] = useState("");
+  const [newTables, setNewTables] = useState("");
   const [creating, setCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editAddress, setEditAddress] = useState("");
+  const [editTables, setEditTables] = useState("");
   const { t } = useTranslation();
 
   const loadLocations = () => {
@@ -42,9 +78,11 @@ export default function LocationsPage() {
     if (!newName.trim()) return;
     setCreating(true);
     try {
-      await createLocation(newName.trim(), newAddress.trim() || undefined);
+      const tables = parseTableNumbers(newTables);
+      await createLocation(newName.trim(), newAddress.trim() || undefined, tables.length > 0 ? tables : undefined);
       setNewName("");
       setNewAddress("");
+      setNewTables("");
       loadLocations();
     } catch (e: any) {
       alert(e.message);
@@ -58,6 +96,7 @@ export default function LocationsPage() {
       await updateLocation(id, {
         name: editName,
         address: editAddress || undefined,
+        tableNumbers: parseTableNumbers(editTables),
       });
       setEditingId(null);
       loadLocations();
@@ -81,8 +120,8 @@ export default function LocationsPage() {
         {t("locations.title")}
       </h1>
 
-      <div className="flex gap-2 max-w-lg items-end">
-        <div className="flex-1 space-y-2">
+      <div className="flex gap-2 max-w-2xl items-end flex-wrap">
+        <div className="flex-1 min-w-[140px] space-y-2">
           <Label>{t("locations.name")}</Label>
           <Input
             value={newName}
@@ -90,12 +129,20 @@ export default function LocationsPage() {
             placeholder={t("locations.namePlaceholder")}
           />
         </div>
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 min-w-[140px] space-y-2">
           <Label>{t("locations.address")}</Label>
           <Input
             value={newAddress}
             onChange={(e) => setNewAddress(e.target.value)}
             placeholder={t("locations.addressPlaceholder")}
+          />
+        </div>
+        <div className="flex-1 min-w-[120px] space-y-2">
+          <Label>{t("locations.tableNumbers")}</Label>
+          <Input
+            value={newTables}
+            onChange={(e) => setNewTables(e.target.value)}
+            placeholder={t("locations.tableNumbersPlaceholder")}
           />
         </div>
         <Button variant="brand" onClick={handleCreate} disabled={creating}>
@@ -109,6 +156,7 @@ export default function LocationsPage() {
             <TableHead>{t("locations.name")}</TableHead>
             <TableHead>{t("locations.slug")}</TableHead>
             <TableHead>{t("locations.address")}</TableHead>
+            <TableHead>{t("locations.tableNumbers")}</TableHead>
             <TableHead>{t("locations.scoreboards")}</TableHead>
             <TableHead>{t("locations.users")}</TableHead>
             <TableHead></TableHead>
@@ -145,6 +193,20 @@ export default function LocationsPage() {
                   <span className="text-text-secondary">{loc.address || "-"}</span>
                 )}
               </TableCell>
+              <TableCell>
+                {editingId === loc.id ? (
+                  <Input
+                    value={editTables}
+                    onChange={(e) => setEditTables(e.target.value)}
+                    placeholder={t("locations.tableNumbersPlaceholder")}
+                    className="h-7 text-sm"
+                  />
+                ) : (
+                  <span className="text-xs text-text-secondary font-mono">
+                    {(loc.tableNumbers ?? []).length > 0 ? formatTableNumbers(loc.tableNumbers) : "-"}
+                  </span>
+                )}
+              </TableCell>
               <TableCell className="font-mono text-text-secondary">{loc._count?.scoreboardConfigs ?? 0}</TableCell>
               <TableCell className="font-mono text-text-secondary">{loc._count?.users ?? 0}</TableCell>
               <TableCell>
@@ -169,6 +231,7 @@ export default function LocationsPage() {
                       setEditingId(loc.id);
                       setEditName(loc.name);
                       setEditAddress(loc.address || "");
+                      setEditTables(formatTableNumbers(loc.tableNumbers ?? []));
                     }}
                   >
                     <Pencil className="w-3 h-3" />
