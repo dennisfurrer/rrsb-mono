@@ -44,12 +44,12 @@
   "dashboard": {
     "title": "Dashboard",
     "onlineScoreboards": "Online Scoreboards",
-    "totalScoreboards": "Registrierte Scoreboards",
+    "totalScoreboards": "Scoreboards gesamt",
     "offlineScoreboards": "Offline Scoreboards",
     "noScoreboards": "Noch keine Scoreboards registriert",
     "getStarted": "Öffnen Sie die Scoreboard-App auf einem Gerät, um zu beginnen",
     "scoreboardsSection": "Scoreboards",
-    "matchSetupSection": "Spiel zuweisen — Schnellstart",
+    "matchSetupSection": "Spiel zuweisen — Schnelleinrichtung",
     "inUse": "Belegt",
     "available": "Verfügbar",
     "recentAssignments": "Letzte Zuweisungen",
@@ -74,7 +74,7 @@
       "step2": "Das Gerät wird automatisch erkannt und erscheint hier in der Liste",
       "step3": "Weisen Sie eine Tischnummer und Namensliste zu",
       "url": "Scoreboard-URL",
-      "hint": "Stellen Sie sicher, dass das Gerät und der Server im gleichen Netzwerk sind."
+      "hint": "Stellen Sie sicher, dass das Gerät und der Server im selben Netzwerk sind."
     },
     "detail": {
       "title": "Scoreboard",
@@ -101,7 +101,7 @@
     }
   },
   "matchSetup": {
-    "title": "Spielplanung",
+    "title": "Spieleinrichtung",
     "createAssignment": "Spielzuweisung erstellen",
     "player1": "Spieler 1",
     "player2": "Spieler 2",
@@ -117,10 +117,10 @@
     "submit": "Zuweisung erstellen",
     "assignments": "Spielzuweisungen",
     "pending": "Ausstehend",
-    "claimed": "Beansprucht",
+    "claimed": "Übernommen",
     "status": {
       "PENDING": "Ausstehend",
-      "CLAIMED": "Beansprucht",
+      "CLAIMED": "Übernommen",
       "CANCELLED": "Abgebrochen",
       "COMPLETED": "Abgeschlossen"
     },
