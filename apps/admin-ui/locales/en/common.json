@@ -125,7 +125,9 @@
       "COMPLETED": "Completed"
     },
     "noAssignments": "No match assignments yet.",
-    "confirmDelete": "Delete this assignment?"
+    "confirmDelete": "Delete this assignment?",
+    "actions": "Actions",
+    "seeScore": "See Score"
   },
   "locations": {
     "title": "Locations",
@@ -158,5 +160,32 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "walkthrough": {
+    "welcome": "Welcome",
+    "welcomeSubtext": "Here's a quick tour for this site",
+    "summary": "You're all set.",
+    "summarySubtext": "Do your thing",
+    "skip": "Skip tour",
+    "desktopOnly": "Watch the tour on desktop",
+    "desktopOnlySubtext": "The interactive tour needs a larger screen to shine.",
+    "steps": {
+      "sidebar": {
+        "question": "Your navigation hub",
+        "subtext": "Switch between scoreboards, matches, player lists, and settings."
+      },
+      "stats": {
+        "question": "Live at a glance",
+        "subtext": "See which scoreboards are online, in use, or available."
+      },
+      "matchSetup": {
+        "question": "Set up a match",
+        "subtext": "Pick your players, choose the format, and assign a scoreboard."
+      },
+      "assignments": {
+        "question": "Track matches",
+        "subtext": "Monitor match assignments and their status."
+      }
+    }
   }
 }

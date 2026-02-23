@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Power, Trash2 } from "lucide-react";
+import { Power, Trash2, Eye } from "lucide-react";
 
 export default function ScoreboardsPage() {
   const [scoreboards, setScoreboards] = useState<ScoreboardConfig[]>([]);
@@ -178,7 +178,7 @@ export default function ScoreboardsPage() {
               <TableHead>{t("scoreboards.table")}</TableHead>
               <TableHead>{t("scoreboards.status")}</TableHead>
               <TableHead>{t("namesLists.created")}</TableHead>
-              <TableHead></TableHead>
+              <TableHead>{t("matchSetup.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -202,16 +202,27 @@ export default function ScoreboardsPage() {
                   {new Date(a.createdAt).toLocaleString()}
                 </TableCell>
                 <TableCell>
-                  {(a.status === "PENDING" || a.status === "CANCELLED") && (
+                  <div className="flex items-center gap-1">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-danger"
-                      onClick={() => handleDeleteAssignment(a.id)}
+                      disabled
+                      className="gap-1.5 text-text-muted"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Eye className="w-3.5 h-3.5" />
+                      {t("matchSetup.seeScore")}
                     </Button>
-                  )}
+                    {(a.status === "PENDING" || a.status === "CANCELLED") && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-danger h-8 w-8 p-0"
+                        onClick={() => handleDeleteAssignment(a.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

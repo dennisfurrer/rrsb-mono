@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { MatchSetupForm } from "@/components/match-setup-form";
 import { getScoreboards, getMatchAssignments } from "@/lib/api";
 import type { ScoreboardConfig, MatchAssignment } from "@/lib/types";
-import { Monitor, Swords, ArrowRight, Wifi, WifiOff, Circle } from "lucide-react";
+import { Monitor, Swords, ArrowRight, Wifi, WifiOff, Circle, Eye } from "lucide-react";
+import { Walkthrough } from "@/components/walkthrough";
 
 export default function DashboardPage() {
   const [scoreboards, setScoreboards] = useState<ScoreboardConfig[]>([]);
@@ -54,6 +55,8 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10">
+      <Walkthrough />
+
       <h1 className="text-2xl md:text-3xl font-display font-extrabold text-text-primary tracking-tight">
         {t("dashboard.title")}
       </h1>
@@ -76,7 +79,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Scoreboard stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4" data-walkthrough="stats-grid">
             <Card>
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-2">
@@ -115,7 +118,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Assignments */}
-          <Card>
+          <Card data-walkthrough="recent-assignments">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-semibold text-text-muted uppercase tracking-wider">
@@ -155,6 +158,15 @@ export default function DashboardPage() {
                           )}
                         </div>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled
+                        className="gap-1.5 text-text-muted shrink-0"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        {t("matchSetup.seeScore")}
+                      </Button>
                       <Badge variant={
                         a.status === "PENDING" ? "info" :
                         a.status === "CLAIMED" ? "success" :
@@ -172,7 +184,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Right Column: Assign Match ── */}
-        <div className="space-y-5">
+        <div className="space-y-5" data-walkthrough="match-setup">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Swords className="w-5 h-5 text-text-muted" />

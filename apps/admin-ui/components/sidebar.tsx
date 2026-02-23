@@ -133,7 +133,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <nav className="py-4 px-3 space-y-1">
+        <nav className="py-4 px-3 space-y-1" data-walkthrough="sidebar-nav">
           {filteredSections.map((section, sIdx) => (
             <div key={section.labelKey + sIdx}>
               {section.separatorBefore && (
