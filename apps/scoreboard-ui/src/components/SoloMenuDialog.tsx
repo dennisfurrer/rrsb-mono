@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
-  computeSoloStats,
+  computeBreakStats,
+  computeHitMissStats,
   routineById,
   type SoloSessionState,
 } from "../lib/solo";
@@ -23,9 +24,12 @@ export function SoloMenuDialog({
   onClose,
 }: Props) {
   const [confirmEnd, setConfirmEnd] = useState(false);
-  const stats = computeSoloStats(session.shots);
   const routine = routineById(session.routineId);
-  const hitRatePct = Math.round(stats.hitRate * 100);
+
+  const canUndo =
+    session.mode === "hitmiss"
+      ? session.shots.length > 0
+      : session.attempts.length > 0;
 
   if (confirmEnd) {
     return (
@@ -40,7 +44,7 @@ export function SoloMenuDialog({
             flexDirection: "column",
             alignItems: "center",
             gap: "2.5vh",
-            width: "52vw",
+            width: "58vw",
           }}
         >
           <div style={{ color: "#fff", fontSize: "2.6vw", fontWeight: "bold", textAlign: "center" }}>
@@ -54,17 +58,25 @@ export function SoloMenuDialog({
               padding: "2vh 2vw",
               display: "flex",
               flexDirection: "column",
-              gap: "1vh",
+              gap: "1.2vh",
             }}
           >
             <div style={{ color: "#fbbf24", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>
-              {routine.name} &mdash; {session.playerName}
+              {routine.name}
+              {session.mode === "break" && (
+                <span style={{ color: "#bbb", fontWeight: "normal" }}>
+                  {" "}— {session.redsCount} Rote
+                </span>
+              )}
+              <span style={{ color: "#bbb", fontWeight: "normal" }}>
+                {" "}— {session.playerName}
+              </span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-around", color: "#fff", fontSize: "1.6vw" }}>
-              <span>{stats.hits} / {stats.total}</span>
-              <span>{stats.total === 0 ? "—" : `${hitRatePct}%`}</span>
-              <span>Beste Serie: {stats.bestStreak}</span>
-            </div>
+            {session.mode === "hitmiss" ? (
+              <HitMissSummary session={session} />
+            ) : (
+              <BreakSummary session={session} />
+            )}
           </div>
           <div style={{ display: "flex", gap: "2vw", width: "100%" }}>
             <button
@@ -111,7 +123,7 @@ export function SoloMenuDialog({
         <button
           className="menu-btn-undo"
           onClick={onUndo}
-          disabled={session.shots.length === 0}
+          disabled={!canUndo}
         >
           Undo / Letzte Eingabe löschen
         </button>
@@ -125,6 +137,40 @@ export function SoloMenuDialog({
           Practice beenden
         </button>
       </div>
+    </div>
+  );
+}
+
+function HitMissSummary({
+  session,
+}: {
+  session: Extract<SoloSessionState, { mode: "hitmiss" }>;
+}) {
+  const stats = computeHitMissStats(session.shots);
+  const pct = stats.total === 0 ? "—" : `${Math.round(stats.hitRate * 100)}%`;
+  return (
+    <div style={{ display: "flex", justifyContent: "space-around", color: "#fff", fontSize: "1.6vw" }}>
+      <span>{stats.hits} / {stats.total}</span>
+      <span>{pct}</span>
+      <span>Beste Serie: {stats.bestStreak}</span>
+    </div>
+  );
+}
+
+function BreakSummary({
+  session,
+}: {
+  session: Extract<SoloSessionState, { mode: "break" }>;
+}) {
+  const stats = computeBreakStats(session.attempts);
+  const avg = stats.totalAttempts === 0 ? "—" : stats.averageBreak.toFixed(1);
+  return (
+    <div style={{ display: "flex", justifyContent: "space-around", color: "#fff", fontSize: "1.4vw", flexWrap: "wrap", gap: "0.5vh 1vw" }}>
+      <span>Höchste: {stats.highestBreak || "—"}</span>
+      <span>Schnitt: {avg}</span>
+      <span>Aufgeräumt: {stats.clearedCount}</span>
+      <span>Verfehlt: {stats.missedCount}</span>
+      <span>Versuche: {stats.totalAttempts}</span>
     </div>
   );
 }

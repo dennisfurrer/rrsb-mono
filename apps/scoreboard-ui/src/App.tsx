@@ -32,8 +32,16 @@ import { BreaksDialog } from "./components/BreaksDialog";
 import { RoutinePickerDialog } from "./components/RoutinePickerDialog";
 import { SoloSession } from "./components/SoloSession";
 import { SoloMenuDialog } from "./components/SoloMenuDialog";
+import { BreakEntryDialog } from "./components/BreakEntryDialog";
+import { MultiEntryDialog } from "./components/MultiEntryDialog";
+import { RedsConfigDialog } from "./components/RedsConfigDialog";
 import {
   createSoloSession,
+  maxClearanceValue,
+  type BallColor,
+  type BreakAttempt,
+  type MissType,
+  type Pocket,
   type SoloRoutineId,
   type SoloSessionState,
   type SoloShot,
@@ -95,6 +103,9 @@ export function App() {
     return null;
   });
   const [showSoloMenu, setShowSoloMenu] = useState(false);
+  const [showBreakEntry, setShowBreakEntry] = useState(false);
+  const [showMultiEntry, setShowMultiEntry] = useState(false);
+  const [showRedsConfig, setShowRedsConfig] = useState(false);
 
   useEffect(() => {
     if (soloSession) {
@@ -598,17 +609,83 @@ export function App() {
     setPracticePlayer(null);
   }, []);
 
-  const handleSoloShot = useCallback((shot: SoloShot) => {
+  const handleHitMissShot = useCallback((shot: SoloShot) => {
     setSoloSession((prev) => {
-      if (!prev) return prev;
+      if (!prev || prev.mode !== "hitmiss") return prev;
       return { ...prev, shots: [...prev.shots, shot] };
     });
   }, []);
 
+  const handleBreakSubmit = useCallback(
+    (
+      value: number,
+      details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
+    ) => {
+      setSoloSession((prev) => {
+        if (!prev || prev.mode !== "break") return prev;
+        const attempt: BreakAttempt = {
+          kind: "break",
+          value,
+          missType: details?.missType,
+          ball: details?.ball,
+          pocket: details?.pocket,
+          timestamp: Date.now(),
+        };
+        return { ...prev, attempts: [...prev.attempts, attempt] };
+      });
+      setShowBreakEntry(false);
+    },
+    []
+  );
+
+  const handleCleared = useCallback(() => {
+    setSoloSession((prev) => {
+      if (!prev || prev.mode !== "break") return prev;
+      const attempt: BreakAttempt = {
+        kind: "cleared",
+        value: maxClearanceValue(prev.redsCount),
+        timestamp: Date.now(),
+      };
+      return { ...prev, attempts: [...prev.attempts, attempt] };
+    });
+  }, []);
+
+  const handleMissed = useCallback(() => {
+    setSoloSession((prev) => {
+      if (!prev || prev.mode !== "break") return prev;
+      const attempt: BreakAttempt = {
+        kind: "missed",
+        timestamp: Date.now(),
+      };
+      return { ...prev, attempts: [...prev.attempts, attempt] };
+    });
+  }, []);
+
+  const handleMultiCommit = useCallback((attempts: BreakAttempt[]) => {
+    setSoloSession((prev) => {
+      if (!prev || prev.mode !== "break") return prev;
+      return { ...prev, attempts: [...prev.attempts, ...attempts] };
+    });
+    setShowMultiEntry(false);
+  }, []);
+
+  const handleRedsChange = useCallback((reds: number) => {
+    setSoloSession((prev) => {
+      if (!prev || prev.mode !== "break") return prev;
+      return { ...prev, redsCount: reds };
+    });
+    setShowRedsConfig(false);
+  }, []);
+
   const handleSoloUndo = useCallback(() => {
     setSoloSession((prev) => {
-      if (!prev || prev.shots.length === 0) return prev;
-      return { ...prev, shots: prev.shots.slice(0, -1) };
+      if (!prev) return prev;
+      if (prev.mode === "hitmiss") {
+        if (prev.shots.length === 0) return prev;
+        return { ...prev, shots: prev.shots.slice(0, -1) };
+      }
+      if (prev.attempts.length === 0) return prev;
+      return { ...prev, attempts: prev.attempts.slice(0, -1) };
     });
     setShowSoloMenu(false);
   }, []);
@@ -616,7 +693,10 @@ export function App() {
   const handleSoloReset = useCallback(() => {
     setSoloSession((prev) => {
       if (!prev) return prev;
-      return { ...prev, shots: [], startedAt: Date.now() };
+      if (prev.mode === "hitmiss") {
+        return { ...prev, shots: [], startedAt: Date.now() };
+      }
+      return { ...prev, attempts: [], startedAt: Date.now() };
     });
     setShowSoloMenu(false);
   }, []);
@@ -662,7 +742,12 @@ export function App() {
       {soloSession ? (
         <SoloSession
           session={soloSession}
-          onShot={handleSoloShot}
+          onHitMissShot={handleHitMissShot}
+          onBreakEntry={() => setShowBreakEntry(true)}
+          onCleared={handleCleared}
+          onMissed={handleMissed}
+          onMultiEntry={() => setShowMultiEntry(true)}
+          onEditReds={() => setShowRedsConfig(true)}
           onMenuClick={() => setShowSoloMenu(true)}
         />
       ) : (
@@ -705,6 +790,32 @@ export function App() {
           onResetSession={handleSoloReset}
           onEndPractice={handleSoloEnd}
           onClose={() => setShowSoloMenu(false)}
+        />
+      )}
+
+      {showBreakEntry && soloSession && soloSession.mode === "break" && (
+        <BreakEntryDialog
+          playerName={soloSession.playerName}
+          onSubmit={handleBreakSubmit}
+          onClose={() => setShowBreakEntry(false)}
+        />
+      )}
+
+      {showMultiEntry && soloSession && soloSession.mode === "break" && (
+        <MultiEntryDialog
+          playerName={soloSession.playerName}
+          routineId={soloSession.routineId}
+          redsCount={soloSession.redsCount}
+          onCommit={handleMultiCommit}
+          onClose={() => setShowMultiEntry(false)}
+        />
+      )}
+
+      {showRedsConfig && soloSession && soloSession.mode === "break" && (
+        <RedsConfigDialog
+          current={soloSession.redsCount}
+          onSave={handleRedsChange}
+          onClose={() => setShowRedsConfig(false)}
         />
       )}
 

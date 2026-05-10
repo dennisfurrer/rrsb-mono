@@ -21,14 +21,19 @@ export function RoutinePickerDialog({ playerName, onStart, onCancel }: Props) {
           {SOLO_ROUTINES.map((r) => (
             <button
               key={r.id}
+              data-routine={r.id}
               className={`routine-card ${selected === r.id ? "selected" : ""}`}
               onClick={() => setSelected(r.id)}
             >
-              <div className="routine-card-name">{r.name}</div>
-              <div className="routine-card-desc">{r.description}</div>
+              <div className="routine-card-accent" />
+              <div className="routine-card-body">
+                <div className="routine-card-name">{r.name}</div>
+                <div className="routine-card-desc">{r.description}</div>
+              </div>
             </button>
           ))}
         </div>
+
         <div className="routine-picker-actions">
           <button className="routine-picker-cancel" onClick={onCancel}>
             Zurück
