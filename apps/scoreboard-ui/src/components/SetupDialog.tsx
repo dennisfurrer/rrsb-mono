@@ -5,6 +5,8 @@ import { type MatchAssignment, type NamesListEntry } from "../lib/api";
 const SETTINGS_CLICKS = 8;
 const CLICK_RESET_MS = 2000;
 
+export const PRACTICE_MODE_VALUE = "__practice__";
+
 interface PlayerEntry {
   name: string;
   ioc: string;
@@ -31,6 +33,7 @@ interface Props {
     nat2: string,
     bestOf: number
   ) => void;
+  onPracticeStart: (playerName: string) => void;
   defaultBestOf: number;
   playerList?: NamesListEntry[] | null;
   pendingAssignment?: MatchAssignment | null;
@@ -40,6 +43,7 @@ interface Props {
 
 export function SetupDialog({
   onComplete,
+  onPracticeStart,
   defaultBestOf,
   playerList,
   pendingAssignment,
@@ -80,7 +84,14 @@ export function SetupDialog({
     return players.find((p) => p.name === name)?.ioc || "SUI";
   }
 
+  const isPractice = name2 === PRACTICE_MODE_VALUE;
+
   const handleOk = () => {
+    if (isPractice) {
+      const p1 = name1 || "Spieler";
+      onPracticeStart(p1);
+      return;
+    }
     const p1 = name1 || "Player 1";
     const p2 = name2 || "Player 2";
     onComplete(p1, p2, getIOC(p1), getIOC(p2), bestOf);
@@ -119,8 +130,11 @@ export function SetupDialog({
           ))}
         </select>
 
-        <div className="setup-player-header setup-player2-header" onClick={handleP2LabelClick}>
-          Spieler 2:
+        <div
+          className={`setup-player-header ${isPractice ? "setup-practice-header" : "setup-player2-header"}`}
+          onClick={handleP2LabelClick}
+        >
+          {isPractice ? "Modus:" : "Spieler 2:"}
         </div>
         <select
           className="setup-player-select"
@@ -130,6 +144,9 @@ export function SetupDialog({
           <option value="" disabled>
             Spieler wählen...
           </option>
+          <option value={PRACTICE_MODE_VALUE}>
+            🎯 PRACTICE MODE
+          </option>
           {players.map((p) => (
             <option key={p.name} value={p.name}>
               {p.name}
@@ -137,17 +154,21 @@ export function SetupDialog({
           ))}
         </select>
 
-        <div className="setup-bestof-label">Best of frames:</div>
-        <div className="setup-bestof-buttons">
+        <div className={`setup-bestof-label ${isPractice ? "disabled" : ""}`}>
+          Best of frames:
+        </div>
+        <div className={`setup-bestof-buttons ${isPractice ? "disabled" : ""}`}>
           <button
             className="bestof-double"
             onClick={() => setBestOf((v) => Math.max(1, v - 5))}
+            disabled={isPractice}
           >
             --
           </button>
           <button
             className="bestof-single"
             onClick={() => setBestOf((v) => Math.max(1, v - 1))}
+            disabled={isPractice}
           >
             -
           </button>
@@ -155,12 +176,14 @@ export function SetupDialog({
           <button
             className="bestof-single"
             onClick={() => setBestOf((v) => v + 1)}
+            disabled={isPractice}
           >
             +
           </button>
           <button
             className="bestof-double"
             onClick={() => setBestOf((v) => v + 5)}
+            disabled={isPractice}
           >
             ++
           </button>
