@@ -483,3 +483,309 @@ div { font-weight: bold; }
 .menu-btn-match-end { background: #5a8a5a; color: #00e600; }
 .menu-btn-new-game { background: #000088; color: #00e6e6; }
 
+.menu-fullscreen button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ===== SETUP — disabled best-of (practice mode) ===== */
+.setup-bestof-label.disabled {
+  opacity: 0.4;
+  color: #888;
+}
+
+.setup-bestof-buttons.disabled button,
+.setup-bestof-buttons.disabled .setup-bestof-value {
+  opacity: 0.4;
+}
+
+.setup-bestof-buttons button:disabled {
+  cursor: not-allowed;
+}
+
+/* ===== SETUP — practice mode header (P2 dropdown shows PRACTICE MODE) ===== */
+.setup-practice-header {
+  background: #1a3300;
+  color: #66ff33;
+}
+
+/* ===== ROUTINE PICKER ===== */
+.routine-picker {
+  position: absolute;
+  top: 5%;
+  left: 10%;
+  width: 80%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.routine-picker-header {
+  flex: 0 0 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a3300;
+  color: #66ff33;
+  font-weight: bold;
+  font-size: 2.7vw;
+}
+
+.routine-picker-subtitle {
+  flex: 0 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.8vw;
+}
+
+.routine-picker-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5vh 1.5vw;
+  padding: 1.5vh 0;
+  background: #333;
+}
+
+.routine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  background: #444;
+  color: #fff;
+  border: 3px solid #777;
+  cursor: pointer;
+  padding: 1vh 1vw;
+}
+
+.routine-card:active {
+  background: #555;
+}
+
+.routine-card.selected {
+  background: #1a3300;
+  border-color: #66ff33;
+  color: #ccffcc;
+}
+
+.routine-card-name {
+  font-size: 2.4vw;
+  font-weight: bold;
+}
+
+.routine-card.selected .routine-card-name {
+  color: #66ff33;
+}
+
+.routine-card-desc {
+  font-size: 1.3vw;
+  font-weight: normal;
+  color: #bbb;
+  text-align: center;
+}
+
+.routine-card.selected .routine-card-desc {
+  color: #99cc99;
+}
+
+.routine-picker-actions {
+  flex: 0 0 12%;
+  display: flex;
+  gap: 1vw;
+}
+
+.routine-picker-cancel {
+  flex: 1;
+  background: #444;
+  color: #ccc;
+  border: 2px solid #666;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 2.5vw;
+}
+
+.routine-picker-cancel:active {
+  background: #555;
+}
+
+.routine-picker-start {
+  flex: 2;
+  background: #006600;
+  color: #00ff00;
+  border: 2px solid #009900;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 3.5vw;
+}
+
+.routine-picker-start:active {
+  background: #008800;
+}
+
+.routine-picker-start.disabled,
+.routine-picker-start:disabled {
+  background: #2a2a2a;
+  color: #555;
+  border-color: #444;
+  cursor: not-allowed;
+}
+
+/* ===== SOLO SESSION ===== */
+.solo {
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.solo-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.solo-header {
+  flex: 0 0 12%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2vw;
+  background: #1a3300;
+  border-bottom: 0.2vh solid #2d5500;
+}
+
+.solo-header-routine {
+  color: #66ff33;
+  font-weight: bold;
+  font-size: 2.6vw;
+}
+
+.solo-header-player {
+  color: #fff;
+  font-weight: bold;
+  font-size: 2vw;
+}
+
+.solo-tally {
+  flex: 0 0 28%;
+  display: flex;
+  background: yellow;
+  color: #000;
+}
+
+.solo-tally-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5vh;
+  border-right: 0.2vw solid #cc9900;
+}
+
+.solo-tally-cell:last-child {
+  border-right: none;
+}
+
+.solo-tally-num {
+  font-size: 6vw;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.solo-tally-label {
+  font-size: 1.5vw;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.solo-streaks {
+  flex: 0 0 8%;
+  display: flex;
+  background: #00003a;
+  color: #99ccff;
+}
+
+.solo-streak {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  font-size: 1.6vw;
+  font-weight: bold;
+}
+
+.solo-streak-label {
+  color: #6699cc;
+}
+
+.solo-streak-value {
+  color: #fff;
+  font-size: 2vw;
+}
+
+.solo-buttons {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.solo-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: inherit;
+  transition: background 0.05s;
+}
+
+.solo-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.solo-btn-hit {
+  background: #006600;
+  color: #00ff00;
+  border-right: 0.3vw solid #000;
+}
+
+.solo-btn-hit:active {
+  background: #008800;
+}
+
+.solo-btn-miss {
+  background: #660000;
+  color: #ff3333;
+}
+
+.solo-btn-miss:active {
+  background: #880000;
+}
+
+.solo-btn-icon {
+  font-size: 9vw;
+  line-height: 1;
+}
+
+.solo-btn-label {
+  font-size: 3vw;
+  letter-spacing: 0.1em;
+}
+
