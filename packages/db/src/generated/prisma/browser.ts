@@ -62,3 +62,13 @@ export type FrameAction = Prisma.FrameActionModel
  * 
  */
 export type MatchAssignment = Prisma.MatchAssignmentModel
+/**
+ * Model PracticeSession
+ * 
+ */
+export type PracticeSession = Prisma.PracticeSessionModel
+/**
+ * Model PracticeAttempt
+ * 
+ */
+export type PracticeAttempt = Prisma.PracticeAttemptModel

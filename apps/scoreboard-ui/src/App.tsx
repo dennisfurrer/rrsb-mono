@@ -9,13 +9,17 @@ import {
   type MatchState,
 } from "./lib/model";
 import {
+  addPracticeAttempts,
   cancelAssignment,
   claimAssignment,
   completeAssignment,
   createMatch,
+  createPracticeSession,
+  deleteLastPracticeAttempt,
   fetchNamesList,
   fetchPendingAssignment,
   getDeviceId,
+  patchPracticeSession,
   pingScoreboard,
   sendFrameAction,
   updateMatch,
@@ -36,8 +40,10 @@ import { BreakEntryDialog } from "./components/BreakEntryDialog";
 import { MultiEntryDialog } from "./components/MultiEntryDialog";
 import { RedsConfigDialog } from "./components/RedsConfigDialog";
 import {
+  breakAttemptToApi,
   createSoloSession,
   maxClearanceValue,
+  routineById,
   type BallColor,
   type BreakAttempt,
   type MissType,
@@ -595,13 +601,29 @@ export function App() {
   }, []);
 
   const handleRoutinePicked = useCallback(
-    (routineId: SoloRoutineId) => {
+    async (routineId: SoloRoutineId) => {
       const name = practicePlayer || soloSession?.playerName || "Spieler";
-      setSoloSession(createSoloSession(name, routineId));
+      const routine = routineById(routineId);
+      const fresh = createSoloSession(name, routineId);
+
+      // Create remote session FIRST so remoteId is set when the session
+      // screen renders. Writes from action buttons can then commit reliably.
+      const tableNum = scoreboardConfig?.tableNumber ?? null;
+      const remoteId = await createPracticeSession({
+        playerName: name,
+        routineId,
+        routineName: routine.name,
+        mode: routine.mode === "break" ? "BREAK" : "HITMISS",
+        redsCount: fresh.mode === "break" ? fresh.redsCount : undefined,
+        deviceId: deviceId.current,
+        tableNumber: tableNum ?? undefined,
+      });
+
+      setSoloSession({ ...fresh, remoteId });
       setShowRoutinePicker(false);
       setShowSetup(false);
     },
-    [practicePlayer, soloSession]
+    [practicePlayer, soloSession, scoreboardConfig]
   );
 
   const handleRoutinePickerCancel = useCallback(() => {
@@ -609,110 +631,183 @@ export function App() {
     setPracticePlayer(null);
   }, []);
 
-  const handleHitMissShot = useCallback((shot: SoloShot) => {
-    setSoloSession((prev) => {
-      if (!prev || prev.mode !== "hitmiss") return prev;
-      return { ...prev, shots: [...prev.shots, shot] };
-    });
-  }, []);
+  const handleHitMissShot = useCallback(
+    (shot: SoloShot) => {
+      if (!soloSession || soloSession.mode !== "hitmiss") return;
+      setSoloSession((prev) =>
+        prev && prev.mode === "hitmiss"
+          ? { ...prev, shots: [...prev.shots, shot] }
+          : prev
+      );
+      if (soloSession.remoteId) {
+        addPracticeAttempts(soloSession.remoteId, [
+          { kind: shot === "hit" ? "HIT" : "MISS" },
+        ]);
+      }
+    },
+    [soloSession]
+  );
 
   const handleBreakSubmit = useCallback(
     (
       value: number,
       details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
     ) => {
-      setSoloSession((prev) => {
-        if (!prev || prev.mode !== "break") return prev;
-        const attempt: BreakAttempt = {
-          kind: "break",
-          value,
-          missType: details?.missType,
-          ball: details?.ball,
-          pocket: details?.pocket,
-          timestamp: Date.now(),
-        };
-        return { ...prev, attempts: [...prev.attempts, attempt] };
-      });
+      if (!soloSession || soloSession.mode !== "break") return;
+      const attempt: BreakAttempt = {
+        kind: "break",
+        value,
+        missType: details?.missType,
+        ball: details?.ball,
+        pocket: details?.pocket,
+        timestamp: Date.now(),
+      };
+      setSoloSession((prev) =>
+        prev && prev.mode === "break"
+          ? { ...prev, attempts: [...prev.attempts, attempt] }
+          : prev
+      );
+      if (soloSession.remoteId) {
+        addPracticeAttempts(soloSession.remoteId, [breakAttemptToApi(attempt)]);
+      }
       setShowBreakEntry(false);
     },
-    []
+    [soloSession]
   );
 
   const handleCleared = useCallback(() => {
-    setSoloSession((prev) => {
-      if (!prev || prev.mode !== "break") return prev;
-      const attempt: BreakAttempt = {
-        kind: "cleared",
-        value: maxClearanceValue(prev.redsCount),
-        timestamp: Date.now(),
-      };
-      return { ...prev, attempts: [...prev.attempts, attempt] };
-    });
-  }, []);
+    if (!soloSession || soloSession.mode !== "break") return;
+    const attempt: BreakAttempt = {
+      kind: "cleared",
+      value: maxClearanceValue(soloSession.redsCount),
+      timestamp: Date.now(),
+    };
+    setSoloSession((prev) =>
+      prev && prev.mode === "break"
+        ? { ...prev, attempts: [...prev.attempts, attempt] }
+        : prev
+    );
+    if (soloSession.remoteId) {
+      addPracticeAttempts(soloSession.remoteId, [breakAttemptToApi(attempt)]);
+    }
+  }, [soloSession]);
 
   const handleMissed = useCallback(() => {
-    setSoloSession((prev) => {
-      if (!prev || prev.mode !== "break") return prev;
-      const attempt: BreakAttempt = {
-        kind: "missed",
-        timestamp: Date.now(),
-      };
-      return { ...prev, attempts: [...prev.attempts, attempt] };
-    });
-  }, []);
+    if (!soloSession || soloSession.mode !== "break") return;
+    const attempt: BreakAttempt = {
+      kind: "missed",
+      timestamp: Date.now(),
+    };
+    setSoloSession((prev) =>
+      prev && prev.mode === "break"
+        ? { ...prev, attempts: [...prev.attempts, attempt] }
+        : prev
+    );
+    if (soloSession.remoteId) {
+      addPracticeAttempts(soloSession.remoteId, [breakAttemptToApi(attempt)]);
+    }
+  }, [soloSession]);
 
-  const handleMultiCommit = useCallback((attempts: BreakAttempt[]) => {
-    setSoloSession((prev) => {
-      if (!prev || prev.mode !== "break") return prev;
-      return { ...prev, attempts: [...prev.attempts, ...attempts] };
-    });
-    setShowMultiEntry(false);
-  }, []);
+  const handleMultiCommit = useCallback(
+    (attempts: BreakAttempt[]) => {
+      if (!soloSession || soloSession.mode !== "break") return;
+      setSoloSession((prev) =>
+        prev && prev.mode === "break"
+          ? { ...prev, attempts: [...prev.attempts, ...attempts] }
+          : prev
+      );
+      if (soloSession.remoteId && attempts.length > 0) {
+        addPracticeAttempts(
+          soloSession.remoteId,
+          attempts.map(breakAttemptToApi)
+        );
+      }
+      setShowMultiEntry(false);
+    },
+    [soloSession]
+  );
 
-  const handleRedsChange = useCallback((reds: number) => {
-    setSoloSession((prev) => {
-      if (!prev || prev.mode !== "break") return prev;
-      return { ...prev, redsCount: reds };
-    });
-    setShowRedsConfig(false);
-  }, []);
+  const handleRedsChange = useCallback(
+    (reds: number) => {
+      if (!soloSession || soloSession.mode !== "break") return;
+      setSoloSession((prev) =>
+        prev && prev.mode === "break" ? { ...prev, redsCount: reds } : prev
+      );
+      if (soloSession.remoteId) {
+        patchPracticeSession(soloSession.remoteId, { redsCount: reds });
+      }
+      setShowRedsConfig(false);
+    },
+    [soloSession]
+  );
 
   const handleSoloUndo = useCallback(() => {
+    if (!soloSession) return;
+    const hasEntries =
+      soloSession.mode === "hitmiss"
+        ? soloSession.shots.length > 0
+        : soloSession.attempts.length > 0;
+    if (!hasEntries) {
+      setShowSoloMenu(false);
+      return;
+    }
     setSoloSession((prev) => {
       if (!prev) return prev;
       if (prev.mode === "hitmiss") {
-        if (prev.shots.length === 0) return prev;
         return { ...prev, shots: prev.shots.slice(0, -1) };
       }
-      if (prev.attempts.length === 0) return prev;
       return { ...prev, attempts: prev.attempts.slice(0, -1) };
     });
+    if (soloSession.remoteId) {
+      deleteLastPracticeAttempt(soloSession.remoteId);
+    }
     setShowSoloMenu(false);
-  }, []);
+  }, [soloSession]);
 
-  const handleSoloReset = useCallback(() => {
-    setSoloSession((prev) => {
-      if (!prev) return prev;
-      if (prev.mode === "hitmiss") {
-        return { ...prev, shots: [], startedAt: Date.now() };
-      }
-      return { ...prev, attempts: [], startedAt: Date.now() };
-    });
+  const handleSoloReset = useCallback(async () => {
+    // Snapshot current session, finalize old, await new remote, then swap.
     setShowSoloMenu(false);
-  }, []);
+    const prev = soloSession;
+    if (!prev) return;
+
+    if (prev.remoteId) {
+      patchPracticeSession(prev.remoteId, { finished: true });
+    }
+
+    const routine = routineById(prev.routineId);
+    const redsCount = prev.mode === "break" ? prev.redsCount : undefined;
+    const newRemote = await createPracticeSession({
+      playerName: prev.playerName,
+      routineId: prev.routineId,
+      routineName: routine.name,
+      mode: routine.mode === "break" ? "BREAK" : "HITMISS",
+      redsCount,
+      deviceId: deviceId.current,
+      tableNumber: scoreboardConfig?.tableNumber ?? undefined,
+    });
+
+    const fresh = createSoloSession(prev.playerName, prev.routineId, redsCount);
+    setSoloSession({ ...fresh, remoteId: newRemote });
+  }, [scoreboardConfig, soloSession]);
 
   const handleSoloChangeRoutine = useCallback(() => {
+    if (soloSession?.remoteId) {
+      patchPracticeSession(soloSession.remoteId, { finished: true });
+    }
     setSoloSession(null);
     setShowSoloMenu(false);
     setShowRoutinePicker(true);
-  }, []);
+  }, [soloSession]);
 
   const handleSoloEnd = useCallback(() => {
+    if (soloSession?.remoteId) {
+      patchPracticeSession(soloSession.remoteId, { finished: true });
+    }
     setSoloSession(null);
     setPracticePlayer(null);
     setShowSoloMenu(false);
     setShowSetup(true);
-  }, []);
+  }, [soloSession]);
 
   // ===== SETTINGS =====
   const handleSettingsSave = useCallback(

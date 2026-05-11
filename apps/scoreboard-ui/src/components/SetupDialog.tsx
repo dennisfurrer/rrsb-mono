@@ -145,7 +145,7 @@ export function SetupDialog({
             Spieler wählen...
           </option>
           <option value={PRACTICE_MODE_VALUE}>
-            🎯 PRACTICE MODE
+            SOLO TRAINING
           </option>
           {players.map((p) => (
             <option key={p.name} value={p.name}>

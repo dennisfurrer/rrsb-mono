@@ -26,3 +26,53 @@ export const AssignmentStatus = {
 } as const
 
 export type AssignmentStatus = (typeof AssignmentStatus)[keyof typeof AssignmentStatus]
+
+
+export const PracticeMode = {
+  BREAK: 'BREAK',
+  HITMISS: 'HITMISS'
+} as const
+
+export type PracticeMode = (typeof PracticeMode)[keyof typeof PracticeMode]
+
+
+export const PracticeAttemptKind = {
+  BREAK: 'BREAK',
+  CLEARED: 'CLEARED',
+  MISSED: 'MISSED',
+  HIT: 'HIT',
+  MISS: 'MISS'
+} as const
+
+export type PracticeAttemptKind = (typeof PracticeAttemptKind)[keyof typeof PracticeAttemptKind]
+
+
+export const BallColor = {
+  RED: 'RED',
+  YELLOW: 'YELLOW',
+  GREEN: 'GREEN',
+  BROWN: 'BROWN',
+  BLUE: 'BLUE',
+  PINK: 'PINK',
+  BLACK: 'BLACK'
+} as const
+
+export type BallColor = (typeof BallColor)[keyof typeof BallColor]
+
+
+export const MissType = {
+  LONG: 'LONG',
+  EASY: 'EASY',
+  DIFFICULT: 'DIFFICULT',
+  POSITION: 'POSITION'
+} as const
+
+export type MissType = (typeof MissType)[keyof typeof MissType]
+
+
+export const Pocket = {
+  CORNER: 'CORNER',
+  MIDDLE: 'MIDDLE'
+} as const
+
+export type Pocket = (typeof Pocket)[keyof typeof Pocket]

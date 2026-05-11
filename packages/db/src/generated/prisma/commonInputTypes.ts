@@ -236,6 +236,91 @@ export type EnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAssignmentStatusFilter<$PrismaModel>
 }
 
+export type EnumPracticeModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeMode | Prisma.EnumPracticeModeFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel> | $Enums.PracticeMode
+}
+
+export type EnumPracticeModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeMode | Prisma.EnumPracticeModeFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeModeWithAggregatesFilter<$PrismaModel> | $Enums.PracticeMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel>
+}
+
+export type EnumPracticeAttemptKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeAttemptKind | Prisma.EnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel> | $Enums.PracticeAttemptKind
+}
+
+export type EnumMissTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.MissType | Prisma.EnumMissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel> | $Enums.MissType | null
+}
+
+export type EnumBallColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel> | $Enums.BallColor | null
+}
+
+export type EnumPocketNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Pocket | Prisma.EnumPocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel> | $Enums.Pocket | null
+}
+
+export type EnumPracticeAttemptKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeAttemptKind | Prisma.EnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeAttemptKindWithAggregatesFilter<$PrismaModel> | $Enums.PracticeAttemptKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel>
+}
+
+export type EnumMissTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MissType | Prisma.EnumMissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMissTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.MissType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumBallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBallColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.BallColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel>
+}
+
+export type EnumPocketNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Pocket | Prisma.EnumPocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPocketNullableWithAggregatesFilter<$PrismaModel> | $Enums.Pocket | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -469,6 +554,91 @@ export type NestedEnumAssignmentStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAssignmentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAssignmentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumPracticeModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeMode | Prisma.EnumPracticeModeFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel> | $Enums.PracticeMode
+}
+
+export type NestedEnumPracticeModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeMode | Prisma.EnumPracticeModeFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeMode[] | Prisma.ListEnumPracticeModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeModeWithAggregatesFilter<$PrismaModel> | $Enums.PracticeMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPracticeModeFilter<$PrismaModel>
+}
+
+export type NestedEnumPracticeAttemptKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeAttemptKind | Prisma.EnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel> | $Enums.PracticeAttemptKind
+}
+
+export type NestedEnumMissTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.MissType | Prisma.EnumMissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel> | $Enums.MissType | null
+}
+
+export type NestedEnumBallColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel> | $Enums.BallColor | null
+}
+
+export type NestedEnumPocketNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Pocket | Prisma.EnumPocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel> | $Enums.Pocket | null
+}
+
+export type NestedEnumPracticeAttemptKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PracticeAttemptKind | Prisma.EnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  in?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PracticeAttemptKind[] | Prisma.ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPracticeAttemptKindWithAggregatesFilter<$PrismaModel> | $Enums.PracticeAttemptKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPracticeAttemptKindFilter<$PrismaModel>
+}
+
+export type NestedEnumMissTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MissType | Prisma.EnumMissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.MissType[] | Prisma.ListEnumMissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumMissTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.MissType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumBallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBallColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.BallColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBallColorNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumPocketNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Pocket | Prisma.EnumPocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Pocket[] | Prisma.ListEnumPocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumPocketNullableWithAggregatesFilter<$PrismaModel> | $Enums.Pocket | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
 }
 
 

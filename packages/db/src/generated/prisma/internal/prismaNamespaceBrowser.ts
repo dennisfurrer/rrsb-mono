@@ -59,7 +59,9 @@ export const ModelName = {
   NamesListEntry: 'NamesListEntry',
   Match: 'Match',
   FrameAction: 'FrameAction',
-  MatchAssignment: 'MatchAssignment'
+  MatchAssignment: 'MatchAssignment',
+  PracticeSession: 'PracticeSession',
+  PracticeAttempt: 'PracticeAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -211,6 +213,41 @@ export const MatchAssignmentScalarFieldEnum = {
 } as const
 
 export type MatchAssignmentScalarFieldEnum = (typeof MatchAssignmentScalarFieldEnum)[keyof typeof MatchAssignmentScalarFieldEnum]
+
+
+export const PracticeSessionScalarFieldEnum = {
+  id: 'id',
+  playerName: 'playerName',
+  routineId: 'routineId',
+  routineName: 'routineName',
+  mode: 'mode',
+  redsCount: 'redsCount',
+  deviceId: 'deviceId',
+  tableNumber: 'tableNumber',
+  locationId: 'locationId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  finalized: 'finalized',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PracticeSessionScalarFieldEnum = (typeof PracticeSessionScalarFieldEnum)[keyof typeof PracticeSessionScalarFieldEnum]
+
+
+export const PracticeAttemptScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  orderIndex: 'orderIndex',
+  kind: 'kind',
+  value: 'value',
+  missType: 'missType',
+  ball: 'ball',
+  pocket: 'pocket',
+  timestamp: 'timestamp'
+} as const
+
+export type PracticeAttemptScalarFieldEnum = (typeof PracticeAttemptScalarFieldEnum)[keyof typeof PracticeAttemptScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -134,7 +134,7 @@ export function SoloMenuDialog({
           Andere Übung wählen
         </button>
         <button className="menu-btn-new-game" onClick={() => setConfirmEnd(true)}>
-          Practice beenden
+          Training beenden
         </button>
       </div>
     </div>
