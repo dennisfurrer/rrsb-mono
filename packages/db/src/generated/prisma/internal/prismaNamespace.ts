@@ -392,7 +392,9 @@ export const ModelName = {
   NamesListEntry: 'NamesListEntry',
   Match: 'Match',
   FrameAction: 'FrameAction',
-  MatchAssignment: 'MatchAssignment'
+  MatchAssignment: 'MatchAssignment',
+  PracticeSession: 'PracticeSession',
+  PracticeAttempt: 'PracticeAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "player" | "location" | "user" | "scoreboardConfig" | "namesList" | "namesListEntry" | "match" | "frameAction" | "matchAssignment"
+    modelProps: "player" | "location" | "user" | "scoreboardConfig" | "namesList" | "namesListEntry" | "match" | "frameAction" | "matchAssignment" | "practiceSession" | "practiceAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1080,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PracticeSession: {
+      payload: Prisma.$PracticeSessionPayload<ExtArgs>
+      fields: Prisma.PracticeSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PracticeSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PracticeSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.PracticeSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PracticeSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        findMany: {
+          args: Prisma.PracticeSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        create: {
+          args: Prisma.PracticeSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        createMany: {
+          args: Prisma.PracticeSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PracticeSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.PracticeSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        update: {
+          args: Prisma.PracticeSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PracticeSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PracticeSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PracticeSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PracticeSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.PracticeSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePracticeSession>
+        }
+        groupBy: {
+          args: Prisma.PracticeSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PracticeSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PracticeAttempt: {
+      payload: Prisma.$PracticeAttemptPayload<ExtArgs>
+      fields: Prisma.PracticeAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PracticeAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PracticeAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.PracticeAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PracticeAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.PracticeAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.PracticeAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.PracticeAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PracticeAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.PracticeAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        update: {
+          args: Prisma.PracticeAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.PracticeAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PracticeAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PracticeAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.PracticeAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.PracticeAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePracticeAttempt>
+        }
+        groupBy: {
+          args: Prisma.PracticeAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PracticeAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeAttemptCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1252,6 +1402,41 @@ export const MatchAssignmentScalarFieldEnum = {
 export type MatchAssignmentScalarFieldEnum = (typeof MatchAssignmentScalarFieldEnum)[keyof typeof MatchAssignmentScalarFieldEnum]
 
 
+export const PracticeSessionScalarFieldEnum = {
+  id: 'id',
+  playerName: 'playerName',
+  routineId: 'routineId',
+  routineName: 'routineName',
+  mode: 'mode',
+  redsCount: 'redsCount',
+  deviceId: 'deviceId',
+  tableNumber: 'tableNumber',
+  locationId: 'locationId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  finalized: 'finalized',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PracticeSessionScalarFieldEnum = (typeof PracticeSessionScalarFieldEnum)[keyof typeof PracticeSessionScalarFieldEnum]
+
+
+export const PracticeAttemptScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  orderIndex: 'orderIndex',
+  kind: 'kind',
+  value: 'value',
+  missType: 'missType',
+  ball: 'ball',
+  pocket: 'pocket',
+  timestamp: 'timestamp'
+} as const
+
+export type PracticeAttemptScalarFieldEnum = (typeof PracticeAttemptScalarFieldEnum)[keyof typeof PracticeAttemptScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1356,6 +1541,76 @@ export type EnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'AssignmentStatus[]'
  */
 export type ListEnumAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssignmentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PracticeMode'
+ */
+export type EnumPracticeModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PracticeMode'>
+    
+
+
+/**
+ * Reference to a field of type 'PracticeMode[]'
+ */
+export type ListEnumPracticeModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PracticeMode[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PracticeAttemptKind'
+ */
+export type EnumPracticeAttemptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PracticeAttemptKind'>
+    
+
+
+/**
+ * Reference to a field of type 'PracticeAttemptKind[]'
+ */
+export type ListEnumPracticeAttemptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PracticeAttemptKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MissType'
+ */
+export type EnumMissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MissType'>
+    
+
+
+/**
+ * Reference to a field of type 'MissType[]'
+ */
+export type ListEnumMissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MissType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BallColor'
+ */
+export type EnumBallColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BallColor'>
+    
+
+
+/**
+ * Reference to a field of type 'BallColor[]'
+ */
+export type ListEnumBallColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BallColor[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Pocket'
+ */
+export type EnumPocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Pocket'>
+    
+
+
+/**
+ * Reference to a field of type 'Pocket[]'
+ */
+export type ListEnumPocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Pocket[]'>
     
 
 
@@ -1476,6 +1731,8 @@ export type GlobalOmitConfig = {
   match?: Prisma.MatchOmit
   frameAction?: Prisma.FrameActionOmit
   matchAssignment?: Prisma.MatchAssignmentOmit
+  practiceSession?: Prisma.PracticeSessionOmit
+  practiceAttempt?: Prisma.PracticeAttemptOmit
 }
 
 /* Types for Logging */

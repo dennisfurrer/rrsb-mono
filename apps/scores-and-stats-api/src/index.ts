@@ -13,6 +13,7 @@ import {
 import { highlightsRouter } from "./routes/highlights.js";
 import { adminRouter } from "./routes/admin/index.js";
 import { scoreboardsPublicRouter } from "./routes/admin/ping.js";
+import { practiceRouter, practiceStatsRouter } from "./routes/practice.js";
 
 const app = express();
 
@@ -40,6 +41,10 @@ app.use("/api/admin", adminRouter);
 
 // Public scoreboard routes (ping, names list)
 app.use("/api/scoreboards", scoreboardsPublicRouter);
+
+// Practice (solo training) routes
+app.use("/api/practice-sessions", practiceRouter);
+app.use("/api/practice-stats", practiceStatsRouter);
 
 app.use(
   (

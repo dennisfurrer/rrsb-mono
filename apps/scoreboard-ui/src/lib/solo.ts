@@ -104,6 +104,7 @@ export type SoloSessionState =
   | {
       mode: "hitmiss";
       sessionId: string;
+      remoteId: string | null;
       playerName: string;
       routineId: SoloRoutineId;
       startedAt: number;
@@ -113,6 +114,7 @@ export type SoloSessionState =
   | {
       mode: "break";
       sessionId: string;
+      remoteId: string | null;
       playerName: string;
       routineId: SoloRoutineId;
       startedAt: number;
@@ -129,6 +131,7 @@ export function createSoloSession(
   const routine = routineById(routineId);
   const base = {
     sessionId: crypto.randomUUID(),
+    remoteId: null as string | null,
     playerName,
     routineId,
     startedAt: Date.now(),
@@ -142,6 +145,42 @@ export function createSoloSession(
     mode: "break",
     redsCount: redsCount ?? routine.defaultReds ?? 15,
     attempts: [],
+  };
+}
+
+// Map a domain BreakAttempt to the API payload shape (uppercase enums)
+export function breakAttemptToApi(a: BreakAttempt): {
+  kind: "BREAK" | "CLEARED" | "MISSED";
+  value?: number;
+  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION";
+  ball?: "RED" | "YELLOW" | "GREEN" | "BROWN" | "BLUE" | "PINK" | "BLACK";
+  pocket?: "CORNER" | "MIDDLE";
+} {
+  if (a.kind === "cleared") {
+    return { kind: "CLEARED", value: a.value };
+  }
+  if (a.kind === "missed") {
+    return { kind: "MISSED" };
+  }
+  return {
+    kind: "BREAK",
+    value: a.value,
+    missType: a.missType
+      ? (a.missType.toUpperCase() as "LONG" | "EASY" | "DIFFICULT" | "POSITION")
+      : undefined,
+    ball: a.ball
+      ? (a.ball.toUpperCase() as
+          | "RED"
+          | "YELLOW"
+          | "GREEN"
+          | "BROWN"
+          | "BLUE"
+          | "PINK"
+          | "BLACK")
+      : undefined,
+    pocket: a.pocket
+      ? (a.pocket.toUpperCase() as "CORNER" | "MIDDLE")
+      : undefined,
   };
 }
 

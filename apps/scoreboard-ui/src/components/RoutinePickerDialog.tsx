@@ -14,7 +14,7 @@ export function RoutinePickerDialog({ playerName, onStart, onCancel }: Props) {
     <div className="setup-overlay">
       <div className="routine-picker">
         <div className="routine-picker-header">
-          Practice Mode &mdash; {playerName}
+          Solo Training &mdash; {playerName}
         </div>
         <div className="routine-picker-subtitle">Übung wählen:</div>
         <div className="routine-picker-grid">

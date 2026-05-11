@@ -256,3 +256,83 @@ export async function updateTableNumber(
     console.error("Failed to update table number:", e);
   }
 }
+
+// ===== Practice (solo training) =====
+
+export interface CreatePracticeSessionPayload {
+  playerName: string;
+  routineId: string;
+  routineName: string;
+  mode: "BREAK" | "HITMISS";
+  redsCount?: number;
+  deviceId?: string;
+  tableNumber?: number;
+}
+
+export interface PracticeAttemptInput {
+  kind: "BREAK" | "CLEARED" | "MISSED" | "HIT" | "MISS";
+  value?: number;
+  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION";
+  ball?: "RED" | "YELLOW" | "GREEN" | "BROWN" | "BLUE" | "PINK" | "BLACK";
+  pocket?: "CORNER" | "MIDDLE";
+}
+
+export async function createPracticeSession(
+  payload: CreatePracticeSessionPayload
+): Promise<string | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/practice-sessions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    return data.data?.sessionId ?? null;
+  } catch (e) {
+    console.error("Failed to create practice session:", e);
+    return null;
+  }
+}
+
+export async function patchPracticeSession(
+  sessionId: string,
+  patch: { redsCount?: number; finished?: boolean }
+): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/api/practice-sessions/${sessionId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+  } catch (e) {
+    console.error("Failed to patch practice session:", e);
+  }
+}
+
+export async function addPracticeAttempts(
+  sessionId: string,
+  attempts: PracticeAttemptInput[]
+): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/api/practice-sessions/${sessionId}/attempts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ attempts }),
+    });
+  } catch (e) {
+    console.error("Failed to add practice attempts:", e);
+  }
+}
+
+export async function deleteLastPracticeAttempt(
+  sessionId: string
+): Promise<void> {
+  try {
+    await fetch(
+      `${API_BASE_URL}/api/practice-sessions/${sessionId}/attempts/last`,
+      { method: "DELETE" }
+    );
+  } catch (e) {
+    console.error("Failed to delete last attempt:", e);
+  }
+}

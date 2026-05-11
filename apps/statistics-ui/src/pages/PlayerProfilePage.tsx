@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Chart, registerables } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { api, type PlayerProfile } from "../lib/api";
+import {
+  api,
+  type PlayerProfile,
+  type PracticeStatsResponse,
+} from "../lib/api";
 
 Chart.register(...registerables, ChartDataLabels);
 
@@ -297,6 +301,9 @@ export function PlayerProfilePage() {
         </div>
       )}
 
+      {/* Solo Training panel */}
+      <TrainingPanel playerName={profile.name} />
+
       {/* CTA */}
       <div style={{ textAlign: "center" }}>
         <Link
@@ -306,6 +313,93 @@ export function PlayerProfilePage() {
         >
           View Match History
         </Link>
+      </div>
+    </div>
+  );
+}
+
+function TrainingPanel({ playerName }: { playerName: string }) {
+  const [stats, setStats] = useState<PracticeStatsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    api.practice
+      .playerStats(playerName)
+      .then(setStats)
+      .catch(() => setStats(null))
+      .finally(() => setLoading(false));
+  }, [playerName]);
+
+  if (loading) return null;
+  if (!stats || stats.totalSessions === 0) return null;
+
+  return (
+    <div className="glass-card" style={{ marginBottom: 32 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 12,
+        }}
+      >
+        <h3
+          style={{
+            fontSize: "0.9em",
+            color: "var(--text-muted)",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+        >
+          Solo Training
+        </h3>
+        <Link
+          to={`/training?player=${encodeURIComponent(playerName)}`}
+          style={{ fontSize: "0.9em" }}
+        >
+          {stats.totalSessions} Sessions &rsaquo;
+        </Link>
+      </div>
+      <div className="training-routine-summary">
+        {stats.perRoutine.map((r) => (
+          <div key={r.routineId} className="training-routine-card">
+            <div className="training-routine-card-name">{r.routineName}</div>
+            <div className="training-routine-card-meta">
+              {r.sessionCount} Sessions &middot; {r.totalAttempts} Versuche
+            </div>
+            {r.mode === "break" ? (
+              <div className="training-routine-card-stats">
+                <span>
+                  <strong>{r.highestBreak || "—"}</strong> Höchste
+                </span>
+                <span>
+                  <strong>
+                    {r.totalAttempts === 0 ? "—" : r.averageBreak.toFixed(1)}
+                  </strong>{" "}
+                  Schnitt
+                </span>
+                <span>
+                  <strong>{r.clearedCount}</strong> Aufgeräumt
+                </span>
+              </div>
+            ) : (
+              <div className="training-routine-card-stats">
+                <span>
+                  <strong>
+                    {r.hits + r.misses === 0
+                      ? "—"
+                      : `${Math.round(r.hitRate * 100)}%`}
+                  </strong>{" "}
+                  Quote
+                </span>
+                <span>
+                  <strong>{r.bestStreak}</strong> Beste Serie
+                </span>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

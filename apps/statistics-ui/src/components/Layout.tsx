@@ -33,6 +33,9 @@ export function Layout() {
           <NavLink to="/highlights" onClick={() => setMenuOpen(false)}>
             Highlights
           </NavLink>
+          <NavLink to="/training" onClick={() => setMenuOpen(false)}>
+            Training
+          </NavLink>
         </div>
         <button
           className="theme-toggle"

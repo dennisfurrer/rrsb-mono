@@ -239,6 +239,7 @@ export type LocationWhereInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigListRelationFilter
   matches?: Prisma.MatchListRelationFilter
   users?: Prisma.UserListRelationFilter
+  practiceSessions?: Prisma.PracticeSessionListRelationFilter
 }
 
 export type LocationOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type LocationOrderByWithRelationInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigOrderByRelationAggregateInput
   matches?: Prisma.MatchOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
+  practiceSessions?: Prisma.PracticeSessionOrderByRelationAggregateInput
 }
 
 export type LocationWhereUniqueInput = Prisma.AtLeast<{
@@ -270,6 +272,7 @@ export type LocationWhereUniqueInput = Prisma.AtLeast<{
   scoreboardConfigs?: Prisma.ScoreboardConfigListRelationFilter
   matches?: Prisma.MatchListRelationFilter
   users?: Prisma.UserListRelationFilter
+  practiceSessions?: Prisma.PracticeSessionListRelationFilter
 }, "id" | "name" | "slug">
 
 export type LocationOrderByWithAggregationInput = {
@@ -314,6 +317,7 @@ export type LocationCreateInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput
   matches?: Prisma.MatchCreateNestedManyWithoutLocationInput
   users?: Prisma.UserCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUncheckedCreateInput = {
@@ -328,6 +332,7 @@ export type LocationUncheckedCreateInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput
   matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUpdateInput = {
@@ -342,6 +347,7 @@ export type LocationUpdateInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput
   matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationUncheckedUpdateInput = {
@@ -356,6 +362,7 @@ export type LocationUncheckedUpdateInput = {
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput
   matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationCreateManyInput = {
@@ -503,6 +510,22 @@ export type LocationUpdateOneWithoutMatchesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutMatchesInput, Prisma.LocationUpdateWithoutMatchesInput>, Prisma.LocationUncheckedUpdateWithoutMatchesInput>
 }
 
+export type LocationCreateNestedOneWithoutPracticeSessionsInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutPracticeSessionsInput, Prisma.LocationUncheckedCreateWithoutPracticeSessionsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutPracticeSessionsInput
+  connect?: Prisma.LocationWhereUniqueInput
+}
+
+export type LocationUpdateOneWithoutPracticeSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LocationCreateWithoutPracticeSessionsInput, Prisma.LocationUncheckedCreateWithoutPracticeSessionsInput>
+  connectOrCreate?: Prisma.LocationCreateOrConnectWithoutPracticeSessionsInput
+  upsert?: Prisma.LocationUpsertWithoutPracticeSessionsInput
+  disconnect?: Prisma.LocationWhereInput | boolean
+  delete?: Prisma.LocationWhereInput | boolean
+  connect?: Prisma.LocationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutPracticeSessionsInput, Prisma.LocationUpdateWithoutPracticeSessionsInput>, Prisma.LocationUncheckedUpdateWithoutPracticeSessionsInput>
+}
+
 export type LocationCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -514,6 +537,7 @@ export type LocationCreateWithoutUsersInput = {
   updatedAt?: Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput
   matches?: Prisma.MatchCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUncheckedCreateWithoutUsersInput = {
@@ -527,6 +551,7 @@ export type LocationUncheckedCreateWithoutUsersInput = {
   updatedAt?: Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput
   matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type LocationCreateOrConnectWithoutUsersInput = {
@@ -556,6 +581,7 @@ export type LocationUpdateWithoutUsersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput
   matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationUncheckedUpdateWithoutUsersInput = {
@@ -569,6 +595,7 @@ export type LocationUncheckedUpdateWithoutUsersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput
   matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationCreateWithoutScoreboardConfigsInput = {
@@ -582,6 +609,7 @@ export type LocationCreateWithoutScoreboardConfigsInput = {
   updatedAt?: Date | string
   matches?: Prisma.MatchCreateNestedManyWithoutLocationInput
   users?: Prisma.UserCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUncheckedCreateWithoutScoreboardConfigsInput = {
@@ -595,6 +623,7 @@ export type LocationUncheckedCreateWithoutScoreboardConfigsInput = {
   updatedAt?: Date | string
   matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type LocationCreateOrConnectWithoutScoreboardConfigsInput = {
@@ -624,6 +653,7 @@ export type LocationUpdateWithoutScoreboardConfigsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationUncheckedUpdateWithoutScoreboardConfigsInput = {
@@ -637,6 +667,7 @@ export type LocationUncheckedUpdateWithoutScoreboardConfigsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationCreateWithoutMatchesInput = {
@@ -650,6 +681,7 @@ export type LocationCreateWithoutMatchesInput = {
   updatedAt?: Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput
   users?: Prisma.UserCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutLocationInput
 }
 
 export type LocationUncheckedCreateWithoutMatchesInput = {
@@ -663,6 +695,7 @@ export type LocationUncheckedCreateWithoutMatchesInput = {
   updatedAt?: Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutLocationInput
 }
 
 export type LocationCreateOrConnectWithoutMatchesInput = {
@@ -692,6 +725,7 @@ export type LocationUpdateWithoutMatchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutLocationNestedInput
 }
 
 export type LocationUncheckedUpdateWithoutMatchesInput = {
@@ -705,6 +739,79 @@ export type LocationUncheckedUpdateWithoutMatchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationCreateWithoutPracticeSessionsInput = {
+  id?: string
+  name: string
+  slug: string
+  address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  scoreboardConfigs?: Prisma.ScoreboardConfigCreateNestedManyWithoutLocationInput
+  matches?: Prisma.MatchCreateNestedManyWithoutLocationInput
+  users?: Prisma.UserCreateNestedManyWithoutLocationInput
+}
+
+export type LocationUncheckedCreateWithoutPracticeSessionsInput = {
+  id?: string
+  name: string
+  slug: string
+  address?: string | null
+  tableNumbers?: Prisma.LocationCreatetableNumbersInput | number[]
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedCreateNestedManyWithoutLocationInput
+  matches?: Prisma.MatchUncheckedCreateNestedManyWithoutLocationInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutLocationInput
+}
+
+export type LocationCreateOrConnectWithoutPracticeSessionsInput = {
+  where: Prisma.LocationWhereUniqueInput
+  create: Prisma.XOR<Prisma.LocationCreateWithoutPracticeSessionsInput, Prisma.LocationUncheckedCreateWithoutPracticeSessionsInput>
+}
+
+export type LocationUpsertWithoutPracticeSessionsInput = {
+  update: Prisma.XOR<Prisma.LocationUpdateWithoutPracticeSessionsInput, Prisma.LocationUncheckedUpdateWithoutPracticeSessionsInput>
+  create: Prisma.XOR<Prisma.LocationCreateWithoutPracticeSessionsInput, Prisma.LocationUncheckedCreateWithoutPracticeSessionsInput>
+  where?: Prisma.LocationWhereInput
+}
+
+export type LocationUpdateToOneWithWhereWithoutPracticeSessionsInput = {
+  where?: Prisma.LocationWhereInput
+  data: Prisma.XOR<Prisma.LocationUpdateWithoutPracticeSessionsInput, Prisma.LocationUncheckedUpdateWithoutPracticeSessionsInput>
+}
+
+export type LocationUpdateWithoutPracticeSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  scoreboardConfigs?: Prisma.ScoreboardConfigUpdateManyWithoutLocationNestedInput
+  matches?: Prisma.MatchUpdateManyWithoutLocationNestedInput
+  users?: Prisma.UserUpdateManyWithoutLocationNestedInput
+}
+
+export type LocationUncheckedUpdateWithoutPracticeSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableNumbers?: Prisma.LocationUpdatetableNumbersInput | number[]
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  scoreboardConfigs?: Prisma.ScoreboardConfigUncheckedUpdateManyWithoutLocationNestedInput
+  matches?: Prisma.MatchUncheckedUpdateManyWithoutLocationNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutLocationNestedInput
 }
 
 
@@ -716,12 +823,14 @@ export type LocationCountOutputType = {
   scoreboardConfigs: number
   matches: number
   users: number
+  practiceSessions: number
 }
 
 export type LocationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   scoreboardConfigs?: boolean | LocationCountOutputTypeCountScoreboardConfigsArgs
   matches?: boolean | LocationCountOutputTypeCountMatchesArgs
   users?: boolean | LocationCountOutputTypeCountUsersArgs
+  practiceSessions?: boolean | LocationCountOutputTypeCountPracticeSessionsArgs
 }
 
 /**
@@ -755,6 +864,13 @@ export type LocationCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.
   where?: Prisma.UserWhereInput
 }
 
+/**
+ * LocationCountOutputType without action
+ */
+export type LocationCountOutputTypeCountPracticeSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PracticeSessionWhereInput
+}
+
 
 export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -768,6 +884,7 @@ export type LocationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scoreboardConfigs?: boolean | Prisma.Location$scoreboardConfigsArgs<ExtArgs>
   matches?: boolean | Prisma.Location$matchesArgs<ExtArgs>
   users?: boolean | Prisma.Location$usersArgs<ExtArgs>
+  practiceSessions?: boolean | Prisma.Location$practiceSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["location"]>
 
@@ -809,6 +926,7 @@ export type LocationInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   scoreboardConfigs?: boolean | Prisma.Location$scoreboardConfigsArgs<ExtArgs>
   matches?: boolean | Prisma.Location$matchesArgs<ExtArgs>
   users?: boolean | Prisma.Location$usersArgs<ExtArgs>
+  practiceSessions?: boolean | Prisma.Location$practiceSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LocationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LocationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -820,6 +938,7 @@ export type $LocationPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     scoreboardConfigs: Prisma.$ScoreboardConfigPayload<ExtArgs>[]
     matches: Prisma.$MatchPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
+    practiceSessions: Prisma.$PracticeSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1227,6 +1346,7 @@ export interface Prisma__LocationClient<T, Null = never, ExtArgs extends runtime
   scoreboardConfigs<T extends Prisma.Location$scoreboardConfigsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$scoreboardConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoreboardConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   matches<T extends Prisma.Location$matchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$matchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Location$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  practiceSessions<T extends Prisma.Location$practiceSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Location$practiceSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PracticeSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1721,6 +1841,30 @@ export type Location$usersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Location.practiceSessions
+ */
+export type Location$practiceSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PracticeSession
+   */
+  select?: Prisma.PracticeSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PracticeSession
+   */
+  omit?: Prisma.PracticeSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PracticeSessionInclude<ExtArgs> | null
+  where?: Prisma.PracticeSessionWhereInput
+  orderBy?: Prisma.PracticeSessionOrderByWithRelationInput | Prisma.PracticeSessionOrderByWithRelationInput[]
+  cursor?: Prisma.PracticeSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PracticeSessionScalarFieldEnum | Prisma.PracticeSessionScalarFieldEnum[]
 }
 
 /**

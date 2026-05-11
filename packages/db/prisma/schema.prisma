@@ -20,6 +20,41 @@ enum AssignmentStatus {
   COMPLETED
 }
 
+enum PracticeMode {
+  BREAK
+  HITMISS
+}
+
+enum PracticeAttemptKind {
+  BREAK
+  CLEARED
+  MISSED
+  HIT
+  MISS
+}
+
+enum BallColor {
+  RED
+  YELLOW
+  GREEN
+  BROWN
+  BLUE
+  PINK
+  BLACK
+}
+
+enum MissType {
+  LONG
+  EASY
+  DIFFICULT
+  POSITION
+}
+
+enum Pocket {
+  CORNER
+  MIDDLE
+}
+
 model Player {
   playerId         String   @id @default(cuid())
   name             String   @unique
@@ -45,6 +80,7 @@ model Location {
   scoreboardConfigs ScoreboardConfig[]
   matches           Match[]
   users             User[]
+  practiceSessions  PracticeSession[]
 }
 
 model User {
@@ -140,4 +176,46 @@ model MatchAssignment {
   tableNumber Int?
   status      AssignmentStatus @default(PENDING)
   createdAt   DateTime         @default(now())
+}
+
+model PracticeSession {
+  id           String              @id @default(cuid())
+  playerName   String
+  routineId    String
+  routineName  String
+  mode         PracticeMode
+  redsCount    Int?
+  deviceId     String?
+  tableNumber  Int?
+  locationId   String?
+  location     Location?           @relation(fields: [locationId], references: [id])
+  startedAt    DateTime            @default(now())
+  finishedAt   DateTime?
+  finalized    Boolean             @default(false)
+  attempts     PracticeAttempt[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([playerName])
+  @@index([routineId])
+  @@index([startedAt])
+  @@index([locationId])
+  @@index([playerName, routineId])
+}
+
+model PracticeAttempt {
+  id          String              @id @default(cuid())
+  sessionId   String
+  session     PracticeSession     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  orderIndex  Int
+  kind        PracticeAttemptKind
+  value       Int?
+  missType    MissType?
+  ball        BallColor?
+  pocket      Pocket?
+  timestamp   DateTime            @default(now())
+
+  @@unique([sessionId, orderIndex])
+  @@index([sessionId])
+  @@index([kind])
 }

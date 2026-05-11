@@ -525,3 +525,238 @@ select.glass-btn option {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Training pages ===== */
+
+.training-select {
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.training-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.training-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.training-row:hover {
+  text-decoration: none;
+}
+
+.training-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.training-row-routine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.training-row-routine-name {
+  font-weight: 600;
+  font-size: 1.05em;
+  color: var(--text-primary);
+}
+
+.training-row-reds {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border: 1px solid var(--border-card);
+  border-radius: 999px;
+}
+
+.training-row-mode {
+  font-size: 0.72em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.training-row-mode.mode-break {
+  background: rgba(234, 179, 8, 0.15);
+  color: #fbbf24;
+}
+
+.training-row-mode.mode-hitmiss {
+  background: rgba(20, 255, 236, 0.12);
+  color: var(--accent-green);
+}
+
+.training-row-player {
+  color: var(--text-secondary);
+  font-size: 0.95em;
+}
+
+.training-row-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.training-row-finalized {
+  color: var(--accent-green);
+  font-size: 0.75em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.training-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.training-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.training-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.training-stat-card {
+  text-align: center;
+  padding: 16px 12px;
+}
+
+.training-stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.training-stat-label {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.training-attempts {
+  display: flex;
+  flex-direction: column;
+}
+
+.training-attempt-row {
+  display: grid;
+  grid-template-columns: 50px 130px 1fr 1.5fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-card);
+  font-size: 0.95em;
+}
+
+.training-attempt-row:last-child {
+  border-bottom: none;
+}
+
+.training-attempt-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85em;
+}
+
+.training-attempt-kind {
+  font-weight: 600;
+}
+
+.training-attempt-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.training-attempt-tags {
+  font-size: 0.85em;
+}
+
+/* Player profile — Solo Training panel */
+.training-routine-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.training-routine-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.training-routine-card-name {
+  font-weight: 600;
+  font-size: 1em;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.training-routine-card-meta {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.training-routine-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+}
+
+.training-routine-card-stats strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .training-attempt-row {
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px 8px;
+  }
+  .training-attempt-num {
+    grid-row: span 2;
+  }
+  .training-attempt-value,
+  .training-attempt-tags {
+    grid-column: 2;
+  }
+}
