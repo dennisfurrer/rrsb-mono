@@ -14,25 +14,25 @@ import {
 interface Props {
   session: SoloSessionState;
   onHitMissShot?: (shot: SoloShot) => void;
-  onBreakEntry?: () => void;
-  onCleared?: () => void;
-  onMissed?: () => void;
-  onMultiEntry?: () => void;
-  onEditReds?: () => void;
+  onUndo?: () => void;
+  onNewSession?: () => void;
+  onChangeRoutine?: () => void;
   onMenuClick: () => void;
 }
 
 export function SoloSession({
   session,
   onHitMissShot,
-  onBreakEntry,
-  onCleared,
-  onMissed,
-  onMultiEntry,
-  onEditReds,
+  onUndo,
+  onNewSession,
+  onChangeRoutine,
   onMenuClick,
 }: Props) {
   const routine = routineById(session.routineId);
+  const displayName =
+    session.routineId === "ball1521" && session.mode === "break"
+      ? `${session.redsCount}er-Ball`
+      : routine.name;
   const historyRef = useRef<HTMLDivElement>(null);
 
   const historyLen =
@@ -52,7 +52,7 @@ export function SoloSession({
       <div className="solo">
         <div className="solo-main">
           <div className="solo-header">
-            <div className="solo-header-routine">{routine.name}</div>
+            <div className="solo-header-routine">{displayName}</div>
             <div className="solo-header-player">{session.playerName}</div>
           </div>
 
@@ -118,6 +118,21 @@ export function SoloSession({
               </span>
             ))}
           </div>
+          <button
+            className="bottom-bar-secondary bottom-bar-undo"
+            onClick={onUndo}
+            disabled={session.shots.length === 0}
+            type="button"
+          >
+            ↩ Undo
+          </button>
+          <button
+            className="bottom-bar-secondary"
+            onClick={onChangeRoutine}
+            type="button"
+          >
+            ← Zurück
+          </button>
           <div className="menu-btn" onClick={onMenuClick}>
             Menu
           </div>
@@ -126,7 +141,7 @@ export function SoloSession({
     );
   }
 
-  // Break-mode UI
+  // Break-mode UI — stats only, entry happens in MultiEntryDialog
   const stats = computeBreakStats(session.attempts);
   const avg = stats.totalAttempts === 0 ? "—" : stats.averageBreak.toFixed(1);
 
@@ -135,14 +150,12 @@ export function SoloSession({
       <div className="solo-main">
         <div className="solo-header">
           <div className="solo-header-routine">
-            {routine.name}
-            <button
-              className="solo-header-reds-btn"
-              onClick={onEditReds}
-              type="button"
-            >
-              {session.redsCount} Rote ⚙
-            </button>
+            {displayName}
+            {!routine.seriesMode && session.routineId !== "ball1521" && session.routineId !== "farben-endlos" && (
+              <span className="solo-header-reds-text">
+                {session.redsCount} Rote
+              </span>
+            )}
           </div>
           <div className="solo-header-player">{session.playerName}</div>
         </div>
@@ -158,39 +171,12 @@ export function SoloSession({
           </div>
           <div className="solo-tally-cell">
             <div className="solo-tally-num">{stats.clearedCount}</div>
-            <div className="solo-tally-label">Aufgeräumt</div>
+            <div className="solo-tally-label">Clearance</div>
           </div>
           <div className="solo-tally-cell">
             <div className="solo-tally-num">{stats.totalAttempts}</div>
             <div className="solo-tally-label">Versuche</div>
           </div>
-        </div>
-
-        <div className="solo-buttons solo-buttons-3">
-          <button
-            className="solo-btn solo-btn-cleared"
-            onClick={onCleared}
-            disabled={session.finished}
-          >
-            <div className="solo-btn-icon">✓</div>
-            <div className="solo-btn-label">AUFGERÄUMT</div>
-          </button>
-          <button
-            className="solo-btn solo-btn-break"
-            onClick={onBreakEntry}
-            disabled={session.finished}
-          >
-            <div className="solo-btn-icon">▦</div>
-            <div className="solo-btn-label">BREAK</div>
-          </button>
-          <button
-            className="solo-btn solo-btn-missed"
-            onClick={onMissed}
-            disabled={session.finished}
-          >
-            <div className="solo-btn-icon">✕</div>
-            <div className="solo-btn-label">VERFEHLT</div>
-          </button>
         </div>
       </div>
 
@@ -202,10 +188,17 @@ export function SoloSession({
         </div>
         <button
           className="bottom-bar-secondary"
-          onClick={onMultiEntry}
+          onClick={onNewSession}
           type="button"
         >
-          + Mehrere
+          Neue Session
+        </button>
+        <button
+          className="bottom-bar-secondary"
+          onClick={onChangeRoutine}
+          type="button"
+        >
+          ← Zurück
         </button>
         <div className="menu-btn" onClick={onMenuClick}>
           Menu
@@ -216,19 +209,6 @@ export function SoloSession({
 }
 
 function BreakLogEntry({ attempt }: { attempt: BreakAttempt }) {
-  if (attempt.kind === "cleared") {
-    return (
-      <span
-        style={{
-          letterSpacing: "0.05em",
-          color: "#fbbf24",
-          fontWeight: "bold",
-        }}
-      >
-        ✓ {attempt.value} (Aufgeräumt){" "}
-      </span>
-    );
-  }
   if (attempt.kind === "missed") {
     return (
       <span style={{ letterSpacing: "0.05em", color: "#f87171" }}>
@@ -252,6 +232,9 @@ function BreakLogEntry({ attempt }: { attempt: BreakAttempt }) {
   return (
     <span style={{ letterSpacing: "0.05em", color: "#4ade80" }}>
       ● {attempt.value}
+      {attempt.clearance && (
+        <span style={{ color: "#ffee44", fontWeight: "bold" }}> ★ Clearance</span>
+      )}
       {tags.length > 0 && (
         <span style={{ color: "#888", fontWeight: "normal" }}>
           {" "}({tags.join(", ")})

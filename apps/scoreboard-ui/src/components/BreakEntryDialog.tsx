@@ -4,6 +4,9 @@ import { BreakDetailsDialog } from "./BreakDetailsDialog";
 
 interface Props {
   playerName: string;
+  seriesMode?: boolean;
+  routineName?: string;
+  maxBreak?: number;
   onSubmit: (
     value: number,
     details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
@@ -11,22 +14,31 @@ interface Props {
   onClose: () => void;
 }
 
-export function BreakEntryDialog({ playerName, onSubmit, onClose }: Props) {
+export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak, onSubmit, onClose }: Props) {
   const [display, setDisplay] = useState("");
   const [showDetails, setShowDetails] = useState(false);
+  const [error, setError] = useState("");
 
   const appendDigit = (d: number) => {
     const next = display + String(d);
     const val = parseInt(next);
-    if (val <= 200) setDisplay(next);
+    if (val <= 200) {
+      setDisplay(next);
+      if (error) setError("");
+    }
   };
 
-  const clear = () => setDisplay("");
+  const clear = () => { setDisplay(""); setError(""); };
 
   const value = parseInt(display) || 0;
 
   const submitPlain = () => {
     if (value > 0) {
+      if (maxBreak !== undefined && value > maxBreak) {
+        setError(`Break ${value} ist zu hoch! Maximal mögliches Break: ${maxBreak}`);
+        setDisplay("");
+        return;
+      }
       onSubmit(value);
     } else {
       onClose();
@@ -63,13 +75,33 @@ export function BreakEntryDialog({ playerName, onSubmit, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Display */}
+        {routineName && (
+          <div className="break-entry-routine-name">{routineName}</div>
+        )}
         <div className="break-entry-display">
           <div className="break-entry-display-title">
-            <div className="break-entry-break-for">Break für</div>
+            <div className="break-entry-break-for">{seriesMode ? "Serie für" : "Break für"}</div>
             <div className="break-entry-break-name">{playerName}</div>
           </div>
           <div className="break-entry-break-value">{display || "0"}</div>
         </div>
+
+        {/* Validation error */}
+        {error && (
+          <div style={{
+            background: "#3a0a0a",
+            border: "1px solid #aa3333",
+            borderRadius: "6px",
+            color: "#ff6666",
+            fontSize: "1.5vw",
+            fontWeight: "bold",
+            padding: "1vh 1.5vw",
+            textAlign: "center",
+            margin: "0 0 0.5vh 0",
+          }}>
+            {error}
+          </div>
+        )}
 
         {/* Numpad rows */}
         <div className="break-entry-line">

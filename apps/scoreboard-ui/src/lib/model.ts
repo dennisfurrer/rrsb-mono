@@ -15,6 +15,8 @@ export interface FrameAction {
   timestamp: number;
 }
 
+export type InputMode = "break" | "ballbyball";
+
 export interface MatchState {
   matchId: string | null;
   players: [Player, Player];
@@ -24,6 +26,10 @@ export interface MatchState {
   currentFrame: number;
   tableNumber: string | null;
   finished: boolean;
+  inputMode?: InputMode;
+  redsCount?: number;
+  bbState?: import("./ballbyball").BBState | null;
+  matchType?: string;
 }
 
 export function createPlayer(name: string, nationalityIOC = ""): Player {
@@ -73,8 +79,11 @@ export function framesToWin(bestOf: number): number {
 }
 
 export function isMatchOver(state: MatchState): boolean {
+  if (state.bestOf % 2 === 0) {
+    // Even best-of: all frames must be played
+    const totalFrames = state.players[0].frames + state.players[1].frames;
+    return totalFrames >= state.bestOf;
+  }
   const target = framesToWin(state.bestOf);
-  return (
-    state.players[0].frames >= target || state.players[1].frames >= target
-  );
+  return state.players[0].frames >= target || state.players[1].frames >= target;
 }

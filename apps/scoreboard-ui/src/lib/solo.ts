@@ -2,7 +2,15 @@ export type SoloRoutineId =
   | "lineup"
   | "tline"
   | "opentable"
-  | "blackspot";
+  | "ball1521"
+  | "farben-endlos"
+  | "zigzak"
+  | "spot-yellow"
+  | "spot-green"
+  | "spot-brown"
+  | "spot-blue"
+  | "spot-pink"
+  | "spot-black";
 
 export type SoloRoutineMode = "hitmiss" | "break";
 
@@ -12,36 +20,61 @@ export interface SoloRoutine {
   description: string;
   mode: SoloRoutineMode;
   defaultReds?: number;
+  minReds?: number;
+  seriesMode?: boolean;
+  explanation?: string;
 }
 
 export const SOLO_ROUTINES: SoloRoutine[] = [
   {
     id: "lineup",
     name: "Line-Up",
-    description: "Rote in einer Linie, mit Farben",
+    description: "Alle Roten auf Mittelachse, plus Farben auf Spots. Break spielen!",
     mode: "break",
     defaultReds: 15,
+    explanation: "Spielart: Es werden alle Kugeln verwendet. Weiss darf frei gesetzt werden. Es wird immer abwechselnd Rot–Farbe–Rot–Farbe gespielt, wobei die Farbigen wieder aufgesetzt werden. Gespielt wird bis ein angespielter Ball nicht mehr fällt.\n\nAufsetzart:\n• Alle Farbigen auf ihre Aufsetzmarken\n• 2 Rote neben Blau\n• 7 Rote zwischen Blau und Pink\n• 5 Rote zwischen Pink und Schwarz\n• 1 Rote neben Schwarz\n• Weiss darf frei irgendwo auf dem ganzen Tisch gesetzt werden\n\nTrainingseffekt: Bilden eines Breaks. Kontrolle über Weiss.\n\nZiel: Ein so hohes Break wie möglich zu erreichen.",
   },
   {
     id: "tline",
     name: "T-Line",
-    description: "Rote in T-Form von den Spots",
+    description: "Rote in T-Form höhe pink seitlich und zu schwarz, Farben auf Spots",
     mode: "break",
     defaultReds: 15,
   },
   {
     id: "opentable",
     name: "Offener Tisch",
-    description: "Beliebige Stellung, freie Wahl",
+    description: "Beliebige Stellung der Roten, Farben auf Spots. Weiss frei setzen. Break spielen!",
     mode: "break",
     defaultReds: 15,
   },
   {
-    id: "blackspot",
-    name: "Schwarze vom Spot",
-    description: "Schwarze wiederholt vom Spot lochen",
-    mode: "hitmiss",
+    id: "ball1521",
+    name: "15/21-Ball",
+    description: "15 oder 21 Bälle nach Plan aufsetzen. Nur Bälle lochen. Jeder Stoss zählt!",
+    mode: "break",
   },
+  {
+    id: "farben-endlos",
+    name: "Farben endlos",
+    description: "Farben auf Spots von gelb bis schwarz abräumen und von schwarz wieder auf gelb stellen und weiter abräumen.",
+    mode: "break",
+  },
+  {
+    id: "zigzak",
+    name: "Zig-Zak",
+    description: "Farben auf Spots. Je 5 Rote zwischen schwarz-pink im Zig-Zak. Ev. weitere 5 zw. pink-blau und blau-braun. Breaken!",
+    mode: "break",
+    defaultReds: 5,
+    minReds: 5,
+    explanation: "Spielart: Es werden 5, 10 oder 15 Rote plus alle Farben verwendet. Abwechselnd Rot–Farbe spielen. Farbige werden wieder aufgesetzt. Spielen bis ein angespielter Ball nicht mehr fällt.\n\nAufsetzart:\n• Farben auf ihre Aufsetzmarken\n• Rote Bälle im Zig-Zak versetzt zwischen Schwarz, Pink, Blau und Braun, je nach Anzahl verwendeter Bälle, wobei je ein 5er Pack versetzt zusammen zwischen zwei Farben aufgelegt werden muss. Die Versetzbreite sollte ca. 1 Kugeldurchmesser ab der Mittelachse sein.\n• Weiss darf auf ganzem Tisch gesetzt werden\n\nTrainingseffekt: Gutes Stellen von Weiss auf jeweils nächsten roten Ball, ohne andere zu berühren.\n\nZiel: So hohes Break wie möglich erzielen.",
+  },
+  { id: "spot-yellow", name: "Gelb vom Spot", description: "Gelbe Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Gelb gelocht, bleibt Weiss liegen und Gelb wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Gelb verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
+  { id: "spot-green", name: "Grün vom Spot", description: "Grüne Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Grün gelocht, bleibt Weiss liegen und Grün wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Grün verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
+  { id: "spot-brown", name: "Braun vom Spot", description: "Braune Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Braun gelocht, bleibt Weiss liegen und Braun wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Braun verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
+  { id: "spot-blue", name: "Blau vom Spot", description: "Blaue Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Blau gelocht, bleibt Weiss liegen und Blau wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Blau verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
+  { id: "spot-pink", name: "Pink vom Spot", description: "Pinke Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Pink gelocht, bleibt Weiss liegen und Pink wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Pink verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
+  { id: "spot-black", name: "Schwarz vom Spot", description: "Schwarze Kugel vom Spot lochen", mode: "break", seriesMode: true, explanation: "Weiss darf zu Beginn gesetzt werden. Wird Schwarz gelocht, bleibt Weiss liegen und Schwarz wird wieder auf ihrem Spot aufgesetzt. Die Serie mitzählen bis Schwarz verfehlt wurde. Danach die Serie schreiben und Weiss für die nächste Serie wieder setzen. usw.\n\nZiel: Eine so hohe Serie wie möglich spielen." },
 ];
 
 export type SoloShot = "hit" | "miss";
@@ -70,7 +103,7 @@ export const BALL_COLORS: { id: BallColor; label: string; bg: string; fg: string
 ];
 
 export const MISS_TYPES: { id: MissType; label: string }[] = [
-  { id: "long", label: "Lange Rote" },
+  { id: "long", label: "Lange" },
   { id: "easy", label: "Einfache" },
   { id: "difficult", label: "Schwierige" },
   { id: "position", label: "Position" },
@@ -85,14 +118,10 @@ export type BreakAttempt =
   | {
       kind: "break";
       value: number;
+      clearance?: boolean;
       missType?: MissType;
       ball?: BallColor;
       pocket?: Pocket;
-      timestamp: number;
-    }
-  | {
-      kind: "cleared";
-      value: number;
       timestamp: number;
     }
   | {
@@ -156,9 +185,6 @@ export function breakAttemptToApi(a: BreakAttempt): {
   ball?: "RED" | "YELLOW" | "GREEN" | "BROWN" | "BLUE" | "PINK" | "BLACK";
   pocket?: "CORNER" | "MIDDLE";
 } {
-  if (a.kind === "cleared") {
-    return { kind: "CLEARED", value: a.value };
-  }
   if (a.kind === "missed") {
     return { kind: "MISSED" };
   }
@@ -184,11 +210,6 @@ export function breakAttemptToApi(a: BreakAttempt): {
   };
 }
 
-/** Max possible points for a line-up clearance with N reds (all blacks). */
-export function maxClearanceValue(redsCount: number): number {
-  // N reds × 1 + N colors × 7 + final color clearance (27)
-  return redsCount * 1 + redsCount * 7 + 27;
-}
 
 export interface HitMissStats {
   total: number;
@@ -255,7 +276,7 @@ export function computeBreakStats(attempts: BreakAttempt[]): BreakStats {
     const v = attemptValue(a);
     sum += v;
     if (v > highest) highest = v;
-    if (a.kind === "cleared") cleared += 1;
+    if (a.kind === "break" && a.clearance) cleared += 1;
     if (a.kind === "missed") missed += 1;
   }
   return {

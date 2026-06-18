@@ -22,6 +22,7 @@ export function CalculatorDialog({
 }: Props) {
   const [display, setDisplay] = useState("");
   const [foulMode, setFoulMode] = useState(false);
+  const [handicapMode, setHandicapMode] = useState(false);
 
   const appendDigit = (d: number) => {
     const next = display + String(d);
@@ -29,124 +30,113 @@ export function CalculatorDialog({
     if (val <= 155) setDisplay(next);
   };
 
-  const clear = () => setDisplay("");
+  const clear = () => {
+    setDisplay("");
+    setFoulMode(false);
+    setHandicapMode(false);
+  };
+
+  const points = parseInt(display) || 0;
 
   const submit = () => {
-    const points = parseInt(display) || 0;
     if (points > 0) {
-      onSubmit(playerIndex, points, foulMode, false);
+      onSubmit(playerIndex, points, foulMode, handicapMode);
     } else {
       onClose();
     }
   };
 
-  const submitFoul = () => {
-    const points = parseInt(display) || 0;
-    if (points > 0) {
-      onSubmit(playerIndex, points, true, false);
+  const handleFoul = () => {
+    if (foulMode) {
+      if (points > 0) onSubmit(playerIndex, points, true, false);
+    } else {
+      setFoulMode(true);
+      setHandicapMode(false);
     }
   };
 
-  const submitHandicap = () => {
-    const points = parseInt(display) || 0;
-    if (points > 0) {
-      onSubmit(playerIndex, points, false, true);
+  const handleHandicap = () => {
+    if (handicapMode) {
+      if (points > 0) onSubmit(playerIndex, points, false, true);
+    } else {
+      setHandicapMode(true);
+      setFoulMode(false);
     }
   };
+
+  const modeLabel = foulMode ? "Foul von" : handicapMode ? "Handicap für" : "Break für";
 
   return (
     <div className="overlay" onClick={onClose}>
       <div
-        className={`calc-fullscreen ${showHandicap ? "has-handicap" : ""}`}
+        className="calc-fullscreen"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Row 1: Display + Foul */}
+        {/* Row 1: Display + Foul (or Foul/HC stack) */}
         <div className="calc-line">
           <div className="calc-display">
             <div className="calc-display-title">
-              <div className={`calc-break-for ${foulMode ? "foul-label" : ""}`}>
-                {foulMode ? "Foul für" : "Break für"}
+              <div className={`calc-break-for ${foulMode ? "foul-label" : handicapMode ? "handicap-label" : ""}`}>
+                {modeLabel}
               </div>
               <div className="calc-break-name">{playerName}</div>
             </div>
-            <div className={`calc-break-value ${foulMode ? "foul-mode" : ""}`}>
+            <div className={`calc-break-value ${foulMode ? "foul-mode" : handicapMode ? "handicap-mode" : ""}`}>
               {display || "0"}
             </div>
           </div>
-          <div
-            className={`calc-butt calc-foul ${foulMode ? "active" : ""}`}
-            onClick={() => {
-              if (foulMode) {
-                submitFoul();
-              } else {
-                setFoulMode(true);
-              }
-            }}
-          >
-            Foul
-          </div>
+          {showHandicap ? (
+            <div className="calc-foul-hc-stack">
+              <div
+                className={`calc-butt calc-foul ${foulMode ? "active" : ""}`}
+                onClick={handleFoul}
+              >
+                Foul
+              </div>
+              <div
+                className={`calc-butt calc-handicap ${handicapMode ? "active" : ""}`}
+                onClick={handleHandicap}
+              >
+                HCap
+              </div>
+            </div>
+          ) : (
+            <div
+              className={`calc-butt calc-foul ${foulMode ? "active" : ""}`}
+              onClick={handleFoul}
+            >
+              Foul
+            </div>
+          )}
         </div>
 
         {/* Row 2: 1 2 3 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(1)}>
-            1
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(2)}>
-            2
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(3)}>
-            3
-          </div>
+          <div className="calc-butt" onClick={() => appendDigit(1)}>1</div>
+          <div className="calc-butt" onClick={() => appendDigit(2)}>2</div>
+          <div className="calc-butt" onClick={() => appendDigit(3)}>3</div>
         </div>
 
         {/* Row 3: 4 5 6 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(4)}>
-            4
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(5)}>
-            5
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(6)}>
-            6
-          </div>
+          <div className="calc-butt" onClick={() => appendDigit(4)}>4</div>
+          <div className="calc-butt" onClick={() => appendDigit(5)}>5</div>
+          <div className="calc-butt" onClick={() => appendDigit(6)}>6</div>
         </div>
 
         {/* Row 4: 7 8 9 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(7)}>
-            7
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(8)}>
-            8
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(9)}>
-            9
-          </div>
+          <div className="calc-butt" onClick={() => appendDigit(7)}>7</div>
+          <div className="calc-butt" onClick={() => appendDigit(8)}>8</div>
+          <div className="calc-butt" onClick={() => appendDigit(9)}>9</div>
         </div>
 
         {/* Row 5: Löschen 0 OK */}
         <div className="calc-line">
-          <div className="calc-butt calc-clear" onClick={clear}>
-            Löschen
-          </div>
-          <div className="calc-butt" onClick={() => appendDigit(0)}>
-            0
-          </div>
-          <div className="calc-butt calc-ok" onClick={submit}>
-            OK
-          </div>
+          <div className="calc-butt calc-clear" onClick={clear}>Löschen</div>
+          <div className="calc-butt" onClick={() => appendDigit(0)}>0</div>
+          <div className="calc-butt calc-ok" onClick={submit}>OK</div>
         </div>
-
-        {/* Row 6: Handicap (conditional) */}
-        {showHandicap && (
-          <div className="calc-line">
-            <div className="calc-butt calc-handicap" onClick={submitHandicap}>
-              Handicap
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

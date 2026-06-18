@@ -2,17 +2,36 @@ import { useState } from "react";
 
 interface Props {
   currentTableNumber: string | null;
-  onSave: (tableNumber: string) => void;
+  currentCenterName: string | null;
+  onSave: (tableNumber: string, centerName: string) => void;
   onClose: () => void;
 }
 
 const SETTINGS_PASSWORD = import.meta.env.VITE_SETTINGS_PASSWORD || "1234";
+const CENTER_NAMES_KEY = "centerNames";
 
-export function SettingsDialog({ currentTableNumber, onSave, onClose }: Props) {
+function loadCenterNames(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(CENTER_NAMES_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveCenterName(name: string) {
+  if (!name.trim()) return;
+  const names = loadCenterNames();
+  const updated = [name, ...names.filter((n) => n !== name)].slice(0, 20);
+  localStorage.setItem(CENTER_NAMES_KEY, JSON.stringify(updated));
+}
+
+export function SettingsDialog({ currentTableNumber, currentCenterName, onSave, onClose }: Props) {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [tableNumber, setTableNumber] = useState(currentTableNumber || "");
+  const [centerName, setCenterName] = useState(currentCenterName || "");
   const [error, setError] = useState("");
+  const centerNames = loadCenterNames();
 
   const handleAuth = () => {
     if (password === SETTINGS_PASSWORD) {
@@ -24,8 +43,21 @@ export function SettingsDialog({ currentTableNumber, onSave, onClose }: Props) {
   };
 
   const handleSave = () => {
-    onSave(tableNumber);
+    saveCenterName(centerName);
+    onSave(tableNumber, centerName);
     onClose();
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "0.75rem",
+    fontSize: "1.1rem",
+    borderRadius: "6px",
+    border: "1px solid #555",
+    background: "#222",
+    color: "#fff",
+    marginBottom: "1rem",
+    boxSizing: "border-box" as const,
   };
 
   return (
@@ -54,16 +86,7 @@ export function SettingsDialog({ currentTableNumber, onSave, onClose }: Props) {
               onKeyDown={(e) => e.key === "Enter" && handleAuth()}
               placeholder="Passwort eingeben"
               autoFocus
-              style={{
-                width: "100%",
-                padding: "0.75rem",
-                fontSize: "1.1rem",
-                borderRadius: "6px",
-                border: "1px solid #555",
-                background: "#222",
-                color: "#fff",
-                marginBottom: "0.5rem",
-              }}
+              style={inputStyle}
             />
             {error && (
               <div style={{ color: "#f66", marginBottom: "0.5rem" }}>
@@ -110,23 +133,27 @@ export function SettingsDialog({ currentTableNumber, onSave, onClose }: Props) {
             </div>
             <div style={{ marginBottom: "0.5rem" }}>Tischnummer:</div>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               value={tableNumber}
-              onChange={(e) => setTableNumber(e.target.value)}
-              min={1}
-              max={99}
+              onChange={(e) => setTableNumber(e.target.value.replace(/\D/g, ""))}
               autoFocus
-              style={{
-                width: "100%",
-                padding: "0.75rem",
-                fontSize: "1.1rem",
-                borderRadius: "6px",
-                border: "1px solid #555",
-                background: "#222",
-                color: "#fff",
-                marginBottom: "1rem",
-              }}
+              style={inputStyle}
             />
+            <div style={{ marginBottom: "0.5rem" }}>Center:</div>
+            <input
+              type="text"
+              list="center-names-list"
+              value={centerName}
+              onChange={(e) => setCenterName(e.target.value)}
+              placeholder="z.B. Billardclub Zürich"
+              style={inputStyle}
+            />
+            <datalist id="center-names-list">
+              {centerNames.map((n) => (
+                <option key={n} value={n} />
+              ))}
+            </datalist>
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <button
                 onClick={handleSave}

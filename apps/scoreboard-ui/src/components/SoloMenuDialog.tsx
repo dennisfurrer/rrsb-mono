@@ -37,8 +37,10 @@ export function SoloMenuDialog({
         <div
           onClick={(e) => e.stopPropagation()}
           style={{
-            background: "#2a2a2a",
+            background: "#3a3a3a",
             borderRadius: "12px",
+            border: "2px solid #aaa",
+            boxShadow: "0 0 0 4px #ffffff22, 0 0 40px #ffffff44",
             padding: "3.5vh 3vw 3vh",
             display: "flex",
             flexDirection: "column",
@@ -168,7 +170,7 @@ function BreakSummary({
     <div style={{ display: "flex", justifyContent: "space-around", color: "#fff", fontSize: "1.4vw", flexWrap: "wrap", gap: "0.5vh 1vw" }}>
       <span>Höchste: {stats.highestBreak || "—"}</span>
       <span>Schnitt: {avg}</span>
-      <span>Aufgeräumt: {stats.clearedCount}</span>
+      <span>Clearance: {stats.clearedCount}</span>
       <span>Verfehlt: {stats.missedCount}</span>
       <span>Versuche: {stats.totalAttempts}</span>
     </div>

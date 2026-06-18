@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { MatchState } from "../lib/model";
 import { useAutoFontSize } from "../hooks/useAutoFontSize";
 import trophyGif from "../assets/trophy.gif";
@@ -8,7 +9,64 @@ interface Props {
   onPlayerClick: (playerIndex: number) => void;
   onMenuClick: () => void;
   onBreaksClick: (playerIndex: number) => void;
-  history: { label: string }[];
+  onCenterClick?: () => void;
+  history: { label: string; color?: string; playerIndex?: 0 | 1; kind?: string }[];
+  centerName?: string;
+  matchStartTime?: string;
+  matchEndTime?: string;
+  matchFinished?: boolean;
+  playerColors?: [string | null, string | null];
+  onColorChange?: (playerIndex: 0 | 1, color: string) => void;
+  onEditLastBreak?: () => void;
+}
+
+const PALETTE_DARK = [
+  "#cc0022", "#800020", "#cc4400", "#7c4a2a",
+  "#4a2a10", "#998800", "#aaaa00", "#448800",
+  "#004d1a", "#007744", "#006688", "#3377aa",
+  "#1a3fa0", "#5500aa", "#cc0066", "#777777",
+];
+
+const PALETTE_LIGHT = [
+  "#ff4455", "#cc3355", "#ff8844", "#cd7f32",
+  "#996633", "#ffd700", "#ffee55", "#88ff00",
+  "#006828", "#00c878", "#00ced1", "#87ceeb",
+  "#4169e1", "#8b00ff", "#ff69b4", "#c0c0c0",
+];
+
+function adjustColor(hex: string, f: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const clamp = (v: number) => Math.min(255, Math.max(0, Math.round(v)));
+  const r = clamp(((n >> 16) & 0xff) * f);
+  const g = clamp(((n >> 8) & 0xff) * f);
+  const b = clamp((n & 0xff) * f);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
+function resolveColor(own: string | null, other: string | null, lighter: boolean): string | undefined {
+  if (!own) return undefined;
+  return own === other ? adjustColor(own, lighter ? 1.7 : 0.5) : own;
+}
+
+function colorDistance(a: string, b: string): number {
+  const p = (h: string) => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+  const [r1,g1,b1] = p(a); const [r2,g2,b2] = p(b);
+  return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
+}
+
+function isGrayish(hex: string): boolean {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return Math.max(r,g,b) - Math.min(r,g,b) < 40;
+}
+
+function nameGlowStyle(color: string | undefined): CSSProperties | undefined {
+  if (!color) return undefined;
+  return {
+    color,
+    textShadow: `0 0 4px ${color}cc, 0 0 10px ${color}88, 0 0 20px ${color}44`,
+  };
 }
 
 function AutoSize({
@@ -16,25 +74,190 @@ function AutoSize({
   deps,
   className,
   scale,
+  style,
+  containerRef,
 }: {
   text: string;
   deps: unknown[];
   className?: string;
   scale?: number;
+  style?: CSSProperties;
+  containerRef?: React.RefObject<HTMLElement>;
 }) {
-  const ref = useAutoFontSize(deps, scale);
+  const ref = useAutoFontSize(deps, scale, containerRef);
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={style}>
       {text}
     </div>
   );
 }
 
-export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, history }: Props) {
+function formatMatchDuration(startIso: string, endIso?: string): string {
+  const ms = (endIso ? new Date(endIso).getTime() : Date.now()) - new Date(startIso).getTime();
+  const totalMins = Math.floor(ms / 60000);
+  const h = Math.floor(totalMins / 60);
+  const m = totalMins % 60;
+  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+}
+
+const SCORE_SCALE = 1.32;
+
+function DigitSlot({ value, animDuration = 5 }: { value: number; animDuration?: number }) {
+  const [curr, setCurr] = useState(value);
+  const [prev, setPrev] = useState(value);
+  const [animKey, setAnimKey] = useState(-1);
+
+  useEffect(() => {
+    if (value !== curr) {
+      setPrev(curr);
+      setCurr(value);
+      setAnimKey(k => k + 1);
+    }
+  }, [value, curr]);
+
+  return (
+    <span className="sb-digit-wrap">
+      {animKey < 0 ? (
+        <span className="sb-secs-digit">{curr}</span>
+      ) : (
+        <span
+          key={animKey}
+          className="sb-digit-tick"
+          style={{ animationDuration: `${animDuration}s` }}
+          onAnimationEnd={() => setAnimKey(-1)}
+        >
+          <span className="sb-secs-digit">{curr}</span>
+          <span className="sb-secs-digit">{prev}</span>
+        </span>
+      )}
+    </span>
+  );
+}
+
+export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak }: Props) {
   const [p1, p2] = match.players;
   const p1Active = match.activePlayerIndex === 0;
   const p2Active = match.activePlayerIndex === 1;
   const historyRef = useRef<HTMLDivElement>(null);
+  const p1NameRowRef = useRef<HTMLDivElement>(null);
+  const p2NameRowRef = useRef<HTMLDivElement>(null);
+  const p1NameTextRef = useRef<HTMLDivElement>(null);
+  const p2NameTextRef = useRef<HTMLDivElement>(null);
+  const [tick, setTick] = useState(0);
+  const [secsAnimDelay, setSecsAnimDelay] = useState("0s");
+  const [showFinishedHint, setShowFinishedHint] = useState(false);
+  const [colorPickerFor, setColorPickerFor] = useState<0 | 1 | null>(null);
+
+  const [p1Raw, p2Raw] = playerColors ?? [null, null];
+  const effP1Color = resolveColor(p1Raw, p2Raw, true);
+  const effP2Color = resolveColor(p2Raw, p1Raw, false);
+  const eitherGrayish = (effP1Color ? isGrayish(effP1Color) : false) || (effP2Color ? isGrayish(effP2Color) : false);
+  const neutralCandidates = eitherGrayish ? ["#ffee44", "#88ff88"] : ["#ffffff", "#ffee44", "#88ff88"];
+  const neutralColor = neutralCandidates.find(c => {
+    const d1 = effP1Color ? colorDistance(c, effP1Color) : Infinity;
+    const d2 = effP2Color ? colorDistance(c, effP2Color) : Infinity;
+    return d1 >= 90 && d2 >= 90;
+  }) ?? "#88ff88";
+  const noScores = p1.score === 0 && p2.score === 0;
+  const showColorHint = noScores && !match.finished && p1Raw === null && p2Raw === null && colorPickerFor === null;
+
+  const pickColor = (idx: 0 | 1, color: string) => {
+    onColorChange?.(idx, color);
+    setColorPickerFor(null);
+  };
+
+  // Shared font-size for both score fields
+  const p1ScoreRef = useRef<HTMLDivElement>(null);
+  const p2ScoreRef = useRef<HTMLDivElement>(null);
+
+  const resizeScores = useCallback(() => {
+    const p1El = p1ScoreRef.current;
+    const p2El = p2ScoreRef.current;
+    if (!p1El || !p2El) return;
+
+    // Reset forced width so binary search uses natural content width
+    p1El.style.width = "";
+    p2El.style.width = "";
+
+    const computeSize = (el: HTMLDivElement) => {
+      const parent = el.parentElement;
+      if (!parent) return 500;
+      const maxW = parent.clientWidth * 0.95 * SCORE_SCALE;
+      const maxH = parent.clientHeight * 0.9 * SCORE_SCALE;
+      el.style.height = "auto";
+      let lo = 8, hi = 500;
+      while (lo < hi - 1) {
+        const mid = Math.floor((lo + hi) / 2);
+        el.style.fontSize = `${mid}px`;
+        if (el.offsetWidth <= maxW && el.offsetHeight <= maxH) lo = mid;
+        else hi = mid;
+      }
+      el.style.height = "";
+      return lo;
+    };
+
+    const shared = Math.min(computeSize(p1El), computeSize(p2El));
+    p1El.style.fontSize = `${shared}px`;
+    p2El.style.fontSize = `${shared}px`;
+
+    // Equalize box widths so gray backgrounds are the same size on both sides
+    const equalW = Math.max(p1El.offsetWidth, p2El.offsetWidth);
+    p1El.style.width = `${equalW}px`;
+    p2El.style.width = `${equalW}px`;
+  }, []);
+
+  useEffect(() => {
+    resizeScores();
+    window.addEventListener("resize", resizeScores);
+    return () => window.removeEventListener("resize", resizeScores);
+  }, [resizeScores, p1.score, p2.score]);
+
+  const resizeNames = useCallback(() => {
+    const p1El = p1NameTextRef.current;
+    const p2El = p2NameTextRef.current;
+    const p1Row = p1NameRowRef.current;
+    const p2Row = p2NameRowRef.current;
+    if (!p1El || !p2El || !p1Row || !p2Row) return;
+
+    const computeSize = (el: HTMLDivElement, row: HTMLDivElement) => {
+      const maxW = row.clientWidth * 0.95 * 0.88;
+      const maxH = row.clientHeight * 0.9 * 0.88;
+      if (maxW <= 0 || maxH <= 0) return 500;
+      el.style.height = "auto";
+      let lo = 8, hi = 500;
+      while (lo < hi - 1) {
+        const mid = Math.floor((lo + hi) / 2);
+        el.style.fontSize = `${mid}px`;
+        if (el.offsetWidth <= maxW && el.offsetHeight <= maxH) lo = mid;
+        else hi = mid;
+      }
+      el.style.height = "";
+      return lo;
+    };
+
+    const shared = Math.min(computeSize(p1El, p1Row), computeSize(p2El, p2Row));
+    p1El.style.fontSize = `${shared}px`;
+    p2El.style.fontSize = `${shared}px`;
+  }, []);
+
+  useEffect(() => {
+    resizeNames();
+    window.addEventListener("resize", resizeNames);
+    return () => window.removeEventListener("resize", resizeNames);
+  }, [resizeNames, p1.name, p2.name, effP1Color, effP2Color]);
+
+  useEffect(() => {
+    if (!matchStartTime || matchEndTime) return;
+    const id = setInterval(() => setTick(t => t + 1), 1000);
+    return () => clearInterval(id);
+  }, [matchStartTime, matchEndTime]);
+
+  useEffect(() => {
+    if (!matchStartTime || matchEndTime) return;
+    const elapsed = Date.now() - new Date(matchStartTime).getTime();
+    const secsInMinute = (elapsed % 60000) / 1000;
+    setSecsAnimDelay(`-${secsInMinute.toFixed(3)}s`);
+  }, [matchStartTime, matchEndTime]);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -42,19 +265,134 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, h
     }
   }, [history]);
 
+  const elapsedMs = matchStartTime
+    ? (matchEndTime ? new Date(matchEndTime).getTime() : Date.now()) - new Date(matchStartTime).getTime()
+    : 0;
+  const durationMins = Math.floor(elapsedMs / 60000);
+  const totalHours = Math.floor(durationMins / 60);
+  const minutesMod = durationMins % 60;
+
+  // Pre-trigger minute/hour digits 5 s before the rollover so they glide in sync with the seconds strip
+  const secsInMinute = matchEndTime ? 0 : Math.floor((elapsedMs % 60000) / 1000);
+  const preTransition = secsInMinute >= 55;
+  const nextMinutesMod = (minutesMod + 1) % 60;
+  const nextTotalHours = minutesMod === 59 ? totalHours + 1 : totalHours;
+
+  const dispMinsTens = preTransition ? Math.floor(nextMinutesMod / 10) : Math.floor(minutesMod / 10);
+  const dispMinsUnits = preTransition ? nextMinutesMod % 10 : minutesMod % 10;
+  const dispHoursTens = (preTransition && minutesMod === 59) ? Math.floor((nextTotalHours % 100) / 10) : Math.floor(totalHours / 10);
+  const dispHoursUnits = (preTransition && minutesMod === 59) ? nextTotalHours % 10 : totalHours % 10;
+
   return (
     <div className="scoreboard">
+      {match.bbState?.respottedBlack && !match.bbState.frameOver && !match.finished && (
+        <div style={{
+          position: "fixed",
+          top: "0.6vh",
+          left: 0,
+          right: 0,
+          zIndex: 500,
+          textAlign: "center",
+          background: "#111",
+          borderTop: "2px solid #f0c040",
+          borderBottom: "2px solid #f0c040",
+          padding: "0.8vh 0",
+          fontSize: "2.2vw",
+          fontWeight: "bold",
+          color: "#f0c040",
+          letterSpacing: "0.12em",
+          pointerEvents: "none",
+        }}>
+          ⚫ RE-SPOTTED BLACK
+        </div>
+      )}
+      {showFinishedHint && (
+        <div className="overlay" onClick={() => setShowFinishedHint(false)}>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#2a2a2a",
+              borderRadius: "12px",
+              padding: "3vh 3vw",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "2vh",
+              width: "44vw",
+              textAlign: "center",
+            }}
+          >
+            <div style={{ color: "#ffee44", fontSize: "2.4vw", fontWeight: "bold" }}>
+              Diese Partie ist beendet
+            </div>
+            <div style={{ color: "#aaa", fontSize: "1.7vw", lineHeight: 1.4 }}>
+              Um ein neues Spiel zu starten, wähle im <span style={{ color: "#fff", fontWeight: "bold" }}>Menu</span> die Option <span style={{ color: "#fff", fontWeight: "bold" }}>Neues Spiel</span>.
+            </div>
+            <button
+              onClick={() => setShowFinishedHint(false)}
+              style={{
+                marginTop: "0.5vh",
+                padding: "1.2vh 4vw",
+                fontSize: "1.8vw",
+                fontWeight: "bold",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: "#1a5c1a",
+                color: "#4ade80",
+              }}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      {colorPickerFor !== null && (
+        <div className="sb-color-backdrop" onClick={() => setColorPickerFor(null)} />
+      )}
       <div className="sb-main">
         {/* Left 40% */}
-        <div className="sb-left" onClick={() => onPlayerClick(0)}>
-          <div className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}>
-            <AutoSize text={p1.name} deps={[p1.name]} className="name-text lc" scale={0.665} />
+        <div className="sb-left" onClick={() => {
+          if (matchFinished) { setShowFinishedHint(true); return; }
+          onPlayerClick(0);
+        }}>
+          <div
+            ref={p1NameRowRef}
+            className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}
+            onClick={(e) => {
+              if (noScores && !matchFinished) { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }
+            }}
+          >
+            <div className="sb-name-with-club sb-name-with-club--left">
+              <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
+              <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>Round Robin Sports</div>
+            </div>
           </div>
+          {colorPickerFor === 0 && (
+            <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
+              <div className="sb-color-picker-section">Dunkel</div>
+              {PALETTE_DARK.map(c => {
+                const display = p2Raw === c ? adjustColor(c, 1.7) : c;
+                return (
+                  <div key={c} className={`sb-color-swatch${p1Raw === display ? " sb-color-swatch--selected" : ""}`}
+                    style={{ background: display }} onClick={() => pickColor(0, display)} />
+                );
+              })}
+              <div className="sb-color-picker-section">Hell</div>
+              {PALETTE_LIGHT.map(c => {
+                const display = p2Raw === c ? adjustColor(c, 1.7) : c;
+                return (
+                  <div key={c} className={`sb-color-swatch${p1Raw === display ? " sb-color-swatch--selected" : ""}`}
+                    style={{ background: display }} onClick={() => pickColor(0, display)} />
+                );
+              })}
+            </div>
+          )}
           <div className="sb-frames-row">
             <AutoSize text={String(p1.frames)} deps={[p1.frames]} className="frames-text lc" scale={1.32} />
           </div>
           <div className={`sb-score-row ${!p1Active ? "score-inactive" : ""}`}>
-            <AutoSize text={String(p1.score)} deps={[p1.score]} className="score-text lc" scale={1.32} />
+            <div ref={p1ScoreRef} className="score-text lc">{p1.score}</div>
           </div>
           <div
             className="sb-break-row sb-break-row-clickable"
@@ -63,36 +401,122 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, h
               if (match.matchId) onBreaksClick(0);
             }}
           >
-            <div className="break-text">
+            <div className="break-text" style={{ color: effP1Color ?? "#5599ff" }}>
               {p1.highbreaks.slice(0, 5).join(", ")}
             </div>
           </div>
         </div>
 
         {/* Center 20% */}
-        <div className="sb-center">
+        <div className="sb-center" onClick={onCenterClick} style={onCenterClick ? { cursor: "pointer" } : undefined}>
           <div className="sb-name-row sb-name-row-center" style={p1.winner ? { justifyContent: "flex-start" } : p2.winner ? { justifyContent: "flex-end" } : undefined}>
+            {match.tableNumber && Number(match.tableNumber) > 0 && (
+              <div className="sb-table-number">Tisch {match.tableNumber}</div>
+            )}
+            {centerName && <div className="sb-center-name">{centerName}</div>}
             {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
             {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
+            {match.finished && !p1.winner && !p2.winner && (
+              <div style={{ color: "#ffee44", fontSize: "1.5vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
+                UNENTSCHIEDEN
+              </div>
+            )}
+            {showColorHint && (
+              <div className="sb-color-hint">
+                <span className="sb-color-hint-arrow">&#8249;</span>
+                <div className="sb-color-hint-text">
+                  <div>Namen antippen</div>
+                  <div>Spielerfarbe wählen</div>
+                </div>
+                <span className="sb-color-hint-arrow">&#8250;</span>
+              </div>
+            )}
           </div>
           <div className="sb-frames-row sb-frames-row-center">
             <div>Frames</div>
             <div>({match.bestOf})</div>
+            {match.matchType && (
+              <div style={{ fontSize: "1vw", color: "#888", letterSpacing: "0.04em", marginTop: "0.4vh", textTransform: "uppercase" }}>
+                {match.matchType}
+              </div>
+            )}
           </div>
-          <div className="sb-score-row sb-score-row-center">Score</div>
+          <div className="sb-score-row sb-score-row-center">
+            <div>Score</div>
+            {matchStartTime && (
+              <div className="sb-match-time">
+                <div className="sb-match-time-label">Matchzeit</div>
+                <div className="sb-match-time-value">
+                  {matchEndTime ? (
+                    formatMatchDuration(matchStartTime, matchEndTime)
+                  ) : (
+                    <>
+                      <DigitSlot value={dispHoursTens} />
+                      <DigitSlot value={dispHoursUnits} />
+                      <span>:</span>
+                      <DigitSlot value={dispMinsTens} />
+                      <DigitSlot value={dispMinsUnits} />
+                      <span className="sb-secs-wrap">
+                        <span className="sb-secs-strip" style={{ animationDelay: secsAnimDelay }}>
+                          {["00", ...Array.from({ length: 12 }, (_, i) => String(55 - i * 5).padStart(2, "0"))].map((d, i) => (
+                            <span key={i} className="sb-secs-digit">{d}</span>
+                          ))}
+                        </span>
+                      </span>
+                    </>
+                  )}
+                </div>
+                {durationMins >= 60 && (
+                  <div className="sb-match-time-mins">{durationMins} Min.</div>
+                )}
+              </div>
+            )}
+          </div>
           <div className="sb-break-row sb-break-row-center">&laquo; Breaks &gt;7 &raquo;</div>
         </div>
 
         {/* Right 40% */}
-        <div className="sb-right" onClick={() => onPlayerClick(1)}>
-          <div className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}>
-            <AutoSize text={p2.name} deps={[p2.name]} className="name-text rc" scale={0.665} />
+        <div className="sb-right" onClick={() => {
+          if (matchFinished) { setShowFinishedHint(true); return; }
+          onPlayerClick(1);
+        }}>
+          <div
+            ref={p2NameRowRef}
+            className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}
+            onClick={(e) => {
+              if (noScores && !matchFinished) { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }
+            }}
+          >
+            <div className="sb-name-with-club sb-name-with-club--right">
+              <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
+              <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>Round Robin Sports</div>
+            </div>
           </div>
+          {colorPickerFor === 1 && (
+            <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
+              <div className="sb-color-picker-section">Dunkel</div>
+              {PALETTE_DARK.map(c => {
+                const display = p1Raw === c ? adjustColor(c, 1.7) : c;
+                return (
+                  <div key={c} className={`sb-color-swatch${p2Raw === display ? " sb-color-swatch--selected" : ""}`}
+                    style={{ background: display }} onClick={() => pickColor(1, display)} />
+                );
+              })}
+              <div className="sb-color-picker-section">Hell</div>
+              {PALETTE_LIGHT.map(c => {
+                const display = p1Raw === c ? adjustColor(c, 1.7) : c;
+                return (
+                  <div key={c} className={`sb-color-swatch${p2Raw === display ? " sb-color-swatch--selected" : ""}`}
+                    style={{ background: display }} onClick={() => pickColor(1, display)} />
+                );
+              })}
+            </div>
+          )}
           <div className="sb-frames-row">
             <AutoSize text={String(p2.frames)} deps={[p2.frames]} className="frames-text rc" scale={1.32} />
           </div>
           <div className={`sb-score-row ${!p2Active ? "score-inactive" : ""}`}>
-            <AutoSize text={String(p2.score)} deps={[p2.score]} className="score-text rc" scale={1.32} />
+            <div ref={p2ScoreRef} className="score-text rc">{p2.score}</div>
           </div>
           <div
             className="sb-break-row sb-break-row-clickable"
@@ -101,7 +525,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, h
               if (match.matchId) onBreaksClick(1);
             }}
           >
-            <div className="break-text">
+            <div className="break-text" style={{ color: effP2Color ?? "#ff8833" }}>
               {p2.highbreaks.slice(0, 5).join(", ")}
             </div>
           </div>
@@ -110,11 +534,26 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, h
 
       <div className="bottom-bar">
         <div className="history-log" ref={historyRef}>
-          {history.map((h, i) => (
-            <span key={i} style={{ letterSpacing: "0.05em" }}>
-              ░ {h.label}{" "}
-            </span>
-          ))}
+          {history.filter(h => h.label !== "").map((h, i, arr) => {
+            const isLastBreak = i === arr.length - 1 && h.kind === "break" && !!onEditLastBreak;
+            return (
+              <span
+                key={i}
+                onClick={isLastBreak ? onEditLastBreak : undefined}
+                style={{
+                  letterSpacing: "0.05em",
+                  color: h.playerIndex === 0 ? (effP1Color ?? "#5599ff") : h.playerIndex === 1 ? (effP2Color ?? "#ff8833") : neutralColor,
+                  cursor: isLastBreak ? "pointer" : "default",
+                  textDecoration: isLastBreak ? "underline dotted" : "none",
+                  borderRadius: isLastBreak ? "4px" : undefined,
+                  padding: isLastBreak ? "0 0.3vw" : undefined,
+                  background: isLastBreak ? "rgba(255,255,255,0.06)" : undefined,
+                }}
+              >
+                ░ {h.label}{" "}
+              </span>
+            );
+          })}
         </div>
         <div className="menu-btn" onClick={onMenuClick}>
           Menu

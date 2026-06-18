@@ -1,18 +1,23 @@
 import { useCallback, useEffect, useRef } from "react";
+import type { RefObject } from "react";
 
 /**
  * Auto-sizes text to fill its container using a binary search approach.
  * The ref should be on an inline-level element (inline-block/inline-flex)
  * inside a fixed-size parent. The parent's dimensions define the max bounds.
+ * Pass containerRef to override which ancestor is used for size measurement
+ * (useful when the direct parent is not fixed-size).
  */
-export function useAutoFontSize(deps: unknown[], scale = 1) {
+export function useAutoFontSize(deps: unknown[], scale = 1, containerRef?: RefObject<HTMLElement>) {
   const ref = useRef<HTMLDivElement>(null);
 
   const resize = useCallback(() => {
     const el = ref.current;
-    if (!el || !el.parentElement) return;
+    if (!el) return;
 
-    const parent = el.parentElement;
+    const parent = (containerRef?.current ?? el.parentElement) as HTMLElement | null;
+    if (!parent) return;
+
     const maxW = parent.clientWidth * 0.95 * scale;
     const maxH = parent.clientHeight * 0.9 * scale;
 
@@ -37,7 +42,7 @@ export function useAutoFontSize(deps: unknown[], scale = 1) {
 
     el.style.fontSize = `${lo}px`;
     el.style.height = "";
-  }, [scale]);
+  }, [scale, containerRef]);
 
   useEffect(() => {
     resize();
