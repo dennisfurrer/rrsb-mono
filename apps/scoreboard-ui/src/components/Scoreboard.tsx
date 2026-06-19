@@ -10,7 +10,7 @@ interface Props {
   onMenuClick: () => void;
   onBreaksClick: (playerIndex: number) => void;
   onCenterClick?: () => void;
-  history: { label: string; color?: string; playerIndex?: 0 | 1; kind?: string }[];
+  history: { label: string; color?: string; playerIndex?: 0 | 1; kind?: string; frameNumber?: number }[];
   centerName?: string;
   matchStartTime?: string;
   matchEndTime?: string;

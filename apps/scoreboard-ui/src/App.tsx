@@ -829,7 +829,7 @@ export function App() {
     const snapPostRerack = structuredClone(match);
     snapPostRerack.players[0].score = 0;
     snapPostRerack.players[1].score = 0;
-    if (snapPostRerack.bbState) snapPostRerack.bbState = createBBState(snapPostRerack.redsCount);
+    if (snapPostRerack.bbState) snapPostRerack.bbState = createBBState(snapPostRerack.redsCount ?? 15);
 
     pushHistory("Re-rack", match, undefined, { kind: "rerack", frameNumber: match.currentFrame });
     if (hc0 > 0) {
@@ -855,7 +855,7 @@ export function App() {
       next.players[0].score = hc0;
       next.players[1].score = hc1;
       if (next.bbState) {
-        next.bbState = createBBState(next.redsCount);
+        next.bbState = createBBState(next.redsCount ?? 15);
       }
 
       if (next.matchId) {

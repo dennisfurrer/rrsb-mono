@@ -736,7 +736,7 @@ export function BallByBallDialog({
 
       function handleOK() {
         if (hcTarget !== null && inputNum > 0) {
-          onHandicap(hcTarget, inputNum);
+          onHandicap?.(hcTarget, inputNum);
           setHcInput("");
           setHcTarget(null);
           setShowHCDialog(false);
