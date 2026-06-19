@@ -1,6 +1,7 @@
 export interface Player {
   name: string;
   nationalityIOC: string;
+  club?: string;
   frames: number;
   score: number;
   highbreaks: number[];
@@ -32,10 +33,11 @@ export interface MatchState {
   matchType?: string;
 }
 
-export function createPlayer(name: string, nationalityIOC = ""): Player {
+export function createPlayer(name: string, nationalityIOC = "", club = ""): Player {
   return {
     name,
     nationalityIOC,
+    club,
     frames: 0,
     score: 0,
     highbreaks: [],

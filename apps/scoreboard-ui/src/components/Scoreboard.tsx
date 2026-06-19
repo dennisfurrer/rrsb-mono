@@ -159,7 +159,6 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     return d1 >= 90 && d2 >= 90;
   }) ?? "#88ff88";
   const noScores = p1.score === 0 && p2.score === 0;
-  const showColorHint = noScores && !match.finished && p1Raw === null && p2Raw === null && colorPickerFor === null;
 
   const pickColor = (idx: 0 | 1, color: string) => {
     onColorChange?.(idx, color);
@@ -285,6 +284,23 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
 
   return (
     <div className="scoreboard">
+      {match.matchType && (
+        <div style={{
+          position: "fixed",
+          top: "2.5vh",
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontSize: "2vw",
+          color: "#aaa",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          pointerEvents: "none",
+          zIndex: 10,
+        }}>
+          {match.matchType}
+        </div>
+      )}
       {match.bbState?.respottedBlack && !match.bbState.frameOver && !match.finished && (
         <div style={{
           position: "fixed",
@@ -323,10 +339,10 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             }}
           >
             <div style={{ color: "#ffee44", fontSize: "2.4vw", fontWeight: "bold" }}>
-              Diese Partie ist beendet
+              Partie beendet!
             </div>
             <div style={{ color: "#aaa", fontSize: "1.7vw", lineHeight: 1.4 }}>
-              Um ein neues Spiel zu starten, wähle im <span style={{ color: "#fff", fontWeight: "bold" }}>Menu</span> die Option <span style={{ color: "#fff", fontWeight: "bold" }}>Neues Spiel</span>.
+              Wähle im <span style={{ color: "#fff", fontWeight: "bold" }}>Menu</span> die Option <span style={{ color: "#fff", fontWeight: "bold" }}>Neues Spiel</span> — oder passe das <span style={{ color: "#fff", fontWeight: "bold" }}>Ausspielziel</span> an, um weiterzuspielen.
             </div>
             <button
               onClick={() => setShowFinishedHint(false)}
@@ -359,14 +375,19 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
           <div
             ref={p1NameRowRef}
             className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}
-            onClick={(e) => {
-              if (noScores && !matchFinished) { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }
-            }}
           >
             <div className="sb-name-with-club sb-name-with-club--left">
               <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
-              <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>Round Robin Sports</div>
+              <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>{p1.club || "?"}</div>
             </div>
+            {noScores && !matchFinished && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
+                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
+              >
+                ✎
+              </button>
+            )}
           </div>
           {colorPickerFor === 0 && (
             <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
@@ -417,29 +438,14 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
             {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
             {match.finished && !p1.winner && !p2.winner && (
-              <div style={{ color: "#ffee44", fontSize: "1.5vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
+              <div className="sb-draw-pulse" style={{ fontSize: "1.9vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
                 UNENTSCHIEDEN
-              </div>
-            )}
-            {showColorHint && (
-              <div className="sb-color-hint">
-                <span className="sb-color-hint-arrow">&#8249;</span>
-                <div className="sb-color-hint-text">
-                  <div>Namen antippen</div>
-                  <div>Spielerfarbe wählen</div>
-                </div>
-                <span className="sb-color-hint-arrow">&#8250;</span>
               </div>
             )}
           </div>
           <div className="sb-frames-row sb-frames-row-center">
             <div>Frames</div>
             <div>({match.bestOf})</div>
-            {match.matchType && (
-              <div style={{ fontSize: "1vw", color: "#888", letterSpacing: "0.04em", marginTop: "0.4vh", textTransform: "uppercase" }}>
-                {match.matchType}
-              </div>
-            )}
           </div>
           <div className="sb-score-row sb-score-row-center">
             <div>Score</div>
@@ -483,14 +489,19 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
           <div
             ref={p2NameRowRef}
             className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}
-            onClick={(e) => {
-              if (noScores && !matchFinished) { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }
-            }}
           >
             <div className="sb-name-with-club sb-name-with-club--right">
               <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
-              <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>Round Robin Sports</div>
+              <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>{p2.club || "?"}</div>
             </div>
+            {noScores && !matchFinished && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
+                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
+              >
+                ✎
+              </button>
+            )}
           </div>
           {colorPickerFor === 1 && (
             <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
@@ -532,27 +543,66 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         </div>
       </div>
 
+      <div style={{ position: "absolute", bottom: "15%", left: "0.8vw", color: "#666", fontSize: "0.75vw", fontWeight: "normal", pointerEvents: "none" }}>
+        Scoreboard V2.0.0
+      </div>
+      <div style={{ position: "absolute", bottom: "15%", right: "0.8vw", color: "#666", fontSize: "0.75vw", fontWeight: "normal", pointerEvents: "none" }}>
+        © 2026 Round Robin Sports
+      </div>
       <div className="bottom-bar">
         <div className="history-log" ref={historyRef}>
-          {history.filter(h => h.label !== "").map((h, i, arr) => {
+          {history.filter(h => h.label !== "").flatMap((h, i, arr) => {
             const isLastBreak = i === arr.length - 1 && h.kind === "break" && !!onEditLastBreak;
-            return (
-              <span
-                key={i}
-                onClick={isLastBreak ? onEditLastBreak : undefined}
-                style={{
-                  letterSpacing: "0.05em",
-                  color: h.playerIndex === 0 ? (effP1Color ?? "#5599ff") : h.playerIndex === 1 ? (effP2Color ?? "#ff8833") : neutralColor,
-                  cursor: isLastBreak ? "pointer" : "default",
-                  textDecoration: isLastBreak ? "underline dotted" : "none",
-                  borderRadius: isLastBreak ? "4px" : undefined,
-                  padding: isLastBreak ? "0 0.3vw" : undefined,
-                  background: isLastBreak ? "rgba(255,255,255,0.06)" : undefined,
-                }}
-              >
-                ░ {h.label}{" "}
+            const isRerack = h.kind === "rerack";
+            const isKorrektur = isRerack && h.label.startsWith("Korrektur");
+            const isHandicap = h.kind === "handicap";
+            const prevFrameNumber = i > 0 ? arr[i - 1].frameNumber : undefined;
+            const showFrameSep = h.frameNumber !== undefined && h.frameNumber !== prevFrameNumber;
+            const frameSep = showFrameSep ? (
+              <span key={`fs-${i}`}>
+                <span style={{ letterSpacing: "0.05em", color: neutralColor, padding: "0 0.5em" }}>{"·"}</span>
+                <span style={{ border: "1.5px solid #999", borderRadius: "4px", padding: "0 0.5vw", background: "#fff", color: "#000", fontWeight: "bold", letterSpacing: "0.05em" }}>Frame {h.frameNumber}</span>
+                {" "}
+              </span>
+            ) : null;
+            const entry = (
+              <span key={i}>
+                <span style={{ letterSpacing: "0.05em", color: neutralColor, padding: "0 0.5em" }}>{"·"}</span>
+                <span
+                  onClick={isLastBreak ? onEditLastBreak : undefined}
+                  style={{
+                    letterSpacing: "0.05em",
+                    color: isKorrektur ? "#88bbff" : isRerack ? "#0a3a1a" : h.playerIndex === 0 ? (effP1Color ?? "#5599ff") : h.playerIndex === 1 ? (effP2Color ?? "#ff8833") : neutralColor,
+                    fontWeight: isRerack ? "bold" : undefined,
+                    border: isKorrektur ? "1px solid #4488ff66" : isRerack ? "1px solid #1a6630" : undefined,
+                    borderRadius: isRerack ? "4px" : isLastBreak ? "4px" : undefined,
+                    padding: isRerack ? "0 0.4vw" : isLastBreak ? "0 0.3vw" : undefined,
+                    background: isKorrektur ? "rgba(30,80,200,0.28)" : isRerack ? "#4ade80" : isLastBreak ? "rgba(255,255,255,0.06)" : undefined,
+                    cursor: isLastBreak ? "pointer" : "default",
+                    textDecoration: isLastBreak ? "underline dotted" : "none",
+                  }}
+                >
+                  {isHandicap ? (() => {
+                    const hcIdx = h.label.indexOf(" HC ");
+                    if (hcIdx < 0) return h.label;
+                    return <>{h.label.slice(0, hcIdx)}{" "}<span style={{ border: "1.5px solid #c87830", borderRadius: "4px", padding: "0 0.3vw", background: "rgba(140,75,15,0.65)", color: "#f0c878" }}>{h.label.slice(hcIdx + 1)}</span></>;
+                  })() : isRerack && !isKorrektur && "⚪ "}{!isHandicap && (h.kind === "break" ? (() => {
+                    const bm = h.label.match(/^(.*)\((\d+)\)(.*)$/);
+                    if (!bm) return <>{h.label}</>;
+                    const pc = h.playerIndex === 0 ? (effP1Color ?? "#5599ff") : (effP2Color ?? "#ff8833");
+                    return <>{bm[1]}<span style={{ border: `1.5px solid ${pc}cc`, borderRadius: "3px", padding: "0 0.3vw", background: `${pc}22` }}>{bm[2]}</span>{bm[3]}</>;
+                  })() : h.label.split("Foul").map((part, j, arr) => (
+                    <span key={j}>
+                      {j === arr.length - 1 && j > 0 ? null : (j < arr.length - 1 ? part.replace(/ - $/, "  ") : part)}
+                      {j < arr.length - 1 && (
+                        <span style={{ background: "rgba(200,0,0,0.85)", border: "1px solid #ffd700bb", borderRadius: "3px", padding: "0 0.3vw", fontWeight: "bold", color: "#ffeeaa" }}>FOUL{arr[j + 1]}</span>
+                      )}
+                    </span>
+                  )))}{" "}
+                </span>
               </span>
             );
+            return frameSep ? [frameSep, entry] : [entry];
           })}
         </div>
         <div className="menu-btn" onClick={onMenuClick}>

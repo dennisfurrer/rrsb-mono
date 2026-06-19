@@ -16,8 +16,10 @@ interface FrameStat {
   scores: [number, number] | null;
   breaks: [number[], number[]];
   fouls: [number, number];
+  foulCount: [number, number];
   handicap: [number, number];
   reracks: number;
+  corrections: string[];
   startTime: string | null;
   endTime: string | null;
 }
@@ -30,7 +32,7 @@ function formatHHMMColon(totalMins: number): string {
 
 function formatHHMM(iso: string): string {
   const d = new Date(iso);
-  return `${d.getHours().toString().padStart(2, "0")}.${d.getMinutes().toString().padStart(2, "0")}`;
+  return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 }
 
 function formatDuration(startIso: string, endIso?: string | null): string {
@@ -47,7 +49,7 @@ function deriveFrameStats(history: HistoryEntry[]): FrameStat[] {
     const fn = entry.frameNumber;
     if (fn === undefined) continue;
     if (!map.has(fn)) {
-      map.set(fn, { frameNumber: fn, scores: null, breaks: [[], []], fouls: [0, 0], handicap: [0, 0], reracks: 0, startTime: null, endTime: null });
+      map.set(fn, { frameNumber: fn, scores: null, breaks: [[], []], fouls: [0, 0], foulCount: [0, 0], handicap: [0, 0], reracks: 0, corrections: [], startTime: null, endTime: null });
     }
     if (entry.timestamp && !firstTimestamps.has(fn)) {
       firstTimestamps.set(fn, entry.timestamp);
@@ -60,8 +62,11 @@ function deriveFrameStats(history: HistoryEntry[]): FrameStat[] {
       frame.breaks[entry.playerIndex].push(entry.points);
     } else if (entry.kind === "foul" && entry.playerIndex !== undefined && entry.points !== undefined) {
       frame.fouls[entry.playerIndex] += entry.points;
+      frame.foulCount[entry.playerIndex]++;
     } else if (entry.kind === "handicap" && entry.playerIndex !== undefined && entry.points !== undefined) {
       frame.handicap[entry.playerIndex] += entry.points;
+    } else if (entry.kind === "correction") {
+      frame.corrections.push(entry.label);
     } else if (entry.kind === "frame_end") {
       try {
         const snap = JSON.parse(entry.snapshot) as MatchState;
@@ -155,8 +160,10 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
       scores: null,
       breaks: [[], []],
       fouls: [0, 0],
+      foulCount: [0, 0],
       handicap: [0, 0],
       reracks: 0,
+      corrections: [],
       startTime: lastEndIso ?? null,
       endTime: null,
     });
@@ -219,7 +226,7 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
                   </span>
                   <span className="stats-grid-label">Breaks:</span>
                   <span className="stats-grid-val" style={{ color: frame.fouls[0] > 0 ? "#ff2222" : "#555" }}>
-                    {frame.fouls[0] > 0 ? `${frame.fouls[0]} Pkt` : "–"}
+                    {frame.fouls[0] > 0 ? <>{frame.fouls[0]} Pkt<span className="stats-count"> ({frame.foulCount[0]})</span></> : "–"}
                   </span>
                   <span className="stats-grid-label">Fouls:</span>
                   {hasAnyHandicap && <>
@@ -247,6 +254,9 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
                       {frame.reracks === 1 ? "1 Rerack" : `${frame.reracks} Reracks`}
                     </div>
                   )}
+                  {frame.corrections.map((label, i) => (
+                    <div key={i} style={{ color: "#f0c040", fontSize: "0.75vw", marginTop: "0.2vh" }}>{label}</div>
+                  ))}
                   {frame.startTime && (
                     <div style={{ display: "flex", alignItems: "center", width: "100%", fontSize: "0.92vw", color: "#bbb", letterSpacing: "0.03em", fontWeight: "normal" }}>
                       <span style={{ flex: 1, textAlign: "right" }}>{formatHHMM(frame.startTime)}</span>
@@ -267,7 +277,7 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
                   </span>
                   <span className="stats-grid-label">Fouls:</span>
                   <span className="stats-grid-val" style={{ color: frame.fouls[1] > 0 ? "#ff2222" : "#555" }}>
-                    {frame.fouls[1] > 0 ? `${frame.fouls[1]} Pkt` : "–"}
+                    {frame.fouls[1] > 0 ? <>{frame.fouls[1]} Pkt<span className="stats-count"> ({frame.foulCount[1]})</span></> : "–"}
                   </span>
                   {hasAnyHandicap && <>
                     <span className="stats-grid-label">HC:</span>

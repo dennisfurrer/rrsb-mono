@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RRSB Scoreboard – Bedienungsanleitung</title>
+<style>
+  :root {
+    --col-p1: #5599ff;
+    --col-p2: #ff8833;
+    --col-green: #4ade80;
+    --col-red: #ff5555;
+    --col-gold: #f0c040;
+    --col-orange: #c87832;
+    --col-blue: #6699ff;
+    --bg-dark: #111;
+    --bg-card: #1e1e1e;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 13pt;
+    line-height: 1.65;
+    color: #222;
+    background: #fff;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 12mm 14mm;
+  }
+  /* ---- PRINT ---- */
+  @media print {
+    body { padding: 10mm 12mm; font-size: 11pt; }
+    .no-print { display: none !important; }
+    section { page-break-before: always; }
+    section:first-of-type { page-break-before: avoid; }
+    h2 { page-break-after: avoid; }
+    .mockup { page-break-inside: avoid; }
+    ol, ul { page-break-inside: avoid; }
+  }
+  /* ---- COVER ---- */
+  .cover {
+    text-align: center;
+    padding: 30mm 0 20mm;
+    border-bottom: 3px solid #222;
+    margin-bottom: 12mm;
+  }
+  .cover h1 { font-size: 28pt; letter-spacing: 0.04em; }
+  .cover .sub { font-size: 16pt; color: #555; margin-top: 4mm; }
+  .cover .meta { font-size: 10pt; color: #888; margin-top: 8mm; }
+  /* ---- TOC ---- */
+  .toc { margin-bottom: 14mm; }
+  .toc h2 { font-size: 14pt; border-bottom: 1.5px solid #bbb; padding-bottom: 2mm; margin-bottom: 4mm; }
+  .toc ol { padding-left: 6mm; }
+  .toc li { margin: 1.5mm 0; }
+  .toc a { color: #333; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  /* ---- CHAPTERS ---- */
+  section { margin-bottom: 14mm; }
+  h2 {
+    font-size: 15pt;
+    background: #222;
+    color: #fff;
+    padding: 3mm 5mm;
+    border-radius: 4px;
+    margin-bottom: 5mm;
+  }
+  h3 {
+    font-size: 12pt;
+    color: #333;
+    border-left: 4px solid #555;
+    padding-left: 4mm;
+    margin: 5mm 0 3mm;
+  }
+  p { margin-bottom: 3mm; }
+  ol, ul { padding-left: 7mm; margin-bottom: 4mm; }
+  li { margin-bottom: 1.5mm; }
+  .note {
+    background: #f5f5f5;
+    border-left: 4px solid #999;
+    padding: 2.5mm 4mm;
+    font-size: 11pt;
+    color: #444;
+    margin: 3mm 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .tip {
+    background: #eef6ee;
+    border-left: 4px solid #4a9a4a;
+    padding: 2.5mm 4mm;
+    font-size: 11pt;
+    color: #2a5a2a;
+    margin: 3mm 0;
+    border-radius: 0 4px 4px 0;
+  }
+  /* ---- MOCKUPS ---- */
+  .mockup {
+    background: #0d0d0d;
+    border-radius: 8px;
+    padding: 4mm;
+    margin: 5mm 0 6mm;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mockup svg { display: block; }
+  /* ---- PRINT BUTTON ---- */
+  .print-btn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 13pt;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 999;
+  }
+  .print-btn:hover { background: #444; }
+  kbd {
+    background: #eee;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: 10pt;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div style="font-size:11pt;color:#888;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6mm;">Round Robin Sports</div>
+  <h1>RRSB Scoreboard</h1>
+  <div class="sub">Bedienungsanleitung</div>
+  <div class="meta">Version 2026 &nbsp;·&nbsp; Snooker-Scoreboard für Tablet &amp; Touchscreen</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#setup">Neues Spiel starten</a></li>
+    <li><a href="#scoreboard">Das Scoreboard – Hauptanzeige</a></li>
+    <li><a href="#direkteingabe">Direkteingabe – Ganzes Break</a></li>
+    <li><a href="#ballforball">Ball-für-Ball-Eingabe</a></li>
+    <li><a href="#menu">Das Menu</a></li>
+    <li><a href="#handicap">Handicap-Eingabe</a></li>
+    <li><a href="#frameend">Frame- und Match-Abschluss</a></li>
+    <li><a href="#solo">Übungsmodus (Solo)</a></li>
+  </ol>
+</div>
+
+<!-- ======================================================
+     KAPITEL 1: SETUP
+     ====================================================== -->
+<section id="setup">
+  <h2>1. Neues Spiel starten</h2>
+
+  <p>Beim ersten Aufruf der App sowie nach jedem abgeschlossenen Spiel erscheint das <strong>Setup-Fenster</strong>. Hier werden alle Grundeinstellungen für das Match vorgenommen.</p>
+
+  <!-- SVG: Setup Dialog -->
+  <div class="mockup">
+    <svg width="560" height="320" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <!-- Background card -->
+      <rect width="560" height="320" fill="#161616"/>
+      <rect x="20" y="16" width="520" height="288" rx="12" fill="#1e1e1e" stroke="#3a3a3a" stroke-width="1.5"/>
+      <!-- Title -->
+      <text x="280" y="46" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">Neues Spiel</text>
+      <!-- Player name fields -->
+      <rect x="36" y="60" width="220" height="36" rx="6" fill="#111" stroke="#5599ff" stroke-width="1.5"/>
+      <text x="146" y="74" text-anchor="middle" fill="#5599ff" font-size="10">Spieler 1</text>
+      <text x="146" y="89" text-anchor="middle" fill="#fff" font-size="12">Max Müller</text>
+      <rect x="304" y="60" width="220" height="36" rx="6" fill="#111" stroke="#ff8833" stroke-width="1.5"/>
+      <text x="414" y="74" text-anchor="middle" fill="#ff8833" font-size="10">Spieler 2</text>
+      <text x="414" y="89" text-anchor="middle" fill="#fff" font-size="12">Peter Meier</text>
+      <!-- Match type label -->
+      <text x="36" y="120" fill="#aaa" font-size="11">Matchart</text>
+      <rect x="36" y="128" width="488" height="34" rx="6" fill="#111" stroke="#444" stroke-width="1"/>
+      <text x="280" y="150" text-anchor="middle" fill="#fff" font-size="12">Best of 7  (Ungerade)</text>
+      <text x="500" y="150" text-anchor="middle" fill="#888" font-size="14">▾</text>
+      <!-- Best of -->
+      <text x="36" y="185" fill="#aaa" font-size="11">Ausspielziel</text>
+      <rect x="36" y="192" width="50" height="30" rx="5" fill="#222" stroke="#555" stroke-width="1"/>
+      <text x="61" y="212" text-anchor="middle" fill="#aaa" font-size="14">−</text>
+      <text x="150" y="213" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">Best of 7</text>
+      <rect x="220" y="192" width="50" height="30" rx="5" fill="#222" stroke="#555" stroke-width="1"/>
+      <text x="245" y="212" text-anchor="middle" fill="#aaa" font-size="14">+</text>
+      <!-- Input mode -->
+      <text x="36" y="250" fill="#aaa" font-size="11">Eingabemodus</text>
+      <rect x="36" y="258" width="228" height="32" rx="6" fill="#1a3a1a" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="150" y="279" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">Ganzes Break</text>
+      <rect x="296" y="258" width="228" height="32" rx="6" fill="#111" stroke="#444" stroke-width="1"/>
+      <text x="410" y="279" text-anchor="middle" fill="#888" font-size="12">Ball für Ball</text>
+      <!-- Start button -->
+      <rect x="36" y="298" width="488" height="0" rx="6" fill="#1a5c1a"/>
+      <!-- Annotations -->
+      <text x="36" y="310" fill="#4a9a4a" font-size="10">① Name</text>
+      <text x="290" y="310" fill="#4a9a4a" font-size="10">② Matchtyp &amp; Ausspielziel</text>
+    </svg>
+  </div>
+
+  <h3>Schritt für Schritt</h3>
+  <ol>
+    <li><strong>Spielernamen eingeben:</strong> Im linken Feld den Namen von Spieler 1 (blau), im rechten Feld den Namen von Spieler 2 (orange) eingeben. Die Tastatur erscheint automatisch beim Antippen.</li>
+    <li><strong>Matchart wählen:</strong> Im Dropdown «Matchart» die gewünschte Spielform auswählen. Durch Darüberstreichen mit dem Finger werden die Optionen angezeigt — beim Loslassen wird die zuletzt markierte Option übernommen.
+      <ul>
+        <li><em>Ungerade (Best of 3, 5, 7 …):</em> Das Spiel endet, sobald ein Spieler die Mehrheit gewonnen hat.</li>
+        <li><em>Gerade (Best of 2, 4, 6 …):</em> Alle Frames werden gespielt, auch wenn ein Sieger schon feststeht.</li>
+      </ul>
+    </li>
+    <li><strong>Ausspielziel anpassen:</strong> Mit den Tasten <kbd>−</kbd> und <kbd>+</kbd> die Anzahl Frames einstellen.</li>
+    <li><strong>Eingabemodus wählen:</strong>
+      <ul>
+        <li><em>Ganzes Break:</em> Am Ende eines Breaks die Gesamtpunktzahl per Zehnerblock eingeben. Einfach und schnell.</li>
+        <li><em>Ball für Ball:</em> Jeden gepotteten Ball einzeln erfassen. Ideal für genaue Statistiken.</li>
+      </ul>
+    </li>
+    <li><strong>Spiel starten:</strong> Den grünen «Spiel starten»-Button antippen. Das Scoreboard erscheint.</li>
+  </ol>
+
+  <div class="tip">Tipp: Der Eingabemodus kann jederzeit während des Spiels gewechselt werden — und zwar für jeden Frame individuell.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 2: SCOREBOARD
+     ====================================================== -->
+<section id="scoreboard">
+  <h2>2. Das Scoreboard – Hauptanzeige</h2>
+
+  <p>Das Scoreboard zeigt jederzeit den aktuellen Spielstand übersichtlich auf dem gesamten Bildschirm. Es ist in zwei Hälften aufgeteilt — links Spieler 1, rechts Spieler 2.</p>
+
+  <!-- SVG: Scoreboard -->
+  <div class="mockup">
+    <svg width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="560" height="300" fill="#0a0a0a"/>
+      <!-- Left half -->
+      <rect x="0" y="0" width="270" height="300" fill="#0d1520"/>
+      <!-- Right half -->
+      <rect x="290" y="0" width="270" height="300" fill="#20110a"/>
+      <!-- Divider -->
+      <rect x="270" y="0" width="20" height="300" fill="#0a0a0a"/>
+      <!-- Frame counts top -->
+      <text x="60" y="38" text-anchor="middle" fill="#5599ff" font-size="28" font-weight="bold">3</text>
+      <text x="280" y="36" text-anchor="middle" fill="#888" font-size="13">Best of 7</text>
+      <text x="500" y="38" text-anchor="middle" fill="#ff8833" font-size="28" font-weight="bold">2</text>
+      <!-- Player names -->
+      <text x="135" y="90" text-anchor="middle" fill="#5599ff" font-size="18" font-weight="bold">Max Müller</text>
+      <text x="425" y="90" text-anchor="middle" fill="#ff8833" font-size="18" font-weight="bold">Peter Meier</text>
+      <!-- Big scores -->
+      <text x="135" y="185" text-anchor="middle" fill="#fff" font-size="80" font-weight="bold">47</text>
+      <text x="425" y="185" text-anchor="middle" fill="#fff" font-size="80" font-weight="bold">31</text>
+      <!-- Bottom bar -->
+      <rect x="0" y="258" width="560" height="42" fill="#111"/>
+      <!-- Break display left -->
+      <rect x="8" y="264" width="180" height="28" rx="14" fill="#1a2a1a"/>
+      <text x="98" y="283" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">▶ Break eingeben</text>
+      <!-- Break display right -->
+      <rect x="372" y="264" width="180" height="28" rx="14" fill="#1a2a1a"/>
+      <text x="462" y="283" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">▶ Break eingeben</text>
+      <!-- MENU button -->
+      <rect x="226" y="264" width="108" height="28" rx="14" fill="#005500" stroke="#00aa00" stroke-width="1"/>
+      <text x="280" y="283" text-anchor="middle" fill="#00dd00" font-size="13" font-weight="bold">MENU</text>
+      <!-- Copyright -->
+      <text x="554" y="256" text-anchor="end" fill="#444" font-size="9">© 2026 Round Robin Sports</text>
+      <!-- Annotations -->
+      <text x="60" y="58" text-anchor="middle" fill="#5599ff" font-size="9">Gewonnene Frames</text>
+      <text x="500" y="58" text-anchor="middle" fill="#ff8833" font-size="9">Gewonnene Frames</text>
+      <text x="280" y="52" text-anchor="middle" fill="#666" font-size="9">Ausspielziel</text>
+    </svg>
+  </div>
+
+  <h3>Elemente der Hauptanzeige</h3>
+  <ul>
+    <li><strong>Gewonnene Frames (oben links/rechts):</strong> Die grossen farbigen Zahlen zeigen, wie viele Frames jeder Spieler bisher gewonnen hat.</li>
+    <li><strong>Spielernamen:</strong> Links in Blau (Spieler 1), rechts in Orange (Spieler 2).</li>
+    <li><strong>Aktueller Framescore (grosse Zahl):</strong> Die Punkte im laufenden Frame. Der Spieler mit dem höheren Score führt.</li>
+    <li><strong>«Ausspielziel» (Mitte oben):</strong> Zeigt das eingestellte Spielziel, z. B. «Best of 7».</li>
+    <li><strong>Statuszeile (unten):</strong> Enthält drei Bereiche:
+      <ul>
+        <li>Links und rechts: Break-Eingabe-Buttons für jeden Spieler.</li>
+        <li>Mitte: Der grüne <strong>MENU</strong>-Button öffnet das Hauptmenü.</li>
+      </ul>
+    </li>
+    <li><strong>Break-Anzeige:</strong> Während eines laufenden Breaks wird die aktuelle Breckpunktzahl neben dem Spielernamen eingeblendet.</li>
+  </ul>
+
+  <h3>Break-Eingabe starten</h3>
+  <ol>
+    <li>Den <strong>«▶ Break eingeben»</strong>-Button des aktiven Spielers antippen (linker Button für Spieler 1, rechter für Spieler 2).</li>
+    <li>Das Eingabefenster öffnet sich (je nach Modus: Direkteingabe oder Ball für Ball).</li>
+  </ol>
+
+  <div class="note">Hinweis: Nur der Spieler, der gerade «an der Reihe» ist, sollte seinen Button verwenden. Es gibt keine technische Sperre — beide Spieler könnten tippen, aber die Logik erwartet abwechselnde Eingaben.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 3: DIREKTEINGABE
+     ====================================================== -->
+<section id="direkteingabe">
+  <h2>3. Direkteingabe – Ganzes Break</h2>
+
+  <p>Im Modus «Ganzes Break» wird am Ende eines Breaks die Gesamtpunktzahl auf einmal eingegeben. Ein Zehnerblock erscheint und die Punkte werden mit <strong>OK</strong> bestätigt.</p>
+
+  <!-- SVG: Calculator Dialog -->
+  <div class="mockup">
+    <svg width="400" height="340" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="400" height="340" fill="#161616"/>
+      <rect x="20" y="20" width="360" height="300" rx="12" fill="#1e1e1e" stroke="#3a3a3a" stroke-width="1.5"/>
+      <!-- Player name -->
+      <text x="200" y="52" text-anchor="middle" fill="#5599ff" font-size="15" font-weight="bold">Max Müller</text>
+      <!-- Display -->
+      <rect x="36" y="62" width="328" height="46" rx="8" fill="#111" stroke="#333"/>
+      <text x="352" y="92" text-anchor="end" fill="#fff" font-size="28" font-weight="bold">47</text>
+      <!-- Numpad -->
+      <g font-size="18" font-weight="bold" text-anchor="middle">
+        <!-- Row 1: 1 2 3 -->
+        <rect x="36" y="118" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="83" y="144" fill="#fff">1</text>
+        <rect x="152" y="118" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="199" y="144" fill="#fff">2</text>
+        <rect x="268" y="118" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="315" y="144" fill="#fff">3</text>
+        <!-- Row 2: 4 5 6 -->
+        <rect x="36" y="166" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="83" y="192" fill="#fff">4</text>
+        <rect x="152" y="166" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="199" y="192" fill="#fff">5</text>
+        <rect x="268" y="166" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="315" y="192" fill="#fff">6</text>
+        <!-- Row 3: 7 8 9 -->
+        <rect x="36" y="214" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="83" y="240" fill="#fff">7</text>
+        <rect x="152" y="214" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="199" y="240" fill="#fff">8</text>
+        <rect x="268" y="214" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="315" y="240" fill="#fff">9</text>
+        <!-- Row 4: ← 0 OK -->
+        <rect x="36" y="262" width="95" height="40" rx="6" fill="#2a1a1a" stroke="#ff444466"/>
+        <text x="83" y="288" fill="#ff6666">←</text>
+        <rect x="152" y="262" width="95" height="40" rx="6" fill="#252525" stroke="#333"/>
+        <text x="199" y="288" fill="#fff">0</text>
+        <rect x="268" y="262" width="95" height="40" rx="6" fill="#1a4a1a" stroke="#4ade80"/>
+        <text x="315" y="288" fill="#4ade80">OK</text>
+      </g>
+      <!-- Foul + Handicap buttons top right area -->
+      <rect x="36" y="308" width="150" height="0" rx="6" fill="#5c1a1a"/>
+    </svg>
+  </div>
+
+  <h3>Normales Break eingeben</h3>
+  <ol>
+    <li>Den «▶ Break eingeben»-Button des aktiven Spielers antippen.</li>
+    <li>Das Eingabefenster öffnet sich mit dem Spielernamen oben.</li>
+    <li>Die Punktzahl des Breaks über den Zehnerblock eingeben (z. B. <kbd>4</kbd> <kbd>7</kbd> für 47 Punkte).</li>
+    <li><strong>OK</strong> antippen — die Punkte werden dem Spieler gutgeschrieben, der andere Spieler ist dran.</li>
+    <li>Mit <kbd>←</kbd> kann die letzte Ziffer gelöscht werden.</li>
+  </ol>
+
+  <h3>Foul eingeben</h3>
+  <ol>
+    <li>Im Direkteingabe-Fenster den <strong>«Foul»</strong>-Button antippen.</li>
+    <li>Die Punktzahl des Fouls eingeben (mindestens 4).</li>
+    <li>OK antippen — die Punkte gehen an den <em>Gegner</em> des foulenden Spielers.</li>
+  </ol>
+
+  <h3>Break abbrechen</h3>
+  <p>Mit dem <strong>«Abbrechen»</strong>-Button (rot) wird das Eingabefenster ohne Eintrag geschlossen. Der Spielstand bleibt unverändert.</p>
+
+  <div class="tip">Tipp: Nach dem Drücken von OK wechselt das System automatisch den aktiven Spieler. Es ist also nicht nötig, manuell umzuschalten.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 4: BALL FÜR BALL
+     ====================================================== -->
+<section id="ballforball">
+  <h2>4. Ball-für-Ball-Eingabe</h2>
+
+  <p>Im Modus «Ball für Ball» wird jeder gepottete Ball einzeln erfasst. Das Eingabefenster erscheint seitlich auf dem Bildschirm — links für Spieler 1, rechts für Spieler 2 — und kann per Drag &amp; Drop verschoben werden.</p>
+
+  <!-- SVG: BallByBall Panel -->
+  <div class="mockup">
+    <svg width="560" height="300" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="560" height="300" fill="#0a0a0a"/>
+      <!-- Scoreboard background -->
+      <rect x="0" y="0" width="560" height="300" fill="#111"/>
+      <!-- BBB Panel -->
+      <rect x="14" y="10" width="220" height="278" rx="10" fill="rgba(20,20,20,0.92)" stroke="#b8970088" stroke-width="1.5"/>
+      <!-- Phase label -->
+      <text x="124" y="32" text-anchor="middle" fill="#ccc" font-size="10">Rot wählen</text>
+      <!-- Ball row 1 -->
+      <!-- Red ball -->
+      <circle cx="46" cy="60" r="22" fill="#cc0000" stroke="#fff" stroke-width="1.5"/>
+      <text x="46" y="66" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">15</text>
+      <!-- Yellow -->
+      <circle cx="96" cy="60" r="22" fill="#cccc00" stroke="#fff" stroke-width="1.5"/>
+      <!-- Green -->
+      <circle cx="146" cy="60" r="22" fill="#006600" stroke="#fff" stroke-width="1.5"/>
+      <!-- Brown -->
+      <circle cx="196" cy="60" r="22" fill="#884400" stroke="#fff" stroke-width="1.5"/>
+      <!-- Ball row 2 -->
+      <!-- Blue -->
+      <circle cx="46" cy="114" r="22" fill="#0000cc" stroke="#fff" stroke-width="1.5"/>
+      <!-- Pink -->
+      <circle cx="96" cy="114" r="22" fill="#cc6699" stroke="#fff" stroke-width="1.5"/>
+      <!-- Black -->
+      <circle cx="146" cy="114" r="22" fill="#111111" stroke="#fff" stroke-width="1.5"/>
+      <!-- Player name area -->
+      <text x="26" y="158" fill="#5599ff" font-size="13" font-weight="bold">Max Müller</text>
+      <!-- Action buttons -->
+      <rect x="18" y="165" width="62" height="32" rx="6" fill="#1a1a40" stroke="#6688ff" stroke-width="0.5"/>
+      <text x="49" y="185" text-anchor="middle" fill="#6688ff" font-size="10">← Undo</text>
+      <rect x="86" y="165" width="68" height="32" rx="6" fill="#1a3a1a" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="120" y="185" text-anchor="middle" fill="#4ade80" font-size="10">Break-Ende</text>
+      <rect x="160" y="165" width="62" height="32" rx="6" fill="#0a2a1a" stroke="#4ade80" stroke-width="0.5"/>
+      <text x="191" y="185" text-anchor="middle" fill="#4ade80" font-size="10">Redo →</text>
+      <!-- Break counter -->
+      <text x="26" y="215" fill="#f0c040" font-size="20" font-weight="bold">Break 34</text>
+      <!-- Ball history -->
+      <circle cx="30" cy="240" r="10" fill="#cc0000"/>
+      <circle cx="50" cy="240" r="10" fill="#0000cc"/>
+      <circle cx="70" cy="240" r="10" fill="#cc0000"/>
+      <circle cx="90" cy="240" r="10" fill="#cc6699"/>
+      <circle cx="110" cy="240" r="10" fill="#cc0000"/>
+      <circle cx="130" cy="240" r="10" fill="#111111" stroke="#555"/>
+      <!-- Grid buttons -->
+      <rect x="18" y="256" width="40" height="26" rx="5" fill="#5c1a1a" stroke="#ff5555" stroke-width="1"/>
+      <text x="38" y="273" text-anchor="middle" fill="#ff5555" font-size="10">Foul</text>
+      <rect x="64" y="256" width="160" height="26" rx="5" fill="#3a1a1a" stroke="#ff444466" stroke-width="1"/>
+      <text x="144" y="273" text-anchor="middle" fill="#ff4444" font-size="10">Abbrechen</text>
+      <!-- Scoreboard scores in background -->
+      <text x="380" y="160" text-anchor="middle" fill="rgba(255,255,255,0.15)" font-size="70" font-weight="bold">47</text>
+    </svg>
+  </div>
+
+  <h3>Das Ball-für-Ball-Fenster</h3>
+  <p>Das Fenster erscheint auf der Seite des aktiven Spielers. Es kann durch Ziehen (Drag) an jede Position auf dem Bildschirm verschoben werden.</p>
+
+  <h3>Balls eingeben – Phase für Phase</h3>
+  <ol>
+    <li><strong>Rote Phase:</strong> Das Fenster zeigt «Rot wählen». Den roten Ball antippen — die Zahl im Ball zeigt, wie viele Rote noch auf dem Tisch sind.</li>
+    <li><strong>Farbphase (nach einem Roten):</strong> Jetzt eine Farbe wählen. Es können auch weitere Rote gespielt werden, falls mehrere Rote mit einem Stoss gehen.</li>
+    <li><strong>Farben-Phase (nur noch Farben):</strong> Die Farben werden in der vorgeschriebenen Reihenfolge gespielt (Gelb → Grün → Braun → Blau → Pink → Schwarz).</li>
+    <li>Am Ende eines Breaks den <strong>«Break-Ende»</strong>-Button antippen. Das Break wird gespeichert, der Gegner ist dran.</li>
+  </ol>
+
+  <h3>Rote anpassen</h3>
+  <p>Falls die Anzahl der Roten auf dem Tisch nicht stimmt (z. B. nach einem Rerack oder einer Korrektur), kann die Zahl direkt angepasst werden:</p>
+  <ol>
+    <li>Im Ausgangszustand (kein Break am Laufen) die <kbd>−</kbd> oder <kbd>+</kbd>-Buttons neben «Rote:» antippen.</li>
+    <li>Die Änderung mit <strong>OK</strong> bestätigen.</li>
+  </ol>
+
+  <h3>Undo &amp; Redo</h3>
+  <ul>
+    <li><strong>Undo (← )</strong> macht den zuletzt eingegebenen Ball rückgängig.</li>
+    <li><strong>Redo (→ )</strong> stellt einen rückgängig gemachten Ball wieder her.</li>
+    <li>Mehrfaches Drücken von Undo ermöglicht das Zurückgehen mehrerer Schritte.</li>
+  </ul>
+
+  <h3>Foul eingeben</h3>
+  <ol>
+    <li>Den <strong>«Foul»</strong>-Button (rot) antippen.</li>
+    <li>Den betroffenen Ball antippen — das System berechnet die Foulpunkte automatisch (mindestens 4, je nach Ball mehr).</li>
+    <li>Die Foulpunkte gehen an den Gegner.</li>
+  </ol>
+
+  <h3>Freeball</h3>
+  <p>Nach einem Foul kann dem eingehenden Spieler ein Freeball gewährt werden. Der Freeball-Button erscheint automatisch, wenn die Spielsituation dies erlaubt. Er zeigt an, als welche Farbe der Freeball gespielt werden kann (z. B. «Freeball als Rot»).</p>
+
+  <h3>Break abbrechen</h3>
+  <p>Mit dem <strong>«Abbrechen»</strong>-Button wird das Fenster geschlossen. Läuft gerade ein Break, erscheint eine Warnung — das Break muss erst über «Break-Ende» abgeschlossen werden.</p>
+
+  <div class="tip">Tipp: Die Ball-Historie (kleine Bälle am unteren Rand des Fensters) zeigt alle bereits gepotteten Bälle des aktuellen Breaks in der Reihenfolge der Eingabe.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 5: MENU
+     ====================================================== -->
+<section id="menu">
+  <h2>5. Das Menu</h2>
+
+  <p>Das Menu wird über den grünen <strong>MENU</strong>-Button in der Statuszeile unten geöffnet. Es enthält alle übergeordneten Funktionen des Scoreboards.</p>
+
+  <!-- SVG: Menu Dialog -->
+  <div class="mockup">
+    <svg width="480" height="380" viewBox="0 0 480 380" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="480" height="380" fill="#0a0a0a"/>
+      <rect x="20" y="14" width="440" height="352" rx="16" fill="rgba(10,10,12,0.97)" stroke="#2e2e2e" stroke-width="1.5"/>
+      <!-- Header -->
+      <text x="40" y="42" fill="#555" font-size="11" letter-spacing="3">MENU</text>
+      <text x="446" y="42" text-anchor="end" fill="#555" font-size="15">✕</text>
+      <line x1="30" y1="50" x2="450" y2="50" stroke="#2a2a2a" stroke-width="1"/>
+      <!-- New game -->
+      <rect x="30" y="58" width="420" height="52" rx="10" fill="#080820" stroke="#224488" stroke-width="1.5"/>
+      <text x="50" y="89" fill="#6699ff" font-size="14" font-weight="bold">New game / Neues Spiel</text>
+      <!-- Rerack -->
+      <rect x="30" y="116" width="420" height="52" rx="10" fill="#181818" stroke="#44444444" stroke-width="1.5"/>
+      <text x="50" y="147" fill="#aaaaaa" font-size="14" font-weight="bold">Re-rack</text>
+      <!-- Frame end + Match end -->
+      <rect x="30" y="174" width="204" height="52" rx="10" fill="#081808" stroke="#22aa4444" stroke-width="1.5"/>
+      <text x="50" y="205" fill="#4ade80" font-size="12" font-weight="bold">🔴 Frame-Ende (Max gewinnt)</text>
+      <rect x="246" y="174" width="204" height="52" rx="10" fill="#0c1f0c" stroke="#226622" stroke-width="1.5"/>
+      <text x="266" y="205" fill="#22dd44" font-size="12" font-weight="bold">🏁 Match-Ende</text>
+      <!-- Undo / Redo -->
+      <rect x="30" y="232" width="204" height="52" rx="10" fill="#1e0808" stroke="#aa222244" stroke-width="1.5"/>
+      <text x="50" y="263" fill="#ff5555" font-size="12" font-weight="bold">← Undo / Eingabe löschen</text>
+      <rect x="246" y="232" width="204" height="52" rx="10" fill="#1a3a1a" stroke="#2a5a2a" stroke-width="1.5"/>
+      <text x="266" y="263" fill="#4ade80" font-size="12" font-weight="bold">Redo / Wiederherstellen →</text>
+      <!-- Ausspielziel -->
+      <rect x="30" y="290" width="420" height="66" rx="10" fill="#0c0e1a" stroke="#224488" stroke-width="1.5"/>
+      <text x="50" y="318" fill="#8899cc" font-size="13" font-weight="bold">Ausspielziel ändern</text>
+      <text x="200" y="348" text-anchor="middle" fill="#aaa" font-size="16">−</text>
+      <text x="260" y="348" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">Best of 7</text>
+      <text x="320" y="348" text-anchor="middle" fill="#aaa" font-size="16">+</text>
+    </svg>
+  </div>
+
+  <h3>Menu öffnen &amp; schliessen</h3>
+  <ol>
+    <li>Den grünen <strong>MENU</strong>-Button in der Statuszeile antippen.</li>
+    <li>Das Menu-Fenster öffnet sich in der Bildschirmmitte.</li>
+    <li>Durch Antippen des <strong>✕</strong>-Buttons oben rechts oder ausserhalb des Fensters wird das Menu wieder geschlossen.</li>
+  </ol>
+
+  <h3>Menu-Funktionen im Überblick</h3>
+
+  <h3>New game / Neues Spiel</h3>
+  <ol>
+    <li>Antippen startet ein neues Spiel.</li>
+    <li>Falls bereits Einträge vorhanden sind, erscheint eine Sicherheitsabfrage — das laufende Spiel geht unwiderruflich verloren.</li>
+    <li>Das Setup-Fenster öffnet sich neu.</li>
+  </ol>
+
+  <h3>Re-rack</h3>
+  <ol>
+    <li>Antippen löst einen Re-rack aus (alle Bälle werden neu aufgestellt).</li>
+    <li>Eine Bestätigung ist erforderlich.</li>
+    <li>Das laufende Break wird beendet und kann nicht rückgängig gemacht werden.</li>
+  </ol>
+
+  <h3>Frame-Ende</h3>
+  <ol>
+    <li>Beendet den aktuellen Frame manuell.</li>
+    <li>Es erscheint ein Bestätigungsfenster mit dem aktuellen Ergebnis und Statistiken (siehe Kapitel 7).</li>
+    <li>Bei Unentschieden ist diese Funktion deaktiviert.</li>
+  </ol>
+
+  <h3>Match-Ende</h3>
+  <ol>
+    <li>Beendet das gesamte Match vorzeitig.</li>
+    <li>Das aktuelle Frameergebnis wird als letzter Frame gewertet.</li>
+    <li>Eine Sicherheitsabfrage erscheint mit dem Gesamtergebnis.</li>
+  </ol>
+
+  <h3>Undo / Redo</h3>
+  <ul>
+    <li><strong>Undo</strong> macht die zuletzt eingegebene Punktzahl rückgängig (auch über mehrere Breaks hinweg möglich).</li>
+    <li><strong>Redo</strong> stellt eine rückgängig gemachte Eingabe wieder her.</li>
+  </ul>
+
+  <h3>Ausspielziel ändern</h3>
+  <ol>
+    <li>Mit <kbd>−</kbd> und <kbd>+</kbd> das Ausspielziel (Best of X) anpassen.</li>
+    <li>Das Minimum ist die Anzahl bereits gespielter Frames.</li>
+    <li>Änderung mit <strong>OK</strong> bestätigen oder mit <strong>Abbrechen</strong> verwerfen.</li>
+    <li>Diese Funktion ist nur beim Framestart oder nach Match-Ende verfügbar.</li>
+  </ol>
+
+  <div class="tip">Tipp: Das «?»-Symbol neben «Ausspielziel ändern» erklärt den Unterschied zwischen gerader und ungerader Frameanzahl.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 6: HANDICAP
+     ====================================================== -->
+<section id="handicap">
+  <h2>6. Handicap-Eingabe</h2>
+
+  <p>Ein Handicap gibt einem Spieler eine Punktevorgabe am Framestart. Es ist nur verfügbar, wenn beide Spieler noch <strong>0 Punkte</strong> im laufenden Frame haben (also ganz am Anfang eines Frames).</p>
+
+  <!-- SVG: Handicap Dialog -->
+  <div class="mockup">
+    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="400" height="300" fill="#161616"/>
+      <rect x="20" y="16" width="360" height="268" rx="14" fill="#1e1e1e" stroke="#c87832" stroke-width="1.5"/>
+      <!-- Title -->
+      <text x="200" y="46" text-anchor="middle" fill="#c87832" font-size="16" font-weight="bold">Handicap</text>
+      <!-- Player selector -->
+      <rect x="36" y="56" width="154" height="36" rx="8" fill="#2a2a2a" stroke="#5599ff" stroke-width="2"/>
+      <text x="113" y="79" text-anchor="middle" fill="#5599ff" font-size="13" font-weight="bold">Max Müller</text>
+      <rect x="210" y="56" width="154" height="36" rx="8" fill="#141414" stroke="#333" stroke-width="2"/>
+      <text x="287" y="79" text-anchor="middle" fill="#ff8833" font-size="13" font-weight="bold">Peter Meier</text>
+      <!-- Display -->
+      <rect x="36" y="100" width="328" height="40" rx="8" fill="#111"/>
+      <text x="350" y="128" text-anchor="end" fill="#5599ff" font-size="24" font-weight="bold">15</text>
+      <!-- Numpad 3x4 -->
+      <g font-size="15" font-weight="bold" text-anchor="middle">
+        <rect x="36" y="150" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="81" y="171" fill="#fff">1</text>
+        <rect x="155" y="150" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="200" y="171" fill="#fff">2</text>
+        <rect x="274" y="150" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="319" y="171" fill="#fff">3</text>
+        <rect x="36" y="190" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="81" y="211" fill="#fff">4</text>
+        <rect x="155" y="190" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="200" y="211" fill="#fff">5</text>
+        <rect x="274" y="190" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="319" y="211" fill="#fff">6</text>
+        <rect x="36" y="230" width="90" height="32" rx="6" fill="#2a1a1a" stroke="#ff444466"/><text x="81" y="251" fill="#ff6666">←</text>
+        <rect x="155" y="230" width="90" height="32" rx="6" fill="#252525" stroke="#333"/><text x="200" y="251" fill="#fff">0</text>
+        <rect x="274" y="230" width="90" height="32" rx="6" fill="#1a4a1a" stroke="#4ade80"/><text x="319" y="251" fill="#4ade80">OK</text>
+      </g>
+    </svg>
+  </div>
+
+  <h3>Handicap im Modus «Ganzes Break» eingeben</h3>
+  <ol>
+    <li>Den Break-Eingabe-Button des Spielers antippen (nur bei Framescore 0:0 sichtbar).</li>
+    <li>Im Zehnerblock erscheint zusätzlich ein <strong>«Handicap»</strong>-Button.</li>
+    <li>Antippen öffnet das Handicap-Fenster.</li>
+    <li>Den Spieler antippen, der das Handicap erhalten soll — der Name leuchtet in seiner Farbe auf.</li>
+    <li>Die Handicap-Punktzahl über den Zehnerblock eingeben.</li>
+    <li><strong>OK</strong> antippen — die Punkte werden dem gewählten Spieler als Vorgabe gutgeschrieben.</li>
+    <li>Das Fenster schliesst sich. Das Handicap erscheint im Frame-Chart als Startpunkt.</li>
+  </ol>
+
+  <h3>Handicap im Modus «Ball für Ball» eingeben</h3>
+  <ol>
+    <li>Das Ball-für-Ball-Fenster öffnen (nur bei Framescore 0:0 sichtbar).</li>
+    <li>Im unteren Bereich erscheint der <strong>«Handicap»</strong>-Button (orange).</li>
+    <li>Antippen öffnet das Handicap-Fenster — der eigene Spieler ist bereits vorgewählt.</li>
+    <li>Punktzahl eingeben und mit <strong>OK</strong> bestätigen.</li>
+    <li>Es können beide Spieler ein Handicap erhalten (z. B. 25 für Spieler 1, 0 für Spieler 2).</li>
+  </ol>
+
+  <div class="note">Hinweis: Ein eingegebenes Handicap erscheint in der Frame-Statistik und im Score-Verlaufschart als Anfangspunkt der Linie. Es kann nicht rückgängig gemacht werden.</div>
+</section>
+
+<!-- ======================================================
+     KAPITEL 7: FRAME- UND MATCH-ABSCHLUSS
+     ====================================================== -->
+<section id="frameend">
+  <h2>7. Frame- und Match-Abschluss</h2>
+
+  <p>Wenn ein Frame zu Ende geht, erscheint automatisch ein Bestätigungsfenster mit dem Ergebnis und einer Übersicht über die wichtigsten Statistiken.</p>
+
+  <!-- SVG: Frame End dialog -->
+  <div class="mockup">
+    <svg width="560" height="340" viewBox="0 0 560 340" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="560" height="340" fill="#0a0a0a"/>
+      <rect x="14" y="10" width="532" height="320" rx="14" fill="#1e1e1e" stroke="#555" stroke-width="1.5"/>
+      <!-- Title -->
+      <text x="280" y="38" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">3. Frame beenden?</text>
+      <!-- Score row -->
+      <rect x="24" y="46" width="512" height="56" rx="10" fill="#111"/>
+      <text x="80" y="82" text-anchor="middle" fill="#5599ff" font-size="14" font-weight="bold">Max Müller 🏆</text>
+      <rect x="210" y="54" width="140" height="40" rx="8" fill="#222"/>
+      <text x="256" y="82" text-anchor="middle" fill="#ffee44" font-size="24" font-weight="bold">68</text>
+      <text x="280" y="80" text-anchor="middle" fill="#555" font-size="14">:</text>
+      <text x="304" y="82" text-anchor="middle" fill="#888" font-size="24" font-weight="bold">45</text>
+      <text x="460" y="82" text-anchor="middle" fill="#ff8833" font-size="14" font-weight="bold">Peter Meier</text>
+      <!-- Stats area -->
+      <text x="24" y="122" fill="#5599ff" font-size="11" font-weight="bold">Max Müller</text>
+      <text x="296" y="122" fill="#ff8833" font-size="11" font-weight="bold">Peter Meier</text>
+      <!-- Stats rows -->
+      <text x="24" y="142" fill="#ccc" font-size="11">Breaks &gt;7:</text>
+      <text x="140" y="142" fill="#5599ff" font-size="11">34, 22, 12</text>
+      <text x="296" y="142" fill="#ccc" font-size="11">Breaks &gt;7:</text>
+      <text x="412" y="142" fill="#ff8833" font-size="11">18</text>
+      <text x="24" y="160" fill="#ccc" font-size="11">Foulpunkte:</text>
+      <text x="140" y="160" fill="#ff4444" font-size="11">8</text>
+      <text x="296" y="160" fill="#ccc" font-size="11">Foulpunkte:</text>
+      <text x="412" y="160" fill="#ff4444" font-size="11">4</text>
+      <text x="24" y="178" fill="#aaa" font-size="11">⏱ Framedauer:</text>
+      <text x="140" y="178" fill="#fff" font-size="11" font-weight="bold">0:18:42</text>
+      <!-- Chart area -->
+      <rect x="24" y="188" width="512" height="94" rx="8" fill="#111"/>
+      <text x="34" y="204" fill="#666" font-size="10">Frameverlauf</text>
+      <!-- Simplified chart lines -->
+      <polyline points="50,262 130,245 200,230 280,210 360,200 480,195" fill="none" stroke="#5599ff" stroke-width="2"/>
+      <polyline points="50,262 110,252 190,248 260,242 340,235 480,230" fill="none" stroke="#ff8833" stroke-width="2"/>
+      <circle cx="480" cy="195" r="4" fill="#5599ff"/>
+      <circle cx="480" cy="230" r="4" fill="#ff8833"/>
+      <text x="490" y="199" fill="#5599ff" font-size="10">68</text>
+      <text x="490" y="234" fill="#ff8833" font-size="10">45</text>
+      <!-- Buttons -->
+      <rect x="24" y="290" width="240" height="32" rx="8" fill="#3a1a1a" stroke="#553333"/>
+      <text x="144" y="311" text-anchor="middle" fill="#ff4444" font-size="13" font-weight="bold">Abbrechen</text>
+      <rect x="296" y="290" width="240" height="32" rx="8" fill="#1a5c1a" stroke="#4ade80" stroke-width="2"/>
+      <text x="416" y="311" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">Frame beenden</text>
+    </svg>
+  </div>
+
+  <h3>Frame-Abschluss</h3>
+  <ol>
+    <li>Am Ende eines Frames erscheint das Bestätigungsfenster automatisch, sobald der Framescore entschieden ist.</li>
+    <li>Es kann auch manuell über <strong>Menu → Frame-Ende</strong> aufgerufen werden.</li>
+    <li>Das Fenster zeigt:
+      <ul>
+        <li>Den aktuellen Framescor mit Sieger-Symbol 🏆</li>
+        <li>Alle Breaks über 7 Punkte</li>
+        <li>Gesamte Foulpunkte</li>
+        <li>Allfällige Handicap-Punkte</li>
+        <li>Framedauer</li>
+        <li>Den grafischen Frameverlauf (Score-Chart)</li>
+      </ul>
+    </li>
+    <li>Mit <strong>«Frame beenden»</strong> (grün, glühender Rand) wird der Frame abgeschlossen — der gewinnende Spieler erhält einen Frame gutgeschrieben.</li>
+    <li>Mit <strong>«Abbrechen»</strong> kehrt man ohne Abschluss zurück.</li>
+  </ol>
+
+  <h3>Der Frameverlauf-Chart</h3>
+  <p>Der Chart zeigt, wie sich der Punktestand im Laufe des Frames entwickelt hat. Jeder Punkt auf der Linie entspricht dem Ende eines Breaks. Punkte auf der Linie markieren Break-Abschlüsse. Die Farbe entspricht dem jeweiligen Spieler.</p>
+
+  <h3>Match-Ende</h3>
+  <ol>
+    <li>Bei einem «Best of X»-Match mit ungerader Zahl endet das Spiel automatisch, sobald ein Spieler die Mehrheit gewonnen hat.</li>
+    <li>Bei gerader Zahl werden alle Frames gespielt.</li>
+    <li>Auf dem Scoreboard erscheint die Meldung <strong>«Partie beendet!»</strong> mit dem Gesamtergebnis.</li>
+    <li>Über <strong>Menu → New game</strong> kann ein neues Spiel gestartet werden, oder über <strong>Menu → Ausspielziel ändern</strong> kann das Ziel erhöht werden, um weiterzuspielen.</li>
+  </ol>
+
+  <h3>Match-Statistiken</h3>
+  <p>Während des Spiels kann jederzeit über den <strong>«Statistik»</strong>-Bereich eine Übersicht aller gespielten Frames aufgerufen werden. Dort ist pro Frame ersichtlich:</p>
+  <ul>
+    <li>Ergebnis (Score beider Spieler)</li>
+    <li>Höchste Breaks</li>
+    <li>Foulpunkte (mit Anzahl Fouls in Klammern)</li>
+    <li>Handicap-Punkte</li>
+  </ul>
+</section>
+
+<!-- ======================================================
+     KAPITEL 8: ÜBUNGSMODUS (SOLO)
+     ====================================================== -->
+<section id="solo">
+  <h2>8. Übungsmodus (Solo)</h2>
+
+  <p>Der Übungsmodus ermöglicht es einem einzelnen Spieler, Breaks und Trainingsroutinen selbstständig aufzuzeichnen — ohne Gegner. Alle Sessions werden gespeichert und sind jederzeit einsehbar.</p>
+
+  <!-- SVG: Solo Mode -->
+  <div class="mockup">
+    <svg width="520" height="280" viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect width="520" height="280" fill="#0a0a0a"/>
+      <!-- Scoreboard solo background -->
+      <rect x="0" y="0" width="520" height="280" fill="#0d150d"/>
+      <!-- Player area centered -->
+      <text x="260" y="46" text-anchor="middle" fill="#4ade80" font-size="20" font-weight="bold">Max Müller</text>
+      <text x="260" y="72" text-anchor="middle" fill="#888" font-size="13">Solo-Training</text>
+      <!-- Score -->
+      <text x="260" y="160" text-anchor="middle" fill="#fff" font-size="88" font-weight="bold">0</text>
+      <!-- Bottom bar -->
+      <rect x="0" y="238" width="520" height="42" fill="#111"/>
+      <!-- Break button centered -->
+      <rect x="110" y="244" width="300" height="28" rx="14" fill="#1a2a1a" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="260" y="263" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">▶ Break eingeben</text>
+      <!-- MENU button -->
+      <rect x="422" y="244" width="86" height="28" rx="14" fill="#005500" stroke="#00aa00" stroke-width="1"/>
+      <text x="465" y="263" text-anchor="middle" fill="#00dd00" font-size="13" font-weight="bold">MENU</text>
+      <!-- Break history -->
+      <rect x="14" y="188" width="492" height="44" rx="8" fill="#0a1a0a" stroke="#1a3a1a"/>
+      <text x="30" y="204" fill="#666" font-size="10">Breaks dieser Session:</text>
+      <rect x="30" y="210" width="60" height="18" rx="4" fill="#1a3a1a" stroke="#4ade8066"/>
+      <text x="60" y="223" text-anchor="middle" fill="#4ade80" font-size="11">Break 47</text>
+      <rect x="100" y="210" width="60" height="18" rx="4" fill="#1a3a1a" stroke="#4ade8066"/>
+      <text x="130" y="223" text-anchor="middle" fill="#4ade80" font-size="11">Break 23</text>
+      <rect x="170" y="210" width="60" height="18" rx="4" fill="#1a3a1a" stroke="#4ade8066"/>
+      <text x="200" y="223" text-anchor="middle" fill="#4ade80" font-size="11">Break 18</text>
+    </svg>
+  </div>
+
+  <h3>Solo-Training starten</h3>
+  <ol>
+    <li>Im Setup-Fenster <strong>keinen Gegner</strong> eingeben (Spieler-2-Feld leer lassen) — oder die entsprechende Solo-Option wählen.</li>
+    <li>Das Scoreboard zeigt nur den eigenen Spieler und einen zentralen Break-Eingabe-Button.</li>
+  </ol>
+
+  <h3>Breaks aufzeichnen</h3>
+  <ol>
+    <li>Den <strong>«▶ Break eingeben»</strong>-Button antippen.</li>
+    <li>Im Direkteingabe-Modus die Break-Punktzahl eingeben und OK bestätigen.</li>
+    <li>Im Ball-für-Ball-Modus jeden Ball einzeln erfassen und mit «Break-Ende» abschliessen.</li>
+    <li>Alle Breaks werden in der Session gespeichert und am unteren Rand angezeigt.</li>
+  </ol>
+
+  <h3>Trainingsroutinen (Break-Modus)</h3>
+  <p>Im Solo-Modus können auch strukturierte Trainingsroutinen aufgezeichnet werden:</p>
+  <ol>
+    <li>Eine Routine besteht aus mehreren Breaks hintereinander (z. B. immer wieder auflegen und breaken).</li>
+    <li>Jede Session wird mit Datum, Gesamtpunkten und Anzahl Breaks gespeichert.</li>
+    <li>Die Übersicht aller Sessions ist über das MENU zugänglich.</li>
+  </ol>
+
+  <h3>Session beenden</h3>
+  <ol>
+    <li>MENU öffnen → <strong>«Session beenden»</strong> wählen.</li>
+    <li>Die Session wird mit allen Breaks gespeichert.</li>
+    <li>Eine neue Session kann sofort gestartet werden.</li>
+  </ol>
+
+  <h3>Trainingshistorie einsehen</h3>
+  <ol>
+    <li>MENU → <strong>«Trainingshistorie»</strong> öffnen.</li>
+    <li>Alle gespeicherten Sessions mit Datum und Statistiken werden angezeigt.</li>
+    <li>Einzelne Sessions können als Detail angeschaut werden.</li>
+  </ol>
+
+  <div class="tip">Tipp: Der Solo-Modus eignet sich besonders für das Trainieren von Positionen, das Üben von langen Serien oder das Verfolgen der eigenen Break-Entwicklung über Zeit.</div>
+</section>
+
+<!-- PRINT BUTTON -->
+<div style="height:60px"></div>
+<button class="print-btn no-print" onclick="window.print()">🖨 Drucken / Als PDF speichern</button>
+
+</body>
+</html>

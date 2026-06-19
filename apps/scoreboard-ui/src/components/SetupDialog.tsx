@@ -10,6 +10,41 @@ export const PRACTICE_MODE_VALUE = "__practice__";
 interface PlayerEntry {
   name: string;
   ioc: string;
+  club: string;
+}
+
+function iocToFlag(ioc: string): string {
+  const map: Record<string, string> = {
+    AFG:"AF",ALB:"AL",ALG:"DZ",AND:"AD",ANG:"AO",ANT:"AG",ARG:"AR",ARM:"AM",
+    ARU:"AW",AUS:"AU",AUT:"AT",AZE:"AZ",BAH:"BS",BAN:"BD",BAR:"BB",BDI:"BI",
+    BEL:"BE",BEN:"BJ",BER:"BM",BHU:"BT",BIZ:"BZ",BOL:"BO",BOT:"BW",BRA:"BR",
+    BRN:"BH",BRU:"BN",BUL:"BG",BUR:"BF",CAF:"CF",CAM:"KH",CAN:"CA",CAY:"KY",
+    CGO:"CG",CHA:"TD",CHI:"CL",CHN:"CN",CIV:"CI",CMR:"CM",COD:"CD",COK:"CK",
+    COL:"CO",COM:"KM",CPV:"CV",CRC:"CR",CRO:"HR",CUB:"CU",CYP:"CY",CZE:"CZ",
+    DEN:"DK",DJI:"DJ",DMA:"DM",DOM:"DO",ECU:"EC",EGY:"EG",ENG:"GB",ERI:"ER",
+    ESA:"SV",ESP:"ES",EST:"EE",ETH:"ET",FIJ:"FJ",FIN:"FI",FRA:"FR",FSM:"FM",
+    GAB:"GA",GAM:"GM",GBR:"GB",GBS:"GW",GEO:"GE",GEQ:"GQ",GER:"DE",GHA:"GH",
+    GRE:"GR",GRN:"GD",GUA:"GT",GUI:"GN",GUM:"GU",GUY:"GY",HAI:"HT",HKG:"HK",
+    HON:"HN",HUN:"HU",INA:"ID",IND:"IN",IRI:"IR",IRL:"IE",IRQ:"IQ",ISL:"IS",
+    ISR:"IL",ISV:"VI",ITA:"IT",IVB:"VG",JAM:"JM",JOR:"JO",JPN:"JP",KAZ:"KZ",
+    KEN:"KE",KGZ:"KG",KIR:"KI",KOR:"KR",KOS:"XK",KSA:"SA",KUW:"KW",LAO:"LA",
+    LAT:"LV",LBA:"LY",LBN:"LB",LBR:"LR",LCA:"LC",LES:"LS",LIE:"LI",LTU:"LT",
+    LUX:"LU",MAD:"MG",MAR:"MA",MAS:"MY",MAW:"MW",MDA:"MD",MDV:"MV",MEX:"MX",
+    MGL:"MN",MHL:"MH",MKD:"MK",MLI:"ML",MLT:"MT",MNE:"ME",MON:"MC",MOZ:"MZ",
+    MRI:"MU",MTN:"MR",MYA:"MM",NAM:"NA",NCA:"NI",NED:"NL",NEP:"NP",NGR:"NG",
+    NIG:"NE",NIR:"GB",NOR:"NO",NRU:"NR",NZL:"NZ",OMA:"OM",PAK:"PK",PAN:"PA",
+    PAR:"PY",PER:"PE",PHI:"PH",PLE:"PS",PLW:"PW",PNG:"PG",POL:"PL",POR:"PT",
+    PRK:"KP",PUR:"PR",QAT:"QA",ROU:"RO",RSA:"ZA",RUS:"RU",RWA:"RW",SAM:"WS",
+    SCO:"GB",SEN:"SN",SEY:"SC",SGP:"SG",SKN:"KN",SLE:"SL",SLO:"SI",SMR:"SM",
+    SOL:"SB",SOM:"SO",SRB:"RS",SRI:"LK",SSD:"SS",STP:"ST",SUD:"SD",SUI:"CH",
+    SUR:"SR",SVK:"SK",SWZ:"SZ",SYR:"SY",TAN:"TZ",TGA:"TO",THA:"TH",TJK:"TJ",
+    TKM:"TM",TLS:"TL",TOG:"TG",TPE:"TW",TTO:"TT",TUN:"TN",TUR:"TR",TUV:"TV",
+    UAE:"AE",UGA:"UG",UKR:"UA",URU:"UY",USA:"US",UZB:"UZ",VAN:"VU",VEN:"VE",
+    VIE:"VN",VIN:"VC",WAL:"GB",YEM:"YE",ZAM:"ZM",ZIM:"ZW",
+  };
+  const iso2 = map[ioc.toUpperCase()];
+  if (!iso2) return "";
+  return [...iso2].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join("");
 }
 
 function parseCSV(text: string): PlayerEntry[] {
@@ -20,7 +55,8 @@ function parseCSV(text: string): PlayerEntry[] {
     const name = (cols[4] || "").trim();
     if (!name) continue;
     const ioc = (cols[24] || "").replace(/\r|\n/g, "").trim();
-    players.push({ name, ioc });
+    const club = (cols[5] || "").replace(/\r|\n/g, "").trim();
+    players.push({ name, ioc, club });
   }
   return players;
 }
@@ -78,11 +114,14 @@ function PlayerPicker({
             {extraOption.label}
           </div>
         )}
-        {filtered.map(p => (
-          <div key={p.name} className="picker-item" onClick={() => onSelect(p.name)}>
-            {p.name}
-          </div>
-        ))}
+        {filtered.map(p => {
+          const flag = p.ioc ? iocToFlag(p.ioc) : "";
+          return (
+            <div key={p.name} className="picker-item" onClick={() => onSelect(p.name)}>
+              {flag && <span style={{ marginRight: "0.5em" }}>{flag}</span>}{p.name}
+            </div>
+          );
+        })}
         {filtered.length === 0 && (
           <div className="picker-no-result">Keine Spieler unter diesem Buchstaben</div>
         )}
@@ -96,7 +135,8 @@ const REDS_OPTIONS = [1, 3, 6, 10, 15];
 
 const MATCH_TYPES = [
   "6-Reds",
-  "Clubliga-Match",
+  "Liga A-Match",
+  "Liga B/C-Match",
   "Open-Turnier",
   "QT",
   "Sonstiges Turnier",
@@ -111,6 +151,8 @@ interface Props {
     name2: string,
     nat1: string,
     nat2: string,
+    club1: string,
+    club2: string,
     bestOf: number,
     inputMode: "break" | "ballbyball",
     redsCount: number,
@@ -142,13 +184,19 @@ export function SetupDialog({
   onSettingsClick,
 }: Props) {
   const [players] = useState<PlayerEntry[]>(() => {
+    const csvPlayers = parseCSV(csvText);
     if (playerList && playerList.length > 0) {
-      return playerList.map((e) => ({
-        name: e.playerName,
-        ioc: e.nationalityIOC,
-      }));
+      const csvByName = new Map(csvPlayers.map(p => [p.name, p]));
+      return playerList.map((e) => {
+        const csv = csvByName.get(e.playerName);
+        return {
+          name: e.playerName,
+          ioc: e.nationalityIOC || csv?.ioc || "",
+          club: csv?.club || "",
+        };
+      });
     }
-    return parseCSV(csvText);
+    return csvPlayers;
   });
   const [name1, setName1] = useState(defaultName1 ?? "");
   const [name2, setName2] = useState(defaultName2 ?? "");
@@ -168,6 +216,8 @@ export function SetupDialog({
   const [showBreakModeInfo, setShowBreakModeInfo] = useState(false);
   const [showMatchTypeInfo, setShowMatchTypeInfo] = useState(false);
   const [showMatchTypePicker, setShowMatchTypePicker] = useState(false);
+  const [hoveredMatchType, setHoveredMatchType] = useState<string | null>(null);
+  const hoveredMatchTypeRef = useRef<string | null>(null);
   const [matchType, setMatchType] = useState<string>(
     () => localStorage.getItem("lastMatchType") ?? "Trainings-Spiel"
   );
@@ -190,11 +240,17 @@ export function SetupDialog({
   const changeMatchType = (newType: string) => {
     setMatchType(newType);
     localStorage.setItem("lastMatchType", newType);
-    if (newType === "Wochenturnier") {
-      setBestOf(1);
-    } else if (matchType === "Wochenturnier") {
-      const saved = localStorage.getItem("lastBestOf");
-      setBestOf(saved ? parseInt(saved) : defaultBestOf);
+    const defaultsForType: Record<string, number> = {
+      "Wochenturnier": 1,
+      "Liga A-Match": 6,
+      "Liga B/C-Match": 4,
+      "QT": 3,
+      "Swiss Snooker Cup": 3,
+      "6-Reds": 3,
+      "Trainings-Spiel": 5,
+    };
+    if (newType in defaultsForType) {
+      changeBestOf(defaultsForType[newType]);
     }
     if (inputMode === "ballbyball") {
       setRedsCount(SIX_REDS_TYPES.includes(newType) ? 6 : 15);
@@ -222,6 +278,10 @@ export function SetupDialog({
     return players.find((p) => p.name === name)?.ioc || "SUI";
   }
 
+  function getClub(name: string): string {
+    return players.find((p) => p.name === name)?.club || "?";
+  }
+
   const isPractice = name2 === PRACTICE_MODE_VALUE;
   const isSameName = !isPractice && name1 !== "" && name2 !== "" && name1 === name2;
 
@@ -244,7 +304,7 @@ export function SetupDialog({
     }
     const p1 = name1 || "Player 1";
     const p2 = name2 || "Player 2";
-    onComplete(p1, p2, getIOC(p1), getIOC(p2), bestOf, inputMode, redsCount, matchType);
+    onComplete(p1, p2, getIOC(p1), getIOC(p2), getClub(p1), getClub(p2), bestOf, inputMode, redsCount, matchType);
   };
 
   const isPractice2 = name2 === PRACTICE_MODE_VALUE;
@@ -338,6 +398,7 @@ export function SetupDialog({
                   <button
                     onClick={(e) => { e.stopPropagation(); setShowMatchTypeInfo(true); }}
                     type="button"
+                    className="setup-info-btn"
                     style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
                   >
                     ?
@@ -347,6 +408,7 @@ export function SetupDialog({
                   <button
                     type="button"
                     onClick={() => setShowMatchTypePicker((v) => !v)}
+                    className="setup-matchtype-btn"
                     style={{
                       width: "100%",
                       minHeight: "9vh",
@@ -384,30 +446,51 @@ export function SetupDialog({
                         marginTop: "0.4vh",
                         boxShadow: "0 4px 16px rgba(0,0,0,0.6)",
                       }}
+                      onTouchMove={(e) => {
+                        const touch = e.touches[0];
+                        const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                        const btn = el?.closest("[data-mt]");
+                        const t = btn?.getAttribute("data-mt") ?? null;
+                        hoveredMatchTypeRef.current = t;
+                        setHoveredMatchType(t);
+                      }}
+                      onTouchEnd={() => {
+                        const selected = hoveredMatchTypeRef.current;
+                        if (selected) { changeMatchType(selected); setShowMatchTypePicker(false); }
+                        hoveredMatchTypeRef.current = null;
+                        setHoveredMatchType(null);
+                      }}
                     >
-                      {MATCH_TYPES.map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          onClick={() => { changeMatchType(t); setShowMatchTypePicker(false); }}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "1.2vh 1vw",
-                            fontSize: "1.5vw",
-                            fontWeight: t === matchType ? "bold" : "normal",
-                            background: t === matchType ? "#1a3a1a" : "transparent",
-                            color: t === matchType ? "#4ade80" : "#ccc",
-                            border: "none",
-                            borderBottom: "1px solid #333",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            fontFamily: "inherit",
-                          }}
-                        >
-                          {t}
-                        </button>
-                      ))}
+                      {MATCH_TYPES.map((t) => {
+                        const active = t === matchType;
+                        const hovered = t === hoveredMatchType;
+                        return (
+                          <button
+                            key={t}
+                            type="button"
+                            data-mt={t}
+                            onClick={() => { changeMatchType(t); setShowMatchTypePicker(false); }}
+                            onMouseEnter={() => setHoveredMatchType(t)}
+                            onMouseLeave={() => setHoveredMatchType(null)}
+                            style={{
+                              display: "block",
+                              width: "100%",
+                              padding: "1.2vh 1vw",
+                              fontSize: "1.5vw",
+                              fontWeight: active || hovered ? "bold" : "normal",
+                              background: hovered ? "#2a5a2a" : active ? "#1a3a1a" : "transparent",
+                              color: hovered || active ? "#4ade80" : "#ccc",
+                              border: "none",
+                              borderBottom: "1px solid #333",
+                              cursor: "pointer",
+                              textAlign: "center",
+                              fontFamily: "inherit",
+                            }}
+                          >
+                            {t}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -420,7 +503,8 @@ export function SetupDialog({
                       <button
                         onClick={(e) => { e.stopPropagation(); setShowRedsInfo(true); }}
                         type="button"
-                        style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                        className="setup-info-btn"
+                    style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
                       >
                         ?
                       </button>
@@ -430,6 +514,7 @@ export function SetupDialog({
                         <button
                           key={n}
                           onClick={() => setRedsCount(n)}
+                          className="setup-reds-btn"
                           style={{
                             flex: 1,
                             fontSize: "2vw",
@@ -458,6 +543,7 @@ export function SetupDialog({
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowBreakModeInfo(true); }}
                   type="button"
+                  className="setup-info-btn"
                   style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
                 >
                   ?
@@ -468,6 +554,7 @@ export function SetupDialog({
                   <button
                     key={mode}
                     onClick={() => changeInputMode(mode)}
+                    className="setup-mode-btn"
                     style={{
                       flex: 1,
                       fontSize: "1.8vw",
@@ -493,6 +580,7 @@ export function SetupDialog({
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowBestOfInfo(true); }}
                   type="button"
+                  className="setup-info-btn"
                   style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
                 >
                   ?
@@ -556,6 +644,7 @@ export function SetupDialog({
             </div>
             <button
               onClick={() => setShowBestOfInfo(false)}
+              className="menu-btn-info"
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >
               OK
@@ -581,7 +670,8 @@ export function SetupDialog({
             </div>
             {[
               ["6-Reds", "Kurzformat mit 6 roten Bällen (6 Rote vorgewählt)."],
-              ["Clubliga-Match", "Offizielle Begegnung in der Clubliga."],
+              ["Liga A-Match", "Offizielle Begegnung in der A-Liga (Best of 6, 15 Rote)."],
+              ["Liga B/C-Match", "Offizielle Begegnung in der B- oder C-Liga (Best of 4, 15 Rote)."],
               ["Open-Turnier", "Offenes Turnier für alle Spieler."],
               ["QT", "Qualifikationsturnier."],
               ["Sonstiges Turnier", "Andere Turnierformen, die nicht in die übrigen Kategorien passen."],
@@ -595,6 +685,7 @@ export function SetupDialog({
             ))}
             <button
               onClick={() => setShowMatchTypeInfo(false)}
+              className="menu-btn-info"
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >
               OK
@@ -623,6 +714,7 @@ export function SetupDialog({
             </div>
             <button
               onClick={() => setShowRedsInfo(false)}
+              className="menu-btn-info"
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >
               OK
@@ -653,6 +745,7 @@ export function SetupDialog({
             </div>
             <button
               onClick={() => setShowBreakModeInfo(false)}
+              className="menu-btn-info"
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >
               OK
@@ -686,6 +779,7 @@ export function SetupDialog({
                   <button
                     key={d}
                     onClick={() => setNumpadDisplay((p) => p.length >= 2 ? p : p + String(d))}
+                    className="bbb-btn-stepper"
                     style={{ flex: 1, fontSize: "2.8vw", fontWeight: "bold", background: "#2a2a2a", color: "#ddd", border: "1px solid #444", borderRadius: "8px", padding: "1.5vh 0", cursor: "pointer" }}
                   >
                     {d}
@@ -696,12 +790,14 @@ export function SetupDialog({
             <div style={{ display: "flex", gap: "1vw" }}>
               <button
                 onClick={() => setNumpadDisplay("")}
+                className="bbb-btn-cancel"
                 style={{ flex: 1, fontSize: "1.8vw", fontWeight: "bold", background: "#2a1a1a", color: "#f87171", border: "1px solid #553333", borderRadius: "8px", padding: "1.5vh 0", cursor: "pointer" }}
               >
                 Löschen
               </button>
               <button
                 onClick={() => setNumpadDisplay((p) => p === "" || p.length >= 2 ? p : p + "0")}
+                className="bbb-btn-stepper"
                 style={{ flex: 1, fontSize: "2.8vw", fontWeight: "bold", background: "#2a2a2a", color: "#ddd", border: "1px solid #444", borderRadius: "8px", padding: "1.5vh 0", cursor: "pointer" }}
               >
                 0
@@ -712,6 +808,7 @@ export function SetupDialog({
                   if (val >= 1) changeBestOf(val);
                   setShowBestOfNumpad(false);
                 }}
+                className="bbb-btn-ok"
                 style={{ flex: 1, fontSize: "1.8vw", fontWeight: "bold", background: "#1a3a1a", color: "#4ade80", border: "1px solid #2a5a2a", borderRadius: "8px", padding: "1.5vh 0", cursor: "pointer" }}
               >
                 OK

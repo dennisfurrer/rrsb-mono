@@ -1,317 +1,350 @@
-N°;22.03.2024;Name;Vorname;Kurzname WT etc;Email;Passwort;Tel;Eintritt;Austritt;Mitgliedstatus;Crew:;Gold-M. (22);Turnierspieler;Achtung (1);Sichtbar;QT (60);Open (235);SSC (80);Pyr. (47);WT (194);Gast (8);VTg;Res2 (0);IOC-Land
-1;aaNeuer Spieler;Neuer;Spieler;Neuer Spieler;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;1;;0;1;0;1;1;1;1;0;1;1;#NV;;
-2;aaSpieler A;Spieler;A;Spieler A;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;1;;0;1;0;1;1;1;1;0;1;1;#NV;;
-3;aaSpieler B;Spieler;B;Spieler B;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;1;;0;1;0;1;1;1;1;0;1;1;#NV;;
-4;Aeberli Heinz;Aeberli;Heinz;Aeberli H;ifjo{/bfcfsmjAjxnbjm/di;ce47831ec61468345de2d11a8951426a;044/ 321 42 36;02.08.2017;;6;;1;1;0;2;0;0;;1;1;0;-23;;SUI
-5;Aeschlimann Michel;Aeschlimann;Michel;Aeschlimann M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-6;Affolter Chrigu;Affolter;Chrigu;Affolter C;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-7;Alder Jürg;Alder;Jürg;Alder J;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-8;Allan Paul;Allan;Paul;Allan P;csbwfifbsu:3Acmvfxjo/di;a18b82994da45e1034861e0c5c73f734;076/ 335 24 44;01.07.2009;30.11.2022;1;;0;1;0;2;0;1;;0;1;0;#NV;;SCO
-9;Althaus Mike;Althaus;Mike;Althaus M;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-10;Anar Bora;Anar;Bora;Anar B;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-11;Arnold Pascal;Arnold;Pascal;Arnold P;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-12;Arnold Reto;Arnold;Reto;Arnold R;sfup`bsopmeAipunbjm/dpn;20e024ab83177dd48d899fb137c90ebe;076/ 416 13 51;15.11.2019;30.04.2021;1;;0;0;0;2;0;1;0;0;1;0;#NV;;
-13;Ashraf Farhad;Ashraf;Farhad;Ashraf F;tg`btisbgAzbipp/ef;f241fba6add08f0ba9402c1f26183d82;076/ 644 44 44;04.02.2020;30.04.2020;1;;0;1;0;1;0;1;1;0;1;0;#NV;;
-14;Azizaj Bashkim;Azizaj;Bashkim;Azizaj B;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-15;Baltus Jean-Marc;Baltus;Jean-Marc;Baltus J;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-16;Barz Roman;Barz;Roman;Barz R;nbjmAspnbocbs{/dpn;af4069da62e0a8786b709041853a0511;076/ 690 45 87;08.10.2021;;6;;0;3;0;2;0;1;;1;1;0;37;;GER
-17;Batavia Aashil;Batavia;Aashil;Batavia A;bbtijmcbubwjbAhnbjm/dpn;6275e085686864e0471fe29c9865495d;077/ 983 87 27;13.05.2023;31.10.2024;6;;0;1;0;2;0;1;1;0;1;0;-23;;
-18;Batt Michael;Batt;Michael;Batt M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-19;Baumgartner Martin;Baumgartner;Martin;Baumgartner M;cnbsujo::Acmvfxjo/di;42b6e3d932c185c728c3f1cf0231ab03;079/ 231 60 44;18.05.2016;;6;;1;2;0;2;0;1;;0;1;0;-23;;SUI
-20;Baumgartner René;Baumgartner;René;Baumgartner R;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-21;Bazin Gauvain;Bazin;Gauvain;Bazin G;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-22;Begni Carlo;Begni;Carlo;Begni C;dbsmpcfhojAijtqffe/di;ecd8be385fa5558676e8febaeb1921b8;079/ 428 08 37;29.12.2014;30.06.2024;6;;0;1;0;1;0;0;;0;1;0;-114;;SUI
-23;Berliat Markus;Berliat;Markus;Berliat M;cfsmjbuAhsffonbjm/di;e7df119ea2822dce7c7eb325c70cabb1;079/ 448 38 39;;;0;;0;3;0;0;1;1;;0;1;0;#NV;;SUI
-24;Bertschi Sinas;Bertschi;Sinas;Bertschi Si;tjobt/cfsutdijAhnbjm/dpn;84751f68deef9def40b3beb80aea5d55;079/ 224 70 02;03.03.2017;30.06.2023;1;;0;0;0;1;0;0;;0;1;0;#NV;;SUI
-25;Birkett Jermaine;Birkett;Jermaine;Birkett J;kfsnbjof/cjslfuuAipunbjm/dpn;f7b9abe2bee8b5646f196be5c8cd5023;079/ 363 33 44;04.04.2019;31.12.2019;1;;0;0;0;2;0;0;;0;1;0;#NV;;
-26;Bischof Michel;Bischof;Michel;Bischof M;njdifmcjtdipgAcmvfxjo/di;360625b5b8952222e0728444f446fe06;079/ 402 89 37;27.01.2015;31.08.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-27;Bishop Stewart;Bishop;Stewart;Bishop S;tufxzcjtiAzbipp/dpn;b1f4f9a523e36fd969f4573e25af4540;076/ 436 08 15;03.02.2003;;6;;0;1;0;2;0;1;;1;1;0;-23;;RSA
-28;Blaser Bruno;Blaser;Bruno;Blaser B;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-29;Blaser Christoph;Blaser;Christoph;Blaser C;disjt/cmbtfsAcmvfxjo/di;af7b5d7d967b779502c9f5dacc67724f;078/ 781 09 51;02.08.2017;;6;;1;1;0;2;0;0;;1;1;0;37;;SUI
-30;Bosshard Joel;Bosshard;Joel;Bosshard J;kpfm/cpttibseAhny/ofu;9dc59edb3a79705e49f5eece3463f2c8;077/ 477 40 04;12.07.2023;;1;;0;3;0;2;0;1;1;0;1;0;#NV;;
-31;Branca Salvatore;Branca;Salvatore;Branca S;tbmwcsbodbAhnbjm/dpn;d013c0797b8e883cd2bec534fa27b1eb;079/ 271 37 50 ;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-32;Brander René;Brander;René;Brander R;;;079/ 509 16 19;;;0;;0;0;0;0;0;0;;0;0;1;#NV;;SUI
-33;Braun Hannes;Braun;Hannes;Braun H;cicAijtqffe/di;f10ae730380315cfca385097db6269d5;079/ 605 72 16;01.02.2014;31.07.2023;6;;0;0;0;2;0;0;;1;1;0;221;;SUI
-34;Brechbühl Renato;Brechbühl;Renato;Brechbuehl R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-35;Broder Martin;Broder;Martin;Broder M;cspejAlpnnb4/di;1dfb6b98aef3416e03d50fd2fb525600;079/ 293 96 94;;;0;;0;2;0;0;0;1;;0;1;0;#NV;;SUI
-36;Broger Beat;Broger;Beat;Broger B;cfbu/csphfsAcmvfxjo/di;d9b5cf35f6a303426954471258b1a3b4;079/ 684 91 28;;;0;;0;1;0;2;0;0;;0;1;0;#NV;;
-37;Bruni Danilo;Bruni;Danilo;Bruni D;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-38;Brütsch Simon;Brütsch;Simon;Bruetsch S;tjngmvuAhny/ofu;3dba15912ad7658ee0561d4335360ea1;079/ 961 01 13;07.03.2024;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SUI
-39;Bühler Roger;Bühler;Roger;Buehler R;sphfs/cvfimfsAlpdi/di;906f3f3b45bd2f7d91535af378c1e779;079/ 541 38 36 ;;;0;;0;1;0;0;0;1;1;0;1;0;#NV;;
-40;Bürki Roland;Bürki;Roland;Buerki R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-41;Burntani Pon;Burntani;Pon;Burntani P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-42;Cairns Michael;Cairns;Michael;Cairns M;njlfAnjlfdbjsot/dpn;5b7c7de4408bff5bf58bbd6aecd3a95e;077/ 955 55 69;28.03.2018;;6;;1;0;0;1;0;1;;0;1;0;-23;;AUS
-43;Camenzind Pascal;Camenzind;Pascal;Camenzind P;topplfs`qbtdbm`9:Aipunbjm/dpn;e91e6348157868de9dd8b25c81aebfb9;079/ 581 32 85;;;0;;0;1;0;0;0;1;;0;0;0;#NV;;SUI
-44;Cepenas Justas;Cepenas;Justas;Cepenas;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-45;Cetinkaya Sinan;Cetinkaya;Sinan;Cetinkaya S;tjobo/dfujolbzbAhny/di;6d084de8b4546f5a0dce790df507ef46;076/ 561 69 62;09.12.2011;;1;;0;3;0;2;1;1;;0;1;0;#NV;;TUR
-46;Chanson Sébastien;Chanson;Sébastien;Chanson S;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-47;Cheng SinYuen;Cheng;Sin Yuen;Cheng S;difohtjozvfo3:Ahnbjm/dpn;df4f1117f723d7a11b4e90c295f68d88;078/ 727 08 82;13.10.2021;30.06.2023;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-48;Chow Laiman;Chow;Laiman;Chow L;mbjnbodipxAtvosjtf/di;8c38ca93b86d1e35db6407906353e693;076/ 321 29 09;19.10.2021;30.06.2023;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-49;Clerc Roger;Clerc;Roger;Clerc R;sphfs.dmfsdAcmvfxjo/di;07f82c051f2ff057a179cd63e443841a;078/ 722 20 58;09.01.2019;;6;;0;0;0;1;0;0;;0;1;0;-23;;SUI
-50;Clohosey Michael;Clohosey;Michael;Clohosey M;njdibfm/dmpiptfzAhnbjm/dpn;fcf75324307ad9c52024e20d3d0d5b65;079/ 330 60 99;;;0;;0;1;0;2;0;1;1;0;1;1;#NV;;
-51;Costantini Lorenzo;Costantini;Lorenzo;Costantini L;mpsfo{p/dptuboujoj/mdAhnbjm/dpn;93f81b2af13344024536c364f898b43c;079/ 409 86 10;06.11.2021;;6;;0;1;0;2;0;1;1;0;1;0;8;;ITA
-52;Cristiano Carmine;Cristiano;Carmine;Cristiano C;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-53;D'anna Regis;D'anna;Regis;D'anna R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-54;Däpp Gerald;Däpp;Gerald;Daepp G;q/ebfqqAijtqffe/di;0bbf7cce1bd2fe64989f93ea78b6096b;079/ 731 49 81;08.11.2006;31.07.2016;1;;0;2;0;2;0;0;;0;0;0;#NV;;
-55;De Pascali Antonio;De Pascali;Antonio;Depascali A;boupojp/efqbtdbmjAzbipp/ef;a8f97972744895154c99f1222701e800;079/ 642 54 25;;;0;;0;1;0;0;0;0;;0;1;0;#NV;;
-56;Dehchamani Babak;Dehchamani;Babak;Dehchamani B;cbcbl/eAijtqffe/di;8aeb57de9522ec34a2fbd6ebfb221217;062/ 891 99 55;18.05.2016;30.11.2019;1;;0;0;0;1;0;0;;0;1;0;#NV;;
-57;Din Farid;Din;Farid;Din F;gbsje`ejoAzbipp/dpn;33c0beac2b9306af02c539c2f28f66c5;076/ 456 45 14;01.11.2019;31.03.2023;1;;0;0;0;2;0;1;;0;1;0;#NV;;
-58;Dipsan Mihai;Dipsan;Mihai;Dipsan M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-59;Dürig Philipp;Dürig;Philipp;Duerig P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-60;Durisch Marco;Durisch;Marco;Durisch M;nbsdp/evsjtdiAhnbjm/dpn;de5824e84b86dabc42db6b32b57eefe9;079/ 221 11 12;15.01.2006;31.12.2013;1;;0;2;0;2;0;0;;0;0;0;#NV;;SUI
-61;Eberhard Stefan;Eberhard;Stefan;Eberhard S;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-62;Egli René;Egli;René;Egli R;sfof/fAcmvfxjo/di;26bfe7d4b8fcd88c3cb3eabd9c484ecb ;079/ 784 58 96;07.02.2024;;6;;0;1;0;1;0;1;1;0;1;0;-23;;SUI
-63;Egli Yoshiko;Egli;Yoshiko;Egli Y;sfof/fAcmvfxjo/di;b9dbbb4eb8cb3171c43e18577c9f4ff7;079/ 794 69 52;07.02.2024;;4;;0;1;0;1;0;1;1;0;1;0;-23;;JPN
-64;Elhage Issa;Elhage;Issa;Elhage I;jtbl2:83Azbipp/dpn;1faa9c3b042f619016c515da8aed23ee;079/ 632 61 66;07.10.2020;;6;;0;1;0;2;0;1;1;1;1;0;-53;;LBN
-65;Elhayawan Karim;Elhayawan;Karim;Elhayawan K;tobdlbhfAhnbjm/dpn;6c41bb26eae59b6cda4a7b8ba32e5baa;079/ 248 12 22;27.04.2016;;6;;0;0;0;1;0;0;;0;1;0;-23;;
-66;Elze René;Elze;René;Elze R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-67;Engmann Nico;Engmann;Nico;Engmann N;ojdp/fohnbooAmpsfbm/dpn;e5f4a663469748f151aab88c608f762a;078/ 802 46 88;19.03.2016;;1;;0;0;0;1;0;0;;0;0;0;#NV;;
-68;Erhardt Patrick;Erhardt;Patrick;Erhardt P;qbusjdl/f/ufoojtAhnbjm/dpn;8e1af0597e5f49a0d742d8abffec0e1c;079/ 645 44 63;07.08.2015;;1;;0;0;0;1;0;0;;0;0;0;#NV;;
-69;Estermann Enrico;Estermann;Enrico;Estermann E;folbftuAijtqffe/di;0ef5f17e3923e43604dd17fdbf518ab5;079/ 433 57 61;03.05.2023;;6;;1;1;0;2;0;1;1;0;1;0;-23;;SUI
-70;Estermann Karin;Estermann;Karin;Estermann K;folbftuAijtqffe/di;0ef5f17e3923e43604dd17fdbf518ab5;?;01.01.2024;;4;;0;1;0;2;0;1;1;0;1;0;#NV;;SUI
-71;Favre Samuel;Favre;Samuel;Favre S;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-72;Filion Jean;Filion;Jean;Filion J;kpioozgjmjpoAipunbjm/dpn;c5191509f4f6afc6f1a111663950e52d;079/ 661 96 98;13.01.2015;30.09.2020;1;;0;1;0;2;0;1;;1;1;0;#NV;;CAN
-73;Filz Albert;Filz;Albert;Filz A;bmcfsu`gjm{Aipunbjm/dpn;106f16a8fde7ae2ecac302abf5b49a90;078/ 667 42 29;03.04.2006;28.02.2014;1;;0;1;0;2;0;0;;0;0;0;#NV;;AUT
-74;Fingerlin Michael;Fingerlin;Michael;Fingerlin M;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-75;Fiorillo Franco;Fiorillo;Franco;Fiorillo F;gsbodp/gjpsjmmpAcmvfxjo/di;513e698335c91deefd01a8a599583cc0;079/ 684 12 12;11.06.2009;30.09.2016;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-76;Fischbacher Patrick;Fischbacher;Patrick;Fischbacher P;usjdlcbdifsAjdmpve/dpn;51a4cb9cc030f5d84ab33e12dfcd8276 ;078/ 949 00 31;30.01.2023;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SUI
-77;Fischer Daniel;Fischer;Daniel;Fischer D;ebojfm/gjtdifsAhnbjm/dpn;08ecfeba94ebf2b67e758830e0af2348;079/ 318 04 38;05.12.2013;30.06.2023;1;;0;1;0;2;0;1;;1;1;0;#NV;;GER
-78;Fisher Jack;Fisher;Jack;Fisher J;gjtifskbdlfAhnbjm/dpn;ffb5eb59845b53ec3def59bac3777018 ;077/ 236 81 22;21.01.2024;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SCO
-79;Föhn Martin;Föhn;Martin;Foehn M;nbsujo`gpfioAhny/di;cd2ca8494e7eb20d9ded594516f1d383;076/ 419 90 07;01.06.2016;;6;;1;2;0;2;0;1;;0;1;0;-23;;SUI
-80;Frei Ronald;Frei;Ronald;Frei R;mjwj26Amjoui/ofu;adda41c3227e0941d957efa5fc69e811;079/ 101 80 15;03.01.2023;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SUI
-81;Freitag Urs;Freitag;Urs;Freitag U;vst/gsfjubhAnbd/dpn;7e1268fc515ee07912f559ac966d1be0;079/ 502 98 41;25.06.2009;31.12.2021;1;;0;2;0;2;1;1;;0;1;0;#NV;;SUI
-82;Frey Sascha;Frey;Sascha;Frey S;tbtdibgsfzAipunbjm/dpn;e3559c8de7481f015389fee258aa0c3f;076/ 230 95 44;04.12.2012;;6;;0;2;0;2;0;1;;1;1;0;-23;;SUI
-83;Fuchs Fabrice;Fuchs;Fabrice;Fuchs F;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;1;#NV;;
-84;Fulcher Jonni;Fulcher;Jonni;Fulcher J;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;
-85;Furrer Dennis;Furrer;Dennis;Furrer D;efoojt/gvssfsAhnbjm/dpn;2d028f633085098f154282e0e6c14ef9;079/ 350 20 82;01.01.2008;;6;1;0;4;0;2;0;1;;1;1;0;#NV;;SUI
-86;Furrer Ivar;Furrer;Ivar;Furrer I;jwbs/gvssfsApibtmj/di;77570f43133ad0f8afe1ce749c3d7e88;044/ 850 51 12;02.03.2012;31.08.2022;1;;0;3;0;2;1;1;;1;1;0;#NV;;SUI
-87;Furrer Sarah;Furrer;Sarah;Furrer S;tlgvssfsAhnbjm/dpn;a3fa9e0b6b24b1cada4b756c0d240444;076/ 545 59 59;01.04.2007;;2;1;0;0;0;2;0;0;;0;0;0;#NV;;SUI
-88;Galié Peter;Galié;Peter;Galie P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-89;Ganz Mirco;Ganz;Mirco;Ganz M;njsdphbo{Aipunbjm/dpn;143e227fa500c064eb60246fbcc5c1a8;079/ 821 37 65;;;0;;0;2;0;0;0;0;;0;1;0;#NV;;
-90;Garzia Pierfrancesco;Garzia;Pierfrancesco;Garzia P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-91;Gerspach Maxim;Gerspach;Maxim;Gerspach M;nbyjn/hfstqbdiAhnbjm/dpn;01511be91d0e6c6a767a9b7956c76002;+49 163 441 8620;07.05.2017;31.10.2019;1;;0;0;0;2;0;0;;1;1;0;#NV;;
-92;Giedemann Rolf;Giedemann;Rolf;Giedemann R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-93;Giger Rafael;Giger;Rafael;Giger R;hjhfs/sbgbfmAhnbjm/dpn;ec0c8fe7ad80dfe93c0de35448b1d581;078/ 632 02 63;01.11.2012;;6;;0;4;0;2;1;1;;1;1;0;-23;;SUI
-94;Goguet Remi;Goguet;Remi;Goguet R;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-95;Graven Rob;Graven;Rob;Graven R;hsbwfoAcmvfxjo/di;0ae57c94574802400bb2b31a4ac950ed;079/ 662 34 81;01.10.2017;31.07.2021;1;;0;0;0;2;0;0;;1;1;0;#NV;;SUI
-96;Grendelmeier Thomas;Grendelmeier;Thomas;Grendelmeier T;hsfoefmuAujtdbmj/di;e33584b4ce72a8188be7e0087f9a3b4f;079/ 373 72 79;;;0;;0;2;0;0;1;1;;0;1;0;#NV;;
-97;Grimmer Yannic;Grimmer;Yannic;Grimmer Y;zhsjnnfsAipunbjm/dpn;151aa0094f11d8455fb208721955f152;076/ 575 15 05;15.03.2015;31.03.2020;1;;0;0;0;1;0;0;;0;0;0;#NV;;
-98;Grüter Daniel;Grüter;Daniel;Grueter D;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-99;Guerra Tiziano;Guerra;Tiziano;Guerra T;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-100;Guyer Daniel;Guyer;Daniel;Guyer Da;e/hvzfsAcmvfxjo/di;97243ebd3a043be3460246513c7272fe;079/ 205 82 93;04.10.2017;30.04.2019;1;;0;1;0;1;0;0;;0;1;0;#NV;;
-101;Guyer Dominic;Guyer;Dominic;Guyer Do;e/hvzfsAcmvfxjo/di;97243ebd3a043be3460246513c7272fe;;04.10.2017;30.04.2019;1;;0;1;0;1;0;0;;0;1;0;#NV;;
-102;Gyomlay Bela;Gyomlay;Bela;Gyomlay B;cfmbhzpnmbzAhny/di;4fbbe7c352d98a2da34f93b8675daaae;079/ 200 81 10;01.12.2014;30.04.2017;1;;0;2;0;2;0;1;;0;1;0;#NV;;
-103;Hankesz David;Hankesz;David;Hankesz D;eb/ibolft{Ahnbjm/dpn;d8f38bb49d1a99e14dea4dec54f7e8e8;076/ 737 75 15;18.01.2021;31.05.2021;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-104;Hardegger Stefan;Hardegger;Stefan;Hardegger S;ibsejAhny/di;16b264a854592b2a9891ac80dac4a0ec;079/ 217 71 41;;;0;;0;2;0;0;1;1;;0;1;0;#NV;;SUI
-105;Hasenfratz Sandro;Hasenfratz;Sandro;Hasenfratz S;tboesp`:663Aipunbjm/dpn;fadfdaedfcf541c3e7301824fa2d7737;078/ 895 51 02;19.07.2017;;6;;1;4;0;2;0;1;;1;1;0;-23;;SUI
-106;Hashimi Hamid;Hashimi;Hamid;Hashimi H;ibtijnji777Ahnbjm/dpn;eee3485697de0df6c792f031e33c9e0d;078/ 240 10 02;09.01.2023;;6;;0;3;0;2;0;1;1;0;1;0;68;;
-107;Hasler Martin;Hasler;Martin;Hasler M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;SUI
-108;Hättenschwiler Rico;Hättenschwiler;Rico;Haettenschwiler R;tvoof78Ajdmpve/dpn;7e65a9b554bbc9817aa049ce38c84a72;079/ 846 28 56;04.12.2012;;6;;0;0;0;1;0;0;;0;1;0;-23;;SUI
-109;Haug Dominik;Haug;Dominik;Haug D;e/ibvhAnf/dpn;ec2aa5c2986f9fb903a72546916a8f97;076/ 573 53 06;01.11.2012;30.06.2019;1;;0;3;0;2;0;1;;0;1;0;#NV;;GER
-110;Heid Christian;Heid;Christian;Heid C;ifje`disjtujboAzbipp/ef;5b0bdabac6b05c2e37cd904ce2c6fadf;079/ 528 77 27;03.05.2010;;2;;0;3;0;2;0;1;;1;1;0;-298;;GER
-111;Heusser Sebastian;Heusser;Sebastian;Heusser S;tfcbtujbo/ifvttfsAcmvfxjo/di;f53ef5cf8c7ae52c395076875045c1f4;079/ 708 21 07;01.06.2017;31.10.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-112;Holik Alessandro;Holik;Alessandro;Holik A;bmfttboesp/ipmjlApvumppl/dpn;909192ddd5ed75578316ab379415b2df;079/ 880 99 22;12.11.2023;;6;;0;0;0;1;0;0;;0;0;0;-23;;
-113;Horlacher Manuel;Horlacher;Manuel;Horlacher M;nbovfm/ipsmbdifsAhnbjm/dpn;68551eeed54cdafd82453dc35879330a;079/ 820 45 55;24.10.2020;;6;;0;1;0;2;0;1;;1;1;0;8;;SUI
-114;Hubanov Aleksandar;Hubanov;Aleksandar;Hubanov A;bmfyboefs`ivcbopwAbcw/ch;e8ed3988d41d3fc8272adea5b4d418ed;079/ 173 27 42;15.02.2020;31.12.2020;1;;0;1;0;2;0;1;1;0;1;0;#NV;;AUT
-115;Hussaini Manzoor;Hussaini;Manzoor;Hussaini M;ivttbjonbo{pps21Azbipp/dpn ;8637c8776ced76483a0dd9a6eaa79423 ;076/ 261 31 78  ;25.08.2021;30.11.2021;1;;0;1;0;1;0;1;1;0;1;0;#NV;;
-116;Infanger Mike;Infanger;Mike;Infanger M;jogbohfs/njlfAhnbjm/dpn;ba80023efcdb20684f293a348d88836c;076/ 285 68 22;19.04.2023;;1;;0;1;0;2;0;1;1;0;1;0;129;;
-117;Ip Wachio;Ip;Wachio;Ip W;mbngpohgpoh2:97Apvumppl/dpn;10098428c8de3de99262d4036bb651cf;076/ 216 63 41;21.11.2021;30.04.2022;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-118;Ishaq Umar;Ishaq;Umar;Ishaq U;vnbsjtibr3835Ahnbjm/dpn;6813a7e7b20f6e4148447e4631d991bd;076/ 538 25 02;02.01.2023;31.12.2023;1;;0;1;0;2;0;1;1;0;1;0;99;;
-119;Israel Achim;Israel;Achim;Israel A;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-120;Jampa Gyaltsen;Jampa;Gyaltsen;Jampa G;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-121;Jampa Neyshartsang;Jampa;Neyshartsang;Jampa N;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-122;Jankowski Frederic;Jankowski;Frederic;Jankowski F;{joopxju{2Ahny/ef;f81f72a539c14b024843c7d5b33f29cd;078/ 919 15 20;13.04.2019;;6;;0;4;0;2;0;1;;1;1;0;-23;;GER
-123;Jänönen Isto;Jänönen;Isto Kristian;Jaenoenen I;jkbopofoAzbipp/dpn;402795c16d083b5d31b9b56004ca9476;079/ 764 13 73;15.09.2023;;6;;0;2;0;2;0;1;;0;1;0;-23;;FIN
-124;Jensen Jules;Jensen;Jules;Jensen J;kvmft/kfotfoAcmvfxjo/di;14d201cc3131f41c79c5f5cf9821af0d;078/ 900 62 08;11.12.2019;28.02.2020;1;;0;1;0;2;0;1;0;0;1;0;#NV;;
-125;Jezler Roland;Jezler;Roland;Jezler R;tbogsbodjtdpAhny/di;a88bf692a968f95cb28f120dea9cc9a0;079/ 614 14 27;;;0;;0;1;0;0;0;0;;0;1;0;#NV;;SUI
-126;Kälin Jürg;Kälin;Jürg;Kaelin J;qbsuj.lbfmjoAcmvfxjo/di;f894c8b9e99ec9e2f887870e9d85cde3;078/ 707 82 81;28.05.2017;;6;;0;0;0;1;0;0;;0;0;0;-23;;SUI
-127;Kälin Simon;Kälin;Simon;Kaelin S;lbfmjotAipunbjm/dpn;1df01f9d62ce31c8423844a7fdba4a9d;044/ 935 19 36;;;0;;0;1;0;2;1;1;1;0;1;0;#NV;;SUI
-128;Kaltenborn Nirek;Kaltenborn;Nirek;Kaltenborn N;ojsfl/lbmufocpsoApvumppl/dpn;ca25333fb3acaed83cfd40f974f3529e;079/ 237 73 47;16.12.2017;30.04.2021;1;;0;4;0;2;1;1;;0;1;0;#NV;;
-129;Keller Tom;Keller;Tom;Keller T;nbjm3upnAspdlfunbjm/dpn;a35bfa7312cfb0924e344491e15fa041;079/ 535 72 32;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-130;Kerenyi Attila;Kerenyi;Attila;Kerenyi A;blfsfozjAhny/di;a25ea0d03400e087c4f1cda5c972c8a3;+1 646 675 7532 ;29.07.2022;;2;;0;4;0;1;0;1;1;0;1;0;-298;;
-131;Kiefer Markus;Kiefer;Markus;Kiefer M;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-132;Klaener Ole;Klaener;Ole;Klaener O;pmf/lmbfofsAhnbjm/dpn;704f29b611cf9032e1d1e0b378d3c044;+49 162 7760 376;18.10.2023;;0;;0;1;0;2;0;0;;0;1;0;#NV;;
-133;Klaua Denis;Klaua;Denis;Klaua D;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;GER
-134;Kleinschmidt Uwe;Kleinschmidt;Uwe;Kleinschmidt U;vlmcvtAcmvfxjo/di;aa318f052d71dbcc9da28a09a76965c0;079/ 503 71 07;01.10.2014;;6;;0;4;0;2;0;1;;1;1;0;-206;;SUI
-135;Kong James;Kong;James;Kong J;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-136;Kruppert Carsten;Kruppert;Carsten;Kruppert C;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-137;Kücükarabaci Tayfum;Kücükarabaci;Tayfum;Kuecuekarabaci T;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;TUR
-138;Kuhn Alex;Kuhn;Alex;Kuhn A;bmfy/lvioAznbjm/dpn;80c9ef0fb86369cd25f90af27ef53a9e;076/ 327 02 45;21.02.2018;31.08.2019;1;;0;0;0;2;0;0;;0;1;0;#NV;;SUI
-139;Kumbrink Dirk;Kumbrink;Dirk;Kumbrink D;lvncjdlz1Ahnbjm/dpn;c2d96bb33f3908fff1b1b49ec574cb88;079/ 697 22 96;02.02.2024;;6;;0;1;0;2;0;1;1;0;1;0;-23;;GER
-140;Kurzen Jannick;Kurzen;Jannick;Kurzen J;kboojdl/lvs{foAhnbjm/dpn;81e58c4987d71066bc4aabf9c0baf4c9;077/ 533 53 78;16.04.2021;;6;;0;4;0;2;1;1;;0;1;0;8;;SUI
-141;Lahrius Sebastian;Lahrius;Sebastian;Lahrius S;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-142;Lebong Markus;Lebong;Markus;Lebong M;nbslvtmfcpohAijtqffe/di;d1e0fdb4512c05f0593e11f64d58c0e7;056/ 496 08 39;01.11.2014;;6;;0;2;0;2;0;1;;0;1;0;-114;;GER
-143;Lehner Sebastian;Lehner;Sebastian;Lehner S;mfiofs/tfcbtujboAxjoepxtmjwf/dpn;c1a0ead5330a47511e2a4c2c9ac03589;079/ 628 37 14;26.11.2018;31.01.2020;1;;0;2;0;2;0;1;;1;1;0;#NV;;SUI
-144;Lekkerkerker Fredo;Lekkerkerker;Fredo;Lekkerkerker F;ngmAgsfep/om;b95f379f6ae245614d2f949801524317;;;;0;;0;1;0;0;0;0;;0;1;0;#NV;;
-145;Leuch Martin;Leuch;Martin;Leuch M;nbsujo.mfvdiAtvosjtf/di;7bb10749215ea4b3cc744707a4417aef;044/ 725 19 56;11.01.2010;;6;;0;2;0;2;0;1;;1;1;0;-23;;SUI
-146;Leumann Manfred;Leumann;Manfred;Leumann M;nbogsfe/mfvnbooAhny/di;f5ac9c7f944f963a3237f747321a0fd0;079/ 426 44 59;20.12.2017;31.12.2020;1;;0;3;0;2;0;1;;1;1;0;#NV;;SUI
-147;Leuthold Martin;Leuthold;Martin;Leuthold M;iemnbsujo/mfvuipmeAhnbjm/dpn;1e38cb22bd5de248949038a647111d71;079/ 818 00 62;14.01.2015;28.02.2022;1;;0;0;0;1;0;0;;0;1;0;#NV;;SUI
-148;Lienhard Mike;Lienhard;Mike;Lienhard M;njlf/mjfoibseAjdmpve/dpn;2f63d9f0f25190068730b7dc87b2bb50;078/ 788 57 46 ;24.11.2021;31.05.2022;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-149;Loffredo Fabrice;Loffredo;Fabrice;Loffredo F;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;
-150;Losi Marvin;Losi;Marvin;Losi M;nbswjo/mptjAipunbjm/dpn;04e63b96bdcfd15715a90724f05eee6d;076/ 441 14 70;;;0;;0;3;0;0;1;1;;0;1;1;#NV;;SUI
-151;Lüthi Paul;Lüthi;Paul;Luethi P;v/qmvfuijAcmvfxjo/di;735735aa594d4a2eda923d866879d5f2;044/ 740 26 30;01.11.2013;;6;;1;2;0;2;0;1;;0;1;0;-53;;SUI
-152;Lüthy Simon;Lüthy;Simon;Luethy S;mvfuij/tjnpoAhnbjm/dpn;a39d8e0bf9e6be5861e9501b2ebf40f6;044/ 813 31 71;14.04.2012;30.06.2016;1;;0;1;0;2;0;0;;0;0;0;#NV;;SUI
-153;Mahiphund James;Mahiphund;James;Mahiphund J;di/nbijqivoeAipunbjm/dpn;0a1819e12ad0c51949706a4aa661a07d;079/ 655 66 77;01.05.2016;30.06.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;THA
-154;Maier Marc;Maier;Marc;Maier M;ndnbjfsjohAhnbjm/dpn;968c5d27e192326f850f168df6a87480;079/ 269 47 21;27.10.2017;31.07.2021;1;;0;4;0;2;0;1;;1;1;0;#NV;;IMN
-155;Mayor Javier;Mayor;Javier;Mayor J;kbwjfs/nbzpsAhny/di;22d1e5f9df316be1c4982c4206f4fc58;079/ 400 66 19 ;08.12.2019;28.02.2021;1;;0;4;0;2;0;1;;0;1;0;#NV;;
-156;Meier Peter;Meier;Peter;Meier P;qfufs/nfjfsAxnq.jnnpcjmjfo/di;8f976ae9ae638a1202572124c4d60886;079/ 341 78 78;02.02.2024;;6;;0;1;0;1;0;1;1;0;1;0;-23;;SUI
-157;Melser Jacob;Melser;Jacob;Melser J;kbdpc`{iAipunbjm/dpn;922b91eeeaeacf98cdacfb743fe569e7;076/ 246 50 10;31.01.2023;;6;;0;1;0;2;0;1;1;0;1;0;-53;;ENG
-158;Menzi Markus;Menzi;Markus;Menzi M;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;079/ 408 85 35;01.10.1996;;6;1;0;2;0;2;0;1;;1;1;0;#NV;;SUI
-159;Menzi Yvonne;Menzi;Yvonne;Menzi Y;znfo{jAzbipp/dpn;b3406b06ee2119213f107fa86d005311;079/ 350 20 82;01.04.2007;;2;1;0;0;0;2;0;0;;0;1;0;#NV;;SUI
-160;Meravy Pavol;Meravy;Pavol;Meravy P;nfsbwzAtxjttpomjof/di;edd637e1588a648a2dad183a7f35030b;079/ 309 10 47;01.02.2023;31.07.2024;6;;0;1;0;2;0;1;1;0;1;0;-22;;
-161;Meyer Daniel;Meyer;Daniel;Meyer D;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-162;Minoui Mori;Minoui;Mori;Minoui M;npsj/njopvjAzbipp/dpn;5610b1c2ffbf388acf5ff24561c4b7bd;079/ 411 18 89;23.10.2021;;6;;0;0;0;2;0;0;;0;1;0;-53;;IRI
-163;Mohammad Ali;Mohammad;Ali;Mohammad A;tbmnbobmj246:Ahnbjm/dpn;0f80061b4a092b41f37092f2039c4229;079/ 810 53 76;22.05.2021;31.01.2022;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-164;Müller Marcel;Müller;Marcel;Mueller M;;;;;;0;;0;2;0;0;1;1;;0;0;0;#NV;;SUI
-165;Munzinger Noah;Munzinger;Noah;Munzinger N;opbi/nvo{johfsAipunbjm/dpn;19360093b5656f3cbedc05a3b823b265;079/ 550 21 33;27.07.2020;30.09.2023;0;;0;1;0;2;0;1;1;1;1;0;160;;
-166;Muslu Kadir;Muslu;Kadir;Muslu K;lbejs/nvtmv2Ahnbjm/dpn;83aba79d66b1aeafc35c1a1d953f690a;078/ 813 01 04;20.03.2019;31.01.2020;1;;0;2;0;2;0;0;;1;1;0;#NV;;
-167;Muths Roger;Muths;Roger;Muths R;nvuitAijtqffe/di;482ea66263a3509b274ebd7734069093;076 342 10 87;24.03.2009;;6;;1;4;0;2;1;1;;1;1;0;-23;;SUI
-168;Muths Sergio;Muths;Sergio;Muths S;nvuitAcmvfxjo/di;baefc21535abd4d5ebffc555ed0551eb;079/ 308 27 03;04.01.2009;;6;;1;2;0;2;0;0;;0;1;0;-23;;SUI
-169;Mutter Raoul;Mutter;Raoul;Mutter R;sknvuufsAhnbjm/dpn;a3dcc0e960dd9154eb43fa3089963425;079/ 862 61 62;22.12.2020;31.07.2023;1;;0;3;0;2;0;1;;0;1;0;221;;SUI
-170;Naddaf Davood;Naddaf;Davood;Naddaf D;ebwppe/obeebgAhnbjm/dpn;b7d0308621091afe8588693966373120;078/ 620 00 94;08.03.2019;30.06.2023;1;;0;3;0;2;0;1;;0;1;0;252;;IRI
-171;Naveed Ahmad;Naveed;Ahmad;Naveed A;obwffe`binbe36Azbipp/dpn;fb2a8972f5ababd97971c96db20493c0;078/ 353 26 76;25.01.2021;31.03.2023;1;;0;1;0;2;0;1;0;0;1;0;#NV;;
-172;Neff Chatthong;Neff;Chatthong;Neff C;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;THA
-173;Nguyen Michael;Nguyen;Michael;Nguyen M;dptztpguAzbipp/dpn;a8fbd7b729358e190e6939452ef5ccb8;078/ 794 30 05;;;0;;0;1;0;0;0;1;1;0;1;0;#NV;;
-174;Niederreuther Raoul;Niederreuther;Raoul;Niederreuther R;;;;;;0;;0;2;0;0;1;1;;0;0;0;#NV;;
-175;Noro Elia;Noro;Elia;Noro E;fmjb/opspAhnbjm/dpn;1f3870be274f6c49b3e31a0c6728957f;076/ 566 91 06;28.12.2016;31.12.2017;1;;0;0;0;1;0;0;;0;0;0;#NV;;
-176;O'Reilly David;O'Reilly;David;Oreilly D;ebwje`psfjmmzAcmvfnbjm/di;70973bf13f087e6cf06664815befb7f4;076/ 498 93 32;01.01.2007;;6;;1;1;0;2;0;1;;1;1;0;#NV;;IRL
-177;Oberkofler Patrik;Oberkofler;Patrik;Oberkofler P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;AUT
-178;Ochoiski Brian;Ochoiski;Brian;Ochoiski B;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;FRA
-179;Ochoiski Stephan;Ochoiski;Stephane;Ochoiski S;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;FRA
-180;Ogasawara Junya;Ogasawara;Junya;Ogasawara J;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;JPN
-181;Pavelko Nykyta;Pavelko;Nykyta;Pavelko N;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-182;Perret Stéphane;Perret;Stéphane;Perret S;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-183;Peter Simon;Peter;Simon;Peter S;tjnpoqfufs/:3Apvumppl/dpn;fa623088a4cc5190c3a8c6c17de3b606;079/ 196 66 04;03.03.2017;31.10.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;SUI
-184;Pfäffli Michael;Pfäffli;Michael;Pfaeffli M;qgbfggmj/njdibfmAhnbjm/dpn;4ae3d3a00519bd6123982544a1c77b19;079/ 403 50 48;11.06.2021;31.10.2023;1;;0;2;0;2;0;1;;0;1;0;99;;SUI
-185;Pfanner Harry;Pfanner;Harry;Pfanner H;iqgboofsAjdmpve/dpn;045abef7058d9ee38744b19eacbc4f1b;079/ 660 59 80;01.09.2012;;6;;1;4;0;2;1;1;;1;1;0;-23;;AUT
-186;Pfanner Thomas;Pfanner;Thomas;Pfanner T;uiqgboofsAcmvfxjo/di;e3580458b9ad99547bd8c1c16ea9d6a0;079/ 500 77 01;01.09.2012;;6;;1;4;0;2;1;1;;1;1;0;-23;;AUT
-187;Pfister David;Pfister;David;Pfister D;ebwje.qgjtufsAcmvfxjo/di;4e12d3d3e014fdf5d58482ef776c5d44;079/ 222 54 49;08.02.2017;;6;;1;2;0;1;0;1;;1;1;0;-23;;SUI
-188;Pfister Urs;Pfister;Urs;Pfister U;qgjtufs/vstAwuynbjm/di;8ce5b08166e3a739b438bb5f541c18dc;079/ 388 23 22;04.07.2013;;1;;0;1;0;2;0;0;;1;1;0;#NV;;SUI
-189;Pole James;Pole;James;Pole J;kbnftqpmf258Abpm/dpn;4bc24b67ecab050fef5f1c2776f99b7d;079/ 675 28 71;18.10.2017;31.03.2020;1;;0;4;0;2;0;1;;0;1;0;#NV;;ENG
-190;Prazak Martin;Prazak;Martin;Prazak M;nbsujo/qsb{blAtvosjtf/di;7e3f660480ab1640de8024c200b5a4d3;079/ 745 14 64;01.11.2008;31.10.2017;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-191;Prazak Richard;Prazak;Richard;Prazak R;sjtdibAhny/di;3205f64462d77d8f98ef329dec55e668;078/ 760 20 13;01.11.2008;31.10.2017;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-192;Prisi Matthias;Prisi;Matthias;Prisi M;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-193;Pulfer Marco;Pulfer;Marco;Pulfer M;nbsdpqvmwfsAipunbjm/dpn;a4e1032d08b4966eaaf3966f12505f49;076/ 389 17 63;15.07.2015;30.10.2016;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-194;Qerkinaj Fidan;Qerkinaj;Fidan;Qerkinaj F;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-195;Radisavljevic Branko;Radisavljevic;Branko;Radisavljevic B;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-196;Rahmati Armin;Rahmati;Armin;Rahmati A;;01e50c681c0b05ff22686b3e0f7290d3;076/ 502 28 85;;;0;;0;1;0;0;0;1;;0;1;0;#NV;;IRI
-197;Ramseier Jürg;Ramseier;Jürg;Ramseier J;gbnsbnAtvosjtf/di;0db804b14029ce6f615f1aafc1969785;079/ 262 15 36 ;01.08.2020;;6;;1;1;0;2;0;1;1;0;1;0;-23;;SUI
-198;Ramzani Mushtaq;Ramzani;Mushtaq;Ramzani M;liboiib{bsbAhnbjm/dpn;83fb895b310417b62982471ede926729;078/ 932 17 40 ;22.05.2021;;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-199;Rauber Marc;Rauber;Marc;Rauber M;nbsdboesf/sbvcfsAhnbjm/dpn;59d0914c04c19d75773daa24bb2f6cdd;076/ 561 23 61;01.02.2009;;6;;0;2;0;2;0;0;;1;1;0;37;;SUI
-200;Rechtsteiner Markus;Rechtsteiner;Markus;Rechtsteiner M;nbs/lvtAhny/di;4bafeb20cbf9d5c7c934c564ec1365ad;;;;0;;0;2;0;0;0;1;;0;1;0;#NV;;
-201;Riesen Michael;Riesen;Michael;Riesen M;njdibfmsjftfoAnto/dpn;73b6e28698dde5b14a573cf24a57a421;076/ 521 80 91;13.06.2008;31.03.2014;1;;0;0;0;2;0;0;;0;0;0;#NV;;SUI
-202;Rogge Andreas;Rogge;Andreas;Rogge A;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-203;Rosskopf Tobias;Rosskopf;Tobias;Rosskopf T;upcjbtsAqizt/fui{/di;fcdc7b4207660a1372d0cd5491ad856e;076/ 242 86 22;03.05.2006;31.01.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;GER
-204;round robin;round;robin;round robin;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;3;;0;0;0;0;0;0;;0;1;0;#NV;;SUI
-205;Rütschi Aldo;Rütschi;Aldo;Ruetschi A;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-206;Safari Semko;Safari;Semko;Safari S;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-207;Saffran Pascal;Saffran;Pascal;Saffran P;qbtdbm/tbggsboAhnbjm/dpn;949d9735f7a8af1da41588ed6ea4f8e2;079/ 356 14 14;04.05.2023;;6;;0;1;0;2;0;1;1;0;1;0;9;;
-208;Salzmann Dan;Salzmann;Dan;Salzmann D;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-209;Salzmann Erich;Salzmann;Erich;Salzmann E;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-210;Sangjapok Samat;Sangjapok;Samat;Sangjapok S;tbohkbqplAhnbjm/dpn;ba5389caca4b811b157beef6a2b26a80;078/ 634 09 71;27.05.2023;;6;;1;2;0;2;0;0;;0;1;0;-23;;THA
-211;Santana Andre;Santana;Andre;Santana A;boesftboubobfnAhnbjm/dpn;366c0ffdfa7cd98bf15a7faf319d90b0;076/ 365 35 17;03.01.2020;28.02.2020;1;;0;2;0;2;0;1;0;0;1;0;#NV;;
-212;Sari Soner;Sari;Soner;Sari S;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-213;Schärer Martin;Schärer;Martin;Schaerer M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-214;Schmid Jenson;Schmid;Jenson;Schmid J;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;1;1;1;0;1;0;#NV;;
-215;Schmid Kurt;Schmid;Kurt;Schmid K;;6ab35678fd2164be79f1a261fdc6971b;079/ 489 92 40;01.01.2005;;6;;1;0;0;2;0;0;;1;1;0;9;;SUI
-216;Schmid Patrick;Schmid;Patrick;Schmid P;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;1;1;1;0;1;0;#NV;;
-217;Schmid Roger;Schmid;Roger;Schmid R;qppm89Azbipp/dpn;e48b981fb62db33b98a27fc6cf8bf40a;079/ 349 45 02;;;0;;0;2;0;0;0;1;;0;1;0;#NV;;SUI
-218;Schneebeli Louis;Schneebeli;Louis;Schneebeli L;mpvjtAcmvfxjo/di;020de7f17a3ee71e6b9cee445f202b7d;079/ 281 68 18;18.09.2023;;6;;0;1;0;2;0;1;1;0;1;0;9;;
-219;Schneider Stefan;Schneider;Stefan;Schneider S;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;SUI
-220;Schön Stefan;Schön;Stefan;Schoen S;tu/tdipfoAhny/di;90bebd2f0dc248887ba9d779a95c78f3;076/ 479 83 65;11.01.2016;;6;;0;2;0;2;0;1;;1;1;0;8;;GER
-221;Schorr Roland;Schorr;Roland;Schorr R;spmjtdipssAijtqffe/di;3823552b7a2b839259a831e3b7b349a3;078/ 682 56 65;01.10.2005;;6;;0;1;0;2;0;1;;1;1;0;-23;;SUI
-222;Schrofer Markus;Schrofer;Markus;Schrofer M;n/tdispgfsAhnbjm/dpn;d7d07a86a8099df21ac527a2918dcebc;079/ 409 79 79;05.11.2020;31.10.2021;1;;0;1;0;1;0;1;1;0;1;0;#NV;;
-223;Schweizer Michael;Schweizer;Michael;Schweizer M;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-224;Seeli Mario;Seeli;Mario;Seeli M;nbsjp/tffmjAhny/di;ccfd3aa515bae6ae5b6eb34c83c68168;076/ 305 00 99;04.01.2017;31.12.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-225;Seiler Pascal;Seiler;Pascal;Seiler P;qbtdbm/tfjmfsAijtqffe/di;55c494ef6609a372c5478befecc620ea;079/ 425 59 88;11.08.2014;;6;;0;1;0;2;0;1;;1;1;0;37;;SUI
-226;Sener Karakurum;Sener;Karakurum;Sener K;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-227;Shaikh Umar-Ali;Shaikh;Umar-Ali;Shaikh U;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;
-228;Sharman Lee;Sharman;Lee;Sharman L;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-229;Sharman Richard;Sharman;Richard;Sharman R;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-230;Shimamoto Orestes;Shimamoto;Orestes;Shimamoto O;psftuft41Ahnbjm/dpn;a9b735751953866d77442e98a04e9078;078/ 853 23 31;31.01.2023;;6;;0;1;0;2;0;1;1;0;1;0;-23;;
-231;Sivasubramaniam Mohanraj;Sivasubramaniam;Mohanraj;Sivasubramaniam M;npibosbkAijtqffe/di;247184f5fcf8c0afea1291676dc6df8f;076/ 317 89 13;27.04.2014;;2;;0;3;0;2;1;1;;1;1;0;-298;;
-232;Skugor Luka;Skugor;Luka;Skugor L;mvlb/tlvhpsAqspuponbjm/dpn;1abea860162ef5dad43c64adf19673b4;078/ 323 76 67;;;0;;0;2;0;0;0;0;;0;1;0;#NV;;
-233;Spörri Folkert;Spörri;Folkert;Spoerri F;gpmlfsu`tqpfssjAcmvfxjo/di;6266a63569e4cc15f574e089636b5de5;044/ 242 55 12;14.12.2017;31.12.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-234;Stähli Franz;Stähli;Franz;Staehli F;tjmp258Amjwf/ef;72211174b1b876dfa2c3f991477cf747;079/ 345 96 33;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;SUI
-235;Staub Hannes;Staub;Hannes;Staub H;dpjggfvs/ibooftAcmvfxjo/di;8e35fdc54ac8a2edd210217ec7de6475;079/ 772 33 06;30.10.2006;31.01.2019;1;;0;0;0;2;0;0;;0;0;0;#NV;;SUI
-236;Stauffiger Marc;Stauffiger;Marc;Stauffiger M;nbsdtubvggjhfsAipunbjm/dpn;dc13e207a8ed5b63e0b8ab7d3447a800;079/ 689 17 84;01.03.2005;31.10.2017;1;;0;2;0;2;0;0;;0;0;0;#NV;;SUI
-237;Steinmann Patrick;Steinmann;Patrick;Steinmann P;qbusjdl/tufjonbooAijtqffe/di;37b9e65c9769656d565d2f4012d47bbc;079/ 501 58 09;23.08.2002;;6;;1;2;0;2;0;0;;1;1;0;-23;;SUI
-238;Stellato Marco;Stellato;Marco;Stellato M;nbsdp/tufmmbup88Ahnbjm/dpn;94c2cc32028f776371da2fa26f64a0b4;079/ 614 19 86;10.03.2014;31.05.2015;1;;0;2;0;2;0;0;;0;0;0;#NV;;ITA
-239;Stettler Thomas;Stettler;Thomas;Stettler T;u`tufuumfsAhny/di;bac82a9993c15f257413a6c3def4bc4a;079/ 609 07 49;05.12.2014;31.12.2016;1;;0;2;0;2;0;0;;0;0;0;#NV;;GER
-240;Stolz Eric André;Stolz;Eric André;Stolz E;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-241;Stoppacher Benjamin;Stoppacher;Benjamin;Stoppacher B;cfokbnjo/tupqqbdifsAhny/bu;990228e52c6973c2d9c29f05c3c98c45 ;079/ 754 89 99;19.09.2023;;6;;0;1;0;2;0;1;1;0;1;0;-23;;AUT
-242;Strehler Marc;Strehler;Marc;Strehler M;nbjm/ntusfimfsAcmvfxjo/di;4f14696cc248436f72c63f7865615aec;079/ 343 91 93;28.12.2022;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SUI
-243;Sun KwokLeung;Sun;KwokLeung;Sun K;difohtjozvfo3:Ahnbjm/dpn;45cb9d89768663634f23900626470ac3;044/ 741 55 87;06.11.2021;31.10.2022;1;;0;1;0;2;0;1;1;0;1;0;#NV;;
-244;Sutter Beat;Sutter;Beat;Sutter B;cfbu/tvuufsAhny/ofu;5285ad927039ef374d10cd5c1e954ce7;076/ 441 69 63;03.10.2021;;6;;1;1;0;2;0;1;1;0;1;0;-23;;SUI
-245;Taj Karim;Taj;Karim;Taj K;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-246;Takoet Sithidef;Takoet;Sithidef;Takoet S;efg/ublpfu99Ahny/ofu;5ea044ed5d3364cd30fb59c24b305965;078/ 213 87 50;16.02.2021;31.01.2022;1;;0;2;0;2;0;1;;0;0;0;#NV;;THA
-247;Tanner Ariane;Tanner;Ariane;Tanner A;bsjbof/uboofsAhnbjm/dpn;b1118e63988c3c2e79ca73c0b1ae089e;076/ 512 72 07;09.03.2020;;6;;0;1;0;1;0;1;1;0;1;0;9;;SUI
-248;Tashi Sonam Tashi;Tashi;Sonam;Tashi S;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-249;Taylor Brad;Taylor;Brad;Taylor B;csbeubzmpsAhnbjm/dpn;3e194b5730ed8b868224b80ac8d7eed9;079/ 159 71 72;23.03.2019;31.03.2020;1;;0;0;0;2;0;0;;0;1;0;#NV;;
-250;Tessmann Tobias;Tessmann;Tobias;Tessmann T;qsjwbuAupcjbt.ufttnboo/ef;6c15a9994eb2aa39744f6f63813136a7;076/ 831 16 86;19.11.2022;;6;;0;1;0;2;0;1;1;0;1;0;-23;;GER
-251;Tiketsang Namgyal;Tiketsang;Namgyal;Tiketsang N;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-252;Toth Mike;Toth;Mike;Toth M;n/upuiAhny/di;860325a95caf6d1775e410131ec04720;079/ 555 44 01;01.11.2017;31.03.2020;1;;0;3;0;2;0;1;;1;1;0;#NV;;SUI
-253;Truong Giai;Truong;Giai;Truong G;hjbj/usvpohAtijoufsofu/di;6f3bff5ccd1edd76109e1aba3e55c6f0;;;;0;;0;2;0;0;0;0;;0;1;0;#NV;;
-254;Truong Hao;Truong;Hao;Truong H;ibp/usvpohAtijoufsofu/di;af9a04802937310acd6ee9f1b3792994;;;;0;;0;2;0;0;0;0;;0;1;0;#NV;;
-255;Tschander Andreas;Tschander;Andreas;Tschander A;boesfbt/utdiboefsAhnbjm/dpn;4f991558601c9057162454014e74fbc5;079/ 937 61 72;06.03.2024;;6;;0;1;0;2;0;1;1;0;1;0;-23;;GER
-256;Tsitalis Christos;Tsitalis;Christos;Tsitalis C;disjtuptutjubmjtAzbipp/ef;5a5c6f7ed22e4d7f7bab15d523731c6f;+49 1575 472 6352;01.09.2022;;6;;0;1;0;2;0;1;1;0;1;0;-23;;
-257;Twerenbold Christian;Twerenbold;Christian;Twerenbold C;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;SUI
-258;Ursenbacher Alexander;Ursenbacher;Alexander;Ursenbacher A;bmfy258Aipunbjm/di;d41d8cd98f00b204e9800998ecf8427e;078/ 886 66 85;;;0;;0;4;0;0;0;1;;0;1;1;#NV;;SUI
-259;Vanderelst Casper;Vanderelst;Casper;Vanderelst C;dbtqfswboefsfmtuAhny/di;d425143165e7617b9d50b332687d7bda;078/ 956 68 86;04.02.2024;;6;;0;1;0;2;0;0;;0;0;0;8;;NED
-260;Väyrynen Risto;Väyrynen;Risto;Vaeyrynen R;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-261;Vergère Alain;Vergère;Alain;Vergère A;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;SUI
-262;Vetsch Gregor;Vetsch;Gregor;Vetsch G;;7fa012af1d8c91e39ad1b52c070261db;044/ 750 68 81;01.12.2011;30.06.2023;1;;0;0;0;2;0;0;;0;1;0;#NV;;SUI
-263;Vetter Luis;Vetter;Luis;Vetter L;mvjt/wfuufsAipunbjm/dpn;c166bbf3b0c82c31f4dee13d6a0d4d43;079/ 622 28 47;01.04.2018;30.11.2018;1;;0;3;0;2;1;1;;0;0;0;#NV;;SUI
-264;Vorburger Beat;Vorburger;Beat;Vorburger B;cfbu/wpscvshfsAcmvfxjo/di;ef1e0dc1734e84568cd9f86501184861;079/ 211 80 79;01.03.2005;;6;;0;1;0;2;0;0;;1;1;0;-23;;SUI
-265;Vujkovic Dean;Vujkovic;Dean;Vujkovic D;efbo/wvklpwjdAzbipp/dpn;15c1a801b104afe097369c4f4d935f4e;078/ 693 10 19;04.03.2021;31.12.2023;1;;0;1;0;2;0;1;1;0;1;0;221;;
-266;Wäfler Oliver;Wäfler;Oliver;Waefler O;pmjwfs/xbfgmfsAhnbjm/dpn;a46c7a3ff8b7b2c2d2abaec4790af485;079/ 616 22 92;06.10.2015;;6;;0;4;0;2;1;1;;1;1;0;-23;;SUI
-267;Waldhauser René;Waldhauser;René;Waldhauser R;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-268;Walker Daniela;Walker;Daniela;Walker D;ebojfmb/xAtvosjtf/di;d1b145842e9b731a66eef0ee6fc33497;044/ 536 74 35;14.10.2008;;4;;0;0;0;1;0;0;;0;1;0;-53;;SUI
-269;Walker Thomas;Walker;Thomas;Walker T;u/xbmlfsAtvosjtf/di;7e60bc642fefc11b43792e8745df6c1d;076/ 570 48 60;10.10.2008;;6;;0;1;0;2;0;1;;1;1;0;-53;;GER
-270;Walt Beatrice;Walt;Beatrice;Walt B;c/xbmuAhny/di;e5dd621adbf38d3906b24d1cf84c5a2f;078/ 727 81 18;23.11.2021;;4;;0;1;0;2;0;1;1;0;1;0;8;;SUI
-271;Wapf Michael;Wapf;Michael;Wapf M;njdibfm/xbqgAcmvfxjo/di;6acaaa5a3f237e8b91336eee222ae351;079/ 389 02 38;01.04.2010;;6;;1;4;0;2;0;1;;1;1;0;-53;;SUI
-272;Waqas Khawaja;Waqas;Khawaja;Waqas K;xbrbtAzbipp/dp/jo;16011b63b271aed568bbde4bd8a63bdf;078/ 778 10 41;09.02.2020;30.04.2021;1;;0;1;1;2;0;1;1;0;1;0;#NV;;
-273;Wäschle Stefan;Wäschle;Stefan;Waeschle S;vmusbsvoofs78Aipunbjm/dpn;4bad0b8dd3074cd43f641c2ac22a3571;078/ 900 46 27;;;0;;0;1;0;2;0;1;1;0;1;0;#NV;;SUI
-274;Weber Daniel;Weber;Daniel;Weber D;;;;;;0;;0;1;0;0;1;1;;0;0;0;#NV;;
-275;Wedam Claudio;Wedam;Claudio;Wedam C;d/xfebn31Aipunbjm/dpn;78d30c250fa223678e3a1490169070ec;079/ 226 54 88;01.11.2013;;6;;1;3;0;2;0;1;;1;1;0;-23;;SUI
-276;Wedam Mario;Wedam;Mario;Wedam M;d/xfebn31Aipunbjm/dpn;78d30c250fa223678e3a1490169070ec;;01.11.2013;;4;;0;0;0;1;0;0;;0;1;0;-23;;SUI
-277;Wee Bluue;Wee;Bluue;Wee B;xff/cmvvfAhny/di;ec54a37c763476f73a03b3c466dfb50e;056/ 245 74 87;;;0;;0;1;0;0;0;1;;0;1;0;#NV;;
-278;Wegmann Brigitte;Wegmann;Brigitte;Wegmann B;csjhjuuf/xfhnbooAcmvfxjo/di;2bbde08986316bd2b7bb4f696803e3c2;079/ 625 98 30;30.10.2021;;4;;0;1;0;2;0;1;1;0;1;0;-206;;SUI
-279;Wegmann Kevin;Wegmann;Kevin;Wegmann K;lfwjo`topplfsAipunbjm/dpn;074efe27288876f4baf12abf9866c3b8;079/ 314 61 53;01.12.2005;;6;;0;4;0;2;1;1;;1;1;0;-114;;SUI
-280;Wegmüller Cyrill;Wegmüller;Cyrill;Wegmueller C;dz/xf98Aipunbjm/dpn;ed8a8a37a716f47f31121d4bd06cda7b;078/ 697 22 12;26.02.2015;31.07.2016;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-281;Weishaupt Roger;Weishaupt;Roger;Weishaupt R;sphfs/xfjtibvquAhny/di;b016f48d898c745be5ef382254224582;079/ 352 12 06;01.02.2013;;6;;0;0;0;2;0;0;;0;1;0;-23;;SUI
-282;Weiss Peter;Weiss;Peter;Weiss P;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-283;Wenger Paul-Alain;Wenger;Paul-Alain;Wenger P;;;;;;0;;0;3;0;0;1;1;;0;0;0;#NV;;SUI
-284;Weyland Dennis;Weyland;Dennis;Weyland D;efoojtxfzmboeAhnbjm/dpn;71fab71dc7f27505c9850ab546ea653d;078/ 669 12 99;04.01.2017;31.12.2019;1;;0;0;0;1;0;0;;0;1;0;#NV;;
-285;Wieser Christian;Wieser;Christian;Wieser C;xjftfs:3Aipunbjm/dpn;6fb6858f94b9c610d72a146a54522541;078/ 615 79 87;16.09.2014;30.04.2021;1;;0;2;0;2;0;1;;0;1;0;#NV;;
-286;Wittenburg Ralph;Wittenburg;Ralph;Wittenburg R;{ptp/diAebub{vh/di;e30748229745044799092a613e439fec;079/ 226 64 21;01.03.2017;28.02.2018;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-287;Wortmann Florian;Wortmann;Florian;Wortmann F;g/xpsunboo95Ahnbjm/dpn;c865b68e3c69ea88567a17a63725f789;;04.10.2017;30.04.2019;1;;0;0;0;2;0;0;;0;0;0;#NV;;
-288;Wyss Martin;Wyss;Martin;Wyss M;nxAnfjo.xfh.{vn.j/di;8a3871c7dcaedf4febf942e4e89b161f;078/ 603 69 41;13.01.2021;;6;;0;1;0;2;0;1;1;0;1;0;-23;;SUI
-289;Xavier Gustavo;Xavier;Gustavo;Xavier G;hvtubwp/i/ybwjfsApvumppl/dpn;c2c3513c9c3622ec2d4262b75b705717;079/ 742 37 29;04.03.2021;31.12.2023;1;;0;1;0;2;0;1;1;0;1;0;433;;
-290;Zaman Ajmal;Zaman;Ajmal;Zaman A;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-291;Zappi Simone;Zappi;Simone;Zappi S;;;;;;0;;0;2;0;0;0;1;;0;0;0;#NV;;
-292;Zareh Sassan;Zareh;Sassan;Zareh S;t/{bsfiAhny/di;a1f4aa90416446d85c1fa4c3744e187e;076/ 318 13 32 ;23.10.2021;;6;;0;1;0;2;0;1;1;0;1;0;-53;;IRI
-293;Zeidani Hamed;Zeidani;Hamed;Zeidani H;i/q/{fjebojAhnbjm/dpn;870e97f97e4a0faa08c3300895a24d46;;;;0;;0;1;0;0;0;0;;0;1;0;#NV;;
-294;Zimmermann Tom;Zimmermann;Tom;Zimmermann T;{jnnfsnbooAqbuixpslt/di;3ff2103e5b7914179624e21d327e0000;079/ 248 44 76;;;0;;0;3;0;0;1;1;;0;1;0;#NV;;SUI
-295;Zingel Klaus;Zingel;Klaus;Zingel K;l{johfmAcmvfxjo/di;0404d51cd19859af28e8219675f142b6;079/ 651 04 60;26.10.2022;;6;;1;3;0;2;0;0;;0;1;0;-23;;SUI
-296;Zita Toni;Zita;Toni;Zita T;upojl{jubAhny/di;beea2a4fc269514d683757a39f02be13;078/ 659 50 89;08.01.2019;;6;;0;0;0;2;0;0;;1;1;0;-114;;ENG
-297;Zuberbühler Tobias;Zuberbühler;Tobias;Zuberbuehler T;{vczAhny/di;5c8b9a086bd4cd23f0f90a3d0e869d7f;079/ 519 19 64;20.03.2014;30.04.2017;1;;0;0;0;2;0;0;;0;0;0;#NV;;SUI
-298;Zürcher Cornel;Zürcher;Cornel;Zuercher C;dpsofm{vfsdifsAhnbjm/dpn;71f2a2a31b74316effd3f18d4781a6a3;078/ 872 36 07;01.02.2009;30.09.2014;1;;0;2;0;2;0;0;;0;0;0;#NV;;SUI
-299;Zürcher Lionel;Zürcher;Lionel;Zuercher L;mjpofm/{vsdifsAcmvfxjo/di;6b42d00c4ca6ddc33a604c54b8ce4adc;;;;0;;0;1;0;0;0;0;;0;1;0;#NV;;
-300;zzNeuer Spieler 01;Neuer;Spieler;@Neuer Spieler01;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-301;zzNeuer Spieler 02;Neuer;Spieler;@Neuer Spieler02;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-302;zzNeuer Spieler 03;Neuer;Spieler;@Neuer Spieler03;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-303;zzNeuer Spieler 04;Neuer;Spieler;@Neuer Spieler04;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-304;zzNeuer Spieler 05;Neuer;Spieler;@Neuer Spieler05;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-305;zzNeuer Spieler 06;Neuer;Spieler;@Neuer Spieler06;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-306;zzNeuer Spieler 07;Neuer;Spieler;@Neuer Spieler07;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-307;zzNeuer Spieler 08;Neuer;Spieler;@Neuer Spieler08;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-308;zzNeuer Spieler 09;Neuer;Spieler;@Neuer Spieler09;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-309;zzNeuer Spieler 10;Neuer;Spieler;@Neuer Spieler10;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-310;zzNeuer Spieler 11;Neuer;Spieler;@Neuer Spieler11;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-311;zzNeuer Spieler 12;Neuer;Spieler;@Neuer Spieler12;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-312;zzNeuer Spieler 13;Neuer;Spieler;@Neuer Spieler13;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-313;zzNeuer Spieler 14;Neuer;Spieler;@Neuer Spieler14;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-314;zzNeuer Spieler 15;Neuer;Spieler;@Neuer Spieler15;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-315;zzNeuer Spieler 16;Neuer;Spieler;@Neuer Spieler16;topplfsAcmvfxjo/di;45cb9d89768663634f23900626470ac3;;;;0;;0;1;0;1;0;1;1;0;1;0;#NV;;
-;;;;;;;;;;;;;;;;;;;;;;;;
+N°;Name / Vorname;Name;Vorname;ScoBo-Name;Clubname;;;;;;;;;;;;;;;;;;;IOC-Land
+1;Trage hier die Spieler ein;Diese Zeile wird;nicht ;verwendet;;;;;;;;;;;;;;;;;;;;
+2;aaSpieler A;Spieler;A;Spieler A;;;;;;;;;;;;;;;;;;;;
+3;aaSpieler B;Spieler;B;Spieler B;;;;;;;;;;;;;;;;;;;;
+4;Aeberli Heinz;Aeberli;Heinz;Aeberli H;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+5;Aeschlimann Michel;;;Aeschlimann M;;;;;;;;;;;;;;;;;;;;SUI
+6;Affolter Chrigu;;;Affolter C;;;;;;;;;;;;;;;;;;;;SUI
+7;Alder Jürg;;;Alder J;;;;;;;;;;;;;;;;;;;;SUI
+8;Allan Paul;;;Allan P;;;;;;;;;;;;;;;;;;;;SCO
+9;Althaus Mike;;;Althaus M;;;;;;;;;;;;;;;;;;;;SUI
+10;Ammann Marcel;;;Ammann M;;;;;;;;;;;;;;;;;;;;SUI
+11;Anar Bora;;;Anar B;;;;;;;;;;;;;;;;;;;;-
+12;Anisimov Mikhail;Anisimov;Mikhail;Anisimov M;Round Robin Sports;;;;;;;;;;;;;;;;;;;ARM
+13;Aris Florian;Aris;Florian;Aris F;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+14;Arnold Pascal;;;Arnold P;;;;;;;;;;;;;;;;;;;;SUI
+15;Arter Sarah;Arter;Sarah;Arter S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+16;Azizaj Bashkim;;;Azizaj B;;;;;;;;;;;;;;;;;;;;KOS
+17;Bachmann Walter;;;Bachmann W;;;;;;;;;;;;;;;;;;;;SUI
+18;Balaban Sayit;;;Balaban S;;;;;;;;;;;;;;;;;;;;SUI
+19;Baltus Jean-Marc;;;Baltus J;;;;;;;;;;;;;;;;;;;;BEL
+20;Bantli Hannes;;;Bantli H;;;;;;;;;;;;;;;;;;;;SUI
+21;Barz Roman;Barz;Roman;Barz R;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+22;Batt Michael;;;Batt M;;;;;;;;;;;;;;;;;;;;SUI
+23;Baumgartner Martin;Baumgartner;Martin;Baumgartner M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+24;Baumgartner René;;;Baumgartner R;;;;;;;;;;;;;;;;;;;;SUI
+25;Bazin Gauvain;;;Bazin G;;;;;;;;;;;;;;;;;;;;FRA
+26;Begni Carlo;;;Begni C;;;;;;;;;;;;;;;;;;;;SUI
+27;Berliat Markus;;;Berliat M;;;;;;;;;;;;;;;;;;;;SUI
+28;Biernacki Tymoteusz;;;Biernacki T;;;;;;;;;;;;;;;;;;;;SUI
+29;Bishop Stewart;Bishop;Stewart;Bishop S;Round Robin Sports;;;;;;;;;;;;;;;;;;;RSA
+30;Blaser Bruno;;;Blaser B;;;;;;;;;;;;;;;;;;;;SUI
+31;Blaser Christoph;Blaser;Christoph;Blaser C;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+32;Bond Nigel;;;Bond N;World Snooker;;;;;;;;;;;;;;;;;;;ENG
+33;Branca Salvatore;Branca;Salvatore;Branca S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+34;Brander René;;;Brander R;;;;;;;;;;;;;;;;;;;;SUI
+35;Brecel Luca;;;Brecel L;World Snooker;;;;;;;;;;;;;;;;;;;BEL
+36;Brechbühl Renato;;;Brechbuehl R;;;;;;;;;;;;;;;;;;;;SUI
+37;Broder Martin;;;Broder M;;;;;;;;;;;;;;;;;;;;SUI
+38;Brubacher Hans;;;Brubacher H;;;;;;;;;;;;;;;;;;;;SUI
+39;Bruni Danilo;;;Bruni D;;;;;;;;;;;;;;;;;;;;SUI
+40;Brütsch Simon;Brütsch;Simon;Bruetsch S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+41;Bucher Jacqueline;Bucher;Jacqueline;Bucher J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+42;Buchs Dominik;Buchs;Dominik;Buchs D;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+43;Burgener Michael;Burgener;Michael;Burgener M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+44;Bürki Roland;;;Bürki R;;;;;;;;;;;;;;;;;;;;SUI
+45;Burntani Pon;;;Burntani P;;;;;;;;;;;;;;;;;;;;SUI
+46;Cairns Michael;Cairns;Michael;Cairns M;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUS
+47;Camenzind Pascal;;;Camenzind P;;;;;;;;;;;;;;;;;;;;SUI
+48;Canetto Nicola;;;Canetto N;;;;;;;;;;;;;;;;;;;;ITA
+49;Cepenas Justas;;;Cepenas;;;;;;;;;;;;;;;;;;;;LTU
+50;Chand Balbir;Chand;Balbir;Chand B;Round Robin Sports;;;;;;;;;;;;;;;;;;;ENG
+51;Chanson Sébastien;;;Chanson S;;;;;;;;;;;;;;;;;;;;SUI
+52;Chohan Ketan;;;Chohan K;;;;;;;;;;;;;;;;;;;;IND
+53;Clarke Jamie;;;Clark J;World Snooker;;;;;;;;;;;;;;;;;;;WAL
+54;Clohosey Michael;;;Clohosey M;;;;;;;;;;;;;;;;;;;;ENG
+55;Costantini Lorenzo;Costantini;Lorenzo;Costantini L;Round Robin Sports;;;;;;;;;;;;;;;;;;;ITA
+56;Cristiano Carmine;;;Cristiano C;;;;;;;;;;;;;;;;;;;;ITA
+57;Curt Ovidiu;;;Curt O;;;;;;;;;;;;;;;;;;;;ROM
+58;D'anna Regis;;;D'anna R;;;;;;;;;;;;;;;;;;;;FRA
+59;Dale Dominic;;;Dale D;World Snooker;;;;;;;;;;;;;;;;;;;WAL
+60;Dallo Leonardo;Dallo;Leonardo;Dallo L;Round Robin Sports;;;;;;;;;;;;;;;;;;;ITA
+61;De Pascali Antonio;;;DePascali A;;;;;;;;;;;;;;;;;;;;
+62;Dehchamani Babak;;;Dehchamani B;;;;;;;;;;;;;;;;;;;;
+63;DeLuca Oliver;;;DeLuca O;;;;;;;;;;;;;;;;;;;;SUI
+64;Depser Michael;Depser;Michael;Depser M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+65;Din Farid;;;Din F;;;;;;;;;;;;;;;;;;;;PAK
+66;Dipsan Mihai;;;Dipsan M;;;;;;;;;;;;;;;;;;;;ROU
+67;Doherty Ken;;;Doherty K;World Snooker;;;;;;;;;;;;;;;;;;;IRL
+68;Dulka Martin;;;Dulka M;;;;;;;;;;;;;;;;;;;;SVK
+69;Dürig Philipp;;;Dürig P;;;;;;;;;;;;;;;;;;;;SUI
+70;Düring Jean-Luc;Düring;Jean-Luc;Duering J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+71;Düring Nico;Düring;Nico;Duering N;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+72;Dushkin Konstantin;;;Dushkin K;;;;;;;;;;;;;;;;;;;;RUS
+73;Eberhard Stefan;;;Eberhard S;;;;;;;;;;;;;;;;;;;;SUI
+74;Elhage Issa;Elhage;Issa;Elhage I;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+75;Elhayawan Karim;Elhayawan;Karim;Elhayawan K;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+76;Elze René;;;Elze R;;;;;;;;;;;;;;;;;;;;GER
+77;Engler Michael;Engler;Michael;Engler M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+78;Ernst Peter;Ernst;Peter;Ernst P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+79;Estermann Enrico;Estermann;Enrico;Estermann E;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+80;Favre Samuel;;;Favre S;;;;;;;;;;;;;;;;;;;;SUI
+81;Filion Jean;;;Filion J;Round Robin Sports;;;;;;;;;;;;;;;;;;;CAN
+82;Fingerlin Michael;;;Fingerlin M;;;;;;;;;;;;;;;;;;;;GER
+83;Fiorillo Franco;;;Fiorillo F;;;;;;;;;;;;;;;;;;;;ITA
+84;Fischbacher Patrick;Fischbacher;Patrick;Fischbacher P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+85;Fisher Jack;Fisher;Jack;Fisher J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SCO
+86;Föhn Martin;Föhn;Martin;Foehn M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+87;Fragnière Axel;;;Fragnière A;;;;;;;;;;;;;;;;;;;;
+88;Frei Ronald;Frei;Ronald;Frei R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+89;Freitag Urs;;;Freitag U;;;;;;;;;;;;;;;;;;;;SUI
+90;Frey Sascha;Frey;Sascha;Frey S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+91;Fulcher Jonni;;;Fulcher J;;;;;;;;;;;;;;;;;;;;SCO
+92;Furrer Dennis;Furrer;Dennis;Furrer D;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+93;Furrer Ivar;;;Furrer I;;;;;;;;;;;;;;;;;;;;SUI
+94;Furrer Sarah;Furrer;Sarah;Furrer Sa;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+95;Galié Peter;;;Galie P;;;;;;;;;;;;;;;;;;;;SUI
+96;Gantner Oliver;;;Gantner O;;;;;;;;;;;;;;;;;;;;SUI
+97;Garzia Pierfrancesco;;;Garzia P;;;;;;;;;;;;;;;;;;;;ITA
+98;Gashi Lulzim;Gashi;Lulzim;Gashi L;;;;;;;;;;;;;;;;;;;;CAN
+99;Giedemann Rolf;;;Giedemann R;;;;;;;;;;;;;;;;;;;;SUI
+100;Giger Rafael;Giger;Rafael;Giger R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+101;Goguet Remi;;;Goguet R;;;;;;;;;;;;;;;;;;;;SUI
+102;Gou Yiwei;Gou;Yiwei;Gou Y;Round Robin Sports;;;;;;;;;;;;;;;;;;;CHN
+103;Graf Lukas;Graf;Lukas;Graf L;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+104;Graven Rob;Graven;Rob;Graven R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+105;Grendelmeier Thomas;;;Grendelmeier T;;;;;;;;;;;;;;;;;;;;SUI
+106;Grob Harry;Grob;Harry;Grob H;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+107;Guerra Tiziano;;;Guerra T;;;;;;;;;;;;;;;;;;;;ITA
+108;Gyomlay Bela;;;Gyomlay B;;;;;;;;;;;;;;;;;;;;SUI
+109;Gysel Hanspeter;Gysel;Hanspeter;Gysel H;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+110;Hardegger Stefan;;;Hardegger S;;;;;;;;;;;;;;;;;;;;SUI
+111;Harzenmoser Marco;Harzenmoser;Marco;Harzenmoser M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+112;Hasenfratz Sandro;Hasenfratz;Sandro;Hasenfratz S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+113;Hashimi Hamid;;;Hashimi H;;;;;;;;;;;;;;;;;;;;AFG
+114;Hashimi Mujtaba;;;Hashimi M;;;;;;;;;;;;;;;;;;;;AFG
+115;Hasler Martin;;;Hasler M;;;;;;;;;;;;;;;;;;;;SUI
+116;Haug Dominik;;;Haug D;;;;;;;;;;;;;;;;;;;;GER
+117;Haziri Dardan;;;Haziri D;;;;;;;;;;;;;;;;;;;;SUI
+118;Heid Christian;Heid;Christian;Heid C;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+119;Hirschi Joel;;;Hirschi J;;;;;;;;;;;;;;;;;;;;SUI
+120;Hofer Marco;;;Hofer M;;;;;;;;;;;;;;;;;;;;SUI
+121;Hohl Roger;;;Hohl R;;;;;;;;;;;;;;;;;;;;AUT
+122;Holt Michael;;;Holt M;World Snooker;;;;;;;;;;;;;;;;;;;ENG
+123;Horlacher Manuel;Horlacher;Manuel;Horlacher M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+124;Hostettler Ellen;Hostettler;Ellen;Hostettler E;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+125;Hubanov Aleksandar;;;Hubanov A;;;;;;;;;;;;;;;;;;;;AUT
+126;Humbel Thomas;Humbel;Thomas;Humbel T;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+127;Hürlimann Simon;Hürlimann;Simon;Huerlimann S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+128;Infanger Mike;;;Infanger M;;;;;;;;;;;;;;;;;;;;SUI
+129;Ishaq Umar;;;Ishaq U;;;;;;;;;;;;;;;;;;;;
+130;Israel Achim;;;Israel A;;;;;;;;;;;;;;;;;;;;GER
+131;Jampa Gyaltsen;;;Jampa G;;;;;;;;;;;;;;;;;;;;CHN
+132;Jampa Neyshartsang;;;Jampa N;;;;;;;;;;;;;;;;;;;;CHN
+133;Jankowski Frederic;Jankowski;Frederic;Jankowski F;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+134;Jänönen Isto;Jänönen;Isto Kristian;Jaenoenen I;Round Robin Sports;;;;;;;;;;;;;;;;;;;FIN
+135;Jegge Patrik;;;Jegge P;;;;;;;;;;;;;;;;;;;;SUI
+136;Jezler Roland;;;Jezler R;;;;;;;;;;;;;;;;;;;;SUI
+137;Johnson Patrick;Johnson;Patrick;Johnson P;Round Robin Sports;;;;;;;;;;;;;;;;;;;ENG
+138;Junhui Ding;;;Junhui D;World Snooker;;;;;;;;;;;;;;;;;;;CHN
+139;Jusaj Muxhahid;;;Jusaj M;;;;;;;;;;;;;;;;;;;;SUI
+140;Jusaj Sejfullah;;;Jusaj S;;;;;;;;;;;;;;;;;;;;SUI
+141;Kage Sybiller;Kage;Sybille;Kage S;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+142;Kälin Jürg;Kälin;Jürg;Kaelin J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+143;Kälin Simon;Kälin;Simon;Kaelin S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+144;Kalina Gabriel;;;Kalina G;;;;;;;;;;;;;;;;;;;;SVK
+145;Karakurum Sener;;;Karakurum S;;;;;;;;;;;;;;;;;;;;TUR
+146;Keller Tom;;;Keller T;;;;;;;;;;;;;;;;;;;;GER
+147;Kerenyi Attila;Kerenyi;Attila;Kerenyi A;Round Robin Sports;;;;;;;;;;;;;;;;;;;USA
+148;Khmelevskyi Denys;;;Khmelevskyi D;;;;;;;;;;;;;;;;;;;;UKR
+149;Kiefer Markus;;;Kiefer M;;;;;;;;;;;;;;;;;;;;SUI
+150;Klaua Denis;;;Klaua D;;;;;;;;;;;;;;;;;;;;GER
+151;Kleinschmidt Uwe;Kleinschmidt;Uwe;Kleinschmidt U;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+152;Kocamaz Toraman;;;Kocamaz T;;;;;;;;;;;;;;;;;;;;SUI
+153;Kong James;;;Kong J;;;;;;;;;;;;;;;;;;;;SUI
+154;Kruppert Carsten;;;Kruppert C;;;;;;;;;;;;;;;;;;;;GER
+155;Kücükarabaci Tayfum;;;Kuecuekarabaci T;;;;;;;;;;;;;;;;;;;;TUR
+156;Kumbrink Dirk;Kumbrink;Dirk;Kumbrink D;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+157;Kurzen Jannick;Kurzen;Jannick;Kurzen J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+158;Läpple Buaban;Läpple;Buaban;Laepple B;Round Robin Sports;;;;;;;;;;;;;;;;;;;THA
+159;Larkov Mykhailo;;;Larkov M;;;;;;;;;;;;;;;;;;;;UKR
+160;Lebong Markus;Lebong;Markus;Lebong M;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+161;Lehner Sebastian;;;Lehner S;;;;;;;;;;;;;;;;;;;;SUI
+162;Leuch Martin;Leuch;Martin;Leuch M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+163;Leumann Manfred;;;Leumann M;;;;;;;;;;;;;;;;;;;;SUI
+164;Leuthold Martin;;;Leuthold M;;;;;;;;;;;;;;;;;;;;SUI
+165;Lindenmann Alessandro;Lindenmann;Alessandro;Lindenmann A;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+166;Loffredo Fabrice;;;Loffredo F;;;;;;;;;;;;;;;;;;;;SUI
+167;Löschnigg Roman;Löschnigg;Roman;Loeschnigg R;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUT
+168;Losi Marvin;;;Losi M;;;;;;;;;;;;;;;;;;;;SUI
+169;Lüthi Paul;Lüthi;Paul;Luethi P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+170;Mahfood Abdulla;Mahfood;Abdulla;Mahfood A;Round Robin Sports;;;;;;;;;;;;;;;;;;;IRK
+171;Mahiphund James;;;Mahiphund J;;;;;;;;;;;;;;;;;;;;THA
+172;Maier Marc;;;Maier M;;;;;;;;;;;;;;;;;;;;IMN
+173;Maldonado Johnny;;;Maldonado J;;;;;;;;;;;;;;;;;;;;SUI
+174;Mansfield George;;;Mansfield G;;;;;;;;;;;;;;;;;;;;
+175;Martinet David;;;Martinet D;;;;;;;;;;;;;;;;;;;;SUI
+176;Martins Paolo;;;Martins P;;;;;;;;;;;;;;;;;;;;POR
+177;Mavrodiev Vergil;;;Mavrodiev V;Round Robin Sports;;;;;;;;;;;;;;;;;;;BUL
+178;Mayor Javier;Mayor;Javier;Mayor J.;Round Robin Sports;;;;;;;;;;;;;;;;;;;ESP
+179;McCulloch Ian;;;McCulloch I;World Snooker;;;;;;;;;;;;;;;;;;;ENG
+180;McGill Anthony;;;McGill A;World Snooker;;;;;;;;;;;;;;;;;;;SCO
+181;Meier Thomas;Meier;Thomas;Meier T;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+182;Meng Xuanting;Meng;Xuanting;Meng X;Round Robin Sports;;;;;;;;;;;;;;;;;;;CHN
+183;Mennillo Guglielmo;Mennillo;Guglielmo;Mennillo G;Round Robin Sports;;;;;;;;;;;;;;;;;;;ITA
+184;Menzi Markus;Menzi;Markus;Menzi M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+185;Menzi Yvonne;Menzi;Yvonne;Menzi Y;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+186;Meravy Pavol;;;Meravy P;;;;;;;;;;;;;;;;;;;;HUN
+187;Meyer Daniel;;;Meyer D;;;;;;;;;;;;;;;;;;;;SUI
+188;Milekic Aco;Milekic;Aco;Milekic A;Round Robin Sports;;;;;;;;;;;;;;;;;;;?
+189;Minoui Mori;Minoui;Mori;Minoui M;Round Robin Sports;;;;;;;;;;;;;;;;;;;IRI
+190;Muïr Ross;;;Muïr R;World Snooker;;;;;;;;;;;;;;;;;;;SCO
+191;Müller Marcel;;;Mueller M;;;;;;;;;;;;;;;;;;;;SUI
+192;Murphy Shaun;;;Murphy S;World Snooker;;;;;;;;;;;;;;;;;;;ENG
+193;Muths Roger;Muths;Roger;Muths R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+194;Muths Sergio;Muths;Sergio;Muths S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+195;Mutter Raoul;;;Mutter R;;;;;;;;;;;;;;;;;;;;SUI
+196;Naddaf Davood;;;Naddaf D;;;;;;;;;;;;;;;;;;;;IRI
+197;Naseri Khalid;;;Naseri K;;;;;;;;;;;;;;;;;;;;AFG
+198;Nasseri Modjtaba;;;Nasseri M;;;;;;;;;;;;;;;;;;;;AFG
+199;Naveed Ahmad;;;Naveed A;;;;;;;;;;;;;;;;;;;;
+200;Neff Chatthong;;;Neff C;;;;;;;;;;;;;;;;;;;;THA
+201;Nenzi Leandro;Nenzi;Leandro;Nenzi L;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+202;Nguyen Michael;;;Nguyen M;;;;;;;;;;;;;;;;;;;;SUI
+203;Niederreuther Raoul;;;Niederreuther R;;;;;;;;;;;;;;;;;;;;SUI
+204;Niemiec Patrick;;;Niemiec P;;;;;;;;;;;;;;;;;;;;FRA
+205;Nijati Ali Sina;;;Nijati A;;;;;;;;;;;;;;;;;;;;AFG
+206;O'Reilly David;O'Reilly;David;Oreilly D;Round Robin Sports;;;;;;;;;;;;;;;;;;;IRL
+207;Oberkofler Patrik;;;Oberkofler P;;;;;;;;;;;;;;;;;;;;AUT
+208;Ochoiski Brian;;;Ochoiski B;;;;;;;;;;;;;;;;;;;;FRA
+209;Ochoiski Stephan;;;Ochoiski S;;;;;;;;;;;;;;;;;;;;FRA
+210;Oezel Daniel;;;Oezel D;;;;;;;;;;;;;;;;;;;;SUI
+211;Ogasawara Junya;;;Ogasawara J;;;;;;;;;;;;;;;;;;;;JPN
+212;Ott Beda;;;Ott B;;;;;;;;;;;;;;;;;;;;SUI
+213;Pavelko Nykyta;;;Pavelko N;;;;;;;;;;;;;;;;;;;;UKR
+214;Perrenoud Nathalie;;;Perrenoud N;;;;;;;;;;;;;;;;;;;;SUI
+215;Perret Stéphane;;;Perret S;;;;;;;;;;;;;;;;;;;;SUI
+216;Pfanner Harry;Pfanner;Harry;Pfanner H;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUT
+217;Pfanner Thomas;Pfanner;Thomas;Pfanner T;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUT
+218;Pfister David;Pfister;David;Pfister D;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+219;Pietilä Sauli;Pietilä;Sauli;Pietilae S;Round Robin Sports;;;;;;;;;;;;;;;;;;;FIN
+220;Piller Billy;;;Piller B;;;;;;;;;;;;;;;;;;;;SUI
+221;Pole James;;;Pole J;;;;;;;;;;;;;;;;;;;;ENG
+222;Prisi Matthias;;;Prisi M;;;;;;;;;;;;;;;;;;;;SUI
+223;Qerkinaj Fidan;;;Qerkinaj F;Round Robin Sports;;;;;;;;;;;;;;;;;;;CAN
+224;Radisavljevic Branko;;;Radisavljevic B;;;;;;;;;;;;;;;;;;;;SCG
+225;Rafique Amélie;Rafique;Amélie;Rafique A;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+226;Rafique Eliane;Rafique;Eliane;Rafique E;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+227;Rafique Joey;Rafique;Joey;Rafique J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+228;Rafique Samuel;Rafique;Samuel;Rafique S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+229;Rahmati Armin;;;Rahmati A;;;;;;;;;;;;;;;;;;;;IRI
+230;Ramseier Jürg;Ramseier;Jürg;Ramseier J;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+231;Ramseier Yannick;Ramseier;Yannick;Ramseier Y;;;;;;;;;;;;;;;;;;;;SUI
+232;Ramzani Mushtaq;;;Ramzani M;;;;;;;;;;;;;;;;;;;;
+233;Reichen Marcel;;;Reichen M;;;;;;;;;;;;;;;;;;;;SUI
+234;Reusser Simeon;Reusser;Simeon;Reusser S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+235;Ribeiro Francisco;Ribeiro;Francisco;Ribeiro F;Round Robin Sports;;;;;;;;;;;;;;;;;;;POR
+236;Richter Christian;;;Richter C;;;;;;;;;;;;;;;;;;;;GER
+237;Rietmann Luke;;;Rietmann L;;;;;;;;;;;;;;;;;;;;SUI
+238;Robertson Neil;;;Robertson N;World Snooker;;;;;;;;;;;;;;;;;;;AUS
+239;Rogenmoser Petra;Rogenmoser;Petra;Rogenmoser P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+240;Rogge Andreas;;;Rogge A;;;;;;;;;;;;;;;;;;;;GER
+241;Roten Andreas;Roten;Andreas;Roten A;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+242;Ruddy Martin;;;Ruddy M;;;;;;;;;;;;;;;;;;;;IRL
+243;Ruina Arshia;Ruina;Arshia;Ruina A;Round Robin Sports;;;;;;;;;;;;;;;;;;;?
+244;Rütschi Aldo;;;Ruetschi A;;;;;;;;;;;;;;;;;;;;SUI
+245;Safari Semko;;;Safari S;;;;;;;;;;;;;;;;;;;;IRI
+246;Salzmann Dan;;;Salzmann D;;;;;;;;;;;;;;;;;;;;SUI
+247;Salzmann Erich;;;Salzmann E;;;;;;;;;;;;;;;;;;;;SUI
+248;Sanders Adrian;Sanders;Adrian;Sanders A;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUT
+249;Sangjapok Samat;Sangjapok;Samat;Sangjapok S;Round Robin Sports;;;;;;;;;;;;;;;;;;;THA
+250;Sari Soner;;;Sari S;;;;;;;;;;;;;;;;;;;;TUR
+251;Schärer Martin;;;Schaerer M;;;;;;;;;;;;;;;;;;;;SUI
+252;Scheffler Daniel;Scheffler;Daniel;Scheffler D;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+253;Schlatter Marc;;;Schlatter M;;;;;;;;;;;;;;;;;;;;SUI
+254;Schmid Jenson;;;Schmid J;;;;;;;;;;;;;;;;;;;;SUI
+255;Schmid Kurt;Schmid;Kurt;Schmid K;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+256;Schmid Patrick;;;Schmid P;;;;;;;;;;;;;;;;;;;;SUI
+257;Schmid Roger;;;Schmid R;;;;;;;;;;;;;;;;;;;;SUI
+258;Schneebeli Louis;;;Schneebeli L;;;;;;;;;;;;;;;;;;;;SUI
+259;Schneider Stefan;;;Schneider S;;;;;;;;;;;;;;;;;;;;SUI
+260;Schön Stefan;Schön;Stefan;Schoen S;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+261;Schorr Roland;Schorr;Roland;Schorr R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+262;Schreiner Claudia;Schreiner;Claudia;Schreiner C;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+263;Schweizer Michael;;;Schweizer M;;;;;;;;;;;;;;;;;;;;SUI
+264;Schwitter Sandro;Schwitter;Sandro;Schwitter S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+265;Seiler Leroy;Seiler;Leroy;Seiler L;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+266;Seiler Pascal;Seiler;Pascal;Seiler P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+267;Shaikh Umar-Ali;;;Shaikh U;;;;;;;;;;;;;;;;;;;;PAK
+268;Sharman Lee;;;Sharman L;;;;;;;;;;;;;;;;;;;;SUI
+269;Sharman Richard;;;Sharman R;;;;;;;;;;;;;;;;;;;;SUI
+270;Shimamoto Orestes;Shimamoto;Orestes;Shimamoto O;Round Robin Sports;;;;;;;;;;;;;;;;;;;GRE
+271;Siegenthaler Dirk;;;Siegenthaler D;;;;;;;;;;;;;;;;;;;;SUI
+272;Silva Antonio;Silva;Antonio;Silva A;Round Robin Sports;;;;;;;;;;;;;;;;;;;POR
+273;Simic Aleksandar;;;Simic A;;;;;;;;;;;;;;;;;;;;-
+274;Sivasubramaniam Mohanraj;Sivasubramaniam;Mohanraj;Sivasubramaniam M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+275;Skugor Luka;;;Skugor L;;;;;;;;;;;;;;;;;;;;CRO
+276;Spilker Christian;;;Spilker C;;;;;;;;;;;;;;;;;;;;GER
+277;Spyridakos Panos;Spyridakos;Panos;Spyridakos P;Round Robin Sports;;;;;;;;;;;;;;;;;;;GRE
+278;Stähli Franz;;;Staehli F;;;;;;;;;;;;;;;;;;;;SUI
+279;Steinmann Patrick;Steinmann;Patrick;Steinmann P;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+280;Stern Uri;Stern;Uri;Stern U;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+281;Stocker Daniel;Stocker;Daniel;Stocker D;Round Robin Sports;;;;;;;;;;;;;;;;;;;ITA
+282;Stolz Eric André;;;Stolz E;;;;;;;;;;;;;;;;;;;;GER
+283;Stoppacher Benjamin;Stoppacher;Benjamin;Stoppacher B;Round Robin Sports;;;;;;;;;;;;;;;;;;;AUT
+284;Strehler Marc;Strehler;Marc;Strehler M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+285;Sun KwokLeung;;;Sun K;;;;;;;;;;;;;;;;;;;;CHN
+286;Surzhykov Artem;;;Surzhykov A;;;;;;;;;;;;;;;;;;;;UKR
+287;Sutter Beat;Sutter;Beat;Sutter B;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+288;Taj Karim;;;Taj K;;;;;;;;;;;;;;;;;;;;MAR
+289;Takoet Def;;;Takoet D;;;;;;;;;;;;;;;;;;;;THA
+290;Tamisier Alexandre;Tamisier;Alexandre;Tamisier A;Round Robin Sports;;;;;;;;;;;;;;;;;;;FRA
+291;Tanner Ariane;Tanner;Ariane;Tanner A;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+292;Tapogna Marco;;;Tapogna M;;;;;;;;;;;;;;;;;;;;SUI
+293;Tashi Sonam Tashi;;;Tashi S;;;;;;;;;;;;;;;;;;;;SUI
+294;Taylor Brad;;;Taylor B;;;;;;;;;;;;;;;;;;;;-
+295;Tessmann Tobias;Tessmann;Tobias;Tessmann T;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+296;Thomen Stefan;Thomen;Stefan;Thomen S;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+297;Tiketsang Namgyal;;;Tiketsang N;;;;;;;;;;;;;;;;;;;;SUI
+298;Toma Salvatore;;;Toma S;;;;;;;;;;;;;;;;;;;;ITA
+299;Toth Mike;;;Toth M;Clublos;;;;;;;;;;;;;;;;;;;SUI
+300;Treichler Robert;;;Treichler R;;;;;;;;;;;;;;;;;;;;SUI
+301;Truong Giai;;;Truong G;;;;;;;;;;;;;;;;;;;;
+302;Truong Hao;;;Truong H;;;;;;;;;;;;;;;;;;;;
+303;Tschander Andreas;Tschander;Andreas;Tschander A;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+304;Tschanz Stefan;;;Tschanz S;;;;;;;;;;;;;;;;;;;;SUI
+305;Tsitalis Christos;Tsitalis;Christos;Tsitalis C;Round Robin Sports;;;;;;;;;;;;;;;;;;;GRE
+306;Tufail Muhammad;Tufail;Muhammad;Tufail M;Round Robin Sports;;;;;;;;;;;;;;;;;;;?
+307;Ugolini Jonas;;;Ugolini J;;;;;;;;;;;;;;;;;;;;
+308;Ulrich Pascal;;;Ulrich P;;;;;;;;;;;;;;;;;;;;SUI
+309;Ursenbacher Alexander;;;Ursenbacher A;;;;;;;;;;;;;;;;;;;;SUI
+310;Vanderelst Casper;Vanderelst;Casper;Vanderelst C;Round Robin Sports;;;;;;;;;;;;;;;;;;;NED
+311;Vanderelst Joris;Vanderelst;Joris;Vanderelst J;Round Robin Sports;;;;;;;;;;;;;;;;;;;NED
+312;Väyrynen Risto;;;Vaeyrynen R;;;;;;;;;;;;;;;;;;;;FIN
+313;Vdwoude Henk;Vdwoude;Henk;VdWoude H;Round Robin Sports;;;;;;;;;;;;;;;;;;;NED
+314;Vergère Alain;;;Vergère A;;;;;;;;;;;;;;;;;;;;SUI
+315;Vetter Luis;;;Vetter L;;;;;;;;;;;;;;;;;;;;SUI
+316;Von Niederhäusern Markus;;;VonNiederhäusern M;;;;;;;;;;;;;;;;;;;;SUI
+317;Vorburger Beat;Vorburger;Beat;Vorburger B;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+318;Wäfler Oliver;Wäfler;Oliver;Waefler O;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+319;Waldhauser René;;;Waldhauser R;;;;;;;;;;;;;;;;;;;;SUI
+320;Walker Daniela;Walker;Daniela;Walker D;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+321;Walker Thomas;Walker;Thomas;Walker T;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+322;Walker Vincent;Walker;Vincent;Walker V;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+323;Wallenhorst Falk;;;Wallenhorst F;;;;;;;;;;;;;;;;;;;;GER
+324;Walt Beatrice;Walt;Beatrice;Walt B;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+325;Wang Maoguang;Wang;Maoguang;Wang M;Round Robin Sports;;;;;;;;;;;;;;;;;;;CHN
+326;Wangdue Lobsang;Wangdue;Lobsang;Wangdue L;Round Robin Sports;;;;;;;;;;;;;;;;;;;TIB
+327;Wapf Michael;Wapf;Michael;Wapf M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+328;Waqas Khawaja;;;Waqas K;;;;;;;;;;;;;;;;;;;;PAK
+329;Wäschle Stefan;;;Waeschle S;;;;;;;;;;;;;;;;;;;;SUI
+330;Weber Daniel;;;Weber D;;;;;;;;;;;;;;;;;;;;SUI
+331;Weber Matthias;Weber;Matthias;Weber M;Round Robin Sports;;;;;;;;;;;;;;;;;;;GER
+332;Wedam Claudio;Wedam;Claudio;Wedam C;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+333;Wedam Mario;Wedam;Mario;Wedam M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+334;Wegmann Brigitte;Wegmann;Brigitte;Wegmann B;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+335;Wegmann Kevin;Wegmann;Kevin;Wegmann K;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+336;Weilenmann Hans-Ulrich;Weilenmann;Hans-Ulrich;Weilenmann H;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+337;Weiss Peter;;;Weiss P;;;;;;;;;;;;;;;;;;;;SUI
+338;Wenger Paul-Alain;;;Wenger P;;;;;;;;;;;;;;;;;;;;SUI
+339;Werthmüller Michael;;;Werthmüller M;;;;;;;;;;;;;;;;;;;;SUI
+340;Wyss Martin;Wyss;Martin;Wyss M;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+341;Zaman Ajmal;;;Zaman A;;;;;;;;;;;;;;;;;;;;AFG
+342;Zappi Simone;;;Zappi S;;;;;;;;;;;;;;;;;;;;ITA
+343;Zareh Sassan;Zareh;Sassan;Zareh S;Round Robin Sports;;;;;;;;;;;;;;;;;;;IRI
+344;Zellweger Roland;Zellweger;Roland;Zellweger R;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+345;Zhu Yuanzhang;;;Zhu Y;;;;;;;;;;;;;;;;;;;;CHN
+346;Ziegler Alex;Ziegler;Alex;Ziegler A;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+347;Zimmermann Tom;;;Zimmermann T;;;;;;;;;;;;;;;;;;;;SUI
+348;Zingel Klaus;Zingel;Klaus;Zingel K;Round Robin Sports;;;;;;;;;;;;;;;;;;;SUI
+349;Zürcher Lionel;;;Zuercher L;;;;;;;;;;;;;;;;;;;;SUI

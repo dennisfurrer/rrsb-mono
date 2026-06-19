@@ -1,4 +1,35 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+function AutoTextButton({ children, className, onClick, style, disabled }: {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const btn = ref.current;
+    if (!btn) return;
+    btn.style.fontSize = "";
+    void btn.offsetHeight;
+    if (btn.scrollHeight <= btn.offsetHeight + 2) return;
+    let fs = parseFloat(getComputedStyle(btn).fontSize);
+    while (fs > 8) {
+      fs -= 0.5;
+      btn.style.fontSize = `${fs}px`;
+      void btn.offsetHeight;
+      if (btn.scrollHeight <= btn.offsetHeight + 2) break;
+    }
+  }, []);
+
+  return (
+    <button ref={ref} className={className} onClick={onClick} style={style} disabled={disabled}>
+      <span style={{ display: "block", width: "100%" }}>{children}</span>
+    </button>
+  );
+}
 
 interface Props {
   onUndo?: () => void;
@@ -45,6 +76,7 @@ export function MenuDialog({
 }: Props) {
   const [confirmMatchEnd, setConfirmMatchEnd] = useState(false);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
+  const [confirmRerack, setConfirmRerack] = useState(false);
   const [pendingBestOf, setPendingBestOf] = useState(bestOf);
   const [showBestOfInfo, setShowBestOfInfo] = useState(false);
 
@@ -121,6 +153,7 @@ export function MenuDialog({
           </div>
           <div style={{ display: "flex", gap: "2vw", width: "100%" }}>
             <button
+              className="bbb-btn-ok"
               onClick={onMatchEnd}
               style={{
                 flex: 1,
@@ -137,6 +170,7 @@ export function MenuDialog({
               Ja
             </button>
             <button
+              className="bbb-btn-cancel"
               onClick={() => setConfirmMatchEnd(false)}
               style={{
                 flex: 1,
@@ -183,6 +217,7 @@ export function MenuDialog({
           <div style={{ display: "flex", gap: "2vw", width: "100%" }}>
             <button
               onClick={onNewGame}
+              className="bbb-btn-ok"
               style={{
                 flex: 1,
                 padding: "2.5vh 0",
@@ -199,6 +234,68 @@ export function MenuDialog({
             </button>
             <button
               onClick={() => setConfirmNewGame(false)}
+              className="bbb-btn-cancel"
+              style={{
+                flex: 1,
+                padding: "2.5vh 0",
+                fontSize: "2.5vw",
+                fontWeight: "bold",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: "#7a1a1a",
+                color: "#f87171",
+              }}
+            >
+              Nein
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (confirmRerack) {
+    return (
+      <div className="overlay" onClick={onClose}>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            background: "#2a2a2a",
+            borderRadius: "12px",
+            padding: "3.5vh 3vw 3vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "2.5vh",
+            width: "52vw",
+          }}
+        >
+          <div style={{ color: "#fff", fontSize: "3.16vw", fontWeight: "bold", textAlign: "center" }}>
+            Re-rack wirklich ausführen?
+          </div>
+          <div style={{ color: "#aaa", fontSize: "2vw", textAlign: "center" }}>
+            Alle Bälle werden neu aufgestellt. Das aktuelle Break wird beendet und kann nicht rückgängig gemacht werden.
+          </div>
+          <div style={{ display: "flex", gap: "2vw", width: "100%" }}>
+            <button
+              onClick={onRerack}
+              style={{
+                flex: 1,
+                padding: "2.5vh 0",
+                fontSize: "2.5vw",
+                fontWeight: "bold",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: "#1a5c1a",
+                color: "#4ade80",
+              }}
+            >
+              Ja
+            </button>
+            <button
+              onClick={() => setConfirmRerack(false)}
               style={{
                 flex: 1,
                 padding: "2.5vh 0",
@@ -226,45 +323,82 @@ export function MenuDialog({
   return (
     <div className="overlay" onClick={onClose}>
       <div className="menu-fullscreen" onClick={(e) => e.stopPropagation()}>
-        {onUndo && (
-          <button className="menu-btn-undo" onClick={onUndo}>
-            Undo / Letzte Eingabe löschen
-          </button>
-        )}
-        {onRedo && (
-          <button className="menu-btn-undo" onClick={onRedo} style={{ background: "#1a3a1a", color: "#4ade80", borderColor: "#2a5a2a" }}>
-            Redo / Letzte Eingabe wiederherstellen
-          </button>
-        )}
-        {onFrameEnd !== undefined && (
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1.5vh", borderBottom: "1px solid #2a2a2a", marginBottom: "0.4vh" }}>
+          <span style={{ color: "#555", fontSize: "1.2vw", fontWeight: "bold", letterSpacing: "0.18em", textTransform: "uppercase" }}>Menu</span>
           <button
-            className="menu-btn-frame-end"
-            onClick={isFrameTied ? undefined : onFrameEnd}
-            disabled={isFrameTied}
-            style={isFrameTied ? { opacity: 0.4, cursor: "not-allowed" } : undefined}
-          >
-            {isFrameTied ? "Frame-Ende (Unentschieden!)" : `Frame-Ende (${frameLeader} gewinnt Frame)`}
-          </button>
-        )}
+            onClick={onClose}
+            style={{ background: "none", border: "none", color: "#555", fontSize: "1.6vw", cursor: "pointer", padding: "0 0.3vw", lineHeight: 1, minHeight: "unset", height: "auto" }}
+          >✕</button>
+        </div>
+        <button className="menu-btn-new-game" onClick={matchFinished || !hasEntries ? onNewGame : () => setConfirmNewGame(true)}>
+          New game / Neues Spiel
+        </button>
         {!matchFinished && (
-          <button className="menu-btn-rerack" onClick={onRerack}>
+          <button className="menu-btn-rerack" onClick={() => setConfirmRerack(true)}>
             Re-rack
           </button>
         )}
-        {onMatchEnd && (
-          <button className="menu-btn-match-end" onClick={() => setConfirmMatchEnd(true)}>
-            {isTied ? "Match-Ende (Unentschieden)" : `Match-Ende (${matchLeader} gewinnt)`}
-          </button>
+        {((onFrameEnd !== undefined && !isFrameTied) || !!onMatchEnd) && (
+          <div style={{ display: "flex", gap: "0.8vw" }}>
+            <AutoTextButton
+              className="menu-btn-frame-end"
+              onClick={onFrameEnd !== undefined && !isFrameTied ? onFrameEnd : undefined}
+              disabled={onFrameEnd === undefined || isFrameTied}
+              style={{
+                flex: 1,
+                ...(onFrameEnd === undefined
+                  ? { opacity: 0.3, cursor: "not-allowed" }
+                  : isFrameTied
+                    ? { opacity: 0.4, cursor: "not-allowed" }
+                    : {}),
+              }}
+            >
+              🔴 {onFrameEnd !== undefined
+                ? (isFrameTied ? "Frame-Ende (Unentschieden!)" : `Frame-Ende (${frameLeader} gewinnt Frame)`)
+                : "Frame-Ende"}
+            </AutoTextButton>
+            <AutoTextButton
+              className="menu-btn-match-end"
+              style={{ flex: 1, background: "#265c26", color: "#00e600", ...(!onMatchEnd ? { opacity: 0.3, cursor: "not-allowed" } : {}) }}
+              onClick={onMatchEnd ? () => setConfirmMatchEnd(true) : undefined}
+              disabled={!onMatchEnd}
+            >
+              🏁 {onMatchEnd
+                ? (isTied ? "Match-Ende (Unentschieden)" : `Match-Ende (${matchLeader} gewinnt)`)
+                : "Match-Ende"}
+            </AutoTextButton>
+          </div>
+        )}
+        {(onUndo || onRedo) && (
+          <div style={{ display: "flex", gap: "0.8vw" }}>
+            <AutoTextButton
+              className="menu-btn-undo"
+              style={{ flex: 1, ...(!onUndo ? { opacity: 0.3, cursor: "not-allowed" } : {}) }}
+              onClick={onUndo}
+              disabled={!onUndo}
+            >
+              <span style={{ fontFamily: "'Wingdings 3'" }}>L</span>{" Undo / Letzte Eingabe löschen"}
+            </AutoTextButton>
+            <AutoTextButton
+              className="menu-btn-redo"
+              style={{ flex: 1, background: "#1a3a1a", color: "#4ade80", borderColor: "#2a5a2a", ...(!onRedo ? { opacity: 0.3, cursor: "not-allowed" } : {}) }}
+              onClick={onRedo}
+              disabled={!onRedo}
+            >
+              {"Redo / Gelöschtes wiederherstellen. "}<span style={{ fontFamily: "'Wingdings 3'" }}>M</span>
+            </AutoTextButton>
+          </div>
         )}
         {showAdjuster && (
           <div style={{
-            background: "#111833",
-            padding: "3.59vh 2vw",
+            background: "#0c0e1a",
+            border: "1.5px solid #224488",
+            borderRadius: "10px",
+            padding: "2vh 2vw",
             display: "flex",
             flexDirection: "column",
             gap: "1.4vh",
-            borderTop: "1px solid #000",
-            borderBottom: "1px solid #000",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.6vw" }}>
@@ -272,6 +406,7 @@ export function MenuDialog({
                   Ausspielziel ändern
                 </span>
                 <button
+                  className="menu-btn-info"
                   onClick={(e) => { e.stopPropagation(); setShowBestOfInfo(true); }}
                   type="button"
                   style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
@@ -281,9 +416,10 @@ export function MenuDialog({
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "1.2vw" }}>
                 <button
+                  className="menu-btn-bestof"
                   onClick={() => setPendingBestOf((v) => Math.max(totalFrames, v - 1))}
                   disabled={pendingBestOf <= totalFrames}
-                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center" }}
+                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   −
                 </button>
@@ -291,8 +427,9 @@ export function MenuDialog({
                   Best of {pendingBestOf}
                 </span>
                 <button
+                  className="menu-btn-bestof"
                   onClick={() => setPendingBestOf((v) => v + 1)}
-                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center" }}
+                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   +
                 </button>
@@ -301,24 +438,21 @@ export function MenuDialog({
             {pendingChanged && (
               <div style={{ display: "flex", gap: "1vw" }}>
                 <button
-                  onClick={() => { onChangeBestOf(pendingBestOf); }}
-                  style={{ flex: 1, background: "#1a5c1a", color: "#4ade80", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center" }}
-                >
-                  OK
-                </button>
-                <button
                   onClick={() => setPendingBestOf(bestOf)}
-                  style={{ flex: 1, background: "#3a1a1a", color: "#f87171", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center" }}
+                  style={{ flex: 1, background: "#3a1a1a", color: "#f87171", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   Abbrechen
+                </button>
+                <button
+                  onClick={() => { onChangeBestOf(pendingBestOf); }}
+                  style={{ flex: 1, background: "#1a5c1a", color: "#4ade80", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
+                >
+                  OK
                 </button>
               </div>
             )}
           </div>
         )}
-        <button className="menu-btn-new-game" onClick={matchFinished || !hasEntries ? onNewGame : () => setConfirmNewGame(true)}>
-          New game / Neues Spiel
-        </button>
       </div>
 
       {showBestOfInfo && (
@@ -342,6 +476,7 @@ export function MenuDialog({
               Das Spiel endet, sobald ein Spieler die Mehrheit der Frames gewonnen hat und der Gegner rechnerisch nicht mehr aufholen kann.
             </div>
             <button
+              className="menu-btn-info"
               onClick={() => setShowBestOfInfo(false)}
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >

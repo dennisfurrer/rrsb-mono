@@ -120,6 +120,6 @@ export function applyPot(state: BBState, ball: BBBallType): PotResult {
 }
 
 export function applyFoul(state: BBState, ball: BBBallColor): { points: number; newState: BBState } {
-  // Break ends on foul — reset break display, give freeball to opponent
-  return { points: foulPoints(ball), newState: resetBreak({ ...state, freeBallAvailable: true }) };
+  const isLastBlack = state.phase === "colors_only" && state.colorsOnlyIndex === 5;
+  return { points: foulPoints(ball), newState: resetBreak({ ...state, freeBallAvailable: !isLastBlack }) };
 }

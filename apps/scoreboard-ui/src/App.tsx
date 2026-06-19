@@ -66,7 +66,7 @@ type HistoryEntry = {
   label: string;
   snapshot: string;
   color?: string;
-  kind?: "break" | "foul" | "handicap" | "frame_end" | "rerack";
+  kind?: "break" | "foul" | "handicap" | "frame_end" | "rerack" | "correction";
   playerIndex?: 0 | 1;
   points?: number;
   frameNumber?: number;
@@ -75,7 +75,7 @@ type HistoryEntry = {
 };
 
 type RedoEntry = {
-  entry: HistoryEntry;
+  entries: HistoryEntry[];
   matchAfter: string; // JSON of match state AFTER the action (to restore on redo)
 };
 
@@ -117,9 +117,9 @@ export function App() {
   const isEditingBreakRef = useRef(false);
   const preEditHistoryRef = useRef<HistoryEntry[] | null>(null);
   const preEditMatchRef = useRef<MatchState | null>(null);
-  const pendingEditFoulRef = useRef<{ opponentIdx: 0 | 1; foulPts: number } | null>(null);
   const endFrameRef = useRef<() => void>(() => {});
   const [pendingEndFrame, setPendingEndFrame] = useState(false);
+  const [showMenuFrameEndStats, setShowMenuFrameEndStats] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showStats, setShowStats] = useState(false);
@@ -325,6 +325,8 @@ export function App() {
       name2: string,
       nat1: string,
       nat2: string,
+      club1: string,
+      club2: string,
       bestOf: number,
       inputMode: "break" | "ballbyball" = "break",
       redsCount: number = 15,
@@ -332,7 +334,7 @@ export function App() {
     ) => {
       const newState: MatchState = {
         ...createInitialMatchState(),
-        players: [createPlayer(name1, nat1), createPlayer(name2, nat2)],
+        players: [createPlayer(name1, nat1, club1), createPlayer(name2, nat2, club2)],
         bestOf,
         inputMode,
         redsCount,
@@ -384,7 +386,7 @@ export function App() {
       isHandicap: boolean
     ) => {
       const label = isFoul
-        ? `${match.players[playerIndex].name} Foul ${points}`
+        ? `${match.players[playerIndex].name} - Foul ${points}`
         : isHandicap
         ? `${match.players[playerIndex].name} HC ${points}`
         : `${match.players[playerIndex].name} (${points})`;
@@ -464,16 +466,6 @@ export function App() {
     const playerIdx = match.activePlayerIndex as 0 | 1;
     const opponentIdx = (playerIdx === 0 ? 1 : 0) as 0 | 1;
 
-    // If only black remains after this pot, no break in progress, and diff > 7 → frame is decided
-    const newBB = result.newState;
-    if (!newBB.frameOver && newBB.phase === "colors_only" && newBB.colorsOnlyIndex === 5 && match.bbState.breakTotal === 0) {
-      const newScore = match.players[playerIdx].score + result.points;
-      const oppScore = match.players[opponentIdx].score;
-      if (Math.abs(newScore - oppScore) > 7) {
-        result.newState = { ...newBB, frameOver: true };
-      }
-    }
-
     pushHistory(
       "",
       match, undefined,
@@ -492,8 +484,6 @@ export function App() {
   }, [match, pushHistory]);
 
   const handleBBFoul = useCallback((ball: BBBallColor) => {
-    const pendingFoul = pendingEditFoulRef.current;
-    pendingEditFoulRef.current = null;
     isEditingBreakRef.current = false;
     preEditHistoryRef.current = null;
     preEditMatchRef.current = null;
@@ -511,19 +501,11 @@ export function App() {
         : { ...result.newState, phase: "colors_only" as const, colorsOnlyIndex: 0 }
       : result.newState;
 
-    if (bbState.breakTotal > 0) {
-      pushHistory(
-        `${match.players[playerIdx].name} (${bbState.breakTotal}) & Foul (${result.points} für ${match.players[opponentIdx].name})`,
-        match, undefined,
-        { kind: "break", playerIndex: playerIdx, points: bbState.breakTotal, frameNumber: match.currentFrame }
-      );
-    } else {
-      pushHistory(
-        `${match.players[playerIdx].name} Foul (${result.points} für ${match.players[opponentIdx].name})`,
-        match, undefined,
-        { kind: "foul", playerIndex: playerIdx, points: result.points, frameNumber: match.currentFrame }
-      );
-    }
+    pushHistory(
+      `${match.players[playerIdx].name} - Foul ${result.points}`,
+      match, undefined,
+      { kind: "foul", playerIndex: playerIdx, points: result.points, frameNumber: match.currentFrame }
+    );
 
     // Foul when only the black remains → check for re-spotted black
     const isOnlyBlack = bbState.phase === "colors_only" && bbState.colorsOnlyIndex === 5;
@@ -566,7 +548,7 @@ export function App() {
           }
           return next;
         });
-        setPendingEndFrame(true);
+        setShowMenuFrameEndStats(true);
       }
       setShowBBDialog(false);
       return;
@@ -574,9 +556,6 @@ export function App() {
 
     setMatch((prev) => {
       const next = structuredClone(prev);
-      if (pendingFoul) {
-        next.players[pendingFoul.opponentIdx].score -= pendingFoul.foulPts;
-      }
       next.players[opponentIdx].score += result.points;
       next.activePlayerIndex = opponentIdx;
       next.bbState = { ...normalizedBBState, foulByPlayerIndex: playerIdx };
@@ -600,12 +579,13 @@ export function App() {
       nextMatch.bbState.colorsOnlyIndex = 0;
     }
     pushHistory(
-      `Korrektur: ${old}→${newCount} Rote`,
+      `Korrektur: ${old}→${newCount} 🔴`,
       match,
       undefined,
-      { kind: "rerack", frameNumber: match.currentFrame }
+      { kind: "correction", frameNumber: match.currentFrame }
     );
     setMatch(nextMatch);
+    setShowBBDialog(false);
   }, [match, pushHistory]);
 
   // ===== FRAME END =====
@@ -754,7 +734,6 @@ export function App() {
     isEditingBreakRef.current = false;
     preEditHistoryRef.current = null;
     preEditMatchRef.current = null;
-    pendingEditFoulRef.current = null;
     setIsEditingBreak(false);
     const playerIdx = match.activePlayerIndex as 0 | 1;
     const opponentIdx = (playerIdx === 0 ? 1 : 0) as 0 | 1;
@@ -784,16 +763,34 @@ export function App() {
         });
         return;
       }
-      // Record highbreak before frame ends
+      // Record highbreak before frame ends, clear breakBalls so undo snapshot is clean
       setMatch((prev) => {
         const next = structuredClone(prev);
         if (next.bbState) {
           next.players[playerIdx].highbreaks = insertHighBreak(next.players[playerIdx].highbreaks, next.bbState.breakTotal);
+          next.bbState = { ...next.bbState, breakBalls: [], breakTotal: 0 };
         }
         return next;
       });
-      endFrame();
+      setShowMenuFrameEndStats(true);
       return;
+    }
+    // Only black remains and score diff > 7 → frame decided, end it
+    if (bbState?.phase === "colors_only" && bbState.colorsOnlyIndex === 5) {
+      const s0 = match.players[0].score;
+      const s1 = match.players[1].score;
+      if (Math.abs(s0 - s1) > 7) {
+        setMatch((prev) => {
+          const next = structuredClone(prev);
+          if (next.bbState) {
+            next.players[playerIdx].highbreaks = insertHighBreak(next.players[playerIdx].highbreaks, next.bbState.breakTotal);
+            next.bbState = { ...next.bbState, breakBalls: [], breakTotal: 0 };
+          }
+          return next;
+        });
+        setShowMenuFrameEndStats(true);
+        return;
+      }
     }
     setMatch((prev) => {
       const next = structuredClone(prev);
@@ -815,15 +812,51 @@ export function App() {
       }
       return next;
     });
-  }, [match, pushHistory, endFrame]);
+  }, [match, pushHistory, endFrame, setShowMenuFrameEndStats]);
 
   // ===== RE-RACK =====
   const rerack = useCallback(() => {
+    const frameHistory = history.filter(e => e.frameNumber === match.currentFrame);
+    const firstRerackIdx = frameHistory.findIndex(e => e.kind === "rerack");
+    const originalHC = firstRerackIdx >= 0
+      ? frameHistory.slice(0, firstRerackIdx).filter(e => e.kind === "handicap")
+      : frameHistory.filter(e => e.kind === "handicap");
+    const hc0 = originalHC.filter(e => e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+    const hc1 = originalHC.filter(e => e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+    const [p1c, p2c] = playerColors;
+
+    // Snapshot after rerack but before HC: scores = 0, bbState reset
+    const snapPostRerack = structuredClone(match);
+    snapPostRerack.players[0].score = 0;
+    snapPostRerack.players[1].score = 0;
+    if (snapPostRerack.bbState) snapPostRerack.bbState = createBBState(snapPostRerack.redsCount);
+
     pushHistory("Re-rack", match, undefined, { kind: "rerack", frameNumber: match.currentFrame });
+    if (hc0 > 0) {
+      pushHistory(
+        `${match.players[0].name} HC ${hc0}`, snapPostRerack,
+        resolvePlayerColor(p1c, p2c, true) ?? "#5599ff",
+        { kind: "handicap", playerIndex: 0, points: hc0, frameNumber: match.currentFrame }
+      );
+    }
+    if (hc1 > 0) {
+      // Snapshot for second HC entry: after first HC already applied
+      const snapAfterHC0 = structuredClone(snapPostRerack);
+      snapAfterHC0.players[0].score = hc0;
+      pushHistory(
+        `${match.players[1].name} HC ${hc1}`, snapAfterHC0,
+        resolvePlayerColor(p2c, p1c, false) ?? "#ff8833",
+        { kind: "handicap", playerIndex: 1, points: hc1, frameNumber: match.currentFrame }
+      );
+    }
+
     setMatch((prev) => {
       const next = structuredClone(prev);
-      next.players[0].score = 0;
-      next.players[1].score = 0;
+      next.players[0].score = hc0;
+      next.players[1].score = hc1;
+      if (next.bbState) {
+        next.bbState = createBBState(next.redsCount);
+      }
 
       if (next.matchId) {
         sendFrameAction({
@@ -838,7 +871,7 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [match, pushHistory]);
+  }, [match, history, playerColors, pushHistory]);
 
   // ===== EDIT LAST BREAK (ball-by-ball only) =====
   const handleEditLastBreak = useCallback(() => {
@@ -849,28 +882,6 @@ export function App() {
     setHistory((prev) => {
       if (prev.length === 0) return prev;
       const last = prev[prev.length - 1];
-
-      if (last.label.includes("Foul")) {
-        // Break+foul: keep current scores unchanged (break pts on player, foul pts on opponent).
-        // Only restore bbState and activePlayerIndex to the pre-foul snapshot so the break
-        // can continue editing from before the foul. The foul entry becomes an empty-label
-        // undo step so the user can undo it inside the break dialog if desired.
-        const preFoulState = JSON.parse(last.snapshot) as MatchState;
-        const foulingPlayerIdx = preFoulState.activePlayerIndex as 0 | 1;
-        const oppIdx = (foulingPlayerIdx === 0 ? 1 : 0) as 0 | 1;
-        const foulPts = match.players[oppIdx].score - preFoulState.players[oppIdx].score;
-        pendingEditFoulRef.current = { opponentIdx: oppIdx, foulPts };
-        setMatch((prev) => {
-          const next = structuredClone(prev);
-          next.bbState = preFoulState.bbState;
-          next.activePlayerIndex = preFoulState.activePlayerIndex;
-          return next;
-        });
-        // Convert labeled foul entry → empty-label so Undo can pop it cleanly
-        return [...prev.slice(0, -1), { ...last, label: "" }];
-      }
-
-      // Pure break: existing behaviour (scores don't change visibly)
       setMatch(JSON.parse(last.snapshot) as MatchState);
       return prev.slice(0, -1);
     });
@@ -883,25 +894,51 @@ export function App() {
       if (preEditMatchRef.current) setMatch(preEditMatchRef.current);
       preEditHistoryRef.current = null;
       preEditMatchRef.current = null;
-      pendingEditFoulRef.current = null;
       isEditingBreakRef.current = false;
       setIsEditingBreak(false);
     }
     setShowBBDialog(false);
   }, []);
 
-  // ===== UNDO =====
+  // ===== UNDO (ball-by-ball — used inside BBDialog edit mode) =====
   const undo = useCallback(() => {
     if (history.length === 0) return;
     const last = history[history.length - 1];
     const restored = JSON.parse(last.snapshot) as MatchState;
-    // When undoing the converted foul entry during break edit, the pre-foul snapshot
-    // already reverts opponent's score, so the pending foul adjustment is no longer needed.
-    if (isEditingBreakRef.current) {
-      pendingEditFoulRef.current = null;
-    }
-    setRedoStack(rs => [...rs, { entry: last, matchAfter: JSON.stringify(match) }]);
+    setRedoStack(rs => [...rs, { entries: [last], matchAfter: JSON.stringify(match) }]);
     setHistory(history.slice(0, -1));
+    setMatch(restored);
+    setShowMenu(false);
+
+    if (restored.matchId) {
+      sendFrameAction({
+        matchId: restored.matchId,
+        frameNumber: restored.currentFrame,
+        actionType: "undo",
+        playerIndex: restored.activePlayerIndex + 1,
+        points: 0,
+      });
+    }
+  }, [history, match]);
+
+  // ===== UNDO FULL (whole break — used from main menu) =====
+  const undoFull = useCallback(() => {
+    if (history.length === 0) return;
+    const last = history[history.length - 1];
+
+    // For a labeled entry, also remove all preceding empty-label entries of the same break
+    let removeFrom = history.length - 1;
+    if (last.label !== "") {
+      while (removeFrom > 0 && history[removeFrom - 1].label === "") {
+        removeFrom--;
+      }
+    }
+
+    const removed = history.slice(removeFrom);
+    const restored = JSON.parse(removed[0].snapshot) as MatchState;
+
+    setRedoStack(rs => [...rs, { entries: removed, matchAfter: JSON.stringify(match) }]);
+    setHistory(history.slice(0, removeFrom));
     setMatch(restored);
     setShowMenu(false);
 
@@ -921,7 +958,7 @@ export function App() {
     if (redoStack.length === 0) return;
     const top = redoStack[redoStack.length - 1];
     setRedoStack(redoStack.slice(0, -1));
-    setHistory(h => [...h, top.entry]);
+    setHistory(h => [...h, ...top.entries]);
     setMatch(JSON.parse(top.matchAfter) as MatchState);
     setShowMenu(false);
   }, [redoStack]);
@@ -984,6 +1021,8 @@ export function App() {
     const totalFrames = match.players[0].frames + match.players[1].frames;
     if (newBestOf < totalFrames) return;
 
+    const willReopen = match.finished && !isMatchOver({ ...match, bestOf: newBestOf });
+
     setMatch((prev) => {
       const next = structuredClone(prev);
       next.bestOf = newBestOf;
@@ -1012,6 +1051,28 @@ export function App() {
       }
       return next;
     });
+
+    // When reopening a finished match, replace the "gewinnt Match" label with the actual frame score
+    if (willReopen) {
+      setHistory((prev) => {
+        if (prev.length === 0) return prev;
+        const last = prev[prev.length - 1];
+        if (last.kind !== "frame_end") return prev;
+        try {
+          const snap = JSON.parse(last.snapshot) as MatchState;
+          const s0 = snap.players[0].score;
+          const s1 = snap.players[1].score;
+          const winScore = Math.max(s0, s1);
+          const loseScore = Math.min(s0, s1);
+          const winnerIdx = s0 >= s1 ? 0 : 1;
+          const winnerName = snap.players[winnerIdx].name;
+          const frameNum = last.frameNumber ?? snap.currentFrame;
+          return [...prev.slice(0, -1), { ...last, label: `${winnerName} gewinnt ${frameNum}. Frame ${winScore}:${loseScore}` }];
+        } catch {
+          return prev;
+        }
+      });
+    }
 
     setShowMenu(false);
   }, [match]);
@@ -1477,11 +1538,20 @@ export function App() {
           onFoul={handleBBFoul}
           onMiss={handleBBMiss}
           onUndo={undo}
-          onRedo={redoStack.length > 0 && redoStack[redoStack.length - 1].entry.label === "" ? redo : undefined}
+          onRedo={redoStack.length > 0 && redoStack[redoStack.length - 1].entries.length === 1 && redoStack[redoStack.length - 1].entries[0].label === "" ? redo : undefined}
           onCorrectReds={handleBBCorrectReds}
           onClose={handleCancelBreakEdit}
           isEditMode={isEditingBreak}
           onCancelEdit={handleCancelBreakEdit}
+          frameScores={[match.players[0].score, match.players[1].score]}
+          opponentName={match.players[1 - match.activePlayerIndex].name}
+          frameNumber={match.currentFrame}
+          frameHistory={history.filter(e => e.frameNumber === match.currentFrame)}
+          playerColors={[
+            resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff",
+            resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833",
+          ]}
+          onHandicap={(idx, pts) => addPoints(idx, pts, false, true)}
         />
       )}
 
@@ -1497,9 +1567,9 @@ export function App() {
 
       {showMenu && (
         <MenuDialog
-          onUndo={history.length > 0 ? undo : undefined}
+          onUndo={history.length > 0 ? undoFull : undefined}
           onRedo={redoStack.length > 0 ? redo : undefined}
-          onFrameEnd={match.finished ? undefined : endFrame}
+          onFrameEnd={match.finished ? undefined : () => setShowMenuFrameEndStats(true)}
           isFrameTied={isFrameTied}
           onRerack={rerack}
           onMatchEnd={canEndMatchEarly ? endMatchEarly : undefined}
@@ -1525,6 +1595,208 @@ export function App() {
           isFrameStart={isFrameStart}
           onChangeBestOf={changeBestOf}
         />
+      )}
+
+      {showMenuFrameEndStats && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div style={{ background: "#1e1e1e", border: "1px solid #555", borderRadius: "14px", padding: "4vh 4vw", display: "flex", flexDirection: "column", gap: "2vh", alignItems: "center", minWidth: "62vw" }}>
+            <div style={{ color: "#fff", fontSize: "2.2vw", fontWeight: "bold" }}>{match.currentFrame}. Frame beenden?</div>
+            {/* Score */}
+            <div style={{ width: "100%", background: "#111", borderRadius: "10px", padding: "2vh 2vw", display: "flex", alignItems: "center", gap: "1vw" }}>
+              {(() => {
+                const s0 = match.players[0].score;
+                const s1 = match.players[1].score;
+                const p0wins = s0 > s1;
+                const p1wins = s1 > s0;
+                const effCol0 = resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff";
+                const effCol1 = resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833";
+                return (
+                  <>
+                    <span style={{ flex: 1, textAlign: "left", color: effCol0, fontSize: "1.8vw", fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {match.players[0].name}{p0wins && " 🏆"}
+                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", background: "#222", borderRadius: "8px", padding: "0.8vh 1.5vw" }}>
+                      <span style={{ color: p0wins ? "#ffee44" : "#888", fontSize: "3vw", fontWeight: "bold" }}>{s0}</span>
+                      <span style={{ color: "#555", fontSize: "1.8vw" }}>:</span>
+                      <span style={{ color: p1wins ? "#ffee44" : "#888", fontSize: "3vw", fontWeight: "bold" }}>{s1}</span>
+                    </div>
+                    <span style={{ flex: 1, textAlign: "right", color: effCol1, fontSize: "1.8vw", fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {p1wins && "🏆 "}{match.players[1].name}
+                    </span>
+                  </>
+                );
+              })()}
+            </div>
+            {/* Frame stats */}
+            {(() => {
+              const fh = history.filter(e => e.frameNumber === match.currentFrame);
+              const hBreaks0 = fh.filter(e => e.kind === "break" && e.playerIndex === 0 && (e.points ?? 0) > 7).map(e => e.points!).sort((a, b) => b - a);
+              const hBreaks1 = fh.filter(e => e.kind === "break" && e.playerIndex === 1 && (e.points ?? 0) > 7).map(e => e.points!).sort((a, b) => b - a);
+              const fouls0 = fh.filter(e => e.kind === "foul" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+              const fouls1 = fh.filter(e => e.kind === "foul" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+              const hc0 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+              const hc1 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+              const showHandicap = hc0 > 0 || hc1 > 0;
+              const reracks = fh.filter(e => e.kind === "rerack").length;
+              const corrections = fh.filter(e => e.kind === "correction");
+              const startTs = fh.find(e => e.timestamp)?.timestamp;
+              const effCol0 = resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff";
+              const effCol1 = resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833";
+              const durationStr = startTs ? (() => {
+                const ms = Date.now() - new Date(startTs).getTime();
+                const tot = Math.floor(ms / 1000);
+                const h = Math.floor(tot / 3600);
+                const m = Math.floor((tot % 3600) / 60);
+                const s = tot % 60;
+                return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+              })() : null;
+              return (
+                <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1.2vh", borderTop: "1px solid #333", paddingTop: "1.5vh" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto 1fr", columnGap: "0.6vw", rowGap: "0.35vh", fontSize: "1.35vw", alignItems: "baseline" }}>
+                    <div style={{ gridColumn: "1 / 3", color: effCol0, fontWeight: "bold", fontSize: "1.2vw", paddingBottom: "0.15vh" }}>{match.players[0].name}</div>
+                    <div style={{ gridColumn: "3 / 5", color: effCol1, fontWeight: "bold", fontSize: "1.2vw", paddingBottom: "0.15vh" }}>{match.players[1].name}</div>
+                    <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
+                    <div style={{ color: effCol0 }}>{hBreaks0.join(", ") || "—"}</div>
+                    <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
+                    <div style={{ color: effCol1 }}>{hBreaks1.join(", ") || "—"}</div>
+                    <div style={{ color: "#ccc" }}>Foulpunkte:</div>
+                    <div style={{ color: "#ff4444" }}>{fouls0}</div>
+                    <div style={{ color: "#ccc" }}>Foulpunkte:</div>
+                    <div style={{ color: "#ff4444" }}>{fouls1}</div>
+                    {showHandicap && (
+                      <>
+                        <div style={{ color: "#ccc" }}>Handicap:</div>
+                        <div style={{ color: "#c87832" }}>{hc0}</div>
+                        <div style={{ color: "#ccc" }}>Handicap:</div>
+                        <div style={{ color: "#c87832" }}>{hc1}</div>
+                      </>
+                    )}
+                    {(durationStr || reracks > 0) && (
+                      <>
+                        <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
+                        <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
+                        <div style={{ color: "#ffa040" }}>{reracks > 0 ? "🔴 Re-racks:" : ""}</div>
+                        <div style={{ color: "#ffa040" }}>{reracks > 0 ? reracks : ""}</div>
+                      </>
+                    )}
+                    {corrections.map((e, i) => (
+                      <div key={`corr-${i}`} style={{ gridColumn: "1 / 5", color: "#f0c040" }}>{e.label}</div>
+                    ))}
+                  </div>
+                  {(() => {
+                    const svgW = 500, svgH = 150, px = 32, py = 20;
+                    const cW = svgW - 2 * px, cH = svgH - 2 * py;
+                    const fs0 = match.players[0].score, fs1 = match.players[1].score;
+                    if (fs0 === 0 && fs1 === 0) return null;
+                    const yMax = Math.max(fs0, fs1) + 5;
+                    const lastRerackIdx = fh.reduce((idx, e, i) => e.kind === "rerack" ? i : idx, -1);
+                    const eventsAfterRerack = lastRerackIdx >= 0 ? fh.slice(lastRerackIdx + 1) : fh;
+                    const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+                    const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+                    const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1 }> = [{ s: [initHC0, initHC1] }];
+                    let acc0 = initHC0, acc1 = initHC1;
+                    for (const e of eventsAfterRerack) {
+                      if (e.kind === "handicap") continue;
+                      let n0 = acc0, n1 = acc1;
+                      if (e.kind === "break") {
+                        if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
+                        else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
+                      } else if (e.kind === "foul") {
+                        if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
+                        else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
+                      } else {
+                        continue;
+                      }
+                      if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
+                        acc0 = n0; acc1 = n1;
+                        const isFoul = e.kind === "foul";
+                        scoreData.push({
+                          s: [acc0, acc1],
+                          b: !isFoul ? (e.playerIndex as 0 | 1) : undefined,
+                          f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined,
+                        });
+                      }
+                    }
+                    const last = scoreData[scoreData.length - 1];
+                    if (last.s[0] !== fs0 || last.s[1] !== fs1) scoreData.push({ s: [fs0, fs1] });
+                    const firstEvent = eventsAfterRerack.find(e => e.kind === "break" || e.kind === "foul");
+                    const p0First = firstEvent ? (firstEvent.kind === "break" ? firstEvent.playerIndex === 0 : firstEvent.playerIndex === 1) : true;
+                    const n = scoreData.length;
+                    const toX = (i: number) => px + (n > 1 ? (i / (n - 1)) * cW : cW / 2);
+                    const toY = (score: number) => py + cH - (score / yMax) * cH;
+                    const pts0 = scoreData.map((pt, i) => `${toX(i).toFixed(1)},${toY(pt.s[0]).toFixed(1)}`).join(" ");
+                    const pts1 = scoreData.map((pt, i) => `${toX(i).toFixed(1)},${toY(pt.s[1]).toFixed(1)}`).join(" ");
+                    const midY = toY(Math.max(fs0, fs1) / 2);
+                    const col0 = effCol0;
+                    const col1 = effCol1;
+                    const lastX = toX(n - 1);
+                    const lastY0 = toY(fs0);
+                    const lastY1 = toY(fs1);
+                    const lcMin = 14;
+                    const lcGap0 = initHC0 > 0 && initHC1 === 0 ? toY(0) - toY(initHC0) : Infinity;
+                    const lcGap1 = initHC1 > 0 && initHC0 === 0 ? toY(0) - toY(initHC1) : Infinity;
+                    const lcHC0y = lcGap0 < lcMin ? (toY(initHC0) + toY(0)) / 2 - lcMin / 2 : toY(initHC0);
+                    const lcHC1y = lcGap1 < lcMin ? (toY(initHC1) + toY(0)) / 2 - lcMin / 2 : toY(initHC1);
+                    const lcZ1y  = lcGap0 < lcMin ? (toY(initHC0) + toY(0)) / 2 + lcMin / 2 : toY(0);
+                    const lcZ0y  = lcGap1 < lcMin ? (toY(initHC1) + toY(0)) / 2 + lcMin / 2 : toY(0);
+                    const rcGap = Math.abs(lastY0 - lastY1);
+                    const rcMid = (lastY0 + lastY1) / 2;
+                    const rcFs0y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid - lcMin / 2 : rcMid + lcMin / 2) : lastY0;
+                    const rcFs1y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid + lcMin / 2 : rcMid - lcMin / 2) : lastY1;
+                    return (
+                      <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw" }}>
+                        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", display: "block", overflow: "visible" }}>
+                          <text x={svgW / 2} y={toY(Math.max(fs0, fs1)) / 2} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="#666">Frameverlauf</text>
+                          <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                          <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                          <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                          {initHC0 > 0 && <text x={px - 4} y={lcHC0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col0}>{initHC0}</text>}
+                          {initHC1 > 0 && <text x={px - 4} y={lcHC1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col1}>{initHC1}</text>}
+                          {initHC0 === 0 && initHC1 > 0 && <text x={px - 4} y={lcZ0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col0}>0</text>}
+                          {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col1}>0</text>}
+                          {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col0 : col1}>0</text>}
+                          {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col1 : col0}>0</text>}
+                          <polyline points={pts0} fill="none" stroke={col0} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                          <polyline points={pts1} fill="none" stroke={col1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                          {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col0} /> : null)}
+                          {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col1} /> : null)}
+                          {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
+                          {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col0} /> : null)}
+                          <circle cx={lastX} cy={lastY0} r={4} fill={col0} />
+                          <circle cx={lastX} cy={lastY1} r={4} fill={col1} />
+                          <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col0}>{fs0}</text>
+                          <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col1}>{fs1}</text>
+                          <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
+                          <text x={svgW + 8} y={midY} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.floor(Math.max(fs0, fs1) / 2)}</text>
+                          <text x={svgW + 8} y={toY(Math.max(fs0, fs1))} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.max(fs0, fs1)}</text>
+                        </svg>
+                      </div>
+                    );
+                  })()}
+                </div>
+              );
+            })()}
+            <div style={{ display: "flex", gap: "1.5vw", width: "100%" }}>
+              <button
+                className="bbb-btn-cancel"
+                onClick={() => { setShowMenuFrameEndStats(false); setShowMenu(false); }}
+                style={{ flex: 1, background: "#3a1a1a", color: "#ff4444", border: "1px solid #553333", borderRadius: "8px", padding: "1.5vh 0", fontSize: "1.7vw", fontWeight: "bold", cursor: "pointer" }}
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={() => { setShowMenuFrameEndStats(false); endFrame(); setShowMenu(false); }}
+                className="frame-end-btn-glow"
+                style={{ flex: 1, background: "#1a5c1a", color: "#4ade80", border: "2.5px solid #4ade80", borderRadius: "8px", padding: "1.5vh 0", fontSize: "1.7vw", fontWeight: "bold", cursor: "pointer" }}
+              >
+                Frame beenden
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {showSettings && (
