@@ -14,6 +14,7 @@ import { highlightsRouter } from "./routes/highlights.js";
 import { adminRouter } from "./routes/admin/index.js";
 import { scoreboardsPublicRouter } from "./routes/admin/ping.js";
 import { practiceRouter, practiceStatsRouter } from "./routes/practice.js";
+import { remoteRouter } from "./routes/remote.js";
 
 const app = express();
 
@@ -45,6 +46,9 @@ app.use("/api/scoreboards", scoreboardsPublicRouter);
 // Practice (solo training) routes
 app.use("/api/practice-sessions", practiceRouter);
 app.use("/api/practice-stats", practiceStatsRouter);
+
+// Remote scorer relay (phone-based scoring over SSE)
+app.use("/api/remote", remoteRouter);
 
 app.use(
   (

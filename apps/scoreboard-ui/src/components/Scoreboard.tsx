@@ -18,6 +18,20 @@ interface Props {
   playerColors?: [string | null, string | null];
   onColorChange?: (playerIndex: 0 | 1, color: string) => void;
   onEditLastBreak?: () => void;
+  onRemoteClick?: (playerIndex: 0 | 1) => void;
+  remoteConnected?: [boolean, boolean];
+}
+
+/** Small QR-glyph icon for the remote-scorer button. */
+function QrGlyph({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 29 29" width="1.6vw" height="1.6vw" shapeRendering="crispEdges" aria-hidden="true">
+      <path
+        fill={color}
+        d="M0 0h7v7H0zM2 2v3h3V2zM22 0h7v7h-7zM24 2v3h3V2zM0 22h7v7H0zM2 24v3h3v-3zM9 0h2v2H9zM12 0h2v4h-2zM9 4h3v2H9zM16 2h2v2h-2zM9 9h2v2H9zM0 9h2v2H0zM4 9h3v2H4zM18 9h2v2h-2zM22 9h3v2h-3zM27 9h2v2h-2zM14 7h2v3h-2zM9 13h4v2H9zM0 13h2v3H0zM15 13h2v2h-2zM19 13h2v2h-2zM23 13h2v2h-2zM27 13h2v3h-2zM9 16h2v3H9zM13 17h2v2h-2zM17 16h3v2h-3zM22 17h2v2h-2zM25 16h2v2h-2zM9 22h2v2H9zM12 22h3v2h-3zM16 22h2v3h-2zM20 22h3v2h-3zM25 22h3v2h-3zM9 26h3v3H9zM14 26h2v3h-2zM18 26h2v3h-2zM22 26h2v3h-2zM26 26h3v3h-3z"
+      />
+    </svg>
+  );
 }
 
 const PALETTE_DARK = [
@@ -134,7 +148,7 @@ function DigitSlot({ value, animDuration = 5 }: { value: number; animDuration?: 
   );
 }
 
-export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak }: Props) {
+export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak, onRemoteClick, remoteConnected }: Props) {
   const [p1, p2] = match.players;
   const p1Active = match.activePlayerIndex === 0;
   const p2Active = match.activePlayerIndex === 1;
@@ -388,6 +402,18 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
                 ✎
               </button>
             )}
+            {onRemoteClick && !matchFinished && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onRemoteClick(0); }}
+                title="Fernbedienung (Handy)"
+                style={{ position: "absolute", bottom: "0.4vh", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+              >
+                <QrGlyph color={effP1Color ?? "#5599ff"} />
+                {remoteConnected?.[0] && (
+                  <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginLeft: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                )}
+              </button>
+            )}
           </div>
           {colorPickerFor === 0 && (
             <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
@@ -500,6 +526,18 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
                 style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
               >
                 ✎
+              </button>
+            )}
+            {onRemoteClick && !matchFinished && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onRemoteClick(1); }}
+                title="Fernbedienung (Handy)"
+                style={{ position: "absolute", bottom: "0.4vh", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+              >
+                {remoteConnected?.[1] && (
+                  <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginRight: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                )}
+                <QrGlyph color={effP2Color ?? "#ff8833"} />
               </button>
             )}
           </div>

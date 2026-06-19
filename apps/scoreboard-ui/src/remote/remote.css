@@ -1,0 +1,185 @@
+/* Phone remote scorer — mobile-first, scoped under .rmt-root so it doesn't
+   inherit the scoreboard's desktop (vw-based) layout. The global stylesheet
+   pins #root to overflow:hidden, so this root owns its own scroll. */
+
+.rmt-root {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #0d0d0f;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 12px max(24px, env(safe-area-inset-bottom));
+}
+
+.rmt-root div,
+.rmt-root span,
+.rmt-root button,
+.rmt-root p {
+  font-weight: normal;
+}
+
+/* ===== Connection banner ===== */
+.rmt-banner {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: center;
+}
+.rmt-banner--connecting { background: #2a2a33; color: #ccc; }
+.rmt-banner--reconnecting { background: #4a3a10; color: #ffcc55; }
+.rmt-banner--kicked { background: #4a1414; color: #ff8080; }
+.rmt-banner--invalid { background: #4a1414; color: #ff8080; }
+
+/* ===== Header / players ===== */
+.rmt-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: #888;
+  font-size: 13px;
+  padding: 0 2px;
+}
+.rmt-players { display: flex; gap: 8px; }
+.rmt-player {
+  flex: 1;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #17171b;
+  border: 2px solid #25252b;
+  min-width: 0;
+  text-align: left;
+}
+.rmt-player--active { border-color: var(--pc); box-shadow: 0 0 14px -4px var(--pc); }
+.rmt-player--right { text-align: right; }
+.rmt-pname {
+  font-size: 16px;
+  font-weight: bold !important;
+  color: var(--pc);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rmt-pscore { font-size: 42px; font-weight: bold !important; line-height: 1.05; }
+.rmt-pmeta { font-size: 12px; color: #888; }
+.rmt-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--pc);
+  color: #000;
+  border-radius: 6px;
+  padding: 1px 6px;
+  margin-top: 4px;
+  font-weight: bold !important;
+}
+
+/* ===== Break panel (ball-by-ball) ===== */
+.rmt-break {
+  background: #131318;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+.rmt-break-total { font-size: 22px; font-weight: bold !important; color: #fff; }
+.rmt-break-balls { display: flex; gap: 5px; flex-wrap: wrap; }
+.rmt-mini-ball { width: 16px; height: 16px; border-radius: 50%; }
+
+/* ===== Ball pad ===== */
+.rmt-section-label { font-size: 12px; color: #777; margin: 2px 0 -2px 2px; }
+.rmt-balls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.rmt-ball {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 0 -4px 8px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.18);
+  transition: transform 0.05s ease;
+}
+.rmt-ball:active { transform: scale(0.94); }
+.rmt-ball--red { font-size: 14px; }
+.rmt-ball:disabled { opacity: 0.22; box-shadow: none; cursor: default; }
+.rmt-ball-count {
+  font-size: 11px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 8px;
+  padding: 0 5px;
+  margin-left: 4px;
+}
+
+/* ===== Action buttons ===== */
+.rmt-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.rmt-btn {
+  min-height: 54px;
+  border-radius: 12px;
+  border: 1px solid #2c2c34;
+  background: #1c1c22;
+  color: #eee;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.rmt-btn:active { background: #26262e; }
+.rmt-btn:disabled { opacity: 0.35; cursor: default; }
+.rmt-btn--wide { grid-column: 1 / -1; }
+.rmt-btn--miss { background: #243a24; border-color: #2f5a2f; color: #9ce29c; font-weight: bold !important; }
+.rmt-btn--foul { background: #3a2424; border-color: #5a2f2f; color: #e2a0a0; }
+.rmt-btn--primary { background: #1a5c1a; border: none; color: #b6f5b6; font-weight: bold !important; }
+.rmt-btn--ghost { background: #161619; color: #aaa; }
+
+/* ===== Foul picker ===== */
+.rmt-foul-pick { background: #1a1320; border: 1px solid #4a2f5a; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.rmt-foul-pick-title { font-size: 13px; color: #c9a0e2; }
+
+/* ===== Reds stepper ===== */
+.rmt-reds { display: flex; align-items: center; gap: 10px; background: #131318; border-radius: 12px; padding: 8px 12px; }
+.rmt-reds-val { font-size: 20px; font-weight: bold !important; min-width: 28px; text-align: center; }
+.rmt-step {
+  width: 44px; height: 44px; border-radius: 10px; border: 1px solid #333;
+  background: #1c1c22; color: #fff; font-size: 22px; cursor: pointer;
+}
+
+/* ===== Break-mode keypad ===== */
+.rmt-tabs { display: flex; gap: 8px; }
+.rmt-tab {
+  flex: 1; min-height: 44px; border-radius: 10px; border: 2px solid #25252b;
+  background: #17171b; color: var(--pc); font-size: 15px; font-weight: bold !important; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 8px;
+}
+.rmt-tab--on { border-color: var(--pc); background: #20202a; }
+.rmt-input-display {
+  background: #0a0a0c; border: 1px solid #25252b; border-radius: 12px;
+  text-align: right; font-size: 40px; font-weight: bold !important; padding: 10px 16px; min-height: 60px;
+}
+.rmt-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.rmt-key {
+  min-height: 58px; border-radius: 12px; border: 1px solid #2c2c34; background: #1c1c22;
+  color: #fff; font-size: 24px; font-weight: bold !important; cursor: pointer;
+}
+.rmt-key:active { background: #26262e; }
+.rmt-toggles { display: flex; gap: 8px; }
+.rmt-toggle {
+  flex: 1; min-height: 44px; border-radius: 10px; border: 1px solid #2c2c34;
+  background: #17171b; color: #aaa; font-size: 14px; cursor: pointer;
+}
+.rmt-toggle--on { background: #3a2424; border-color: #5a2f2f; color: #e2a0a0; }
+.rmt-toggle--hc-on { background: #3a3024; border-color: #6a5a2f; color: #e2c890; }
+
+.rmt-note { font-size: 12px; color: #666; text-align: center; padding: 4px 0 0; }
+.rmt-finished { text-align: center; padding: 30px 0; color: #ffd24a; font-size: 22px; font-weight: bold !important; }

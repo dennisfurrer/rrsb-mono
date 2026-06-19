@@ -49,6 +49,9 @@ import {
 import { BreakEntryDialog } from "./components/BreakEntryDialog";
 import { MultiEntryDialog } from "./components/MultiEntryDialog";
 import { RedsConfigDialog } from "./components/RedsConfigDialog";
+import { RemoteQRDialog } from "./components/RemoteQRDialog";
+import { useRemoteHost } from "./hooks/useRemoteHost";
+import type { RemoteCommand } from "./lib/remote";
 import {
   breakAttemptToApi,
   createSoloSession,
@@ -1398,6 +1401,37 @@ export function App() {
     []
   );
 
+  // ===== REMOTE SCORER (phone) =====
+  const effColors: [string, string] = [
+    resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff",
+    resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833",
+  ];
+
+  const dispatchRemote = useCallback(
+    (cmd: RemoteCommand & { fromPlayerIndex?: 0 | 1 }) => {
+      switch (cmd.t) {
+        case "bb_pot": handleBBPot(cmd.ball); break;
+        case "bb_foul": handleBBFoul(cmd.ball); break;
+        case "bb_miss": handleBBMiss(); break;
+        case "bb_correct_reds": handleBBCorrectReds(cmd.count); break;
+        case "add_points": addPoints(cmd.playerIndex, cmd.points, cmd.isFoul, cmd.isHandicap); break;
+        case "switch_player":
+          setMatch((prev) => ({ ...prev, activePlayerIndex: cmd.playerIndex }));
+          break;
+        case "undo": undoFull(); break;
+        case "end_frame": endFrame(); break;
+      }
+    },
+    [handleBBPot, handleBBFoul, handleBBMiss, handleBBCorrectReds, addPoints, undoFull, endFrame]
+  );
+  const dispatchRef = useRef(dispatchRemote);
+  useEffect(() => {
+    dispatchRef.current = dispatchRemote;
+  }, [dispatchRemote]);
+
+  const remote = useRemoteHost({ match, colors: effColors, dispatchRef });
+  const [remoteModalPlayer, setRemoteModalPlayer] = useState<0 | 1 | null>(null);
+
   const isFrameStart =
     match.players[0].score === 0 && match.players[1].score === 0;
 
@@ -1454,6 +1488,11 @@ export function App() {
           matchFinished={match.finished}
           playerColors={playerColors}
           onColorChange={(idx, color) => setPlayerColors(prev => idx === 0 ? [color, prev[1]] : [prev[0], color])}
+          onRemoteClick={(idx) => {
+            remote.ensureSession(idx as 0 | 1);
+            setRemoteModalPlayer(idx as 0 | 1);
+          }}
+          remoteConnected={remote.connected}
         />
       )}
 
@@ -1832,6 +1871,20 @@ export function App() {
           onClose={() => setShowStats(false)}
         />
       )}
+
+      {remoteModalPlayer !== null && (() => {
+        const rp = remoteModalPlayer;
+        return (
+          <RemoteQRDialog
+            playerName={match.players[rp].name}
+            playerColor={effColors[rp]}
+            url={remote.urlFor(rp)}
+            connected={remote.connected[rp]}
+            onRegenerate={() => remote.rotateSession(rp)}
+            onClose={() => setRemoteModalPlayer(null)}
+          />
+        );
+      })()}
     </>
   );
 }

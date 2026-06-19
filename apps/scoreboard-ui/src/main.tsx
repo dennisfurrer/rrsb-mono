@@ -1,10 +1,23 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { RemoteApp } from "./remote/RemoteApp";
+import { decodeRemoteParam } from "./lib/remote";
 import "./styles/global.css";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+const params = new URLSearchParams(window.location.search);
+const remoteParam = params.get("r");
+const remote = remoteParam ? decodeRemoteParam(remoteParam) : null;
+
+const root = createRoot(document.getElementById("root")!);
+
+root.render(
+  remote ? (
+    // Phone remote scorer — no StrictMode so the SSE stream isn't double-opened.
+    <RemoteApp roomId={remote.roomId} token={remote.token} />
+  ) : (
+    <StrictMode>
+      <App />
+    </StrictMode>
+  )
 );
