@@ -81,11 +81,25 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
     setDisconnected(true);
   }, []);
 
-  if (disconnected) {
+  if (disconnected || status === "kicked" || status === "invalid") {
+    const msg = status === "kicked"
+      ? "Diese Verbindung wurde auf einem anderen Gerät geöffnet."
+      : "Verbindung unterbrochen oder Session abgelaufen.";
     return (
-      <div className="rmt-root" style={{ alignItems: "center", justifyContent: "center" }}>
-        <div style={{ color: "#aaa", fontSize: 18, textAlign: "center" }}>Verbindung getrennt.</div>
-        <div style={{ color: "#666", fontSize: 14, textAlign: "center" }}>QR-Code erneut scannen um wieder zu verbinden.</div>
+      <div className="rmt-root" style={{ alignItems: "center", justifyContent: "center", gap: 20, textAlign: "center", padding: "0 24px" }}>
+        <div style={{ fontSize: 40 }}>📡</div>
+        <div style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>{msg}</div>
+        <div style={{ color: "#aaa", fontSize: 14, lineHeight: 1.6 }}>
+          Falls der PC neu gestartet wurde:<br />
+          Bitte den <strong style={{ color: "#fff" }}>neuen QR-Code</strong> auf dem Scoreboard-Bildschirm mit der Kamera-App scannen.
+        </div>
+        <button
+          className="rmt-btn rmt-btn--ghost"
+          style={{ width: "100%", maxWidth: 280 }}
+          onClick={() => window.location.reload()}
+        >
+          Nochmals versuchen
+        </button>
       </div>
     );
   }

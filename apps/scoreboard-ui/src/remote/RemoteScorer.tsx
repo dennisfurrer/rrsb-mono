@@ -142,25 +142,7 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
   );
 }
 
-const SCAN_URL = window.location.origin + "/?scan";
-
 function renderBanner(status: ConnStatus, snapshot: RemoteSnapshot | null) {
-  if (status === "kicked") {
-    return (
-      <div className="rmt-banner rmt-banner--kicked" style={{ cursor: "pointer" }}
-        onClick={() => { window.location.href = SCAN_URL; }}>
-        Auf einem anderen Gerät geöffnet. → Antippen für neuen QR-Code
-      </div>
-    );
-  }
-  if (status === "invalid") {
-    return (
-      <div className="rmt-banner rmt-banner--invalid" style={{ cursor: "pointer" }}
-        onClick={() => { window.location.href = SCAN_URL; }}>
-        Sitzung abgelaufen. → Antippen für neuen QR-Code
-      </div>
-    );
-  }
   if (status === "reconnecting") {
     return (
       <div className="rmt-banner rmt-banner--reconnecting" style={{ cursor: "pointer" }}
