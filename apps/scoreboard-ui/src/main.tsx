@@ -4,7 +4,6 @@ import { App } from "./App";
 import { RemoteApp } from "./remote/RemoteApp";
 import { decodeRemoteParam } from "./lib/remote";
 import "./styles/global.css";
-import "./remote/remote.css";
 
 const params = new URLSearchParams(window.location.search);
 const remoteParam = params.get("r");
@@ -18,7 +17,7 @@ root.render(
     // Phone remote scorer — no StrictMode so the SSE stream isn't double-opened.
     <RemoteApp roomId={remote.roomId} token={remote.token} />
   ) : scanMode ? (
-    <div className="rmt-root" style={{ alignItems: "center", justifyContent: "center", gap: 24, textAlign: "center" }}>
+    <div style={{ height: "100%", background: "#0d0d0f", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24, textAlign: "center", fontFamily: "Arial, Helvetica, sans-serif", padding: 24 }}>
       <div style={{ fontSize: 48 }}>📷</div>
       <div style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>Neuen QR-Code scannen</div>
       <div style={{ color: "#aaa", fontSize: 15, maxWidth: 280 }}>
