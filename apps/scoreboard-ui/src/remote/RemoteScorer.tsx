@@ -290,7 +290,7 @@ function BallByBallPad({
         <button className="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
           Foul
         </button>
-        <button className="rmt-btn" onClick={() => onCommand({ t: "undo" })}>
+        <button className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
           ↶ Undo
         </button>
       </div>
@@ -437,7 +437,7 @@ function BreakPad({
         Eintragen
       </button>
 
-      <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
+      <button className="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
         ↶ Undo
       </button>
     </>
