@@ -148,6 +148,7 @@
 .rmt-btn--primary { background: #1a5c1a; border: none; color: #b6f5b6; font-weight: bold !important; }
 .rmt-btn--ghost { background: #161619; color: #aaa; }
 .rmt-btn--undo { background: #1a1a40; border-color: #3344aa; color: #6688ff; }
+.rmt-btn--redo { background: #0a2a1a; border-color: #2a6a3a; color: #4ade80; }
 
 /* ===== Foul picker ===== */
 .rmt-foul-pick { background: #1a1320; border: 1px solid #4a2f5a; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }

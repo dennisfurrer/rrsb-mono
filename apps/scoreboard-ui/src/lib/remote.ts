@@ -16,6 +16,7 @@ export type RemoteCommand =
   | { t: "add_points"; playerIndex: 0 | 1; points: number; isFoul: boolean; isHandicap: boolean }
   | { t: "switch_player"; playerIndex: 0 | 1 }
   | { t: "undo" }
+  | { t: "redo" }
   | { t: "end_frame" }
   | { t: "edit_last_break" };
 
@@ -33,11 +34,13 @@ export interface RemoteSnapshot {
   bbState: BBState | null;
   matchType?: string;
   colors: [string, string];
+  redoAvailable: boolean;
 }
 
 export function buildSnapshot(
   match: MatchState,
-  colors: [string, string]
+  colors: [string, string],
+  redoAvailable = false
 ): RemoteSnapshot {
   return {
     players: [
@@ -62,6 +65,7 @@ export function buildSnapshot(
     bbState: match.bbState ?? null,
     matchType: match.matchType,
     colors,
+    redoAvailable,
   };
 }
 

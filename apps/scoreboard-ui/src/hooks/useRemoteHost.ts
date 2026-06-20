@@ -30,9 +30,10 @@ interface RoomIdentity {
 export function useRemoteHost(opts: {
   match: MatchState;
   colors: [string, string];
+  redoAvailable: boolean;
   dispatchRef: MutableRefObject<(cmd: IncomingCommand) => void>;
 }) {
-  const { match, colors, dispatchRef } = opts;
+  const { match, colors, redoAvailable, dispatchRef } = opts;
 
   const [room] = useState<RoomIdentity>(() => {
     const saved = sessionStorage.getItem("remoteRoom");
@@ -125,7 +126,7 @@ export function useRemoteHost(opts: {
   const lastPush = useRef<string>("");
   useEffect(() => {
     if (!active) return;
-    const snap = buildSnapshot(match, colors);
+    const snap = buildSnapshot(match, colors, redoAvailable);
     const json = JSON.stringify(snap);
     if (json === lastPush.current) return;
     const id = setTimeout(() => {
@@ -133,7 +134,7 @@ export function useRemoteHost(opts: {
       pushRemoteState(room.roomId, room.displayKey, snap);
     }, 120);
     return () => clearTimeout(id);
-  }, [active, match, colors, room]);
+  }, [active, match, colors, redoAvailable, room]);
 
   return {
     roomId: room.roomId,

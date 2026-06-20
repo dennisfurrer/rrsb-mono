@@ -307,9 +307,16 @@ function BallByBallPad({
       </button>
 
       {breakBalls.length > 0 ? (
-        <button className="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
-          ↶ Undo
-        </button>
+        <div className="rmt-actions">
+          <button className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
+            ↶ Undo
+          </button>
+          {snapshot.redoAvailable && (
+            <button className="rmt-btn rmt-btn--redo" onClick={() => onCommand({ t: "redo" })}>
+              Redo ↷
+            </button>
+          )}
+        </div>
       ) : (
         <>
           <div className="rmt-actions">

@@ -1419,6 +1419,7 @@ export function App() {
           setMatch((prev) => ({ ...prev, activePlayerIndex: cmd.playerIndex }));
           break;
         case "undo": undoFull(); break;
+        case "redo": redo(); break;
         case "end_frame": endFrame(); break;
         case "edit_last_break": handleEditLastBreak(); break;
       }
@@ -1430,7 +1431,7 @@ export function App() {
     dispatchRef.current = dispatchRemote;
   }, [dispatchRemote]);
 
-  const remote = useRemoteHost({ match, colors: effColors, dispatchRef });
+  const remote = useRemoteHost({ match, colors: effColors, redoAvailable: redoStack.length > 0, dispatchRef });
   const [remoteModalPlayer, setRemoteModalPlayer] = useState<0 | 1 | null>(null);
 
   const isFrameStart =
