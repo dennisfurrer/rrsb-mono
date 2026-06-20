@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   BALL_HEX,
@@ -181,6 +181,24 @@ function BallByBallPad({
   const bb = snapshot.bbState!;
   const { phase, redsRemaining, colorsOnlyIndex, freeBallAvailable, breakTotal, breakBalls, frameOver } = bb;
 
+  const [lastBreak, setLastBreak] = useState<{ balls: Array<{ hex: string; points: number }>; total: number } | null>(null);
+  const prevRef = useRef<{ breakTotal: number; breakBalls: Array<{ hex: string; points: number }>; frame: number } | null>(null);
+
+  useEffect(() => {
+    const frame = snapshot.currentFrame;
+    const prev = prevRef.current;
+    if (prev) {
+      if (frame !== prev.frame) {
+        setLastBreak(null);
+      } else if (breakTotal > 0) {
+        setLastBreak(null);
+      } else if (prev.breakTotal > 0 && breakTotal === 0 && prev.breakBalls.length > 0) {
+        setLastBreak({ balls: prev.breakBalls, total: prev.breakTotal });
+      }
+    }
+    prevRef.current = { breakTotal, breakBalls, frame };
+  }, [snapshot]);
+
   const redEnabled = phase === "red" && redsRemaining > 0;
   const colorEnabled = (c: BBBallColor) => {
     if (phase === "color") return true;
@@ -303,6 +321,24 @@ function BallByBallPad({
       ) : (
         <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
           Frame beenden
+        </button>
+      )}
+
+      {lastBreak && (
+        <button
+          className="rmt-btn rmt-btn--ghost rmt-btn--wide"
+          style={{ flexDirection: "column", alignItems: "center", gap: 8, height: "auto", padding: "10px 14px" }}
+          onClick={() => {
+            onCommand({ t: "undo" });
+            setLastBreak(null);
+          }}
+        >
+          <span style={{ fontSize: 12, color: "#aaa" }}>↶ Letztes Break bearbeiten ({lastBreak.total} Pkt.) — antippen zum Editieren</span>
+          <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center" }}>
+            {lastBreak.balls.map((b, i) => (
+              <span key={i} className="rmt-mini-ball" style={{ background: b.hex }} />
+            ))}
+          </div>
         </button>
       )}
     </>
