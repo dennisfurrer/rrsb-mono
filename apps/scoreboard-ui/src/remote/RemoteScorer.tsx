@@ -182,6 +182,17 @@ function BallByBallPad({
 
   const [lastBreak, setLastBreak] = useState<{ balls: Array<{ hex: string; points: number }>; total: number } | null>(null);
   const prevRef = useRef<{ breakTotal: number; breakBalls: Array<{ hex: string; points: number }>; frame: number } | null>(null);
+  const [glowBall, setGlowBall] = useState<string | null>(null);
+  const glowTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const triggerGlow = (ball: string) => {
+    if (glowTimer.current) clearTimeout(glowTimer.current);
+    setGlowBall(null);
+    requestAnimationFrame(() => {
+      setGlowBall(ball);
+      glowTimer.current = setTimeout(() => setGlowBall(null), 560);
+    });
+  };
 
   useEffect(() => {
     const frame = snapshot.currentFrame;
@@ -244,20 +255,20 @@ function BallByBallPad({
       <div className="rmt-section-label">Lochen</div>
       <div className="rmt-balls">
         <button
-          className="rmt-ball rmt-ball--red"
+          className={`rmt-ball rmt-ball--red${glowBall === "red" ? " rmt-ball--glow" : ""}`}
           style={{ background: BALL_HEX.red }}
           disabled={!redEnabled}
-          onClick={() => { navigator.vibrate?.(80); onCommand({ t: "bb_pot", ball: "red" }); }}
+          onClick={() => { navigator.vibrate?.(80); triggerGlow("red"); onCommand({ t: "bb_pot", ball: "red" }); }}
         >
           <span className="rmt-ball-count" style={{ fontSize: 15, padding: "0 6px" }}>{redsRemaining}</span>
         </button>
         {COLOR_BALLS.map((c) => (
           <button
             key={c}
-            className="rmt-ball"
+            className={`rmt-ball${glowBall === c ? " rmt-ball--glow" : ""}`}
             style={{ background: BALL_HEX[c] }}
             disabled={!colorEnabled(c)}
-            onClick={() => { navigator.vibrate?.(80); onCommand({ t: "bb_pot", ball: c }); }}
+            onClick={() => { navigator.vibrate?.(80); triggerGlow(c); onCommand({ t: "bb_pot", ball: c }); }}
           />
         ))}
         {freeBallAvailable && (
