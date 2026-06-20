@@ -306,52 +306,60 @@ function BallByBallPad({
         {breakTotal > 0 ? "Break-Ende" : "Aufnahme beenden / Fehlstoss"}
       </button>
 
-      <div className="rmt-actions">
-        <button className="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
-          Foul
-        </button>
-        <button className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
+      {breakBalls.length > 0 ? (
+        <button className="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
           ↶ Undo
         </button>
-      </div>
-
-      {redsEditing ? (
-        <div className="rmt-reds">
-          <span style={{ color: "#aaa", fontSize: 14 }}>🔴 Reds:</span>
-          <button className="rmt-step" onClick={() => setRedsDraft(Math.max(0, redsDraft - 1))}>−</button>
-          <span className="rmt-reds-val">{redsDraft}</span>
-          <button className="rmt-step" onClick={() => setRedsDraft(Math.min(15, redsDraft + 1))}>+</button>
-          <button
-            className="rmt-btn rmt-btn--primary"
-            style={{ flex: 1, minHeight: 44 }}
-            onClick={() => {
-              onCommand({ t: "bb_correct_reds", count: redsDraft });
-              setRedsEditing(false);
-            }}
-          >
-            Setzen
-          </button>
-        </div>
       ) : (
-        <button
-          className="rmt-btn rmt-btn--ghost rmt-btn--wide"
-          onClick={() => {
-            setRedsDraft(redsRemaining);
-            setRedsEditing(true);
-          }}
-        >
-          🔴 Reds korrigieren ({redsRemaining})
-        </button>
-      )}
+        <>
+          <div className="rmt-actions">
+            <button className="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
+              Foul
+            </button>
+            <button className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
+              ↶ Undo
+            </button>
+          </div>
 
-      {frameOver ? (
-        <button className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
-          Frame beenden ▸
-        </button>
-      ) : (
-        <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
-          Frame beenden
-        </button>
+          {redsEditing ? (
+            <div className="rmt-reds">
+              <span style={{ color: "#aaa", fontSize: 14 }}>🔴 Reds:</span>
+              <button className="rmt-step" onClick={() => setRedsDraft(Math.max(0, redsDraft - 1))}>−</button>
+              <span className="rmt-reds-val">{redsDraft}</span>
+              <button className="rmt-step" onClick={() => setRedsDraft(Math.min(15, redsDraft + 1))}>+</button>
+              <button
+                className="rmt-btn rmt-btn--primary"
+                style={{ flex: 1, minHeight: 44 }}
+                onClick={() => {
+                  onCommand({ t: "bb_correct_reds", count: redsDraft });
+                  setRedsEditing(false);
+                }}
+              >
+                Setzen
+              </button>
+            </div>
+          ) : (
+            <button
+              className="rmt-btn rmt-btn--ghost rmt-btn--wide"
+              onClick={() => {
+                setRedsDraft(redsRemaining);
+                setRedsEditing(true);
+              }}
+            >
+              🔴 Reds korrigieren ({redsRemaining})
+            </button>
+          )}
+
+          {frameOver ? (
+            <button className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+              Frame beenden ▸
+            </button>
+          ) : (
+            <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+              Frame beenden
+            </button>
+          )}
+        </>
       )}
 
       {lastBreak && (
