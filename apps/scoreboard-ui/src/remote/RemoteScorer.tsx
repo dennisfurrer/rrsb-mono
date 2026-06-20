@@ -262,7 +262,7 @@ function BallByBallPad({
       )}
 
       <button className="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
-        Aufnahme beenden / Fehlstoss
+        {breakTotal > 0 ? "Break-Ende" : "Aufnahme beenden / Fehlstoss"}
       </button>
 
       <div className="rmt-actions">
