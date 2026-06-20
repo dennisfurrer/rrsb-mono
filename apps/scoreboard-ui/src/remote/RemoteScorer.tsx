@@ -4,7 +4,9 @@ import {
   BALL_HEX,
   BALL_VALUES,
   COLORS_ORDER,
+  applyPot,
   type BBBallColor,
+  type BBState,
 } from "../lib/ballbyball";
 import type { RemoteCommand, RemoteSnapshot } from "../lib/remote";
 import type { ConnStatus } from "./RemoteApp";
@@ -178,7 +180,13 @@ function BallByBallPad({
   onCommand: (cmd: RemoteCommand) => void;
 }) {
   const bb = snapshot.bbState!;
-  const { phase, redsRemaining, colorsOnlyIndex, freeBallAvailable, breakTotal, breakBalls, frameOver } = bb;
+  const { breakTotal, breakBalls, frameOver } = bb;
+
+  // Optimistic local state: updated immediately on tap, reset when real snapshot arrives.
+  const [optBB, setOptBB] = useState<BBState>(bb);
+  useEffect(() => { setOptBB(snapshot.bbState!); }, [snapshot]);
+
+  const { phase, redsRemaining, colorsOnlyIndex, freeBallAvailable } = optBB;
 
   const [lastBreak, setLastBreak] = useState<{ balls: Array<{ hex: string; points: number }>; total: number } | null>(null);
   const prevRef = useRef<{ breakTotal: number; breakBalls: Array<{ hex: string; points: number }>; frame: number } | null>(null);
@@ -208,6 +216,13 @@ function BallByBallPad({
     }
     prevRef.current = { breakTotal, breakBalls, frame };
   }, [snapshot]);
+
+  const potBall = (ball: Parameters<typeof applyPot>[1]) => {
+    navigator.vibrate?.(80);
+    triggerGlow(ball);
+    setOptBB(prev => applyPot(prev, ball).newState);
+    onCommand({ t: "bb_pot", ball });
+  };
 
   const redEnabled = phase !== "colors_only" && redsRemaining > 0;
   const colorEnabled = (c: BBBallColor) => {
@@ -258,7 +273,7 @@ function BallByBallPad({
           className={`rmt-ball rmt-ball--red${glowBall === "red" ? " rmt-ball--glow" : ""}`}
           style={{ background: BALL_HEX.red }}
           disabled={!redEnabled}
-          onClick={() => { navigator.vibrate?.(80); triggerGlow("red"); onCommand({ t: "bb_pot", ball: "red" }); }}
+          onClick={() => potBall("red")}
         >
           <span className="rmt-ball-count" style={{ fontSize: 22, padding: "0 6px" }}>{redsRemaining}</span>
         </button>
@@ -268,7 +283,7 @@ function BallByBallPad({
             className={`rmt-ball${glowBall === c ? " rmt-ball--glow" : ""}`}
             style={{ background: BALL_HEX[c] }}
             disabled={!colorEnabled(c)}
-            onClick={() => { navigator.vibrate?.(80); triggerGlow(c); onCommand({ t: "bb_pot", ball: c }); }}
+            onClick={() => potBall(c)}
           />
         ))}
         {freeBallAvailable && (() => {
@@ -279,7 +294,7 @@ function BallByBallPad({
             <button
               className="rmt-ball"
               style={{ background: FREEBALL_GRADIENT, color: "#fff", border: `3px solid ${fbHex}`, boxShadow: `0 0 8px ${fbHex}`, fontSize: 10, fontWeight: "bold", textShadow: "0 1px 4px #000" }}
-              onClick={() => { navigator.vibrate?.(80); triggerGlow("freeball"); onCommand({ t: "bb_pot", ball: "freeball" }); }}
+              onClick={() => potBall("freeball")}
             >
               Freeball
             </button>
