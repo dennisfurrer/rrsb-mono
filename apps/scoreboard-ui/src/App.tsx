@@ -1410,7 +1410,7 @@ export function App() {
   const dispatchRemote = useCallback(
     (cmd: RemoteCommand & { fromPlayerIndex?: 0 | 1 }) => {
       switch (cmd.t) {
-        case "bb_pot": handleBBPot(cmd.ball); break;
+        case "bb_pot": handleBBPot(cmd.ball); setShowBBDialog(true); break;
         case "bb_foul": handleBBFoul(cmd.ball); break;
         case "bb_miss": handleBBMiss(); break;
         case "bb_correct_reds": handleBBCorrectReds(cmd.count); break;
