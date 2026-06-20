@@ -271,15 +271,20 @@ function BallByBallPad({
             onClick={() => { navigator.vibrate?.(80); triggerGlow(c); onCommand({ t: "bb_pot", ball: c }); }}
           />
         ))}
-        {freeBallAvailable && (
-          <button
-            className="rmt-ball"
-            style={{ background: FREEBALL_GRADIENT, color: "#000" }}
-            onClick={() => onCommand({ t: "bb_pot", ball: "freeball" })}
-          >
-            Frei
-          </button>
-        )}
+        {freeBallAvailable && (() => {
+          const fbHex = phase === "red" ? BALL_HEX.red
+            : phase === "colors_only" ? BALL_HEX[COLORS_ORDER[colorsOnlyIndex]]
+            : "#aaa";
+          return (
+            <button
+              className="rmt-ball"
+              style={{ background: FREEBALL_GRADIENT, color: "#fff", border: `3px solid ${fbHex}`, boxShadow: `0 0 8px ${fbHex}`, fontSize: 10, fontWeight: "bold", textShadow: "0 1px 4px #000" }}
+              onClick={() => { navigator.vibrate?.(80); triggerGlow("freeball"); onCommand({ t: "bb_pot", ball: "freeball" }); }}
+            >
+              Freeball
+            </button>
+          );
+        })()}
       </div>
 
       <button className="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
