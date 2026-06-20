@@ -248,7 +248,7 @@ function BallByBallPad({
           className="rmt-ball rmt-ball--red"
           style={{ background: BALL_HEX.red }}
           disabled={!redEnabled}
-          onClick={() => { navigator.vibrate?.(40); onCommand({ t: "bb_pot", ball: "red" }); }}
+          onClick={() => { navigator.vibrate?.(80); onCommand({ t: "bb_pot", ball: "red" }); }}
         >
           <span className="rmt-ball-count" style={{ fontSize: 15, padding: "0 6px" }}>{redsRemaining}</span>
         </button>
@@ -258,7 +258,7 @@ function BallByBallPad({
             className="rmt-ball"
             style={{ background: BALL_HEX[c] }}
             disabled={!colorEnabled(c)}
-            onClick={() => { navigator.vibrate?.(40); onCommand({ t: "bb_pot", ball: c }); }}
+            onClick={() => { navigator.vibrate?.(80); onCommand({ t: "bb_pot", ball: c }); }}
           />
         ))}
         {freeBallAvailable && (
