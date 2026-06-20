@@ -37,7 +37,7 @@ function FlashButton({ className, onClick, disabled, children, style, ...props }
       {...props}
     >
       {children}
-    </FlashButton>
+    </button>
   );
 }
 
@@ -63,12 +63,8 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
     ? (snapshot.activePlayerIndex as 0 | 1)
     : 0;
 
-  // Keep the break-mode entry target following whoever is at the table.
-  useEffect(() => {
-    setTarget(active);
-  }, [active]);
+  useEffect(() => { setTarget(active); }, [active]);
 
-  // Reset transient UI when the snapshot meaningfully changes.
   useEffect(() => {
     setFoulPicking(false);
     setRedsEditing(false);
@@ -99,7 +95,7 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
 
       <div className="rmt-players">
         {([0, 1] as const).map((pi) => (
-          <button
+          <FlashButton
             key={pi}
             className={`rmt-player${pi === 1 ? " rmt-player--right" : ""}${pi === active ? " rmt-player--active" : ""}`}
             style={colorVar(pi)}
@@ -152,16 +148,16 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
           <div style={{ display: "flex", flexDirection: "column", gap: 8, background: "#1a1a1a", border: "1px solid #444", borderRadius: 12, padding: "12px 14px" }}>
             <div style={{ color: "#ccc", fontSize: 14, textAlign: "center" }}>Verbindung wirklich trennen?</div>
             <div style={{ display: "flex", gap: 8 }}>
-              <FlashButtonclassName="rmt-btn rmt-btn--ghost" style={{ flex: 1 }} onClick={() => setConfirmDisconnect(false)}>
+              <FlashButton className="rmt-btn rmt-btn--ghost" style={{ flex: 1 }} onClick={() => setConfirmDisconnect(false)}>
                 Abbrechen
               </FlashButton>
-              <FlashButtonclassName="rmt-btn rmt-btn--foul" style={{ flex: 1 }} onClick={onDisconnect}>
+              <FlashButton className="rmt-btn rmt-btn--foul" style={{ flex: 1 }} onClick={onDisconnect}>
                 Ja, trennen
               </FlashButton>
             </div>
           </div>
         ) : (
-          <FlashButtonclassName="rmt-btn rmt-btn--wide" style={{ background: "#2a1010", borderColor: "#5a2020", color: "#cc5555", fontSize: 14 }} onClick={() => setConfirmDisconnect(true)}>
+          <FlashButton className="rmt-btn rmt-btn--wide" style={{ background: "#2a1010", borderColor: "#5a2020", color: "#cc5555", fontSize: 14 }} onClick={() => setConfirmDisconnect(true)}>
             Verbindung trennen
           </FlashButton>
         )
@@ -265,16 +261,17 @@ function BallByBallPad({
           {ALL_FOUL_BALLS.map((c) => (
             <button
               key={c}
-              className="rmt-ball"
+              className={`rmt-ball${glowBall === c ? " rmt-ball--glow" : ""}`}
               style={{ background: BALL_HEX[c] }}
               onClick={() => {
+                triggerGlow(c);
                 onCommand({ t: "bb_foul", ball: c });
                 setFoulPicking(false);
               }}
             />
           ))}
         </div>
-        <FlashButtonclassName="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => setFoulPicking(false)}>
+        <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => setFoulPicking(false)}>
           Abbrechen
         </FlashButton>
       </div>
@@ -302,7 +299,7 @@ function BallByBallPad({
           onClick={() => potBall("red")}
         >
           <span className="rmt-ball-count" style={{ fontSize: 22, padding: "0 6px" }}>{redsRemaining}</span>
-        </FlashButton>
+        </button>
         {COLOR_BALLS.map((c) => (
           <button
             key={c}
@@ -318,27 +315,27 @@ function BallByBallPad({
             : "#aaa";
           return (
             <button
-              className="rmt-ball"
-              style={{ background: FREEBALL_GRADIENT, color: "#fff", border: `3px solid ${fbHex}`, boxShadow: `0 0 8px ${fbHex}`, fontSize: 10, fontWeight: "bold", textShadow: "0 1px 4px #000" }}
+              className={`rmt-ball${glowBall === "freeball" ? " rmt-ball--glow" : ""}`}
+              style={{ background: FREEBALL_GRADIENT, color: "#fff", border: `3px solid ${fbHex}`, fontSize: 10, fontWeight: "bold", textShadow: "0 1px 4px #000" }}
               onClick={() => potBall("freeball")}
             >
               Freeball
-            </FlashButton>
+            </button>
           );
         })()}
       </div>
 
-      <FlashButtonclassName="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
+      <FlashButton className="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
         {breakTotal > 0 ? "Break-Ende" : "Aufnahme beenden / Fehlstoss"}
       </FlashButton>
 
       {breakBalls.length > 0 ? (
         <div className="rmt-actions">
-          <FlashButtonclassName="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
+          <FlashButton className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
             ↶ Undo
           </FlashButton>
           {snapshot.redoAvailable && (
-            <FlashButtonclassName="rmt-btn rmt-btn--redo" onClick={() => onCommand({ t: "redo" })}>
+            <FlashButton className="rmt-btn rmt-btn--redo" onClick={() => onCommand({ t: "redo" })}>
               Redo ↷
             </FlashButton>
           )}
@@ -346,10 +343,10 @@ function BallByBallPad({
       ) : (
         <>
           <div className="rmt-actions">
-            <FlashButtonclassName="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
+            <FlashButton className="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
               Foul
             </FlashButton>
-            <FlashButtonclassName="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
+            <FlashButton className="rmt-btn rmt-btn--undo" onClick={() => onCommand({ t: "undo" })}>
               ↶ Undo
             </FlashButton>
           </div>
@@ -357,10 +354,10 @@ function BallByBallPad({
           {redsEditing ? (
             <div className="rmt-reds">
               <span style={{ color: "#aaa", fontSize: 14 }}>🔴 Reds:</span>
-              <FlashButtonclassName="rmt-step" onClick={() => setRedsDraft(Math.max(0, redsDraft - 1))}>−</FlashButton>
+              <FlashButton className="rmt-step" onClick={() => setRedsDraft(Math.max(0, redsDraft - 1))}>−</FlashButton>
               <span className="rmt-reds-val">{redsDraft}</span>
-              <FlashButtonclassName="rmt-step" onClick={() => setRedsDraft(Math.min(15, redsDraft + 1))}>+</FlashButton>
-              <button
+              <FlashButton className="rmt-step" onClick={() => setRedsDraft(Math.min(15, redsDraft + 1))}>+</FlashButton>
+              <FlashButton
                 className="rmt-btn rmt-btn--primary"
                 style={{ flex: 1, minHeight: 44 }}
                 onClick={() => {
@@ -372,7 +369,7 @@ function BallByBallPad({
               </FlashButton>
             </div>
           ) : (
-            <button
+            <FlashButton
               className="rmt-btn rmt-btn--ghost rmt-btn--wide"
               onClick={() => {
                 setRedsDraft(redsRemaining);
@@ -384,11 +381,11 @@ function BallByBallPad({
           )}
 
           {frameOver ? (
-            <FlashButtonclassName="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+            <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden ▸
             </FlashButton>
           ) : (
-            <FlashButtonclassName="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+            <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden
             </FlashButton>
           )}
@@ -396,7 +393,7 @@ function BallByBallPad({
       )}
 
       {lastBreak && (
-        <button
+        <FlashButton
           className="rmt-btn rmt-btn--ghost rmt-btn--wide"
           style={{ flexDirection: "column", alignItems: "center", gap: 8, height: "auto", padding: "10px 14px" }}
           onClick={() => {
@@ -457,7 +454,7 @@ function BreakPad({
     <>
       <div className="rmt-tabs">
         {([0, 1] as const).map((pi) => (
-          <button
+          <FlashButton
             key={pi}
             className={`rmt-tab${pi === target ? " rmt-tab--on" : ""}`}
             style={{ "--pc": snapshot.colors[pi] } as CSSProperties}
@@ -471,13 +468,13 @@ function BreakPad({
       <div className="rmt-input-display">{input === "" ? "0" : input}</div>
 
       <div className="rmt-toggles">
-        <button
+        <FlashButton
           className={`rmt-toggle${isFoul ? " rmt-toggle--on" : ""}`}
           onClick={() => { setIsFoul(!isFoul); if (!isFoul) setIsHandicap(false); }}
         >
           Foul (an Gegner)
         </FlashButton>
-        <button
+        <FlashButton
           className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
           onClick={() => { setIsHandicap(!isHandicap); if (!isHandicap) setIsFoul(false); }}
         >
@@ -487,18 +484,18 @@ function BreakPad({
 
       <div className="rmt-keys">
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
-          <FlashButtonkey={d} className="rmt-key" onClick={() => press(d)}>{d}</FlashButton>
+          <FlashButton key={d} className="rmt-key" onClick={() => press(d)}>{d}</FlashButton>
         ))}
-        <FlashButtonclassName="rmt-key" onClick={() => setInput("")}>C</FlashButton>
-        <FlashButtonclassName="rmt-key" onClick={() => press("0")}>0</FlashButton>
-        <FlashButtonclassName="rmt-key" onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
+        <FlashButton className="rmt-key" onClick={() => setInput("")}>C</FlashButton>
+        <FlashButton className="rmt-key" onClick={() => press("0")}>0</FlashButton>
+        <FlashButton className="rmt-key" onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
       </div>
 
-      <FlashButtonclassName="rmt-btn rmt-btn--primary rmt-btn--wide" disabled={value <= 0} onClick={submit}>
+      <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" disabled={value <= 0} onClick={submit}>
         Eintragen
       </FlashButton>
 
-      <FlashButtonclassName="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
+      <FlashButton className="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
         ↶ Undo
       </FlashButton>
     </>

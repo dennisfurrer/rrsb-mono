@@ -3050,10 +3050,10 @@ div { font-weight: bold; }
 
 /* ===== FRAME END BUTTON PULSE ===== */
 @keyframes frame-end-glow {
-  0%, 100% { box-shadow: 0 0 12px #4ade80cc, 0 0 28px #4ade8088, 0 0 50px #4ade8044; }
-  50%       { box-shadow: 0 0 4px #4ade8044, 0 0 8px #4ade8022; }
+  0%, 100% { box-shadow: 0 0 0 3px #4ade80, 0 0 22px #4ade80cc, 0 0 50px #4ade8077; transform: scale(1.04); }
+  50%       { box-shadow: 0 0 0 1px #4ade8055, 0 0 6px #4ade8033; transform: scale(1.0); }
 }
 
 .frame-end-btn-glow {
-  animation: frame-end-glow 1.8s ease-in-out infinite;
+  animation: frame-end-glow 0.9s ease-in-out infinite;
 }
