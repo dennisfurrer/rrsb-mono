@@ -209,7 +209,7 @@ function BallByBallPad({
     prevRef.current = { breakTotal, breakBalls, frame };
   }, [snapshot]);
 
-  const redEnabled = phase === "red" && redsRemaining > 0;
+  const redEnabled = phase !== "colors_only" && redsRemaining > 0;
   const colorEnabled = (c: BBBallColor) => {
     if (phase === "color") return true;
     if (phase === "colors_only") return COLORS_ORDER[colorsOnlyIndex] === c;
