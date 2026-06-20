@@ -260,7 +260,7 @@ function BallByBallPad({
           disabled={!redEnabled}
           onClick={() => { navigator.vibrate?.(80); triggerGlow("red"); onCommand({ t: "bb_pot", ball: "red" }); }}
         >
-          <span className="rmt-ball-count" style={{ fontSize: 15, padding: "0 6px" }}>{redsRemaining}</span>
+          <span className="rmt-ball-count" style={{ fontSize: 22, padding: "0 6px" }}>{redsRemaining}</span>
         </button>
         {COLOR_BALLS.map((c) => (
           <button

@@ -233,6 +233,7 @@ export function BallByBallDialog({
               dimmed={!foulMode && !isBallEnabled("red")}
               onClick={() => handleBallClick("red")}
               centerLabel={foulMode ? undefined : String(redsRemaining)}
+              centerFontSize={foulMode ? undefined : "2.2vw"}
               bottomLabel={foulMode ? `+${foulPoints("red")}` : undefined}
               foulLabelColor="#ff4444"
             />
