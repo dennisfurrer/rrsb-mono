@@ -250,7 +250,7 @@ function BallByBallPad({
           disabled={!redEnabled}
           onClick={() => onCommand({ t: "bb_pot", ball: "red" })}
         >
-          ROT<span className="rmt-ball-count">{redsRemaining}</span>
+          <span className="rmt-ball-count" style={{ fontSize: 15, padding: "0 6px" }}>{redsRemaining}</span>
         </button>
         {COLOR_BALLS.map((c) => (
           <button
