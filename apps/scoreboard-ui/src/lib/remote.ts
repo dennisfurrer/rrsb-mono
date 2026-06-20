@@ -16,7 +16,8 @@ export type RemoteCommand =
   | { t: "add_points"; playerIndex: 0 | 1; points: number; isFoul: boolean; isHandicap: boolean }
   | { t: "switch_player"; playerIndex: 0 | 1 }
   | { t: "undo" }
-  | { t: "end_frame" };
+  | { t: "end_frame" }
+  | { t: "edit_last_break" };
 
 /** Curated mirror of the match the phone needs to render + drive controls. */
 export interface RemoteSnapshot {

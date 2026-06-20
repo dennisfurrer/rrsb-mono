@@ -329,7 +329,7 @@ function BallByBallPad({
           className="rmt-btn rmt-btn--ghost rmt-btn--wide"
           style={{ flexDirection: "column", alignItems: "center", gap: 8, height: "auto", padding: "10px 14px" }}
           onClick={() => {
-            onCommand({ t: "undo" });
+            onCommand({ t: "edit_last_break" });
             setLastBreak(null);
           }}
         >

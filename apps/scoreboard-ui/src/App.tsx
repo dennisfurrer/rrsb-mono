@@ -1420,9 +1420,10 @@ export function App() {
           break;
         case "undo": undoFull(); break;
         case "end_frame": endFrame(); break;
+        case "edit_last_break": handleEditLastBreak(); break;
       }
     },
-    [handleBBPot, handleBBFoul, handleBBMiss, handleBBCorrectReds, addPoints, undoFull, endFrame]
+    [handleBBPot, handleBBFoul, handleBBMiss, handleBBCorrectReds, addPoints, undoFull, endFrame, handleEditLastBreak]
   );
   const dispatchRef = useRef(dispatchRemote);
   useEffect(() => {
