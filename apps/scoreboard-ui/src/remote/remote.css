@@ -149,6 +149,11 @@
 .rmt-btn--ghost { background: #161619; color: #aaa; }
 .rmt-btn--undo { background: #1a1a40; border-color: #3344aa; color: #6688ff; }
 .rmt-btn--redo { background: #0a2a1a; border-color: #2a6a3a; color: #4ade80; }
+@keyframes btn-flash {
+  0%   { box-shadow: 0 0 0 2px #fff, 0 0 14px 5px rgba(255,255,255,0.55); }
+  100% { box-shadow: none; }
+}
+.rmt-btn--flash { animation: btn-flash 0.52s ease-out forwards; }
 
 /* ===== Foul picker ===== */
 .rmt-foul-pick { background: #1a1320; border: 1px solid #4a2f5a; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
