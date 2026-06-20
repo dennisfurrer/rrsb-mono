@@ -142,15 +142,32 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
   );
 }
 
+const SCAN_URL = window.location.origin + "/?scan";
+
 function renderBanner(status: ConnStatus, snapshot: RemoteSnapshot | null) {
   if (status === "kicked") {
-    return <div className="rmt-banner rmt-banner--kicked">Auf einem anderen Gerät geöffnet — diese Sitzung wurde getrennt.</div>;
+    return (
+      <div className="rmt-banner rmt-banner--kicked" style={{ cursor: "pointer" }}
+        onClick={() => { window.location.href = SCAN_URL; }}>
+        Auf einem anderen Gerät geöffnet. → Antippen für neuen QR-Code
+      </div>
+    );
   }
   if (status === "invalid") {
-    return <div className="rmt-banner rmt-banner--invalid">Sitzung ungültig oder abgelaufen. Bitte den QR-Code erneut scannen.</div>;
+    return (
+      <div className="rmt-banner rmt-banner--invalid" style={{ cursor: "pointer" }}
+        onClick={() => { window.location.href = SCAN_URL; }}>
+        Sitzung abgelaufen. → Antippen für neuen QR-Code
+      </div>
+    );
   }
   if (status === "reconnecting") {
-    return <div className="rmt-banner rmt-banner--reconnecting">Verbindung unterbrochen — neu verbinden…</div>;
+    return (
+      <div className="rmt-banner rmt-banner--reconnecting" style={{ cursor: "pointer" }}
+        onClick={() => window.location.reload()}>
+        Verbindung unterbrochen — antippen zum Neu laden
+      </div>
+    );
   }
   if (status === "connecting" || !snapshot) {
     return <div className="rmt-banner rmt-banner--connecting">Verbinde mit dem Scoreboard…</div>;
