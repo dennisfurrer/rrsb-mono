@@ -281,7 +281,7 @@ function BallByBallPad({
           Foul
         </button>
         <button className="rmt-btn" onClick={() => onCommand({ t: "undo" })}>
-          ↶ Rückgängig
+          ↶ Undo
         </button>
       </div>
 
@@ -428,7 +428,7 @@ function BreakPad({
       </button>
 
       <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
-        ↶ Rückgängig
+        ↶ Undo
       </button>
     </>
   );
