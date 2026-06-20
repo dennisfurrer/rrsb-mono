@@ -180,9 +180,7 @@ function BallByBallPad({
                 onCommand({ t: "bb_foul", ball: c });
                 setFoulPicking(false);
               }}
-            >
-              {BALL_VALUES[c]}
-            </button>
+            />
           ))}
         </div>
         <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => setFoulPicking(false)}>
@@ -221,9 +219,7 @@ function BallByBallPad({
             style={{ background: BALL_HEX[c] }}
             disabled={!colorEnabled(c)}
             onClick={() => onCommand({ t: "bb_pot", ball: c })}
-          >
-            {BALL_VALUES[c]}
-          </button>
+          />
         ))}
         {freeBallAvailable && (
           <button
