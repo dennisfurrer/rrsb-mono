@@ -406,7 +406,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <button
                 onClick={(e) => { e.stopPropagation(); onRemoteClick(0); }}
                 title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "0.4vh", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
               >
                 <QrGlyph color={effP1Color ?? "#5599ff"} />
                 {remoteConnected?.[0] && (
@@ -532,7 +532,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <button
                 onClick={(e) => { e.stopPropagation(); onRemoteClick(1); }}
                 title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "0.4vh", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
               >
                 {remoteConnected?.[1] && (
                   <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginRight: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
