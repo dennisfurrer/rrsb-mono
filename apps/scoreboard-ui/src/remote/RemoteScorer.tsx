@@ -232,6 +232,10 @@ function BallByBallPad({
         )}
       </div>
 
+      <button className="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
+        {breakTotal > 0 ? "Break-Ende" : "Aufnahme beenden / Fehlstoss"}
+      </button>
+
       {redsEditing ? (
         <div className="rmt-reds">
           <span style={{ color: "#aaa", fontSize: 14 }}>🔴 Reds:</span>
@@ -260,10 +264,6 @@ function BallByBallPad({
           🔴 Reds korrigieren ({redsRemaining})
         </button>
       )}
-
-      <button className="rmt-btn rmt-btn--miss rmt-btn--wide" onClick={() => onCommand({ t: "bb_miss" })}>
-        {breakTotal > 0 ? "Break-Ende" : "Aufnahme beenden / Fehlstoss"}
-      </button>
 
       <div className="rmt-actions">
         <button className="rmt-btn rmt-btn--foul" onClick={() => setFoulPicking(true)}>
