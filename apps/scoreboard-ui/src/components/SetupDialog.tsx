@@ -109,7 +109,7 @@ function PlayerPicker({
         ))}
       </div>
       <div className="picker-list">
-        {extraOption && !activeLetter && (
+        {extraOption && (
           <div className="picker-item picker-item-extra" onClick={() => onSelect(extraOption.value)}>
             {extraOption.label}
           </div>
