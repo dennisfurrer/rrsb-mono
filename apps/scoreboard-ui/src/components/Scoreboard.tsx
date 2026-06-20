@@ -392,7 +392,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
           >
             <div className="sb-name-with-club sb-name-with-club--left">
               <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
-              <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>{(p1.club && p1.club !== "?") ? p1.club : "Club?"}</div>
+              <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>{(p1.club && p1.club !== "?") ? p1.club : "Club ?"}</div>
             </div>
             {noScores && !matchFinished && (
               <button
@@ -518,7 +518,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
           >
             <div className="sb-name-with-club sb-name-with-club--right">
               <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
-              <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>{(p2.club && p2.club !== "?") ? p2.club : "Club?"}</div>
+              <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>{(p2.club && p2.club !== "?") ? p2.club : "Club ?"}</div>
             </div>
             {noScores && !matchFinished && (
               <button
