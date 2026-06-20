@@ -14,11 +14,14 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
   const [snapshot, setSnapshot] = useState<RemoteSnapshot | null>(null);
   const [myPlayerIndex, setMyPlayerIndex] = useState<0 | 1 | null>(null);
   const [status, setStatus] = useState<ConnStatus>("connecting");
+  const [disconnected, setDisconnected] = useState(false);
   const queue = useRef<RemoteCommand[]>([]);
   const flushing = useRef(false);
+  const esRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
     const es = new EventSource(stateStreamUrl(roomId, token));
+    esRef.current = es;
 
     es.addEventListener("hello", (e) => {
       try {
@@ -73,12 +76,27 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
     [status, flush]
   );
 
+  const handleDisconnect = useCallback(() => {
+    esRef.current?.close();
+    setDisconnected(true);
+  }, []);
+
+  if (disconnected) {
+    return (
+      <div className="rmt-root" style={{ alignItems: "center", justifyContent: "center" }}>
+        <div style={{ color: "#aaa", fontSize: 18, textAlign: "center" }}>Verbindung getrennt.</div>
+        <div style={{ color: "#666", fontSize: 14, textAlign: "center" }}>QR-Code erneut scannen um wieder zu verbinden.</div>
+      </div>
+    );
+  }
+
   return (
     <RemoteScorer
       snapshot={snapshot}
       myPlayerIndex={myPlayerIndex}
       status={status}
       onCommand={onCommand}
+      onDisconnect={handleDisconnect}
     />
   );
 }

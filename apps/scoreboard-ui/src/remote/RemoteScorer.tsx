@@ -18,9 +18,10 @@ interface Props {
   myPlayerIndex: 0 | 1 | null;
   status: ConnStatus;
   onCommand: (cmd: RemoteCommand) => void;
+  onDisconnect?: () => void;
 }
 
-export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand }: Props) {
+export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDisconnect }: Props) {
   const [foulPicking, setFoulPicking] = useState(false);
   const [redsEditing, setRedsEditing] = useState(false);
   const [redsDraft, setRedsDraft] = useState(0);
@@ -28,6 +29,7 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand }: Pro
   const [target, setTarget] = useState<0 | 1>(0);
   const [isFoul, setIsFoul] = useState(false);
   const [isHandicap, setIsHandicap] = useState(false);
+  const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 
   const active = snapshot?.activePlayerIndex === 0 || snapshot?.activePlayerIndex === 1
     ? (snapshot.activePlayerIndex as 0 | 1)
@@ -115,6 +117,26 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand }: Pro
 
       {myPlayerIndex !== null && (
         <div className="rmt-note">Fernbedienung für {snapshot.players[myPlayerIndex].name}</div>
+      )}
+
+      {onDisconnect && (
+        confirmDisconnect ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, background: "#1a1a1a", border: "1px solid #444", borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ color: "#ccc", fontSize: 14, textAlign: "center" }}>Verbindung wirklich trennen?</div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="rmt-btn rmt-btn--ghost" style={{ flex: 1 }} onClick={() => setConfirmDisconnect(false)}>
+                Abbrechen
+              </button>
+              <button className="rmt-btn rmt-btn--foul" style={{ flex: 1 }} onClick={onDisconnect}>
+                Ja, trennen
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" style={{ color: "#888", fontSize: 14 }} onClick={() => setConfirmDisconnect(true)}>
+            Verbindung trennen
+          </button>
+        )
       )}
     </div>
   );
