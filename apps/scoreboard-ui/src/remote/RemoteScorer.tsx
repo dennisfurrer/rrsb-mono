@@ -133,7 +133,7 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
             </div>
           </div>
         ) : (
-          <button className="rmt-btn rmt-btn--ghost rmt-btn--wide" style={{ color: "#888", fontSize: 14 }} onClick={() => setConfirmDisconnect(true)}>
+          <button className="rmt-btn rmt-btn--wide" style={{ background: "#2a1010", borderColor: "#5a2020", color: "#cc5555", fontSize: 14 }} onClick={() => setConfirmDisconnect(true)}>
             Verbindung trennen
           </button>
         )
