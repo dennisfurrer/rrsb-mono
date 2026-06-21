@@ -1,0 +1,61 @@
+name: Deploy stats UI
+
+# Runs AFTER the "Version bump" workflow finishes on main (like the scoreboard
+# deploy). Builds the statistics UI against the Cloudflare Worker API and
+# direct-uploads to Cloudflare Pages. SPA fallback is handled by public/_redirects.
+
+on:
+  workflow_run:
+    workflows: ["Version bump"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gate on Cloudflare secret
+        id: gate
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "CLOUDFLARE_API_TOKEN not set yet — skipping deploy."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.gate.outputs.ready == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - if: steps.gate.outputs.ready == 'true'
+        uses: pnpm/action-setup@v4
+
+      - if: steps.gate.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - if: steps.gate.outputs.ready == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - if: steps.gate.outputs.ready == 'true'
+        run: pnpm --filter @rrsb/statistics-ui build
+        env:
+          VITE_API_URL: https://ssapi.rrsb.club
+
+      - name: Deploy to Cloudflare Pages
+        if: steps.gate.outputs.ready == 'true'
+        working-directory: apps/statistics-ui
+        run: |
+          npx wrangler@4 pages project create rrsb-statistics --production-branch=main 2>/dev/null || echo "project already exists"
+          npx wrangler@4 pages deploy --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
