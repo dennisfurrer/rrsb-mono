@@ -1,0 +1,5 @@
+node_modules
+.wrangler
+dev.db
+prisma/dev.db
+*.db

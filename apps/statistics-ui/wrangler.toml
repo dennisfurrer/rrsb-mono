@@ -1,0 +1,6 @@
+# Cloudflare Pages — statistics UI (Vite SPA).
+# Direct-upload deploy via .github/workflows/deploy-stats-ui.yml.
+# Production URL: https://stats.rrsb.club (custom domain on the rrsb-statistics project)
+name = "rrsb-statistics"
+compatibility_date = "2026-06-22"
+pages_build_output_dir = "dist"

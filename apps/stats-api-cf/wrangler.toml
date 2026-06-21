@@ -1,0 +1,20 @@
+name = "rrsb-stats-api"
+main = "src/index.ts"
+compatibility_date = "2026-06-21"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 database (created via `wrangler d1 create rrsb-stats`, account dennis.furrer@gmail.com).
+[[d1_databases]]
+binding = "DB"
+database_name = "rrsb-stats"
+database_id = "cf7e23d3-4f4c-4e5a-a001-b2af97531324"
+migrations_dir = "migrations"
+
+# Durable Object for the SSE remote-control relay (rooms/sessions/commands).
+[[durable_objects.bindings]]
+name = "REMOTE"
+class_name = "RemoteRelay"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RemoteRelay"]

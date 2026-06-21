@@ -1,8 +1,8 @@
-name: Deploy scoreboard
+name: Deploy stats UI
 
-# Runs AFTER the "Version bump" workflow finishes on main, so it always ships the
-# freshly version-bumped build. Cloudflare Pages, direct upload (GitHub builds it;
-# Cloudflare does not). For now this deploys the scoreboard UI only.
+# Runs AFTER the "Version bump" workflow finishes on main (like the scoreboard
+# deploy). Builds the statistics UI against the Cloudflare Worker API and
+# direct-uploads to Cloudflare Pages. SPA fallback is handled by public/_redirects.
 
 on:
   workflow_run:
@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   deploy:
-    # Only for successful Version-bump runs on main.
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main') }}
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +22,7 @@ jobs:
         id: gate
         run: |
           if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
-            echo "CLOUDFLARE_API_TOKEN not set yet — skipping deploy (set the secret to enable)."
+            echo "CLOUDFLARE_API_TOKEN not set yet — skipping deploy."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
@@ -32,10 +31,10 @@ jobs:
       - if: steps.gate.outputs.ready == 'true'
         uses: actions/checkout@v4
         with:
-          ref: main # latest main — includes the version-bump commit
+          ref: main
 
       - if: steps.gate.outputs.ready == 'true'
-        uses: pnpm/action-setup@v4 # version comes from package.json "packageManager"
+        uses: pnpm/action-setup@v4
 
       - if: steps.gate.outputs.ready == 'true'
         uses: actions/setup-node@v4
@@ -47,15 +46,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - if: steps.gate.outputs.ready == 'true'
-        run: pnpm --filter @rrsb/scoreboard-ui build
+        run: pnpm --filter @rrsb/statistics-ui build
         env:
           VITE_API_URL: https://ssapi.rrsb.club
 
       - name: Deploy to Cloudflare Pages
         if: steps.gate.outputs.ready == 'true'
-        working-directory: apps/scoreboard-ui
+        working-directory: apps/statistics-ui
         run: |
-          npx wrangler@4 pages project create rrsb-scoreboard --production-branch=main 2>/dev/null || echo "project already exists"
+          npx wrangler@4 pages project create rrsb-statistics --production-branch=main 2>/dev/null || echo "project already exists"
           npx wrangler@4 pages deploy --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
