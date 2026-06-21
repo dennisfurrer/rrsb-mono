@@ -88,7 +88,7 @@ export type BallColor =
   | "pink"
   | "black";
 
-export type MissType = "long" | "easy" | "difficult" | "position";
+export type MissType = "long" | "easy" | "difficult" | "position" | "foul";
 
 export type Pocket = "corner" | "middle";
 
@@ -107,6 +107,7 @@ export const MISS_TYPES: { id: MissType; label: string }[] = [
   { id: "easy", label: "Einfache" },
   { id: "difficult", label: "Schwierige" },
   { id: "position", label: "Position" },
+  { id: "foul", label: "Foul" },
 ];
 
 export const POCKETS: { id: Pocket; label: string }[] = [

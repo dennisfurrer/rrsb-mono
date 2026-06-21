@@ -1461,7 +1461,6 @@ export function App() {
           session={soloSession}
           onHitMissShot={handleHitMissShot}
           onUndo={handleSoloUndo}
-          onNewSession={handleSoloReset}
           onChangeRoutine={handleSoloChangeRoutine}
           onMenuClick={() => setShowSoloMenu(true)}
         />

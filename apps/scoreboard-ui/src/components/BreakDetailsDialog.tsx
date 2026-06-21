@@ -8,6 +8,25 @@ import {
   type Pocket,
 } from "../lib/solo";
 
+const BALL_ICON_COLOR: Record<BallColor, string> = {
+  red: "#dd2222",
+  yellow: "#f0c020",
+  green: "#1f9e4a",
+  brown: "#7a4a1e",
+  blue: "#2255cc",
+  pink: "#ff77b3",
+  black: "#161616",
+};
+
+function BallDot({ color, label }: { color: string; label: string }) {
+  return (
+    <svg viewBox="0 0 20 20" style={{ width: "2.8vw", height: "2.8vw", display: "block" }} aria-label={label}>
+      <circle cx={10} cy={10} r={9} fill={color} stroke="#0006" strokeWidth={0.6} />
+      <circle cx={7.3} cy={6.8} r={2.2} fill="#ffffff" opacity={0.55} />
+    </svg>
+  );
+}
+
 interface Props {
   breakValue: number;
   playerName: string;
@@ -75,14 +94,15 @@ export function BreakDetailsDialog({
               <button
                 key={b.id}
                 className={`break-pill break-pill-ball ${ball === b.id ? "selected" : ""}`}
-                style={
-                  ball === b.id
-                    ? { background: b.bg, color: b.fg, borderColor: b.fg }
-                    : undefined
-                }
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  ...(ball === b.id ? { background: b.bg, borderColor: b.fg } : {}),
+                }}
                 onClick={() => setBall((c) => toggle(c, b.id))}
               >
-                {b.label}
+                <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} />
               </button>
             ))}
           </div>

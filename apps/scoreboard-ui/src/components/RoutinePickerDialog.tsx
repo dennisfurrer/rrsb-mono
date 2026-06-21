@@ -255,7 +255,7 @@ export function RoutinePickerDialog({ playerName, onStart, onCancel }: Props) {
             Zurück
           </button>
           <button
-            className={`routine-picker-start ${!selected ? "disabled" : ""}`}
+            className={`routine-picker-start ${!selected ? "disabled" : "frame-end-btn-glow"}`}
             onClick={() => selected && onStart(selected, showBallCount ? ballCount : showRedToggle ? redToggle : redsCount)}
             disabled={!selected}
           >
