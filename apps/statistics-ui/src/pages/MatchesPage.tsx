@@ -28,11 +28,43 @@ function ArchiveRow({ m }: { m: V3MatchSummary }) {
         <span className={`nm ${p1.isWinner ? "win" : ""}`}>{p1.name}</span>
       </span>
       <span className="archive-row-date">
+        {m.status === "ACTIVE" && <span className="status-dot live" style={{ marginRight: 6 }} />}
+        {m.status === "ABORTED" ? "Stopped · " : ""}
         {formatDate(m.startedAt)}
         {m.tableNumber ? ` · T${m.tableNumber}` : ""}
       </span>
       <span className="chev">›</span>
     </Link>
+  );
+}
+
+/** Collapsible subcategory for unfinished (in-progress / stopped) matches. */
+function UnfinishedSection({ matches }: { matches: V3MatchSummary[] }) {
+  const [open, setOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const rows = showAll ? matches : matches.slice(0, TOP_N);
+  return (
+    <div className={`group ${open ? "open" : ""}`} style={{ marginBottom: 30 }}>
+      <button className="group-head" onClick={() => setOpen((v) => !v)}>
+        <span className="group-chev">›</span>
+        <span className="group-name">Unfinished</span>
+        <span className="group-count">{matches.length}</span>
+      </button>
+      {open && (
+        <div className="group-body">
+          <div className="archive-list">
+            {rows.map((m) => (
+              <ArchiveRow key={m.id} m={m} />
+            ))}
+          </div>
+          {matches.length > TOP_N && (
+            <button className="show-all" onClick={() => setShowAll((v) => !v)}>
+              {showAll ? "Show fewer" : `Show all ${matches.length}`}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -75,14 +107,21 @@ export function MatchesPage() {
   useEffect(() => {
     apiV3.matches
       .list({ limit: 100 })
-      .then((r) => setMatches(r.data.filter((m) => m.players.length === 2 && m.status !== "ACTIVE")))
+      .then((r) => setMatches(r.data.filter((m) => m.players.length === 2)))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
+  // Unfinished = in-progress or stopped (never reached a normal finish).
+  const unfinished = useMemo(
+    () => matches.filter((m) => m.status === "ACTIVE" || m.status === "ABORTED"),
+    [matches],
+  );
+
   const { standard, others } = useMemo(() => {
     const byCode = new Map<string, V3MatchSummary[]>();
     for (const m of matches) {
+      if (m.status !== "FINISHED") continue; // unfinished get their own subcategory
       const arr = byCode.get(m.matchTypeCode) ?? [];
       arr.push(m);
       byCode.set(m.matchTypeCode, arr);
@@ -120,6 +159,8 @@ export function MatchesPage() {
         <div className="card empty-state">No matches in the archive yet.</div>
       ) : (
         <>
+          {unfinished.length > 0 && <UnfinishedSection matches={unfinished} />}
+
           {standard && (
             <div style={{ marginBottom: 30 }}>
               <div className="section-label">

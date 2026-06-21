@@ -23,15 +23,16 @@ function firstName(n: string): string {
 }
 
 /** One table card: live match, most-recent score, or zeros. */
-function TableCard({ table }: { table: V3Table }) {
+function TableCard({ table }: { table: { tableNumber: number | null; match: V3TableMatch | null } }) {
   const m = table.match;
   const n = table.tableNumber;
+  const tlabel = n != null ? `Table ${n}` : "No table";
 
   if (!m) {
     return (
       <div className="tcard empty">
         <div className="tcard-head">
-          <span className="tcard-table">Table {n}</span>
+          <span className="tcard-table">{tlabel}</span>
           <span className="tcard-status">—</span>
         </div>
         <div className="tcard-players">
@@ -62,7 +63,7 @@ function TableCard({ table }: { table: V3Table }) {
       <div className="tcard-head">
         <span className="tcard-table">
           {active && <span className="status-dot live" />}
-          Table {n}
+          {tlabel}
         </span>
         <span className={`tcard-status ${active ? "live" : ""}`}>{statusLabel(m)}</span>
         <span className="tcard-expand">⤢</span>
@@ -104,6 +105,8 @@ export function LiveScoresPage() {
   const [clubs, setClubs] = useState<V3Club[]>([]);
   const [clubId, setClubId] = useState<string>("");
   const [tables, setTables] = useState<V3Table[]>([]);
+  const [otherMatches, setOtherMatches] = useState<V3TableMatch[]>([]);
+  const [otherOpen, setOtherOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const timer = useRef<ReturnType<typeof setInterval>>(null);
 
@@ -123,7 +126,10 @@ export function LiveScoresPage() {
   const loadTables = useCallback((id: string) => {
     apiV3.clubs
       .tables(id)
-      .then((t) => setTables(t.tables))
+      .then((t) => {
+        setTables(t.tables);
+        setOtherMatches(t.otherMatches ?? []);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -170,11 +176,32 @@ export function LiveScoresPage() {
       {loading && tables.length === 0 ? (
         <div className="spinner" />
       ) : (
-        <div className="tables-grid">
-          {tables.map((t) => (
-            <TableCard key={t.tableNumber} table={t} />
-          ))}
-        </div>
+        <>
+          <div className="tables-grid">
+            {tables.map((t) => (
+              <TableCard key={t.tableNumber} table={t} />
+            ))}
+          </div>
+
+          {otherMatches.length > 0 && (
+            <div className={`group ${otherOpen ? "open" : ""}`} style={{ marginTop: 16 }}>
+              <button className="group-head" onClick={() => setOtherOpen((v) => !v)}>
+                <span className="group-chev">›</span>
+                <span className="group-name">Unknown table</span>
+                <span className="group-count">{otherMatches.length}</span>
+              </button>
+              {otherOpen && (
+                <div className="group-body">
+                  <div className="tables-grid">
+                    {otherMatches.map((m) => (
+                      <TableCard key={m.id} table={{ tableNumber: m.tableNumber ?? null, match: m }} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

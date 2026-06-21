@@ -108,7 +108,24 @@ clubsRouter.get("/:id/tables", async (c) => {
       })
     );
 
-    return c.json({ data: { club, tables } });
+    // Active matches in this club that aren't on one of the known tables
+    // (no table number, or a table number outside the club's set).
+    const otherRaw = await prisma.v3Match.findMany({
+      where: {
+        locationId: id,
+        status: "ACTIVE",
+        OR: [{ tableNumber: null }, { tableNumber: { notIn: tableNums } }],
+      },
+      orderBy: { updatedAt: "desc" },
+      include: matchInclude,
+      take: 50,
+    });
+    const otherMatches = otherRaw.map((m) => ({
+      ...shapeMatch(m as TableMatch),
+      tableNumber: (m as TableMatch & { tableNumber: number | null }).tableNumber ?? null,
+    }));
+
+    return c.json({ data: { club, tables, otherMatches } });
   } catch (e) {
     console.error("[v3] Error fetching club tables:", e);
     return c.json({ error: "Failed to fetch tables" }, 500);
