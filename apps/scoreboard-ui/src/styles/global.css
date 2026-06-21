@@ -2524,6 +2524,32 @@ div { font-weight: bold; }
   flex-wrap: wrap;
 }
 
+.stats-fouls-group {
+  background: rgba(255,68,68,0.07);
+  border: 1px solid rgba(255,68,68,0.3);
+  border-radius: 8px;
+  padding: 1vh 1vw;
+  margin-bottom: 1.2vh;
+}
+
+.stats-fouls-group-label {
+  color: #ff8888;
+  font-size: 1.1vw;
+  font-weight: bold;
+  margin-bottom: 0.4vh;
+  display: flex;
+  align-items: center;
+  gap: 0.6vw;
+}
+
+.stats-fouls-group-total {
+  background: rgba(255,68,68,0.25);
+  color: #ffaaaa;
+  border-radius: 10px;
+  padding: 0.1vh 0.7vw;
+  font-size: 1vw;
+}
+
 .stats-detail-group {
   display: flex;
   flex-direction: column;

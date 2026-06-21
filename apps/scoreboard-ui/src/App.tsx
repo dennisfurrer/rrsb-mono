@@ -1253,7 +1253,7 @@ export function App() {
       if (soloSession.remoteId) {
         patchPracticeSession(soloSession.remoteId, { finished: true });
       }
-      const key = `${soloSession.routineId}:${soloSession.redsCount}`;
+      const key = `${soloSession.playerName}:${soloSession.routineId}:${soloSession.redsCount}`;
       setMultiDailyAttempts((prev) => ({
         ...prev,
         [key]: [...(prev[key] ?? []), ...attempts],
@@ -1268,7 +1268,7 @@ export function App() {
 
   const handleMultiNewSession = useCallback(() => {
     if (!soloSession || soloSession.mode !== "break") return;
-    const key = `${soloSession.routineId}:${soloSession.redsCount}`;
+    const key = `${soloSession.playerName}:${soloSession.routineId}:${soloSession.redsCount}`;
     setMultiDailyAttempts((prev) => {
       const next = { ...prev };
       delete next[key];
@@ -1281,7 +1281,7 @@ export function App() {
     if (soloSession.remoteId && attempts.length > 0) {
       addPracticeAttempts(soloSession.remoteId, attempts.map(breakAttemptToApi));
     }
-    const key = `${soloSession.routineId}:${soloSession.redsCount}`;
+    const key = `${soloSession.playerName}:${soloSession.routineId}:${soloSession.redsCount}`;
     setMultiDailyAttempts((prev) => {
       const next = { ...prev };
       delete next[key];
@@ -1557,7 +1557,7 @@ export function App() {
           playerName={soloSession.playerName}
           routineId={soloSession.routineId}
           redsCount={soloSession.redsCount}
-          initialAttempts={multiDailyAttempts[`${soloSession.routineId}:${soloSession.redsCount}`] ?? []}
+          initialAttempts={multiDailyAttempts[`${soloSession.playerName}:${soloSession.routineId}:${soloSession.redsCount}`] ?? []}
           onNewSession={handleMultiNewSession}
           onSaveAndNewSession={handleMultiSaveAndNewSession}
           onCommit={handleMultiCommit}
