@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MutableRefObject } from "react";
 import type { MatchState } from "../lib/model";
+import { API_CONFIGURED } from "../lib/connection";
 import {
   buildSnapshot,
   commandStreamUrl,
@@ -64,6 +65,7 @@ export function useRemoteHost(opts: {
   /** Ensure a session token exists for a player (used when opening the QR modal). */
   const ensureSession = useCallback(
     async (pi: 0 | 1): Promise<string | null> => {
+      if (!API_CONFIGURED) return null; // remote control needs the API
       setActive(true);
       if (tokens[pi]) return tokens[pi];
       const token = await createRemoteSession(room.roomId, room.displayKey, pi);
@@ -76,6 +78,7 @@ export function useRemoteHost(opts: {
   /** Rotate a player's token — invalidates the old QR and boots its phone. */
   const rotateSession = useCallback(
     async (pi: 0 | 1): Promise<string | null> => {
+      if (!API_CONFIGURED) return null;
       setActive(true);
       const token = await createRemoteSession(room.roomId, room.displayKey, pi);
       if (token) {

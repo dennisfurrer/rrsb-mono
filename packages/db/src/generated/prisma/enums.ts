@@ -236,7 +236,9 @@ export const V3EventType = {
   MATCH_END: 'MATCH_END',
   UNDO: 'UNDO',
   REDO: 'REDO',
-  EDIT_LAST_BREAK: 'EDIT_LAST_BREAK'
+  EDIT_LAST_BREAK: 'EDIT_LAST_BREAK',
+  DELETE_BREAK: 'DELETE_BREAK',
+  MATCH_ABANDONED: 'MATCH_ABANDONED'
 } as const
 
 export type V3EventType = (typeof V3EventType)[keyof typeof V3EventType]

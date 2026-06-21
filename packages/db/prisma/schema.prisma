@@ -353,6 +353,8 @@ enum V3EventType {
   UNDO
   REDO
   EDIT_LAST_BREAK
+  DELETE_BREAK
+  MATCH_ABANDONED
 }
 
 enum V3EventSource {

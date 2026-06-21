@@ -1,11 +1,12 @@
-import { API_BASE_URL } from "./api";
+import { API_BASE_URL, apiFetch } from "./connection";
 import type { MatchState } from "./model";
 import type { BBState, BBBallColor, BBBallType } from "./ballbyball";
 
 export { API_BASE_URL };
 
-/** v3 remote relay base — logs session/connection/command meta to the database. */
-const REMOTE_BASE = `${API_BASE_URL}/api/v3/remote`;
+/** v3 remote relay — relative path for fetches, full URL for SSE streams. */
+const REMOTE_PATH = "/api/v3/remote";
+const REMOTE_BASE = `${API_BASE_URL ?? ""}${REMOTE_PATH}`;
 
 /**
  * Commands flow phone -> display. The display applies each command through its
@@ -100,18 +101,14 @@ export async function createRemoteSession(
   displayKey: string,
   playerIndex: 0 | 1
 ): Promise<string | null> {
-  try {
-    const res = await fetch(`${REMOTE_BASE}/${roomId}/session`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ displayKey, playerIndex }),
-    });
-    const data = await res.json();
-    return data.token ?? null;
-  } catch (e) {
-    console.error("Failed to create remote session:", e);
-    return null;
-  }
+  const res = await apiFetch(`${REMOTE_PATH}/${roomId}/session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ displayKey, playerIndex }),
+  });
+  if (!res) return null;
+  const data = await res.json();
+  return data.token ?? null;
 }
 
 export async function pushRemoteState(
@@ -119,15 +116,11 @@ export async function pushRemoteState(
   displayKey: string,
   snapshot: RemoteSnapshot
 ): Promise<void> {
-  try {
-    await fetch(`${REMOTE_BASE}/${roomId}/state`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ displayKey, snapshot }),
-    });
-  } catch {
-    /* best-effort */
-  }
+  await apiFetch(`${REMOTE_PATH}/${roomId}/state`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ displayKey, snapshot }),
+  });
 }
 
 // ===== Phone-side relay calls =====
@@ -137,16 +130,12 @@ export async function sendRemoteCommand(
   token: string,
   command: RemoteCommand
 ): Promise<boolean> {
-  try {
-    const res = await fetch(`${REMOTE_BASE}/${roomId}/command`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, command }),
-    });
-    return res.ok;
-  } catch {
-    return false;
-  }
+  const res = await apiFetch(`${REMOTE_PATH}/${roomId}/command`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, command }),
+  });
+  return !!res && res.ok;
 }
 
 export function commandStreamUrl(roomId: string, displayKey: string): string {

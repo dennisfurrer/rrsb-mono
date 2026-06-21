@@ -1,8 +1,7 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || (
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:7200"
-    : "https://rrsb-mono-sas-api.onrender.com"
-);
+import { API_BASE_URL, apiFetch } from "./connection";
+
+// Re-exported so existing imports (lib/apiV3, lib/remote) keep working.
+export { API_BASE_URL };
 
 interface MatchPayload {
   players: {
@@ -51,47 +50,33 @@ export interface NamesListEntry {
   nationalityIOC: string;
 }
 
-export async function createMatch(
-  payload: MatchPayload
-): Promise<string | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/matches`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    return data.data?.matchId ?? null;
-  } catch (e) {
-    console.error("Failed to create match:", e);
-    return null;
-  }
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
+export async function createMatch(payload: MatchPayload): Promise<string | null> {
+  const res = await apiFetch(`/api/matches`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(payload),
+  });
+  if (!res) return null;
+  const data = await res.json();
+  return data.data?.matchId ?? null;
 }
 
 export async function updateMatch(payload: MatchUpdatePayload): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/matches`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {
-    console.error("Failed to update match:", e);
-  }
+  await apiFetch(`/api/matches`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(payload),
+  });
 }
 
-export async function sendFrameAction(
-  payload: FrameActionPayload
-): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/frame-actions/single`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {
-    console.error("Failed to send frame action:", e);
-  }
+export async function sendFrameAction(payload: FrameActionPayload): Promise<void> {
+  await apiFetch(`/api/frame-actions/single`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(payload),
+  });
 }
 
 export function getDeviceId(): string {
@@ -103,34 +88,22 @@ export function getDeviceId(): string {
   return id;
 }
 
-export async function pingScoreboard(
-  deviceId: string
-): Promise<ScoreboardConfig | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/scoreboards/ping`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deviceId }),
-    });
-    const data = await res.json();
-    return data.config ?? null;
-  } catch (e) {
-    console.error("Ping failed:", e);
-    return null;
-  }
+export async function pingScoreboard(deviceId: string): Promise<ScoreboardConfig | null> {
+  const res = await apiFetch(`/api/scoreboards/ping`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ deviceId }),
+  });
+  if (!res) return null;
+  const data = await res.json();
+  return data.config ?? null;
 }
 
-export async function fetchNamesList(
-  id: string
-): Promise<NamesListEntry[] | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/scoreboards/names-list/${id}`);
-    const data = await res.json();
-    return data.data?.entries ?? null;
-  } catch (e) {
-    console.error("Failed to fetch names list:", e);
-    return null;
-  }
+export async function fetchNamesList(id: string): Promise<NamesListEntry[] | null> {
+  const res = await apiFetch(`/api/scoreboards/names-list/${id}`);
+  if (!res) return null;
+  const data = await res.json();
+  return data.data?.entries ?? null;
 }
 
 export interface MatchAssignment {
@@ -149,59 +122,41 @@ export async function fetchPendingAssignment(
   tableNumber: number | null,
   deviceId: string
 ): Promise<MatchAssignment | null> {
-  try {
-    const params = new URLSearchParams();
-    if (tableNumber) {
-      params.set("tableNumber", String(tableNumber));
-    } else {
-      params.set("deviceId", deviceId);
-    }
-    const res = await fetch(
-      `${API_BASE_URL}/api/scoreboards/assignments/pending?${params}`
-    );
-    const data = await res.json();
-    const assignments = data.data ?? [];
-    return assignments.length > 0 ? assignments[0] : null;
-  } catch (e) {
-    console.error("Failed to fetch assignments:", e);
-    return null;
+  const params = new URLSearchParams();
+  if (tableNumber) {
+    params.set("tableNumber", String(tableNumber));
+  } else {
+    params.set("deviceId", deviceId);
   }
+  const res = await apiFetch(`/api/scoreboards/assignments/pending?${params}`);
+  if (!res) return null;
+  const data = await res.json();
+  const assignments = data.data ?? [];
+  return assignments.length > 0 ? assignments[0] : null;
 }
 
 export async function claimAssignment(id: string): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/scoreboards/assignments/claim`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-  } catch (e) {
-    console.error("Failed to claim assignment:", e);
-  }
+  await apiFetch(`/api/scoreboards/assignments/claim`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ id }),
+  });
 }
 
 export async function cancelAssignment(id: string): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/scoreboards/assignments/cancel`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-  } catch (e) {
-    console.error("Failed to cancel assignment:", e);
-  }
+  await apiFetch(`/api/scoreboards/assignments/cancel`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ id }),
+  });
 }
 
 export async function completeAssignment(id: string): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/scoreboards/assignments/complete`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-  } catch (e) {
-    console.error("Failed to complete assignment:", e);
-  }
+  await apiFetch(`/api/scoreboards/assignments/complete`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ id }),
+  });
 }
 
 export interface BreakAction {
@@ -216,45 +171,25 @@ export async function fetchPlayerBreaks(
   matchId: string,
   playerIndex: number
 ): Promise<BreakAction[]> {
-  try {
-    const res = await fetch(
-      `${API_BASE_URL}/api/frame-actions/${matchId}/breaks/${playerIndex}`
-    );
-    const data = await res.json();
-    return data.data ?? [];
-  } catch (e) {
-    console.error("Failed to fetch breaks:", e);
-    return [];
-  }
+  const res = await apiFetch(`/api/frame-actions/${matchId}/breaks/${playerIndex}`);
+  if (!res) return [];
+  const data = await res.json();
+  return data.data ?? [];
 }
 
 export async function toggleBreakFlag(actionId: string): Promise<boolean> {
-  try {
-    const res = await fetch(
-      `${API_BASE_URL}/api/frame-actions/${actionId}/flag`,
-      { method: "PATCH" }
-    );
-    const data = await res.json();
-    return data.data?.manualFlagToIgnore ?? false;
-  } catch (e) {
-    console.error("Failed to toggle flag:", e);
-    return false;
-  }
+  const res = await apiFetch(`/api/frame-actions/${actionId}/flag`, { method: "PATCH" });
+  if (!res) return false;
+  const data = await res.json();
+  return data.data?.manualFlagToIgnore ?? false;
 }
 
-export async function updateTableNumber(
-  deviceId: string,
-  tableNumber: number
-): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/scoreboards/ping`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ deviceId, tableNumber }),
-    });
-  } catch (e) {
-    console.error("Failed to update table number:", e);
-  }
+export async function updateTableNumber(deviceId: string, tableNumber: number): Promise<void> {
+  await apiFetch(`/api/scoreboards/ping`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ deviceId, tableNumber }),
+  });
 }
 
 // ===== Practice (solo training) =====
@@ -293,59 +228,38 @@ export interface PracticeAttemptInput {
 export async function createPracticeSession(
   payload: CreatePracticeSessionPayload
 ): Promise<string | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/practice-sessions`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    return data.data?.sessionId ?? null;
-  } catch (e) {
-    console.error("Failed to create practice session:", e);
-    return null;
-  }
+  const res = await apiFetch(`/api/practice-sessions`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(payload),
+  });
+  if (!res) return null;
+  const data = await res.json();
+  return data.data?.sessionId ?? null;
 }
 
 export async function patchPracticeSession(
   sessionId: string,
   patch: { redsCount?: number; finished?: boolean }
 ): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/practice-sessions/${sessionId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(patch),
-    });
-  } catch (e) {
-    console.error("Failed to patch practice session:", e);
-  }
+  await apiFetch(`/api/practice-sessions/${sessionId}`, {
+    method: "PATCH",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(patch),
+  });
 }
 
 export async function addPracticeAttempts(
   sessionId: string,
   attempts: PracticeAttemptInput[]
 ): Promise<void> {
-  try {
-    await fetch(`${API_BASE_URL}/api/practice-sessions/${sessionId}/attempts`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ attempts }),
-    });
-  } catch (e) {
-    console.error("Failed to add practice attempts:", e);
-  }
+  await apiFetch(`/api/practice-sessions/${sessionId}/attempts`, {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ attempts }),
+  });
 }
 
-export async function deleteLastPracticeAttempt(
-  sessionId: string
-): Promise<void> {
-  try {
-    await fetch(
-      `${API_BASE_URL}/api/practice-sessions/${sessionId}/attempts/last`,
-      { method: "DELETE" }
-    );
-  } catch (e) {
-    console.error("Failed to delete last attempt:", e);
-  }
+export async function deleteLastPracticeAttempt(sessionId: string): Promise<void> {
+  await apiFetch(`/api/practice-sessions/${sessionId}/attempts/last`, { method: "DELETE" });
 }

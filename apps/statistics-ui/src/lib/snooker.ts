@@ -55,7 +55,22 @@ const EVENT_LABELS: Record<string, string> = {
   UNDO: "Undo",
   REDO: "Redo",
   EDIT_LAST_BREAK: "Edit break",
+  DELETE_BREAK: "Delete break",
+  MATCH_ABANDONED: "Abandoned",
 };
+
+/**
+ * Edit/destructive meta actions — recorded in the firehose but hidden from the
+ * stats UI play-by-play (they're history-management, not game events).
+ */
+export const HIDDEN_EVENT_TYPES = new Set<string>([
+  "UNDO",
+  "REDO",
+  "EDIT_LAST_BREAK",
+  "DELETE_BREAK",
+  "MATCH_ABANDONED",
+  "SWITCH_PLAYER",
+]);
 
 export function eventLabel(type: string): string {
   return EVENT_LABELS[type] ?? type;
