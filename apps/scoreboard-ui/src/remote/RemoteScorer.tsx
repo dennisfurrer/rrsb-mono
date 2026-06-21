@@ -467,8 +467,11 @@ function BreakPad({
         <FlashButton className="rmt-key" onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
       </div>
 
-      <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" disabled={value <= 0} onClick={submit}>
-        Eintragen
+      <FlashButton
+        className="rmt-btn rmt-btn--primary rmt-btn--wide"
+        onClick={value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
+      >
+        {value > 0 ? "Break eintragen" : "Spielerwechsel"}
       </FlashButton>
 
       <div className="rmt-toggles">

@@ -409,11 +409,16 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <button
                 onClick={(e) => { e.stopPropagation(); onRemoteClick(0); }}
                 title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3vh" }}
               >
-                <QrGlyph color={effP1Color ?? "#5599ff"} />
-                {remoteConnected?.[0] && (
-                  <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginLeft: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                <span style={{ display: "flex", alignItems: "center" }}>
+                  <QrGlyph color={effP1Color ?? "#5599ff"} />
+                  {remoteConnected?.[0] && (
+                    <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginLeft: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                  )}
+                </span>
+                {(remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 0 && (
+                  <span style={{ width: "0.6vw", height: "0.6vw", borderRadius: "50%", background: "#facc15", boxShadow: "0 0 8px #facc15" }} />
                 )}
               </button>
             )}
@@ -535,12 +540,17 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <button
                 onClick={(e) => { e.stopPropagation(); onRemoteClick(1); }}
                 title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", alignItems: "center" }}
+                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.3vh" }}
               >
-                {remoteConnected?.[1] && (
-                  <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginRight: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                <span style={{ display: "flex", alignItems: "center" }}>
+                  {remoteConnected?.[1] && (
+                    <span style={{ width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", marginRight: "0.35vw", boxShadow: "0 0 6px #22c55e" }} />
+                  )}
+                  <QrGlyph color={effP2Color ?? "#ff8833"} />
+                </span>
+                {(remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 1 && (
+                  <span style={{ width: "0.6vw", height: "0.6vw", borderRadius: "50%", background: "#facc15", boxShadow: "0 0 8px #facc15" }} />
                 )}
-                <QrGlyph color={effP2Color ?? "#ff8833"} />
               </button>
             )}
           </div>
