@@ -43,6 +43,7 @@ interface Props {
   onClose: () => void;
   isEditMode?: boolean;
   onCancelEdit?: () => void;
+  onDeleteBreak?: () => void;
   frameScores?: [number, number];
   opponentName?: string;
   frameNumber?: number;
@@ -64,6 +65,7 @@ export function BallByBallDialog({
   onClose,
   isEditMode,
   onCancelEdit,
+  onDeleteBreak,
   frameScores,
   opponentName,
   frameNumber,
@@ -76,6 +78,7 @@ export function BallByBallDialog({
   const [showRedsConfirm, setShowRedsConfirm] = useState(false);
   const [showCloseWarning, setShowCloseWarning] = useState(false);
   const [showCancelEditConfirm, setShowCancelEditConfirm] = useState(false);
+  const [showDeleteBreakConfirm, setShowDeleteBreakConfirm] = useState(false);
   const [showFrameEndConfirm, setShowFrameEndConfirm] = useState(false);
   const [frameEndSeen, setFrameEndSeen] = useState(false);
   const [showHCDialog, setShowHCDialog] = useState(false);
@@ -385,34 +388,74 @@ export function BallByBallDialog({
             <button className="bbb-btn-cancel" onClick={() => setPendingReds(null)} style={{ ...actionBtnLg("#2a1a1a", "#ff4444"), border: "1px solid #ff444466" }}>✕</button>
           </div>
         ) : breakBalls.length === 0 && !frameOver ? (
-          /* Combined grid: Abbrechen + Foul/Rote — column 2 is shared so left edges align */
-          <div style={{ display: "grid", gridTemplateColumns: "min-content 1fr", gap: "0.6vh 0.8vw", alignItems: "center", width: "100%" }}>
-            <div />
-            {phase !== "colors_only" ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5vw", border: "1px solid #666", borderRadius: "6px", padding: "0.4vh 0.6vw" }}>
-                <span style={{ color: "#777", fontSize: "1.5vw" }}>Rote:</span>
-                <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.max(0, redsRemaining - 1))} disabled={redsRemaining <= 0} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining <= 0 ? 0.3 : 1, cursor: redsRemaining <= 0 ? "not-allowed" : "pointer", border: "1px solid #777" }}>−</button>
-                <span style={{ color: "#bbb", fontSize: "1.5vw", minWidth: "1.5vw", textAlign: "center" }}>{redsRemaining}</span>
-                <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.min(15, redsRemaining + 1))} disabled={redsRemaining >= 15} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining >= 15 ? 0.3 : 1, cursor: redsRemaining >= 15 ? "not-allowed" : "pointer", border: "1px solid #777" }}>+</button>
-              </div>
-            ) : <div />}
-            <button className="bbb-btn-foul" onClick={() => setFoulMode(true)} style={{ ...actionBtnLg("#5c1a1a", "#ff5555"), border: "1.5px solid #ff5555", whiteSpace: "nowrap" }}>Foul</button>
-            <button className="bbb-btn-cancel" onClick={onClose} style={{ ...actionBtnLg("#3a1a1a", "#ff4444"), border: "1px solid #ff888866", width: "100%" }}>
-              Abbrechen
-            </button>
-            {isFrameStart && onHandicap && (
-              <>
-                <div />
-                <button
-                  className="bbb-btn-handicap"
-                  onClick={() => { setHcTarget(playerIndex); setHcInput(""); setShowHCDialog(true); }}
-                  style={{ ...actionBtnLg("#3a2800", "#c87832"), border: "1.5px solid #c87832", width: "100%" }}
-                >
-                  Handicap
-                </button>
-              </>
-            )}
-          </div>
+          isEditMode && onDeleteBreak ? (
+            /* Edit mode, fully undone back to break start: only Break löschen / Redo / Abbrechen — no Rote/Foul/Handicap */
+            <div style={{ display: "flex", gap: "0.5vw" }}>
+              <button
+                className="bbb-btn-cancel"
+                onClick={() => setShowDeleteBreakConfirm(true)}
+                style={{ ...actionBtnLg("#3a1a1a", "#ff4444"), flex: 1, minWidth: 0, padding: "1.2vh 0.3vw", fontSize: "1.3vw", border: "1px solid #553333", boxSizing: "border-box" }}
+              >
+                Break löschen
+              </button>
+              <button
+                className="bbb-btn-ok"
+                disabled={!onRedo}
+                onClick={onRedo ?? undefined}
+                style={{ ...actionBtnLg("#0a2a1a", "#4ade80"), flex: 1, minWidth: 0, padding: "1.2vh 0.3vw", fontSize: "1.3vw", opacity: onRedo ? 1 : 0.3, cursor: onRedo ? "pointer" : "default", boxSizing: "border-box" }}
+              >
+                {"Redo "}<span style={{ fontFamily: "'Wingdings 3'" }}>M</span>
+              </button>
+              <button
+                className="bbb-btn-cancel"
+                onClick={onClose}
+                style={{ ...actionBtnLg("#3a1a1a", "#ff4444"), flex: 1, minWidth: 0, padding: "1.2vh 0.3vw", fontSize: "1.3vw", border: "1px solid #ff888866", boxSizing: "border-box" }}
+              >
+                Abbrechen
+              </button>
+            </div>
+          ) : (
+            /* Combined grid: Foul + Handicap/Rote on top, Abbrechen below — column 2 is shared so left edges align */
+            (() => {
+              const showHandicap = isFrameStart && !!onHandicap;
+              const redsEditor = phase !== "colors_only" ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5vw", border: "1px solid #666", borderRadius: "6px", padding: "0.4vh 0.6vw" }}>
+                  <span style={{ color: "#777", fontSize: "1.5vw" }}>Rote:</span>
+                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.max(0, redsRemaining - 1))} disabled={redsRemaining <= 0} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining <= 0 ? 0.3 : 1, cursor: redsRemaining <= 0 ? "not-allowed" : "pointer", border: "1px solid #777" }}>−</button>
+                  <span style={{ color: "#bbb", fontSize: "1.5vw", minWidth: "1.5vw", textAlign: "center" }}>{redsRemaining}</span>
+                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.min(15, redsRemaining + 1))} disabled={redsRemaining >= 15} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining >= 15 ? 0.3 : 1, cursor: redsRemaining >= 15 ? "not-allowed" : "pointer", border: "1px solid #777" }}>+</button>
+                </div>
+              ) : <div />;
+              return (
+                <div style={{ display: "grid", gridTemplateColumns: "min-content 1fr", gap: "0.6vh 0.8vw", alignItems: "center", width: "100%" }}>
+                  <button className="bbb-btn-foul" onClick={() => setFoulMode(true)} style={{ ...actionBtnLg("#5c1a1a", "#ff5555"), border: "1.5px solid #ff5555", whiteSpace: "nowrap" }}>Foul</button>
+                  {showHandicap ? (
+                    <button
+                      className="bbb-btn-handicap"
+                      onClick={() => { setHcTarget(playerIndex); setHcInput(""); setShowHCDialog(true); }}
+                      style={{ ...actionBtnLg("#3a2800", "#c87832"), border: "1.5px solid #c87832", width: "100%" }}
+                    >
+                      Handicap
+                    </button>
+                  ) : redsEditor}
+                  <div />
+                  {showHandicap ? redsEditor : (
+                    <button className="bbb-btn-cancel" onClick={onClose} style={{ ...actionBtnLg("#3a1a1a", "#ff4444"), border: "1px solid #ff888866", width: "100%" }}>
+                      Abbrechen
+                    </button>
+                  )}
+                  {showHandicap && (
+                    <>
+                      <div />
+                      <button className="bbb-btn-cancel" onClick={onClose} style={{ ...actionBtnLg("#3a1a1a", "#ff4444"), border: "1px solid #ff888866", width: "100%" }}>
+                        Abbrechen
+                      </button>
+                    </>
+                  )}
+                </div>
+              );
+            })()
+          )
         ) : null}
 
         {/* Break ball history */}
@@ -503,6 +546,36 @@ export function BallByBallDialog({
             <button
               className="bbb-btn-cancel"
               onClick={() => setShowCancelEditConfirm(false)}
+              style={{ background: "#3a1a1a", color: "#ff4444", border: "1px solid #553333", borderRadius: "8px", padding: "1.2vh 3vw", fontSize: "1.7vw", fontWeight: "bold", cursor: "pointer" }}
+            >
+              Zurück
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {showDeleteBreakConfirm && onDeleteBreak && (
+      <div
+        style={{ position: "fixed", inset: 0, zIndex: 800, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ background: "#1e1e1e", border: "1px solid #555", borderRadius: "14px", padding: "4vh 4vw", display: "flex", flexDirection: "column", gap: "2.5vh", alignItems: "center", minWidth: "42vw" }}>
+          <div style={{ color: "#fff", fontSize: "2vw", fontWeight: "bold" }}>Break löschen?</div>
+          <div style={{ color: "#ccc", fontSize: "1.7vw", textAlign: "center" }}>
+            Dieses Break wird endgültig entfernt.
+          </div>
+          <div style={{ display: "flex", gap: "1.5vw" }}>
+            <button
+              className="bbb-btn-ok"
+              onClick={onDeleteBreak}
+              style={{ background: "#1a3a1a", color: "#4ade80", border: "1px solid #2a5a2a", borderRadius: "8px", padding: "1.2vh 3vw", fontSize: "1.7vw", fontWeight: "bold", cursor: "pointer" }}
+            >
+              Ja, löschen
+            </button>
+            <button
+              className="bbb-btn-cancel"
+              onClick={() => setShowDeleteBreakConfirm(false)}
               style={{ background: "#3a1a1a", color: "#ff4444", border: "1px solid #553333", borderRadius: "8px", padding: "1.2vh 3vw", fontSize: "1.7vw", fontWeight: "bold", cursor: "pointer" }}
             >
               Zurück

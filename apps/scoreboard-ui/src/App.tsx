@@ -903,6 +903,16 @@ export function App() {
     setShowBBDialog(false);
   }, []);
 
+  // Confirms permanent removal of a break that was undone back to its start while editing
+  const handleDeleteBreak = useCallback(() => {
+    preEditHistoryRef.current = null;
+    preEditMatchRef.current = null;
+    isEditingBreakRef.current = false;
+    setIsEditingBreak(false);
+    setRedoStack([]);
+    setShowBBDialog(false);
+  }, []);
+
   // ===== UNDO (ball-by-ball — used inside BBDialog edit mode) =====
   const undo = useCallback(() => {
     if (history.length === 0) return;
@@ -1584,6 +1594,7 @@ export function App() {
           onClose={handleCancelBreakEdit}
           isEditMode={isEditingBreak}
           onCancelEdit={handleCancelBreakEdit}
+          onDeleteBreak={handleDeleteBreak}
           frameScores={[match.players[0].score, match.players[1].score]}
           opponentName={match.players[1 - match.activePlayerIndex].name}
           frameNumber={match.currentFrame}

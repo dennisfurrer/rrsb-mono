@@ -1,6 +1,6 @@
 # Cardinal Laws
 
-1. **No git write commands.** No `git add`, `git commit`, `git push`, `git reset`, `git rebase`, `git merge`, `git checkout`, `git stash`, `git cherry-pick`, or any other command that mutates git state. Read-only git commands (`status`, `log`, `diff`, `show`) are fine.
+1. **No git write commands, except push.** No `git reset`, `git rebase`, `git merge`, `git checkout`, `git stash`, `git cherry-pick`, or any other command that mutates git state. Read-only git commands (`status`, `log`, `diff`, `show`) are fine. **Exception:** when the user explicitly writes "push", stage the relevant changed files, commit them, and push directly to `main` (no PR/branching workflow).
 
 2. **No modifications outside the working directory.** Never write, edit, delete, or move files outside of `/Users/dennisfurrer/Documents/Work/RRSB/rrsb-mono/`. The only exception is copying/reading files *from* the legacy codebases (`scoreboard/`, `scoreboard-be/`, `rrsb-breaks-calendar/`) *into* this working directory.
 
