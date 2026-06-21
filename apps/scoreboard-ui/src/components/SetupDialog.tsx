@@ -85,7 +85,12 @@ function PlayerPicker({
           const flag = p.ioc ? iocToFlag(p.ioc) : "";
           return (
             <div key={p.name} className="picker-item" onClick={() => onSelect(p.name)}>
-              {flag && <span style={{ marginRight: "0.5em" }}>{flag}</span>}{p.name}
+              {flag ? (
+                <span style={{ marginRight: "0.5em", display: "inline-block", width: "1.4em", textAlign: "center" }}>{flag}</span>
+              ) : (
+                <span style={{ marginRight: "0.5em", display: "inline-block", width: "1.4em", textAlign: "center", color: "#e0a030", fontWeight: "bold" }}>?</span>
+              )}
+              {p.name}
             </div>
           );
         })}

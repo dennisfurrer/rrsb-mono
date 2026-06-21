@@ -5,7 +5,7 @@ const IOC_TO_ISO2: Record<string, string> = {
   BRN:"BH",BRU:"BN",BUL:"BG",BUR:"BF",CAF:"CF",CAM:"KH",CAN:"CA",CAY:"KY",
   CGO:"CG",CHA:"TD",CHI:"CL",CHN:"CN",CIV:"CI",CMR:"CM",COD:"CD",COK:"CK",
   COL:"CO",COM:"KM",CPV:"CV",CRC:"CR",CRO:"HR",CUB:"CU",CYP:"CY",CZE:"CZ",
-  DEN:"DK",DJI:"DJ",DMA:"DM",DOM:"DO",ECU:"EC",EGY:"EG",ENG:"GB",ERI:"ER",
+  DEN:"DK",DJI:"DJ",DMA:"DM",DOM:"DO",ECU:"EC",EGY:"EG",ERI:"ER",
   ESA:"SV",ESP:"ES",EST:"EE",ETH:"ET",FIJ:"FJ",FIN:"FI",FRA:"FR",FSM:"FM",
   GAB:"GA",GAM:"GM",GBR:"GB",GBS:"GW",GEO:"GE",GEQ:"GQ",GER:"DE",GHA:"GH",
   GRE:"GR",GRN:"GD",GUA:"GT",GUI:"GN",GUM:"GU",GUY:"GY",HAI:"HT",HKG:"HK",
@@ -19,16 +19,33 @@ const IOC_TO_ISO2: Record<string, string> = {
   NIG:"NE",NIR:"GB",NOR:"NO",NRU:"NR",NZL:"NZ",OMA:"OM",PAK:"PK",PAN:"PA",
   PAR:"PY",PER:"PE",PHI:"PH",PLE:"PS",PLW:"PW",PNG:"PG",POL:"PL",POR:"PT",
   PRK:"KP",PUR:"PR",QAT:"QA",ROU:"RO",RSA:"ZA",RUS:"RU",RWA:"RW",SAM:"WS",
-  SCO:"GB",SEN:"SN",SEY:"SC",SGP:"SG",SKN:"KN",SLE:"SL",SLO:"SI",SMR:"SM",
+  SEN:"SN",SEY:"SC",SGP:"SG",SKN:"KN",SLE:"SL",SLO:"SI",SMR:"SM",
   SOL:"SB",SOM:"SO",SRB:"RS",SRI:"LK",SSD:"SS",STP:"ST",SUD:"SD",SUI:"CH",
   SUR:"SR",SVK:"SK",SWZ:"SZ",SYR:"SY",TAN:"TZ",TGA:"TO",THA:"TH",TJK:"TJ",
   TKM:"TM",TLS:"TL",TOG:"TG",TPE:"TW",TTO:"TT",TUN:"TN",TUR:"TR",TUV:"TV",
   UAE:"AE",UGA:"UG",UKR:"UA",URU:"UY",USA:"US",UZB:"UZ",VAN:"VU",VEN:"VE",
-  VIE:"VN",VIN:"VC",WAL:"GB",YEM:"YE",ZAM:"ZM",ZIM:"ZW",
+  VIE:"VN",VIN:"VC",YEM:"YE",ZAM:"ZM",ZIM:"ZW",
 };
 
+// UK home nations don't have an ISO2 code; use Unicode subdivision flag tag sequences instead.
+const UK_SUBDIVISION_TAGS: Record<string, string> = {
+  ENG: "gbeng",
+  SCO: "gbsct",
+  WAL: "gbwls",
+};
+
+function tagSequenceFlag(tag: string): string {
+  const BLACK_FLAG = "\u{1F3F4}";
+  const CANCEL_TAG = "\u{E007F}";
+  const tags = [...tag].map(c => String.fromCodePoint(0xE0000 + c.charCodeAt(0))).join("");
+  return BLACK_FLAG + tags + CANCEL_TAG;
+}
+
 export function iocToFlag(ioc: string): string {
-  const iso2 = IOC_TO_ISO2[ioc.toUpperCase()];
+  const code = ioc.toUpperCase();
+  const subdivisionTag = UK_SUBDIVISION_TAGS[code];
+  if (subdivisionTag) return tagSequenceFlag(subdivisionTag);
+  const iso2 = IOC_TO_ISO2[code];
   if (!iso2) return "";
   return [...iso2].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join("");
 }
