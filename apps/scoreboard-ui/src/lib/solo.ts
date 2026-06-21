@@ -90,7 +90,21 @@ export type BallColor =
 
 export type MissType = "long" | "easy" | "difficult" | "position" | "foul";
 
-export type Pocket = "corner" | "middle";
+export type FoulType =
+  | "white-potted"
+  | "wrong-ball-hit"
+  | "no-ball-hit"
+  | "white-off-table"
+  | "clothing-foul"
+  | "cue-foul";
+
+export type Pocket =
+  | "corner-yellow"
+  | "corner-green"
+  | "middle-yellow"
+  | "middle-green"
+  | "corner-black-yellow"
+  | "corner-black-green";
 
 export const BALL_COLORS: { id: BallColor; label: string; bg: string; fg: string }[] = [
   { id: "red", label: "Rot", bg: "#660000", fg: "#ff5555" },
@@ -110,9 +124,22 @@ export const MISS_TYPES: { id: MissType; label: string }[] = [
   { id: "foul", label: "Foul" },
 ];
 
-export const POCKETS: { id: Pocket; label: string }[] = [
-  { id: "corner", label: "Ecke" },
-  { id: "middle", label: "Mitte" },
+export const FOUL_TYPES: { id: FoulType; label: string }[] = [
+  { id: "white-off-table", label: "Ball vom Tisch" },
+  { id: "cue-foul", label: "Cue-Foul" },
+  { id: "wrong-ball-hit", label: "Falscher Ball berührt" },
+  { id: "no-ball-hit", label: "Kein Ball getroffen" },
+  { id: "clothing-foul", label: "Kleiderfoul" },
+  { id: "white-potted", label: "Weiss gelocht" },
+];
+
+export const POCKETS: { id: Pocket; label: string; side: "yellow" | "green"; blackSpot: boolean; fullLabel: string }[] = [
+  { id: "corner-yellow", label: "Ecke", side: "yellow", blackSpot: false, fullLabel: "Ecke gelb" },
+  { id: "corner-green", label: "Ecke", side: "green", blackSpot: false, fullLabel: "Ecke grün" },
+  { id: "middle-yellow", label: "Mitte", side: "yellow", blackSpot: false, fullLabel: "Mitte s. gelb" },
+  { id: "middle-green", label: "Mitte", side: "green", blackSpot: false, fullLabel: "Mitte s. grün" },
+  { id: "corner-black-yellow", label: "Ecke", side: "yellow", blackSpot: true, fullLabel: "Ecke schwarz s. gelb" },
+  { id: "corner-black-green", label: "Ecke", side: "green", blackSpot: true, fullLabel: "Ecke schwarz s. grün" },
 ];
 
 export type BreakAttempt =
@@ -121,6 +148,7 @@ export type BreakAttempt =
       value: number;
       clearance?: boolean;
       missType?: MissType;
+      foulType?: FoulType;
       ball?: BallColor;
       pocket?: Pocket;
       timestamp: number;
@@ -182,9 +210,22 @@ export function createSoloSession(
 export function breakAttemptToApi(a: BreakAttempt): {
   kind: "BREAK" | "CLEARED" | "MISSED";
   value?: number;
-  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION";
+  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION" | "FOUL";
+  foulType?:
+    | "WHITE_POTTED"
+    | "WRONG_BALL_HIT"
+    | "NO_BALL_HIT"
+    | "WHITE_OFF_TABLE"
+    | "CLOTHING_FOUL"
+    | "CUE_FOUL";
   ball?: "RED" | "YELLOW" | "GREEN" | "BROWN" | "BLUE" | "PINK" | "BLACK";
-  pocket?: "CORNER" | "MIDDLE";
+  pocket?:
+    | "CORNER_YELLOW"
+    | "CORNER_GREEN"
+    | "MIDDLE_YELLOW"
+    | "MIDDLE_GREEN"
+    | "CORNER_BLACK_YELLOW"
+    | "CORNER_BLACK_GREEN";
 } {
   if (a.kind === "missed") {
     return { kind: "MISSED" };
@@ -193,7 +234,16 @@ export function breakAttemptToApi(a: BreakAttempt): {
     kind: "BREAK",
     value: a.value,
     missType: a.missType
-      ? (a.missType.toUpperCase() as "LONG" | "EASY" | "DIFFICULT" | "POSITION")
+      ? (a.missType.toUpperCase() as "LONG" | "EASY" | "DIFFICULT" | "POSITION" | "FOUL")
+      : undefined,
+    foulType: a.foulType
+      ? (a.foulType.toUpperCase().replace(/-/g, "_") as
+          | "WHITE_POTTED"
+          | "WRONG_BALL_HIT"
+          | "NO_BALL_HIT"
+          | "WHITE_OFF_TABLE"
+          | "CLOTHING_FOUL"
+          | "CUE_FOUL")
       : undefined,
     ball: a.ball
       ? (a.ball.toUpperCase() as
@@ -206,7 +256,13 @@ export function breakAttemptToApi(a: BreakAttempt): {
           | "BLACK")
       : undefined,
     pocket: a.pocket
-      ? (a.pocket.toUpperCase() as "CORNER" | "MIDDLE")
+      ? (a.pocket.toUpperCase().replace(/-/g, "_") as
+          | "CORNER_YELLOW"
+          | "CORNER_GREEN"
+          | "MIDDLE_YELLOW"
+          | "MIDDLE_GREEN"
+          | "CORNER_BLACK_YELLOW"
+          | "CORNER_BLACK_GREEN")
       : undefined,
   };
 }

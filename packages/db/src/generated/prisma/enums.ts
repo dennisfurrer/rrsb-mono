@@ -64,15 +64,34 @@ export const MissType = {
   LONG: 'LONG',
   EASY: 'EASY',
   DIFFICULT: 'DIFFICULT',
-  POSITION: 'POSITION'
+  POSITION: 'POSITION',
+  FOUL: 'FOUL'
 } as const
 
 export type MissType = (typeof MissType)[keyof typeof MissType]
 
 
+export const FoulType = {
+  WHITE_POTTED: 'WHITE_POTTED',
+  WRONG_BALL_HIT: 'WRONG_BALL_HIT',
+  NO_BALL_HIT: 'NO_BALL_HIT',
+  WHITE_OFF_TABLE: 'WHITE_OFF_TABLE',
+  CLOTHING_FOUL: 'CLOTHING_FOUL',
+  CUE_FOUL: 'CUE_FOUL'
+} as const
+
+export type FoulType = (typeof FoulType)[keyof typeof FoulType]
+
+
 export const Pocket = {
   CORNER: 'CORNER',
-  MIDDLE: 'MIDDLE'
+  MIDDLE: 'MIDDLE',
+  CORNER_YELLOW: 'CORNER_YELLOW',
+  CORNER_GREEN: 'CORNER_GREEN',
+  MIDDLE_YELLOW: 'MIDDLE_YELLOW',
+  MIDDLE_GREEN: 'MIDDLE_GREEN',
+  CORNER_BLACK_YELLOW: 'CORNER_BLACK_YELLOW',
+  CORNER_BLACK_GREEN: 'CORNER_BLACK_GREEN'
 } as const
 
 export type Pocket = (typeof Pocket)[keyof typeof Pocket]

@@ -1429,6 +1429,7 @@ export const PracticeAttemptScalarFieldEnum = {
   kind: 'kind',
   value: 'value',
   missType: 'missType',
+  foulType: 'foulType',
   ball: 'ball',
   pocket: 'pocket',
   timestamp: 'timestamp'
@@ -1583,6 +1584,20 @@ export type EnumMissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'MissType[]'
  */
 export type ListEnumMissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MissType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FoulType'
+ */
+export type EnumFoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FoulType'>
+    
+
+
+/**
+ * Reference to a field of type 'FoulType[]'
+ */
+export type ListEnumFoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FoulType[]'>
     
 
 

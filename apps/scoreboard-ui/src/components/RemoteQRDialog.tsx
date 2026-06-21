@@ -43,9 +43,10 @@ const backdropStyle = {
 };
 
 const panelStyle = {
-  background: "#1e1e1e",
-  border: "1px solid #555",
-  borderRadius: "16px",
+  background: "linear-gradient(165deg, #2a2a2a, #181818)",
+  border: "1px solid rgba(255,255,255,0.08)",
+  borderRadius: "20px",
+  boxShadow: "0 26px 70px rgba(0,0,0,0.65), 0 0 0 1px rgba(0,0,0,0.4)",
   padding: "3.5vh 3vw",
   display: "flex",
   flexDirection: "column" as const,
@@ -58,8 +59,8 @@ const closeBtnStyle = {
   padding: "1.2vh 2vw",
   fontSize: "1.1vw",
   borderRadius: "10px",
-  border: "none",
-  background: "#1a5c1a",
+  border: "1px solid #3a8c3a",
+  background: "linear-gradient(165deg, #143a14, #0d2410)",
   color: "#4ade80",
   cursor: "pointer",
   fontWeight: "bold" as const,
@@ -70,7 +71,7 @@ const ghostBtnStyle = {
   fontSize: "1.1vw",
   borderRadius: "10px",
   border: "1px solid #555",
-  background: "#2a2a2a",
+  background: "linear-gradient(165deg, #383838, #232323)",
   color: "#ddd",
   cursor: "pointer",
 };
@@ -79,9 +80,9 @@ const dangerBtnStyle = {
   padding: "1.2vh 2vw",
   fontSize: "1.1vw",
   borderRadius: "10px",
-  border: "1px solid #6a2f2f",
-  background: "#3a2020",
-  color: "#ff9a9a",
+  border: "1px solid #774040",
+  background: "linear-gradient(165deg, #3a1414, #240d0d)",
+  color: "#ff8888",
   cursor: "pointer",
   fontWeight: "bold" as const,
 };
@@ -168,8 +169,8 @@ export function RemoteQRDialog({
               {playerName} zählt vom Handy. Du kannst die Verbindung hier trennen.
             </div>
             <div style={{ display: "flex", gap: "1vw", marginTop: "0.6vh" }}>
-              <button onClick={onRegenerate} style={dangerBtnStyle}>Trennen</button>
-              <button onClick={onClose} style={closeBtnStyle}>Schließen</button>
+              <button className="bbb-btn-cancel" onClick={onRegenerate} style={dangerBtnStyle}>Trennen</button>
+              <button className="bbb-btn-ok" onClick={onClose} style={closeBtnStyle}>Schließen</button>
             </div>
           </>
         )}
@@ -181,7 +182,9 @@ export function RemoteQRDialog({
                 width: "24vw",
                 height: "24vw",
                 background: "#fff",
-                borderRadius: "12px",
+                borderRadius: "14px",
+                border: "1px solid rgba(255,204,0,0.4)",
+                boxShadow: "0 0 26px rgba(255,204,0,0.12)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -224,8 +227,8 @@ export function RemoteQRDialog({
             </div>
 
             <div style={{ display: "flex", gap: "1vw", marginTop: "0.6vh" }}>
-              <button onClick={onRegenerate} style={ghostBtnStyle}>Neuer Code</button>
-              <button onClick={onClose} style={closeBtnStyle}>Schließen</button>
+              <button className="bbb-btn-undo" onClick={onRegenerate} style={ghostBtnStyle}>Neuer Code</button>
+              <button className="bbb-btn-ok" onClick={onClose} style={closeBtnStyle}>Schließen</button>
             </div>
           </>
         )}

@@ -11,6 +11,16 @@ const MISS_LABEL: Record<string, string> = {
   easy: "Einfache",
   difficult: "Schwierige",
   position: "Position",
+  foul: "Foul",
+};
+
+const FOUL_LABEL: Record<string, string> = {
+  white_potted: "Weiss gelocht",
+  wrong_ball_hit: "Falscher Ball berührt",
+  no_ball_hit: "Kein Ball getroffen",
+  white_off_table: "Ball vom Tisch",
+  clothing_foul: "Kleiderfoul",
+  cue_foul: "Cue-Foul",
 };
 
 const BALL_LABEL: Record<string, string> = {
@@ -26,6 +36,12 @@ const BALL_LABEL: Record<string, string> = {
 const POCKET_LABEL: Record<string, string> = {
   corner: "Ecke",
   middle: "Mitte",
+  corner_yellow: "Ecke gelb",
+  corner_green: "Ecke grün",
+  middle_yellow: "Mitte s. gelb",
+  middle_green: "Mitte s. grün",
+  corner_black_yellow: "Ecke schwarz s. gelb",
+  corner_black_green: "Ecke schwarz s. grün",
 };
 
 function formatDate(iso: string): string {
@@ -67,6 +83,7 @@ function attemptValueLabel(a: PracticeAttempt): string {
 function attemptTagLabel(a: PracticeAttempt): string {
   const parts: string[] = [];
   if (a.missType) parts.push(MISS_LABEL[a.missType] ?? a.missType);
+  if (a.foulType) parts.push(FOUL_LABEL[a.foulType] ?? a.foulType);
   if (a.ball) parts.push(BALL_LABEL[a.ball] ?? a.ball);
   if (a.pocket) parts.push(POCKET_LABEL[a.pocket] ?? a.pocket);
   return parts.length > 0 ? `(${parts.join(", ")})` : "";

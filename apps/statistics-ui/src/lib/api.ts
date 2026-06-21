@@ -129,8 +129,23 @@ export interface BreakMatrixEntry {
 export type PracticeMode = "break" | "hitmiss";
 export type PracticeKind = "break" | "cleared" | "missed" | "hit" | "miss";
 export type BallColor = "red" | "yellow" | "green" | "brown" | "blue" | "pink" | "black";
-export type MissType = "long" | "easy" | "difficult" | "position";
-export type Pocket = "corner" | "middle";
+export type MissType = "long" | "easy" | "difficult" | "position" | "foul";
+export type FoulType =
+  | "white_potted"
+  | "wrong_ball_hit"
+  | "no_ball_hit"
+  | "white_off_table"
+  | "clothing_foul"
+  | "cue_foul";
+export type Pocket =
+  | "corner"
+  | "middle"
+  | "corner_yellow"
+  | "corner_green"
+  | "middle_yellow"
+  | "middle_green"
+  | "corner_black_yellow"
+  | "corner_black_green";
 
 export interface PracticeAttempt {
   id: string;
@@ -138,6 +153,7 @@ export interface PracticeAttempt {
   kind: PracticeKind;
   value: number | null;
   missType: MissType | null;
+  foulType: FoulType | null;
   ball: BallColor | null;
   pocket: Pocket | null;
   timestamp: string;

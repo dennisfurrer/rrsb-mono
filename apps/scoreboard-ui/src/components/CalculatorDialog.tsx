@@ -74,7 +74,7 @@ export function CalculatorDialog({
       >
         {/* Row 1: Display + Foul (or Foul/HC stack) */}
         <div className="calc-line">
-          <div className="calc-display">
+          <div className={`calc-display ${foulMode ? "foul-mode" : handicapMode ? "handicap-mode" : ""}`}>
             <div className="calc-display-title">
               <div className={`calc-break-for ${foulMode ? "foul-label" : handicapMode ? "handicap-label" : ""}`}>
                 {modeLabel}

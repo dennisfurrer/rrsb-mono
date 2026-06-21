@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import {
   BALL_COLORS,
+  FOUL_TYPES,
   MISS_TYPES,
   POCKETS,
   routineById,
   type BallColor,
   type BreakAttempt,
+  type FoulType,
   type MissType,
   type Pocket,
   type SoloRoutineId,
@@ -63,7 +65,7 @@ export function MultiEntryDialog({
 
   const addBreak = (
     value: number,
-    details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
   ) => {
     setPending((p) => [
       ...p,
@@ -71,6 +73,7 @@ export function MultiEntryDialog({
         kind: "break",
         value,
         missType: details?.missType,
+        foulType: details?.foulType,
         ball: details?.ball,
         pocket: details?.pocket,
         timestamp: Date.now(),
@@ -630,13 +633,17 @@ function PendingRow({ attempt, index, isClearanceCandidate, seriesMode, onCleara
     const m = MISS_TYPES.find((x) => x.id === attempt.missType);
     if (m) tags.push(m.label);
   }
+  if (attempt.foulType) {
+    const f = FOUL_TYPES.find((x) => x.id === attempt.foulType);
+    if (f) tags.push(f.label);
+  }
   if (attempt.ball) {
     const b = BALL_COLORS.find((x) => x.id === attempt.ball);
     if (b) tags.push(b.label);
   }
   if (attempt.pocket) {
     const p = POCKETS.find((x) => x.id === attempt.pocket);
-    if (p) tags.push(p.label);
+    if (p) tags.push(p.fullLabel);
   }
   return (
     <div className="multi-entry-row-content">

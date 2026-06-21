@@ -242,6 +242,7 @@ export const PracticeAttemptScalarFieldEnum = {
   kind: 'kind',
   value: 'value',
   missType: 'missType',
+  foulType: 'foulType',
   ball: 'ball',
   pocket: 'pocket',
   timestamp: 'timestamp'

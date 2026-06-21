@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { BallColor, MissType, Pocket } from "../lib/solo";
+import type { BallColor, FoulType, MissType, Pocket } from "../lib/solo";
 import { BreakDetailsDialog } from "./BreakDetailsDialog";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   maxBreak?: number;
   onSubmit: (
     value: number,
-    details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
   ) => void;
   onClose: () => void;
 }
@@ -51,6 +51,7 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
 
   const submitWithDetails = (details: {
     missType?: MissType;
+    foulType?: FoulType;
     ball?: BallColor;
     pocket?: Pocket;
   }) => {
@@ -62,6 +63,7 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
       <BreakDetailsDialog
         breakValue={value}
         playerName={playerName}
+        routineName={routineName}
         onSave={submitWithDetails}
         onBack={() => setShowDetails(false)}
       />
@@ -89,15 +91,16 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
         {/* Validation error */}
         {error && (
           <div style={{
-            background: "#3a0a0a",
+            background: "linear-gradient(165deg, #3a1010, #260a0a)",
             border: "1px solid #aa3333",
-            borderRadius: "6px",
+            borderRadius: "10px",
+            boxShadow: "0 0 18px rgba(255,68,68,0.25)",
             color: "#ff6666",
             fontSize: "1.5vw",
             fontWeight: "bold",
             padding: "1vh 1.5vw",
             textAlign: "center",
-            margin: "0 0 0.5vh 0",
+            margin: "0 1.5vw",
           }}>
             {error}
           </div>
@@ -124,7 +127,10 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
             Löschen
           </div>
           <div className="break-entry-butt" onClick={() => appendDigit(0)}>0</div>
-          <div className="break-entry-butt break-entry-ok" onClick={submitPlain}>
+          <div
+            className={`break-entry-butt break-entry-ok ${value > 0 ? "frame-end-btn-glow" : ""}`}
+            onClick={submitPlain}
+          >
             OK
           </div>
         </div>
@@ -132,7 +138,7 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
         {/* Optional details link — secondary, intentionally small */}
         <div className="break-entry-details-row">
           <button
-            className={`break-entry-details-link ${value === 0 ? "disabled" : ""}`}
+            className={`break-entry-details-link ${value === 0 ? "disabled" : "break-entry-details-link-attention"}`}
             onClick={openDetails}
             disabled={value === 0}
           >

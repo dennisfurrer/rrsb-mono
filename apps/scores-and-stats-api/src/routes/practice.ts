@@ -17,8 +17,25 @@ const ballEnum = z.enum([
   "PINK",
   "BLACK",
 ]);
-const missTypeEnum = z.enum(["LONG", "EASY", "DIFFICULT", "POSITION"]);
-const pocketEnum = z.enum(["CORNER", "MIDDLE"]);
+const missTypeEnum = z.enum(["LONG", "EASY", "DIFFICULT", "POSITION", "FOUL"]);
+const foulTypeEnum = z.enum([
+  "WHITE_POTTED",
+  "WRONG_BALL_HIT",
+  "NO_BALL_HIT",
+  "WHITE_OFF_TABLE",
+  "CLOTHING_FOUL",
+  "CUE_FOUL",
+]);
+const pocketEnum = z.enum([
+  "CORNER",
+  "MIDDLE",
+  "CORNER_YELLOW",
+  "CORNER_GREEN",
+  "MIDDLE_YELLOW",
+  "MIDDLE_GREEN",
+  "CORNER_BLACK_YELLOW",
+  "CORNER_BLACK_GREEN",
+]);
 
 const createSessionSchema = z.object({
   playerName: z.string().min(1),
@@ -40,6 +57,7 @@ const attemptInputSchema = z.object({
   kind: kindEnum,
   value: z.number().int().min(0).optional(),
   missType: missTypeEnum.optional(),
+  foulType: foulTypeEnum.optional(),
   ball: ballEnum.optional(),
   pocket: pocketEnum.optional(),
 });
@@ -55,6 +73,7 @@ function mapPrismaAttempt(a: {
   kind: string;
   value: number | null;
   missType: string | null;
+  foulType: string | null;
   ball: string | null;
   pocket: string | null;
   timestamp: Date;
@@ -65,6 +84,7 @@ function mapPrismaAttempt(a: {
     kind: a.kind.toLowerCase(),
     value: a.value,
     missType: a.missType ? a.missType.toLowerCase() : null,
+    foulType: a.foulType ? a.foulType.toLowerCase() : null,
     ball: a.ball ? a.ball.toLowerCase() : null,
     pocket: a.pocket ? a.pocket.toLowerCase() : null,
     timestamp: a.timestamp.toISOString(),
@@ -188,6 +208,7 @@ practiceRouter.post("/:id/attempts", async (req: Request, res: Response) => {
         kind: a.kind,
         value: a.value ?? null,
         missType: a.missType ?? null,
+        foulType: a.foulType ?? null,
         ball: a.ball ?? null,
         pocket: a.pocket ?? null,
       })),

@@ -48,11 +48,27 @@ enum MissType {
   EASY
   DIFFICULT
   POSITION
+  FOUL
+}
+
+enum FoulType {
+  WHITE_POTTED
+  WRONG_BALL_HIT
+  NO_BALL_HIT
+  WHITE_OFF_TABLE
+  CLOTHING_FOUL
+  CUE_FOUL
 }
 
 enum Pocket {
   CORNER
   MIDDLE
+  CORNER_YELLOW
+  CORNER_GREEN
+  MIDDLE_YELLOW
+  MIDDLE_GREEN
+  CORNER_BLACK_YELLOW
+  CORNER_BLACK_GREEN
 }
 
 model Player {
@@ -211,6 +227,7 @@ model PracticeAttempt {
   kind        PracticeAttemptKind
   value       Int?
   missType    MissType?
+  foulType    FoulType?
   ball        BallColor?
   pocket      Pocket?
   timestamp   DateTime            @default(now())

@@ -267,6 +267,13 @@ export type EnumMissTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel> | $Enums.MissType | null
 }
 
+export type EnumFoulTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FoulType | Prisma.EnumFoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel> | $Enums.FoulType | null
+}
+
 export type EnumBallColorNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
   in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
@@ -299,6 +306,16 @@ export type EnumMissTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumFoulTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FoulType | Prisma.EnumFoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFoulTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FoulType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel>
 }
 
 export type EnumBallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -587,6 +604,13 @@ export type NestedEnumMissTypeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel> | $Enums.MissType | null
 }
 
+export type NestedEnumFoulTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.FoulType | Prisma.EnumFoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel> | $Enums.FoulType | null
+}
+
 export type NestedEnumBallColorNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.BallColor | Prisma.EnumBallColorFieldRefInput<$PrismaModel> | null
   in?: $Enums.BallColor[] | Prisma.ListEnumBallColorFieldRefInput<$PrismaModel> | null
@@ -619,6 +643,16 @@ export type NestedEnumMissTypeNullableWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMissTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumFoulTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FoulType | Prisma.EnumFoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.FoulType[] | Prisma.ListEnumFoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumFoulTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.FoulType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFoulTypeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumBallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
