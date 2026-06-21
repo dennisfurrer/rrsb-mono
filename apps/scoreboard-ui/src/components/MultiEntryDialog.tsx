@@ -321,7 +321,7 @@ export function MultiEntryDialog({
                   </div>
                   <div className="multi-entry-confirm-buttons" style={{ flexDirection: "column", gap: "0.8vh" }}>
                     <button
-                      className="multi-entry-confirm-yes"
+                      className="multi-entry-confirm-yes multi-entry-confirm-yes--save frame-end-btn-glow"
                       style={{ background: "#1a5c1a", color: "#4ade80", borderColor: "#2a8c2a", padding: "2.2vh 1.5vw" }}
                       onClick={() => {
                         onSaveAndNewSession?.(pending);
@@ -411,7 +411,7 @@ export function MultiEntryDialog({
             Statistik
           </button>
           <button
-            className={`multi-entry-save ${pending.length === 0 ? "disabled" : ""}`}
+            className={`multi-entry-save ${pending.length === 0 ? "disabled" : "frame-end-btn-glow"}`}
             onClick={commit}
             disabled={pending.length === 0}
           >
@@ -446,6 +446,7 @@ export function MultiEntryDialog({
               {routine.explanation ?? "Erklärung folgt…"}
             </div>
             <button
+              className="bbb-btn-ok"
               onClick={() => setShowInfo(false)}
               style={{ flexShrink: 0, alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.6vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a5c1a", color: "#4ade80", fontFamily: "inherit" }}
             >

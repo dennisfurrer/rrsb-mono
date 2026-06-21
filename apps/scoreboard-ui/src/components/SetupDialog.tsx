@@ -368,6 +368,16 @@ export function SetupDialog({
           </div>
         </div>
 
+        {isPractice && (
+          <button
+            type="button"
+            className="setup-exit-practice"
+            onClick={() => setName2("")}
+          >
+            ← Zurück zum normalen Spiel-Setup
+          </button>
+        )}
+
         {!isPractice && (
           <>
             {/* Group 2: Matchart (links, immer) + Rote zu Beginn (rechts, nur ballbyball) */}

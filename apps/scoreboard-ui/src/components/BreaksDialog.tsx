@@ -71,6 +71,7 @@ export function BreaksDialog({
             {breaks.map((b, i) => (
               <div
                 key={b.id}
+                className={`breaks-row ${b.manualFlagToIgnore ? "breaks-row--flagged" : ""}`}
                 onClick={() => handleToggle(b.id)}
                 style={{
                   display: "flex",
@@ -82,7 +83,6 @@ export function BreaksDialog({
                     ? "rgba(255,60,60,0.15)"
                     : "rgba(255,255,255,0.07)",
                   cursor: "pointer",
-                  transition: "background 0.15s",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
@@ -145,6 +145,7 @@ export function BreaksDialog({
         </div>
 
         <button
+          className="breaks-close"
           onClick={onClose}
           style={{
             marginTop: "1rem",
@@ -152,7 +153,7 @@ export function BreaksDialog({
             padding: "0.75rem",
             fontSize: "1.1rem",
             borderRadius: "8px",
-            border: "none",
+            border: "1px solid #555",
             background: "#333",
             color: "#fff",
             cursor: "pointer",
