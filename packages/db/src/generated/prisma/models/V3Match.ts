@@ -30,6 +30,7 @@ export type V3MatchAvgAggregateOutputType = {
   redsCount: number | null
   bestOf: number | null
   winnerPlayerIndex: number | null
+  schemaVersion: number | null
   tableNumber: number | null
 }
 
@@ -37,6 +38,7 @@ export type V3MatchSumAggregateOutputType = {
   redsCount: number | null
   bestOf: number | null
   winnerPlayerIndex: number | null
+  schemaVersion: number | null
   tableNumber: number | null
 }
 
@@ -50,6 +52,9 @@ export type V3MatchMinAggregateOutputType = {
   status: $Enums.V3MatchStatus | null
   isDraw: boolean | null
   winnerPlayerIndex: number | null
+  schemaVersion: number | null
+  producer: string | null
+  producerVersion: string | null
   tableNumber: number | null
   locationId: string | null
   deviceId: string | null
@@ -70,6 +75,9 @@ export type V3MatchMaxAggregateOutputType = {
   status: $Enums.V3MatchStatus | null
   isDraw: boolean | null
   winnerPlayerIndex: number | null
+  schemaVersion: number | null
+  producer: string | null
+  producerVersion: string | null
   tableNumber: number | null
   locationId: string | null
   deviceId: string | null
@@ -90,6 +98,9 @@ export type V3MatchCountAggregateOutputType = {
   status: number
   isDraw: number
   winnerPlayerIndex: number
+  schemaVersion: number
+  producer: number
+  producerVersion: number
   tableNumber: number
   locationId: number
   deviceId: number
@@ -106,6 +117,7 @@ export type V3MatchAvgAggregateInputType = {
   redsCount?: true
   bestOf?: true
   winnerPlayerIndex?: true
+  schemaVersion?: true
   tableNumber?: true
 }
 
@@ -113,6 +125,7 @@ export type V3MatchSumAggregateInputType = {
   redsCount?: true
   bestOf?: true
   winnerPlayerIndex?: true
+  schemaVersion?: true
   tableNumber?: true
 }
 
@@ -126,6 +139,9 @@ export type V3MatchMinAggregateInputType = {
   status?: true
   isDraw?: true
   winnerPlayerIndex?: true
+  schemaVersion?: true
+  producer?: true
+  producerVersion?: true
   tableNumber?: true
   locationId?: true
   deviceId?: true
@@ -146,6 +162,9 @@ export type V3MatchMaxAggregateInputType = {
   status?: true
   isDraw?: true
   winnerPlayerIndex?: true
+  schemaVersion?: true
+  producer?: true
+  producerVersion?: true
   tableNumber?: true
   locationId?: true
   deviceId?: true
@@ -166,6 +185,9 @@ export type V3MatchCountAggregateInputType = {
   status?: true
   isDraw?: true
   winnerPlayerIndex?: true
+  schemaVersion?: true
+  producer?: true
+  producerVersion?: true
   tableNumber?: true
   locationId?: true
   deviceId?: true
@@ -273,6 +295,9 @@ export type V3MatchGroupByOutputType = {
   status: $Enums.V3MatchStatus
   isDraw: boolean
   winnerPlayerIndex: number | null
+  schemaVersion: number
+  producer: string | null
+  producerVersion: string | null
   tableNumber: number | null
   locationId: string | null
   deviceId: string | null
@@ -316,6 +341,9 @@ export type V3MatchWhereInput = {
   status?: Prisma.EnumV3MatchStatusFilter<"V3Match"> | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFilter<"V3Match"> | boolean
   winnerPlayerIndex?: Prisma.IntNullableFilter<"V3Match"> | number | null
+  schemaVersion?: Prisma.IntFilter<"V3Match"> | number
+  producer?: Prisma.StringNullableFilter<"V3Match"> | string | null
+  producerVersion?: Prisma.StringNullableFilter<"V3Match"> | string | null
   tableNumber?: Prisma.IntNullableFilter<"V3Match"> | number | null
   locationId?: Prisma.StringNullableFilter<"V3Match"> | string | null
   deviceId?: Prisma.StringNullableFilter<"V3Match"> | string | null
@@ -343,6 +371,9 @@ export type V3MatchOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   isDraw?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
+  producer?: Prisma.SortOrderInput | Prisma.SortOrder
+  producerVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -373,6 +404,9 @@ export type V3MatchWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumV3MatchStatusFilter<"V3Match"> | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFilter<"V3Match"> | boolean
   winnerPlayerIndex?: Prisma.IntNullableFilter<"V3Match"> | number | null
+  schemaVersion?: Prisma.IntFilter<"V3Match"> | number
+  producer?: Prisma.StringNullableFilter<"V3Match"> | string | null
+  producerVersion?: Prisma.StringNullableFilter<"V3Match"> | string | null
   tableNumber?: Prisma.IntNullableFilter<"V3Match"> | number | null
   locationId?: Prisma.StringNullableFilter<"V3Match"> | string | null
   deviceId?: Prisma.StringNullableFilter<"V3Match"> | string | null
@@ -400,6 +434,9 @@ export type V3MatchOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   isDraw?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
+  producer?: Prisma.SortOrderInput | Prisma.SortOrder
+  producerVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -428,6 +465,9 @@ export type V3MatchScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumV3MatchStatusWithAggregatesFilter<"V3Match"> | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolWithAggregatesFilter<"V3Match"> | boolean
   winnerPlayerIndex?: Prisma.IntNullableWithAggregatesFilter<"V3Match"> | number | null
+  schemaVersion?: Prisma.IntWithAggregatesFilter<"V3Match"> | number
+  producer?: Prisma.StringNullableWithAggregatesFilter<"V3Match"> | string | null
+  producerVersion?: Prisma.StringNullableWithAggregatesFilter<"V3Match"> | string | null
   tableNumber?: Prisma.IntNullableWithAggregatesFilter<"V3Match"> | number | null
   locationId?: Prisma.StringNullableWithAggregatesFilter<"V3Match"> | string | null
   deviceId?: Prisma.StringNullableWithAggregatesFilter<"V3Match"> | string | null
@@ -448,6 +488,9 @@ export type V3MatchCreateInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -474,6 +517,9 @@ export type V3MatchUncheckedCreateInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -500,6 +546,9 @@ export type V3MatchUpdateInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -526,6 +575,9 @@ export type V3MatchUncheckedUpdateInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -552,6 +604,9 @@ export type V3MatchCreateManyInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -572,6 +627,9 @@ export type V3MatchUpdateManyMutationInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -591,6 +649,9 @@ export type V3MatchUncheckedUpdateManyInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -621,6 +682,9 @@ export type V3MatchCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isDraw?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
+  producer?: Prisma.SortOrder
+  producerVersion?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -635,6 +699,7 @@ export type V3MatchAvgOrderByAggregateInput = {
   redsCount?: Prisma.SortOrder
   bestOf?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
 }
 
@@ -648,6 +713,9 @@ export type V3MatchMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isDraw?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
+  producer?: Prisma.SortOrder
+  producerVersion?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -668,6 +736,9 @@ export type V3MatchMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   isDraw?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
+  producer?: Prisma.SortOrder
+  producerVersion?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -682,6 +753,7 @@ export type V3MatchSumOrderByAggregateInput = {
   redsCount?: Prisma.SortOrder
   bestOf?: Prisma.SortOrder
   winnerPlayerIndex?: Prisma.SortOrder
+  schemaVersion?: Prisma.SortOrder
   tableNumber?: Prisma.SortOrder
 }
 
@@ -843,6 +915,9 @@ export type V3MatchCreateWithoutLocationInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -868,6 +943,9 @@ export type V3MatchUncheckedCreateWithoutLocationInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -922,6 +1000,9 @@ export type V3MatchScalarWhereInput = {
   status?: Prisma.EnumV3MatchStatusFilter<"V3Match"> | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFilter<"V3Match"> | boolean
   winnerPlayerIndex?: Prisma.IntNullableFilter<"V3Match"> | number | null
+  schemaVersion?: Prisma.IntFilter<"V3Match"> | number
+  producer?: Prisma.StringNullableFilter<"V3Match"> | string | null
+  producerVersion?: Prisma.StringNullableFilter<"V3Match"> | string | null
   tableNumber?: Prisma.IntNullableFilter<"V3Match"> | number | null
   locationId?: Prisma.StringNullableFilter<"V3Match"> | string | null
   deviceId?: Prisma.StringNullableFilter<"V3Match"> | string | null
@@ -942,6 +1023,9 @@ export type V3MatchCreateWithoutPlayersInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -967,6 +1051,9 @@ export type V3MatchUncheckedCreateWithoutPlayersInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1008,6 +1095,9 @@ export type V3MatchUpdateWithoutPlayersInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1033,6 +1123,9 @@ export type V3MatchUncheckedUpdateWithoutPlayersInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1058,6 +1151,9 @@ export type V3MatchCreateWithoutFramesInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1083,6 +1179,9 @@ export type V3MatchUncheckedCreateWithoutFramesInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1124,6 +1223,9 @@ export type V3MatchUpdateWithoutFramesInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1149,6 +1251,9 @@ export type V3MatchUncheckedUpdateWithoutFramesInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1174,6 +1279,9 @@ export type V3MatchCreateWithoutBreaksInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1199,6 +1307,9 @@ export type V3MatchUncheckedCreateWithoutBreaksInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1240,6 +1351,9 @@ export type V3MatchUpdateWithoutBreaksInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1265,6 +1379,9 @@ export type V3MatchUncheckedUpdateWithoutBreaksInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1290,6 +1407,9 @@ export type V3MatchCreateWithoutEventsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1315,6 +1435,9 @@ export type V3MatchUncheckedCreateWithoutEventsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1356,6 +1479,9 @@ export type V3MatchUpdateWithoutEventsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1381,6 +1507,9 @@ export type V3MatchUncheckedUpdateWithoutEventsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1406,6 +1535,9 @@ export type V3MatchCreateWithoutRemoteSessionsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1431,6 +1563,9 @@ export type V3MatchUncheckedCreateWithoutRemoteSessionsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1472,6 +1607,9 @@ export type V3MatchUpdateWithoutRemoteSessionsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1497,6 +1635,9 @@ export type V3MatchUncheckedUpdateWithoutRemoteSessionsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1522,6 +1663,9 @@ export type V3MatchCreateWithoutRemoteEventsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1547,6 +1691,9 @@ export type V3MatchUncheckedCreateWithoutRemoteEventsInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   locationId?: string | null
   deviceId?: string | null
@@ -1588,6 +1735,9 @@ export type V3MatchUpdateWithoutRemoteEventsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1613,6 +1763,9 @@ export type V3MatchUncheckedUpdateWithoutRemoteEventsInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1638,6 +1791,9 @@ export type V3MatchCreateManyLocationInput = {
   status?: $Enums.V3MatchStatus
   isDraw?: boolean
   winnerPlayerIndex?: number | null
+  schemaVersion?: number
+  producer?: string | null
+  producerVersion?: string | null
   tableNumber?: number | null
   deviceId?: string | null
   remoteRoomId?: string | null
@@ -1657,6 +1813,9 @@ export type V3MatchUpdateWithoutLocationInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1682,6 +1841,9 @@ export type V3MatchUncheckedUpdateWithoutLocationInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1707,6 +1869,9 @@ export type V3MatchUncheckedUpdateManyWithoutLocationInput = {
   status?: Prisma.EnumV3MatchStatusFieldUpdateOperationsInput | $Enums.V3MatchStatus
   isDraw?: Prisma.BoolFieldUpdateOperationsInput | boolean
   winnerPlayerIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  schemaVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  producer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  producerVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remoteRoomId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1802,6 +1967,9 @@ export type V3MatchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   isDraw?: boolean
   winnerPlayerIndex?: boolean
+  schemaVersion?: boolean
+  producer?: boolean
+  producerVersion?: boolean
   tableNumber?: boolean
   locationId?: boolean
   deviceId?: boolean
@@ -1830,6 +1998,9 @@ export type V3MatchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   isDraw?: boolean
   winnerPlayerIndex?: boolean
+  schemaVersion?: boolean
+  producer?: boolean
+  producerVersion?: boolean
   tableNumber?: boolean
   locationId?: boolean
   deviceId?: boolean
@@ -1851,6 +2022,9 @@ export type V3MatchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   isDraw?: boolean
   winnerPlayerIndex?: boolean
+  schemaVersion?: boolean
+  producer?: boolean
+  producerVersion?: boolean
   tableNumber?: boolean
   locationId?: boolean
   deviceId?: boolean
@@ -1872,6 +2046,9 @@ export type V3MatchSelectScalar = {
   status?: boolean
   isDraw?: boolean
   winnerPlayerIndex?: boolean
+  schemaVersion?: boolean
+  producer?: boolean
+  producerVersion?: boolean
   tableNumber?: boolean
   locationId?: boolean
   deviceId?: boolean
@@ -1882,7 +2059,7 @@ export type V3MatchSelectScalar = {
   updatedAt?: boolean
 }
 
-export type V3MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchType" | "matchTypeCode" | "inputMode" | "redsCount" | "bestOf" | "status" | "isDraw" | "winnerPlayerIndex" | "tableNumber" | "locationId" | "deviceId" | "remoteRoomId" | "startedAt" | "finishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["v3Match"]>
+export type V3MatchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "matchType" | "matchTypeCode" | "inputMode" | "redsCount" | "bestOf" | "status" | "isDraw" | "winnerPlayerIndex" | "schemaVersion" | "producer" | "producerVersion" | "tableNumber" | "locationId" | "deviceId" | "remoteRoomId" | "startedAt" | "finishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["v3Match"]>
 export type V3MatchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   location?: boolean | Prisma.V3Match$locationArgs<ExtArgs>
   players?: boolean | Prisma.V3Match$playersArgs<ExtArgs>
@@ -1921,6 +2098,9 @@ export type $V3MatchPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.V3MatchStatus
     isDraw: boolean
     winnerPlayerIndex: number | null
+    schemaVersion: number
+    producer: string | null
+    producerVersion: string | null
     tableNumber: number | null
     locationId: string | null
     deviceId: string | null
@@ -2368,6 +2548,9 @@ export interface V3MatchFieldRefs {
   readonly status: Prisma.FieldRef<"V3Match", 'V3MatchStatus'>
   readonly isDraw: Prisma.FieldRef<"V3Match", 'Boolean'>
   readonly winnerPlayerIndex: Prisma.FieldRef<"V3Match", 'Int'>
+  readonly schemaVersion: Prisma.FieldRef<"V3Match", 'Int'>
+  readonly producer: Prisma.FieldRef<"V3Match", 'String'>
+  readonly producerVersion: Prisma.FieldRef<"V3Match", 'String'>
   readonly tableNumber: Prisma.FieldRef<"V3Match", 'Int'>
   readonly locationId: Prisma.FieldRef<"V3Match", 'String'>
   readonly deviceId: Prisma.FieldRef<"V3Match", 'String'>

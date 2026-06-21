@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { prisma } from "@rrsb/db";
 import type { Prisma } from "@rrsb/db";
+import { capabilities } from "@rrsb/contracts";
 
 export const v3ClubsRouter = Router();
 
@@ -21,6 +22,8 @@ function shapeMatch(m: TableMatch) {
     status: m.status,
     matchType: m.matchType,
     matchTypeCode: m.matchTypeCode,
+    schemaVersion: m.schemaVersion,
+    capabilities: capabilities(m.schemaVersion, m.inputMode),
     bestOf: m.bestOf,
     startedAt: m.startedAt,
     finishedAt: m.finishedAt,

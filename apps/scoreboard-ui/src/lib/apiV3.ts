@@ -1,7 +1,17 @@
 import { API_BASE_URL } from "./api";
 import type { BBBallType } from "./ballbyball";
+import { VERSION } from "../version";
 
 // ===== v3 API client — full play-by-play capture (v3-only writes) =====
+
+/**
+ * Capability level of the data this scoreboard build PRODUCES. Bump this when the
+ * scoreboard starts capturing something new (kept in sync with @rrsb/contracts'
+ * SCHEMA_VERSION on the read side). Provenance is `producer` + `producerVersion`.
+ */
+export const PRODUCED_SCHEMA_VERSION = 3;
+export const PRODUCER = "scoreboard-ui";
+export const PRODUCER_VERSION = VERSION;
 
 export type V3EventType =
   | "POT"
@@ -103,6 +113,9 @@ export interface CreateMatchV3Payload {
   locationId?: string | null;
   deviceId?: string | null;
   remoteRoomId?: string | null;
+  schemaVersion?: number;
+  producer?: string;
+  producerVersion?: string;
 }
 
 /** Map a ball-by-ball ball/freeball to the API enum. */
@@ -137,10 +150,17 @@ export function getRemoteRoomId(): string | null {
 
 export async function createMatchV3(payload: CreateMatchV3Payload): Promise<string | null> {
   try {
+    // Stamp provenance + capability level automatically (caller can override).
+    const body = {
+      schemaVersion: PRODUCED_SCHEMA_VERSION,
+      producer: PRODUCER,
+      producerVersion: PRODUCER_VERSION,
+      ...payload,
+    };
     const res = await fetch(`${API_BASE_URL}/api/v3/matches`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     return data.data?.matchId ?? null;

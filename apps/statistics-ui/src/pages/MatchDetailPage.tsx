@@ -6,6 +6,7 @@ import {
   type V3Frame,
   type V3Break,
   type V3Event,
+  type V3Capabilities,
 } from "../lib/apiV3";
 import { Flag, Ball, StatusPill } from "../components/ui";
 import { matchTypeLabel, eventLabel, formatDate, durationBetween } from "../lib/snooker";
@@ -142,12 +143,14 @@ function FrameItem({
   frame,
   names,
   events,
+  caps,
   open,
   onToggle,
 }: {
   frame: V3Frame;
   names: [string, string];
   events: V3Event[];
+  caps: V3Capabilities;
   open: boolean;
   onToggle: () => void;
 }) {
@@ -203,18 +206,22 @@ function FrameItem({
             </>
           )}
 
-          <button className="full-toggle" onClick={() => setShowFull((v) => !v)}>
-            {showFull ? "Hide full play-by-play" : "Show full play-by-play"}
-            <span className={`full-caret ${showFull ? "open" : ""}`}>›</span>
-          </button>
-          {showFull && (
-            <div className="full-feed">
-              {events.length > 0 ? (
-                <EventFeed events={events} names={names} />
-              ) : (
-                <div style={{ color: "var(--text-3)", fontSize: "0.85rem", padding: "8px 0" }}>No events.</div>
+          {caps.hasPointByPoint && (
+            <>
+              <button className="full-toggle" onClick={() => setShowFull((v) => !v)}>
+                {showFull ? "Hide full play-by-play" : "Show full play-by-play"}
+                <span className={`full-caret ${showFull ? "open" : ""}`}>›</span>
+              </button>
+              {showFull && (
+                <div className="full-feed">
+                  {events.length > 0 ? (
+                    <EventFeed events={events} names={names} />
+                  ) : (
+                    <div style={{ color: "var(--text-3)", fontSize: "0.85rem", padding: "8px 0" }}>No events.</div>
+                  )}
+                </div>
               )}
-            </div>
+            </>
           )}
         </div>
       )}
@@ -263,6 +270,14 @@ export function MatchDetailPage() {
   const [p0, p1] = match.players;
   const names: [string, string] = [p0?.name ?? "P1", p1?.name ?? "P2"];
   const win = match.winnerPlayerIndex;
+  // Capability flags from the API; default to fully-capable if an older API omits them.
+  const caps: V3Capabilities = match.capabilities ?? {
+    hasBallByBall: true,
+    hasVisits: true,
+    hasPointByPoint: true,
+    hasFoulSubtypes: true,
+    hasPocketDetail: true,
+  };
   const framesNewestFirst = [...match.frames].reverse();
   const showDuration = (() => {
     if (!match.finishedAt) return false;
@@ -321,18 +336,48 @@ export function MatchDetailPage() {
 
       {/* Frames — newest first, expandable inline */}
       <div className="section-label" style={{ marginTop: 28 }}>Frames</div>
-      <div className="frame-list">
-        {framesNewestFirst.map((f) => (
-          <FrameItem
-            key={f.id}
-            frame={f}
-            names={names}
-            events={eventsByFrame.get(f.id) ?? []}
-            open={openFrame === f.frameNumber}
-            onToggle={() => setOpenFrame((cur) => (cur === f.frameNumber ? null : f.frameNumber))}
-          />
-        ))}
-      </div>
+      {caps.hasVisits ? (
+        <div className="frame-list">
+          {framesNewestFirst.map((f) => (
+            <FrameItem
+              key={f.id}
+              frame={f}
+              names={names}
+              events={eventsByFrame.get(f.id) ?? []}
+              caps={caps}
+              open={openFrame === f.frameNumber}
+              onToggle={() => setOpenFrame((cur) => (cur === f.frameNumber ? null : f.frameNumber))}
+            />
+          ))}
+        </div>
+      ) : (
+        // Graceful degradation: this match was recorded at an earlier capability
+        // level (no visit/point-by-point detail) — show frame scores only.
+        <div className="frame-list">
+          {framesNewestFirst.map((f) => (
+            <div key={f.id} className="frame-item done">
+              <div className="frame-line" style={{ cursor: "default" }}>
+                <span className="frame-line-no">F{f.frameNumber}</span>
+                <span className="frame-line-side left">
+                  <span className={`frame-line-name ${f.winnerPlayerIndex === 0 ? "win" : ""}`}>{names[0]}</span>
+                </span>
+                <span className="frame-line-score">
+                  <span className={`s ${f.winnerPlayerIndex === 0 ? "win" : ""}`}>{f.scoreP0}</span>
+                  <span className="sep">:</span>
+                  <span className={`s ${f.winnerPlayerIndex === 1 ? "win" : ""}`}>{f.scoreP1}</span>
+                </span>
+                <span className="frame-line-side right">
+                  <span className={`frame-line-name ${f.winnerPlayerIndex === 1 ? "win" : ""}`}>{names[1]}</span>
+                </span>
+                <span />
+              </div>
+            </div>
+          ))}
+          <div style={{ color: "var(--text-3)", fontSize: "0.8rem", marginTop: 4 }}>
+            Frame-by-frame detail isn’t available for this match.
+          </div>
+        </div>
+      )}
     </div>
   );
 }

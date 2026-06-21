@@ -428,6 +428,15 @@ model V3Match {
   isDraw            Boolean       @default(false)
   winnerPlayerIndex Int?
 
+  // Versioning / provenance. `schemaVersion` is the coarse capability level the
+  // UI/API branch on (via @rrsb/contracts); producer/producerVersion are
+  // provenance only (which app build wrote this) — never branched on. Default 3
+  // = the current v3 capability level (every existing v3 row is current); the
+  // API stamps it explicitly on create, and legacy data is surfaced as 1.
+  schemaVersion   Int     @default(3)
+  producer        String?
+  producerVersion String?
+
   tableNumber  Int?
   locationId   String?
   location     Location? @relation(fields: [locationId], references: [id])

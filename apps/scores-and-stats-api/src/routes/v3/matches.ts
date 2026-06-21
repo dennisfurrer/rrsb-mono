@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { prisma } from "@rrsb/db";
 import type { Prisma } from "@rrsb/db";
+import { capabilities, SCHEMA_VERSION } from "@rrsb/contracts";
 import { z } from "zod";
 import {
   ballColorEnum,
@@ -41,6 +42,10 @@ const createMatchSchema = z.object({
   deviceId: z.string().nullable().optional(),
   remoteRoomId: z.string().nullable().optional(),
   startedAt: z.string().optional(),
+  // Versioning / provenance — the producer declares the capability level it wrote.
+  schemaVersion: z.number().int().optional(),
+  producer: z.string().optional(),
+  producerVersion: z.string().optional(),
 });
 
 // POST /api/v3/matches
@@ -73,6 +78,9 @@ v3MatchesRouter.post("/", async (req: Request, res: Response) => {
           deviceId: body.deviceId ?? null,
           remoteRoomId: body.remoteRoomId ?? null,
           startedAt: body.startedAt ? new Date(body.startedAt) : undefined,
+          schemaVersion: body.schemaVersion ?? SCHEMA_VERSION,
+          producer: body.producer ?? null,
+          producerVersion: body.producerVersion ?? null,
         },
       });
 
@@ -684,7 +692,9 @@ v3MatchesRouter.get("/live", async (_req: Request, res: Response) => {
       orderBy: { updatedAt: "desc" },
       include: { players: { orderBy: { playerIndex: "asc" } } },
     });
-    res.json({ data: matches });
+    res.json({
+      data: matches.map((m) => ({ ...m, capabilities: capabilities(m.schemaVersion, m.inputMode) })),
+    });
   } catch (e) {
     console.error("[v3] Error fetching live matches:", e);
     res.status(500).json({ error: "Failed to fetch live matches" });
@@ -725,7 +735,7 @@ v3MatchesRouter.get("/", async (req: Request, res: Response) => {
     ]);
 
     res.json({
-      data: matches,
+      data: matches.map((m) => ({ ...m, capabilities: capabilities(m.schemaVersion, m.inputMode) })),
       metadata: {
         pagination: {
           currentPage: page,
@@ -766,7 +776,7 @@ v3MatchesRouter.get("/:id", async (req: Request, res: Response) => {
       res.status(404).json({ error: "Match not found" });
       return;
     }
-    res.json({ data: match });
+    res.json({ data: { ...match, capabilities: capabilities(match.schemaVersion, match.inputMode) } });
   } catch (e) {
     console.error("[v3] Error fetching match:", e);
     res.status(500).json({ error: "Failed to fetch match" });

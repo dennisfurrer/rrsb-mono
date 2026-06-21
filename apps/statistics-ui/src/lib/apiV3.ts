@@ -43,6 +43,15 @@ export type V3EventType =
   | "REDO"
   | "EDIT_LAST_BREAK";
 
+/** Capability flags the API derives from a match's schemaVersion (see @rrsb/contracts). */
+export interface V3Capabilities {
+  hasBallByBall: boolean;
+  hasVisits: boolean;
+  hasPointByPoint: boolean;
+  hasFoulSubtypes: boolean;
+  hasPocketDetail: boolean;
+}
+
 export interface V3MatchPlayer {
   id: string;
   playerIndex: number;
@@ -72,6 +81,10 @@ export interface V3MatchSummary {
   startedAt: string;
   finishedAt: string | null;
   updatedAt: string;
+  schemaVersion?: number;
+  producer?: string | null;
+  producerVersion?: string | null;
+  capabilities?: V3Capabilities;
   players: V3MatchPlayer[];
 }
 
@@ -251,6 +264,8 @@ export interface V3TableMatch {
   status: V3Status;
   matchType: string;
   matchTypeCode: string;
+  schemaVersion?: number;
+  capabilities?: V3Capabilities;
   bestOf: number;
   startedAt: string;
   finishedAt: string | null;

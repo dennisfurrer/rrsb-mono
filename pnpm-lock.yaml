@@ -136,6 +136,9 @@ importers:
 
   apps/scores-and-stats-api:
     dependencies:
+      '@rrsb/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@rrsb/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -225,6 +228,8 @@ importers:
       vite:
         specifier: ^6.0.0
         version: 6.4.1(@types/node@25.3.0)(jiti@2.6.1)(tsx@4.21.0)
+
+  packages/contracts: {}
 
   packages/db:
     dependencies:
