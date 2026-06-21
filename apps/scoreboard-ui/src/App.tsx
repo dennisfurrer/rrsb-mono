@@ -1875,6 +1875,8 @@ export function App() {
           matchStartedAt={match.startedAt ?? null}
           nameP1={match.players[0].name}
           nameP2={match.players[1].name}
+          iocP1={match.players[0].nationalityIOC}
+          iocP2={match.players[1].nationalityIOC}
           bestOf={match.bestOf}
           framesP1={match.players[0].frames}
           framesP2={match.players[1].frames}

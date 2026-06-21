@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { MatchState } from "../lib/model";
+import { iocToFlag } from "../lib/flags";
 
 interface HistoryEntry {
   label: string;
@@ -97,6 +98,8 @@ interface Props {
   matchStartedAt?: string | null;
   nameP1: string;
   nameP2: string;
+  iocP1?: string;
+  iocP2?: string;
   bestOf: number;
   framesP1: number;
   framesP2: number;
@@ -107,7 +110,9 @@ interface Props {
   onClose: () => void;
 }
 
-export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, bestOf, framesP1, framesP2, currentFrame, currentScores, colorP1, colorP2, onClose }: Props) {
+export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP1, iocP2, bestOf, framesP1, framesP2, currentFrame, currentScores, colorP1, colorP2, onClose }: Props) {
+  const flag1 = (iocP1 && iocToFlag(iocP1)) || "🏳️";
+  const flag2 = (iocP2 && iocToFlag(iocP2)) || "🏳️";
   const c1 = colorP1 ?? "#5599ff";
   const c2 = colorP2 ?? "#ff8833";
   const frames = deriveFrameStats(history, matchStartedAt);
@@ -206,9 +211,15 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, best
     <div className="overlay" onClick={onClose}>
       <div className="stats-dialog" onClick={onClose}>
         <div className="stats-header">
-          <span className="stats-name" style={{ color: c1 }}>{nameP1}</span>
+          <span className="stats-name" style={{ color: c1, position: "relative", overflow: "visible" }}>
+            {nameP1}
+            <span style={{ position: "absolute", left: "100%", top: "50%", transform: "translateY(-50%)", marginLeft: "calc(0.6em - 1.5vw)", whiteSpace: "nowrap" }}>{flag1}</span>
+          </span>
           <span className="stats-vs">vs</span>
-          <span className="stats-name" style={{ color: c2 }}>{nameP2}</span>
+          <span className="stats-name" style={{ color: c2, position: "relative", overflow: "visible" }}>
+            <span style={{ position: "absolute", right: "100%", top: "50%", transform: "translateY(-50%)", marginRight: "calc(0.6em - 1.5vw)", whiteSpace: "nowrap" }}>{flag2}</span>
+            {nameP2}
+          </span>
         </div>
 
         <div className="stats-col-labels">
