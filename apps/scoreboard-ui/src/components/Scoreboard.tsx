@@ -418,8 +418,9 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
                   )}
                 </span>
                 <span
+                  className="sb-active-dot"
                   style={{
-                    width: "1.6vw", height: "1.6vw", borderRadius: "50%", background: "#facc15", boxShadow: "0 0 12px #facc15",
+                    width: "1.6vw", height: "1.6vw", borderRadius: "50%",
                     opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 0 ? 1 : 0,
                   }}
                 />
@@ -552,8 +553,9 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
                   )}
                 </span>
                 <span
+                  className="sb-active-dot"
                   style={{
-                    width: "1.6vw", height: "1.6vw", borderRadius: "50%", background: "#facc15", boxShadow: "0 0 12px #facc15",
+                    width: "1.6vw", height: "1.6vw", borderRadius: "50%",
                     opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 1 ? 1 : 0,
                   }}
                 />

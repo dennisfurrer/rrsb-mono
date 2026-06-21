@@ -20,6 +20,16 @@ html, body, #root {
 /* ===== SCOREBOARD LAYOUT ===== */
 div { font-weight: bold; }
 
+.sb-active-dot {
+  transition: opacity 1.6s ease-in-out;
+  animation: sb-active-dot-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes sb-active-dot-pulse {
+  0%, 100% { background: #fff066; box-shadow: 0 0 14px #fff066; }
+  50%       { background: #e8c100; box-shadow: 0 0 8px #e8c100; }
+}
+
 .lc { border-radius: 0.1em 0 0 0.1em; }
 .rc { border-radius: 0 0.1em 0.1em 0; }
 
