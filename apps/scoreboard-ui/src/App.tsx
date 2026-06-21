@@ -1638,7 +1638,7 @@ export function App() {
               : undefined
           }
           centerName={centerName || undefined}
-          matchStartTime={history[0]?.timestamp}
+          matchStartTime={match.startedAt}
           matchEndTime={match.finished ? history[history.length - 1]?.timestamp : undefined}
           matchFinished={match.finished}
           playerColors={playerColors}
