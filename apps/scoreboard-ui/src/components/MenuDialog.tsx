@@ -57,7 +57,7 @@ function FitWidthText({ text }: { text: string }) {
 
 function RedsTriangleIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
   const radius = 3.2;
-  const spacing = 9;
+  const spacing = 7.5;
   const circles: { cx: number; cy: number }[] = [];
   [1, 2, 3, 4, 5].forEach((count, r) => {
     const cy = 6 + r * spacing;
@@ -109,8 +109,8 @@ function SnookerTableIcon({ size = "1em", style }: { size?: string; style?: Reac
       <path d="M 12 45 A 4 4 0 0 0 20 45" fill="none" stroke="#eee" strokeWidth={0.2} opacity={0.85} />
 
       {/* Pockets */}
-      {[[5, 5], [27, 5], [5, 55], [27, 55], [5, 30], [27, 30]].map(([px, py], i) => (
-        <circle key={i} cx={px} cy={py} r={1.7} fill="#0a0a0a" />
+      {[[4.5, 4.5], [27.5, 4.5], [4.5, 55.5], [27.5, 55.5], [4.5, 30], [27.5, 30]].map(([px, py], i) => (
+        <circle key={i} cx={px} cy={py} r={1.4} fill="#0a0a0a" />
       ))}
 
       {/* Colour spots */}
@@ -119,7 +119,7 @@ function SnookerTableIcon({ size = "1em", style }: { size?: string; style?: Reac
       <circle cx={cx + 4} cy={45} r={ballR} fill="#f0c020" />{/* yellow */}
       <circle cx={cx} cy={30} r={ballR} fill="#2255cc" />{/* blue */}
       <circle cx={cx} cy={19} r={ballR} fill="#ff77b3" />{/* pink */}
-      <circle cx={cx} cy={7} r={ballR} fill="#111" />{/* black */}
+      <circle cx={cx} cy={8} r={ballR} fill="#111" />{/* black */}
 
       {/* Reds triangle */}
       {redDots.map((d) => (
@@ -156,13 +156,22 @@ function BallIcon({ size = "1em", style, fill = "#dd2222", highlight = "#ff9999"
 }
 
 function FinishFlagIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  const flagX = 4, flagY = 1, flagW = 12.6, flagH = 8;
+  const cols = 5, rows = 4;
+  const cellW = flagW / cols;
+  const cellH = flagH / rows;
+  const cells: { x: number; y: number; dark: boolean }[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      cells.push({ x: flagX + c * cellW, y: flagY + r * cellH, dark: (r + c) % 2 === 0 });
+    }
+  }
   return (
     <svg viewBox="0 0 20 20" style={{ width: size, height: size, display: "inline-block", ...style }}>
       <rect x={2.6} y={1} width={1.4} height={18} fill="#ccc" />
-      <rect x={4} y={1} width={6.5} height={4} fill="#111" />
-      <rect x={10.5} y={1} width={6.1} height={4} fill="#eee" />
-      <rect x={4} y={5} width={6.5} height={4} fill="#eee" />
-      <rect x={10.5} y={5} width={6.1} height={4} fill="#111" />
+      {cells.map((cell, i) => (
+        <rect key={i} x={cell.x} y={cell.y} width={cellW} height={cellH} fill={cell.dark ? "#111" : "#eee"} />
+      ))}
     </svg>
   );
 }
@@ -499,11 +508,11 @@ export function MenuDialog({
         {!matchFinished && (
           <AutoTextButton className="menu-btn-rerack" onClick={() => setConfirmRerack(true)}>
             <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
-              <span style={{ gridRow: "span 2", position: "relative", height: "2.4em", width: "auto", justifySelf: "center", display: "inline-block" }}>
+              <span style={{ gridRow: "span 2", position: "relative", height: "2.4em", width: "auto", justifySelf: "center", display: "inline-block", transform: "translateY(0.4em)" }}>
                 <RedsTriangleIcon style={{ height: "100%", width: "auto" }} />
                 <UndoArrowIcon
-                  size="1.2em"
-                  style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#5599ff" }}
+                  size="1.5em"
+                  style={{ position: "absolute", top: "4%", left: "50%", transform: "translate(-57.5%, -50%)", color: "#5599ff" }}
                 />
               </span>
               <span>Re-rack</span>

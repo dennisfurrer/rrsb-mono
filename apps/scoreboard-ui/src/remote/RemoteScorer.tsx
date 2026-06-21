@@ -63,7 +63,10 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
     ? (snapshot.activePlayerIndex as 0 | 1)
     : 0;
 
-  useEffect(() => { setTarget(active); }, [active]);
+  // Fouls are credited to the opponent; everything else goes to the active player.
+  useEffect(() => {
+    setTarget(isFoul ? (active === 0 ? 1 : 0) : active);
+  }, [active, isFoul]);
 
   useEffect(() => {
     setFoulPicking(false);
@@ -130,7 +133,6 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
           input={input}
           setInput={setInput}
           target={target}
-          setTarget={setTarget}
           isFoul={isFoul}
           setIsFoul={setIsFoul}
           isHandicap={isHandicap}
@@ -419,7 +421,6 @@ function BreakPad({
   input,
   setInput,
   target,
-  setTarget,
   isFoul,
   setIsFoul,
   isHandicap,
@@ -430,16 +431,18 @@ function BreakPad({
   input: string;
   setInput: (s: string) => void;
   target: 0 | 1;
-  setTarget: (n: 0 | 1) => void;
   isFoul: boolean;
   setIsFoul: (b: boolean) => void;
   isHandicap: boolean;
   setIsHandicap: (b: boolean) => void;
   onCommand: (cmd: RemoteCommand) => void;
 }) {
+  const pointsRunning = snapshot.players[0].score > 0 || snapshot.players[1].score > 0;
   const value = input === "" ? 0 : parseInt(input, 10);
   const press = (d: string) => {
-    setInput((input + d).replace(/^0+(?=\d)/, "").slice(0, 4));
+    const next = (input + d).replace(/^0+(?=\d)/, "").slice(0, 4);
+    if (parseInt(next, 10) > 155) return;
+    setInput(next);
   };
 
   const submit = () => {
@@ -452,35 +455,7 @@ function BreakPad({
 
   return (
     <>
-      <div className="rmt-tabs">
-        {([0, 1] as const).map((pi) => (
-          <FlashButton
-            key={pi}
-            className={`rmt-tab${pi === target ? " rmt-tab--on" : ""}`}
-            style={{ "--pc": snapshot.colors[pi] } as CSSProperties}
-            onClick={() => setTarget(pi)}
-          >
-            {snapshot.players[pi].name}
-          </FlashButton>
-        ))}
-      </div>
-
       <div className="rmt-input-display">{input === "" ? "0" : input}</div>
-
-      <div className="rmt-toggles">
-        <FlashButton
-          className={`rmt-toggle${isFoul ? " rmt-toggle--on" : ""}`}
-          onClick={() => { setIsFoul(!isFoul); if (!isFoul) setIsHandicap(false); }}
-        >
-          Foul (an Gegner)
-        </FlashButton>
-        <FlashButton
-          className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
-          onClick={() => { setIsHandicap(!isHandicap); if (!isHandicap) setIsFoul(false); }}
-        >
-          Handicap
-        </FlashButton>
-      </div>
 
       <div className="rmt-keys">
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
@@ -495,9 +470,26 @@ function BreakPad({
         Eintragen
       </FlashButton>
 
-      <FlashButton className="rmt-btn rmt-btn--undo rmt-btn--wide" onClick={() => onCommand({ t: "undo" })}>
-        ↶ Undo
-      </FlashButton>
+      <div className="rmt-toggles">
+        <FlashButton
+          className={`rmt-toggle${isFoul ? " rmt-toggle--on" : ""}`}
+          onClick={() => { setIsFoul(!isFoul); if (!isFoul) setIsHandicap(false); }}
+        >
+          Foul (an Gegner)
+        </FlashButton>
+        {pointsRunning ? (
+          <FlashButton className="rmt-toggle rmt-toggle--undo" onClick={() => onCommand({ t: "undo" })}>
+            ↶ Undo
+          </FlashButton>
+        ) : (
+          <FlashButton
+            className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
+            onClick={() => { setIsHandicap(!isHandicap); if (!isHandicap) setIsFoul(false); }}
+          >
+            Handicap
+          </FlashButton>
+        )}
+      </div>
     </>
   );
 }
