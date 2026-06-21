@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./api";
+import { apiFetch } from "./connection";
 import type { BBBallType } from "./ballbyball";
 import { VERSION } from "../version";
 
@@ -27,7 +27,9 @@ export type V3EventType =
   | "MATCH_END"
   | "UNDO"
   | "REDO"
-  | "EDIT_LAST_BREAK";
+  | "EDIT_LAST_BREAK"
+  | "DELETE_BREAK"
+  | "MATCH_ABANDONED";
 
 export type V3BallTypeApi =
   | "RED"
@@ -149,36 +151,32 @@ export function getRemoteRoomId(): string | null {
 }
 
 export async function createMatchV3(payload: CreateMatchV3Payload): Promise<string | null> {
-  try {
-    // Stamp provenance + capability level automatically (caller can override).
-    const body = {
-      schemaVersion: PRODUCED_SCHEMA_VERSION,
-      producer: PRODUCER,
-      producerVersion: PRODUCER_VERSION,
-      ...payload,
-    };
-    const res = await fetch(`${API_BASE_URL}/api/v3/matches`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    return data.data?.matchId ?? null;
-  } catch (e) {
-    console.error("[v3] Failed to create match:", e);
-    return null;
-  }
+  // Stamp provenance + capability level automatically (caller can override).
+  const body = {
+    schemaVersion: PRODUCED_SCHEMA_VERSION,
+    producer: PRODUCER,
+    producerVersion: PRODUCER_VERSION,
+    ...payload,
+  };
+  const res = await apiFetch(`/api/v3/matches`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res) return null; // no API configured, or the request failed
+  const data = await res.json();
+  return data.data?.matchId ?? null;
 }
 
 /** Fire-and-forget append of one or more play-by-play events. */
 export function appendEventsV3(matchId: string, events: V3EventInput[]): void {
   const stamped = events.map((e) => ({ clientTs: new Date().toISOString(), ...e }));
-  fetch(`${API_BASE_URL}/api/v3/matches/${matchId}/events`, {
+  void apiFetch(`/api/v3/matches/${matchId}/events`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ events: stamped }),
     keepalive: true,
-  }).catch((e) => console.error("[v3] Failed to append events:", e));
+  });
 }
 
 export function patchMatchV3(
@@ -190,10 +188,10 @@ export function patchMatchV3(
     bestOf?: number;
   }
 ): void {
-  fetch(`${API_BASE_URL}/api/v3/matches/${matchId}`, {
+  void apiFetch(`/api/v3/matches/${matchId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
     keepalive: true,
-  }).catch((e) => console.error("[v3] Failed to patch match:", e));
+  });
 }

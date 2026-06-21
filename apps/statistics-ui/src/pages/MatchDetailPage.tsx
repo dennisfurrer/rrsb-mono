@@ -9,7 +9,7 @@ import {
   type V3Capabilities,
 } from "../lib/apiV3";
 import { Flag, Ball, StatusPill } from "../components/ui";
-import { matchTypeLabel, eventLabel, formatDate, durationBetween } from "../lib/snooker";
+import { matchTypeLabel, eventLabel, formatDate, durationBetween, HIDDEN_EVENT_TYPES } from "../lib/snooker";
 
 /** Highest break a player made in a given frame (0 if none). */
 function frameHighBreak(f: V3Frame, pi: number): number {
@@ -214,11 +214,17 @@ function FrameItem({
               </button>
               {showFull && (
                 <div className="full-feed">
-                  {events.length > 0 ? (
-                    <EventFeed events={events} names={names} />
-                  ) : (
-                    <div style={{ color: "var(--text-3)", fontSize: "0.85rem", padding: "8px 0" }}>No events.</div>
-                  )}
+                  {(() => {
+                    // Hide history-management/destructive meta + undone events from display.
+                    const shown = events.filter(
+                      (e) => !e.wasUndone && !HIDDEN_EVENT_TYPES.has(e.type)
+                    );
+                    return shown.length > 0 ? (
+                      <EventFeed events={shown} names={names} />
+                    ) : (
+                      <div style={{ color: "var(--text-3)", fontSize: "0.85rem", padding: "8px 0" }}>No events.</div>
+                    );
+                  })()}
                 </div>
               )}
             </>

@@ -72,6 +72,8 @@ export const eventTypeEnum = z.enum([
   "UNDO",
   "REDO",
   "EDIT_LAST_BREAK",
+  "DELETE_BREAK",
+  "MATCH_ABANDONED",
 ]);
 
 /** Map the human match-type label shown in the UI to a normalized enum code. */

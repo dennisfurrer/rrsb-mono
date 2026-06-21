@@ -41,7 +41,9 @@ export type V3EventType =
   | "MATCH_END"
   | "UNDO"
   | "REDO"
-  | "EDIT_LAST_BREAK";
+  | "EDIT_LAST_BREAK"
+  | "DELETE_BREAK"
+  | "MATCH_ABANDONED";
 
 /** Capability flags the API derives from a match's schemaVersion (see @rrsb/contracts). */
 export interface V3Capabilities {

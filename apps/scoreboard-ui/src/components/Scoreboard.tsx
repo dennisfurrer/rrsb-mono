@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { MatchState } from "../lib/model";
 import { useAutoFontSize } from "../hooks/useAutoFontSize";
+import { useApiStatus } from "../lib/connection";
+import { VERSION } from "../version";
 import trophyGif from "../assets/trophy.gif";
 
 interface Props {
@@ -149,6 +151,7 @@ function DigitSlot({ value, animDuration = 5 }: { value: number; animDuration?: 
 }
 
 export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak, onRemoteClick, remoteConnected }: Props) {
+  const apiStatus = useApiStatus();
   const [p1, p2] = match.players;
   const p1Active = match.activePlayerIndex === 0;
   const p2Active = match.activePlayerIndex === 1;
@@ -581,8 +584,14 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         </div>
       </div>
 
-      <div style={{ position: "absolute", bottom: "15%", left: "0.8vw", color: "#666", fontSize: "0.75vw", fontWeight: "normal", pointerEvents: "none" }}>
-        Scoreboard V2.0.0
+      <div style={{ position: "absolute", bottom: "15%", left: "0.8vw", color: "#666", fontSize: "0.75vw", fontWeight: "normal", pointerEvents: "none", display: "flex", alignItems: "center", gap: "0.4vw" }}>
+        <span>Scoreboard v{VERSION}</span>
+        {apiStatus === "error" && (
+          <span
+            title="Not connected to the scores server — scores aren't being saved."
+            style={{ display: "inline-block", width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#c9852f", boxShadow: "0 0 0.3vw rgba(201,133,47,0.7)" }}
+          />
+        )}
       </div>
       <div style={{ position: "absolute", bottom: "15%", right: "0.8vw", color: "#666", fontSize: "0.75vw", fontWeight: "normal", pointerEvents: "none" }}>
         © 2026 Round Robin Sports

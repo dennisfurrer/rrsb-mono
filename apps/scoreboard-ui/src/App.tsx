@@ -983,7 +983,17 @@ export function App() {
     setIsEditingBreak(false);
     setRedoStack([]);
     setShowBBDialog(false);
-  }, []);
+    if (match.matchId) {
+      appendEventsV3(match.matchId, [
+        {
+          type: "DELETE_BREAK",
+          frameNumber: match.currentFrame,
+          state: frameSnap(match),
+          source: "DISPLAY",
+        },
+      ]);
+    }
+  }, [match]);
 
   // ===== UNDO (ball-by-ball — used inside BBDialog edit mode) =====
   const undo = useCallback((meta?: EvtMeta) => {
@@ -1180,6 +1190,22 @@ export function App() {
       name1: match.players[0].name,
       name2: match.players[1].name,
     });
+    // Starting a new game over an unfinished match abandons it — record that.
+    if (match.matchId && !match.finished) {
+      appendEventsV3(match.matchId, [
+        {
+          type: "MATCH_ABANDONED",
+          frameNumber: match.currentFrame,
+          state: {
+            ...frameSnap(match),
+            framesP0: match.players[0].frames,
+            framesP1: match.players[1].frames,
+          },
+          source: "DISPLAY",
+        },
+      ]);
+      patchMatchV3(match.matchId, { status: "ABORTED" });
+    }
     if (activeAssignmentId) {
       cancelAssignment(activeAssignmentId);
       setActiveAssignmentId(null);

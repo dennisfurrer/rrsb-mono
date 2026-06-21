@@ -531,8 +531,19 @@ async function processEvent(
     }
 
     case "REDO":
-    case "EDIT_LAST_BREAK": {
+    case "EDIT_LAST_BREAK":
+    case "DELETE_BREAK": {
+      // Pure record of a destructive/edit action — keep the firehose complete.
       await applyFrameScores(tx, frame.id, ev);
+      break;
+    }
+
+    case "MATCH_ABANDONED": {
+      // "New game" on an unfinished match: record it and stop the match.
+      await tx.v3Match.update({
+        where: { id: match.id },
+        data: { status: "ABORTED", finishedAt: new Date() },
+      });
       break;
     }
   }
