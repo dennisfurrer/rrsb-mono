@@ -274,6 +274,7 @@ export interface V3TableMatch {
   updatedAt: string;
   players: V3TablePlayer[];
   frameScore: [number, number];
+  tableNumber?: number | null;
 }
 
 export interface V3Table {
@@ -284,6 +285,8 @@ export interface V3Table {
 export interface V3ClubTables {
   club: { id: string; name: string; slug: string; tableNumbers: number[] };
   tables: V3Table[];
+  /** Active matches in the club not on a known table (no/unknown table number). */
+  otherMatches?: V3TableMatch[];
 }
 
 export interface Paginated<T> {
