@@ -471,7 +471,9 @@ function BreakPad({
         className="rmt-btn rmt-btn--primary rmt-btn--wide"
         onClick={value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
       >
+        {target === 0 && <span className="rmt-active-dot" />}
         {value > 0 ? (isFoul ? "Foul eintragen" : "Break eintragen") : "Spielerwechsel"}
+        {target === 1 && <span className="rmt-active-dot" />}
       </FlashButton>
 
       <div className="rmt-toggles">
