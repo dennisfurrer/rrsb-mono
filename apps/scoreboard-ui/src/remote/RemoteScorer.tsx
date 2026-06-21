@@ -439,6 +439,7 @@ function BreakPad({
   onCommand: (cmd: RemoteCommand) => void;
 }) {
   const pointsRunning = snapshot.players[0].score > 0 || snapshot.players[1].score > 0;
+  const [confirmFrameEnd, setConfirmFrameEnd] = useState(false);
   const value = input === "" ? 0 : parseInt(input, 10);
   const press = (d: string) => {
     const next = (input + d).replace(/^0+(?=\d)/, "").slice(0, 4);
@@ -472,7 +473,7 @@ function BreakPad({
         onClick={value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
       >
         {target === 0 && <span className="rmt-active-dot" />}
-        {value > 0 ? (isFoul ? "Foul eintragen" : "Break eintragen") : "Spielerwechsel"}
+        {value > 0 ? (isFoul ? "Foul eintragen" : isHandicap ? "Handicap eintragen" : "Break eintragen") : "Spielerwechsel"}
         {target === 1 && <span className="rmt-active-dot" />}
       </FlashButton>
 
@@ -498,9 +499,27 @@ function BreakPad({
       </div>
 
       {pointsRunning && (
-        <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
-          Frame beenden
-        </FlashButton>
+        confirmFrameEnd ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, background: "#1a1a1a", border: "1px solid #444", borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ color: "#ccc", fontSize: 14, textAlign: "center" }}>Frame wirklich beenden?</div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <FlashButton className="rmt-btn rmt-btn--ghost" style={{ flex: 1 }} onClick={() => setConfirmFrameEnd(false)}>
+                Nein
+              </FlashButton>
+              <FlashButton
+                className="rmt-btn rmt-btn--primary"
+                style={{ flex: 1 }}
+                onClick={() => { onCommand({ t: "end_frame" }); setConfirmFrameEnd(false); }}
+              >
+                Ja, beenden
+              </FlashButton>
+            </div>
+          </div>
+        ) : (
+          <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => setConfirmFrameEnd(true)}>
+            Frame beenden
+          </FlashButton>
+        )
       )}
     </>
   );
