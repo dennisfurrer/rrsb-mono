@@ -1,0 +1,25 @@
+{
+  "name": "@rrsb/stats-api-cf",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "prisma:generate": "prisma generate",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/adapter-d1": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "@rrsb/contracts": "workspace:*",
+    "hono": "^4.6.14",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "prisma": "^7.0.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.0.0"
+  }
+}

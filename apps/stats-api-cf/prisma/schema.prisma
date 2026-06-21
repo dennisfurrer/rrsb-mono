@@ -1,0 +1,286 @@
+// RRSB v3 stats API — SQLite/D1 port of the v3 subset of the Postgres schema.
+// Differences from packages/db (Postgres): provider = sqlite; every v3 enum is a
+// String (SQLite has no enums — values validated in app code via zod/@rrsb/contracts);
+// every Int[] is Json (SQLite has no scalar lists). Runtime uses the D1 driver adapter.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  runtime  = "workerd" // Cloudflare Workers target (avoids Node fileURLToPath at init)
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// "Club" — minimal port (the legacy Location relations are not part of the v3 stack).
+model Location {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  slug         String   @unique
+  address      String?
+  tableNumbers Json     @default("[]") // Int[] as JSON
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  v3Matches V3Match[]
+
+  @@map("location")
+}
+
+model V3Player {
+  id             String  @id @default(cuid())
+  name           String  @unique
+  nationalityIOC String?
+  club           String?
+
+  matchesPlayed      Int  @default(0)
+  matchesWon         Int  @default(0)
+  matchesLost        Int  @default(0)
+  matchesDrawn       Int  @default(0)
+  framesWon          Int  @default(0)
+  framesLost         Int  @default(0)
+  pointsFor          Int  @default(0)
+  pointsAgainst      Int  @default(0)
+  breaksOver7        Int  @default(0)
+  highBreak          Int  @default(0)
+  highBreaks         Json @default("[]") // Int[] as JSON
+  centuries          Int  @default(0)
+  foulsCommitted     Int  @default(0)
+  foulPointsConceded Int  @default(0)
+  potsByColor        Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  matchPlayers   V3MatchPlayer[]
+  matchTypeStats V3PlayerMatchTypeStat[]
+
+  @@map("v3_player")
+}
+
+model V3PlayerMatchTypeStat {
+  id            String   @id @default(cuid())
+  playerId      String
+  player        V3Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  matchType     String // V3MatchType
+  matchesPlayed Int      @default(0)
+  matchesWon    Int      @default(0)
+  matchesLost   Int      @default(0)
+  matchesDrawn  Int      @default(0)
+  framesWon     Int      @default(0)
+  framesLost    Int      @default(0)
+  highBreak     Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  @@unique([playerId, matchType])
+  @@map("v3_player_match_type_stat")
+}
+
+model V3Match {
+  id                String  @id @default(cuid())
+  matchType         String
+  matchTypeCode     String  @default("OTHER") // V3MatchType
+  inputMode         String // V3InputMode
+  redsCount         Int     @default(15)
+  bestOf            Int
+  status            String  @default("ACTIVE") // V3MatchStatus
+  isDraw            Boolean @default(false)
+  winnerPlayerIndex Int?
+
+  // Versioning / provenance (see @rrsb/contracts).
+  schemaVersion   Int     @default(3)
+  producer        String?
+  producerVersion String?
+
+  tableNumber  Int?
+  locationId   String?
+  location     Location? @relation(fields: [locationId], references: [id])
+  deviceId     String?
+  remoteRoomId String?
+
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  players        V3MatchPlayer[]
+  frames         V3Frame[]
+  breaks         V3Break[]
+  events         V3Event[]
+  remoteSessions V3RemoteSession[]
+  remoteEvents   V3RemoteEvent[]
+
+  @@index([status])
+  @@index([tableNumber])
+  @@index([matchTypeCode])
+  @@index([startedAt])
+  @@map("v3_match")
+}
+
+model V3MatchPlayer {
+  id               String    @id @default(cuid())
+  matchId          String
+  match            V3Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerIndex      Int
+  playerId         String?
+  player           V3Player? @relation(fields: [playerId], references: [id])
+  name             String
+  nationalityIOC   String?
+  club             String?
+  startingHandicap Int       @default(0)
+  framesWon        Int       @default(0)
+  isWinner         Boolean   @default(false)
+  highBreak        Int       @default(0)
+  highBreaks       Json      @default("[]") // Int[] as JSON
+  pointsFor        Int       @default(0)
+  pointsAgainst    Int       @default(0)
+
+  @@unique([matchId, playerIndex])
+  @@index([name])
+  @@map("v3_match_player")
+}
+
+model V3Frame {
+  id                 String    @id @default(cuid())
+  matchId            String
+  match              V3Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  frameNumber        Int
+  redsCount          Int
+  inputMode          String // V3InputMode
+  breakerPlayerIndex Int?
+  winnerPlayerIndex  Int?
+  scoreP0            Int       @default(0)
+  scoreP1            Int       @default(0)
+  rerackCount        Int       @default(0)
+  respottedBlack     Boolean   @default(false)
+  status             String    @default("IN_PROGRESS") // V3FrameStatus
+  startedAt          DateTime  @default(now())
+  endedAt            DateTime?
+
+  breaks V3Break[]
+  balls  V3Ball[]
+  events V3Event[]
+
+  @@unique([matchId, frameNumber])
+  @@map("v3_frame")
+}
+
+model V3Break {
+  id            String    @id @default(cuid())
+  matchId       String
+  match         V3Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  frameId       String
+  frame         V3Frame   @relation(fields: [frameId], references: [id], onDelete: Cascade)
+  playerIndex   Int
+  sequence      Int
+  totalPoints   Int       @default(0)
+  ballCount     Int       @default(0)
+  isClearance   Boolean   @default(false)
+  isManualEntry Boolean   @default(false)
+  endReason     String? // V3BreakEndReason
+  missType      String? // V3MissType
+  foulType      String? // V3FoulType
+  ball          String? // V3BallColor
+  pocket        String? // V3Pocket
+  startedAt     DateTime  @default(now())
+  endedAt       DateTime?
+
+  balls V3Ball[]
+
+  @@index([frameId])
+  @@index([matchId])
+  @@map("v3_break")
+}
+
+model V3Ball {
+  id                 String   @id @default(cuid())
+  breakId            String
+  break              V3Break  @relation(fields: [breakId], references: [id], onDelete: Cascade)
+  frameId            String
+  frame              V3Frame  @relation(fields: [frameId], references: [id], onDelete: Cascade)
+  sequence           Int
+  ballType           String // V3BallType
+  points             Int
+  isFreeBall         Boolean  @default(false)
+  phase              String // V3BBPhase
+  redsRemainingAfter Int?
+  createdAt          DateTime @default(now())
+
+  @@index([breakId])
+  @@map("v3_ball")
+}
+
+model V3Event {
+  id                 String   @id @default(cuid())
+  matchId            String
+  match              V3Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  frameId            String?
+  frame              V3Frame? @relation(fields: [frameId], references: [id])
+  breakId            String?
+  seq                Int
+  type               String // V3EventType
+  playerIndex        Int?
+  ballType           String? // V3BallType
+  points             Int      @default(0)
+  missType           String? // V3MissType
+  foulType           String? // V3FoulType
+  pocket             String? // V3Pocket
+  isFreeBall         Boolean  @default(false)
+  freeBallGranted    Boolean?
+  phase              String? // V3BBPhase
+  redsRemaining      Int?
+  oldReds            Int?
+  newReds            Int?
+  source             String   @default("DISPLAY") // V3EventSource
+  remotePlayerIndex  Int?
+  wasUndone          Boolean  @default(false)
+  manualFlagToIgnore Boolean  @default(false)
+  label              String?
+  payload            Json?
+  clientTs           DateTime?
+  createdAt          DateTime @default(now())
+
+  @@unique([matchId, seq])
+  @@index([matchId])
+  @@index([type])
+  @@map("v3_event")
+}
+
+model V3RemoteSession {
+  id                 String    @id @default(cuid())
+  matchId            String?
+  match              V3Match?  @relation(fields: [matchId], references: [id])
+  roomId             String
+  playerIndex        Int
+  token              String
+  connectCount       Int       @default(0)
+  createdAt          DateTime  @default(now())
+  rotatedAt          DateTime?
+  lastConnectedAt    DateTime?
+  lastDisconnectedAt DateTime?
+
+  events V3RemoteEvent[]
+
+  @@index([roomId])
+  @@map("v3_remote_session")
+}
+
+model V3RemoteEvent {
+  id             String           @id @default(cuid())
+  matchId        String?
+  match          V3Match?         @relation(fields: [matchId], references: [id])
+  roomId         String
+  sessionId      String?
+  session        V3RemoteSession? @relation(fields: [sessionId], references: [id])
+  type           String // V3RemoteEventType
+  playerIndex    Int?
+  commandType    String?
+  commandPayload Json?
+  createdAt      DateTime         @default(now())
+
+  @@index([roomId])
+  @@index([matchId])
+  @@map("v3_remote_event")
+}
