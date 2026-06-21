@@ -35,13 +35,18 @@ function formatHHMM(iso: string): string {
   return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
 }
 
+function formatDDMMYYYY(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getDate().toString().padStart(2, "0")}.${(d.getMonth() + 1).toString().padStart(2, "0")}.${d.getFullYear()}`;
+}
+
 function formatDuration(startIso: string, endIso?: string | null): string {
   const ms = (endIso ? new Date(endIso).getTime() : Date.now()) - new Date(startIso).getTime();
   const totalMins = Math.floor(ms / 60000);
   return `${totalMins} Min.`;
 }
 
-function deriveFrameStats(history: HistoryEntry[]): FrameStat[] {
+function deriveFrameStats(history: HistoryEntry[], matchStartedAt?: string | null): FrameStat[] {
   const map = new Map<number, FrameStat>();
   const firstTimestamps = new Map<number, string>();
 
@@ -81,7 +86,7 @@ function deriveFrameStats(history: HistoryEntry[]): FrameStat[] {
   const sorted = Array.from(map.values()).sort((a, b) => a.frameNumber - b.frameNumber);
   for (let i = 0; i < sorted.length; i++) {
     sorted[i].startTime = i === 0
-      ? (firstTimestamps.get(sorted[0].frameNumber) ?? null)
+      ? (matchStartedAt ?? firstTimestamps.get(sorted[0].frameNumber) ?? null)
       : (sorted[i - 1].endTime ?? firstTimestamps.get(sorted[i].frameNumber) ?? null);
   }
   return sorted;
@@ -89,6 +94,7 @@ function deriveFrameStats(history: HistoryEntry[]): FrameStat[] {
 
 interface Props {
   history: HistoryEntry[];
+  matchStartedAt?: string | null;
   nameP1: string;
   nameP2: string;
   bestOf: number;
@@ -101,10 +107,10 @@ interface Props {
   onClose: () => void;
 }
 
-export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, framesP2, currentFrame, currentScores, colorP1, colorP2, onClose }: Props) {
+export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, bestOf, framesP1, framesP2, currentFrame, currentScores, colorP1, colorP2, onClose }: Props) {
   const c1 = colorP1 ?? "#5599ff";
   const c2 = colorP2 ?? "#ff8833";
-  const frames = deriveFrameStats(history);
+  const frames = deriveFrameStats(history, matchStartedAt);
 
   const totalBreakPts: [number, number] = [
     frames.reduce((sum, f) => sum + f.breaks[0].reduce((s, b) => s + b, 0), 0),
@@ -141,7 +147,12 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
   const hasAnyHandicapTotal = frames.some(f => f.handicap[0] > 0 || f.handicap[1] > 0);
   const rerackCount = history.filter(e => e.kind === "rerack").length;
 
-  const matchStartIso = frames[0]?.startTime ?? null;
+  const matchStartIso = matchStartedAt ?? frames[0]?.startTime ?? null;
+  const isMatchStartToday = matchStartIso !== null && (() => {
+    const start = new Date(matchStartIso);
+    const now = new Date();
+    return start.getFullYear() === now.getFullYear() && start.getMonth() === now.getMonth() && start.getDate() === now.getDate();
+  })();
   const isMatchLive = frames.some(f => f.scores === null && f.frameNumber === currentFrame);
   const isMatchFinished = bestOf % 2 === 0
     ? framesP1 + framesP2 >= bestOf
@@ -202,7 +213,14 @@ export function MatchStatsDialog({ history, nameP1, nameP2, bestOf, framesP1, fr
 
         <div className="stats-col-labels">
           <span className="stats-col-frames" style={{ color: "#fff" }}>{framesP1}</span>
-          <span style={{ color: "#aaa" }}>Best of {bestOf}</span>
+          <div>
+            <div style={{ color: "#aaa", textAlign: "center" }}>Best of {bestOf}</div>
+            {matchStartIso && (
+              <div style={{ color: "#888", fontSize: "0.75vw", fontWeight: "normal", textAlign: "center", marginTop: "0.2vh" }}>
+                Start: {isMatchStartToday ? "Heute" : formatDDMMYYYY(matchStartIso)} um {formatHHMM(matchStartIso)}
+              </div>
+            )}
+          </div>
           <span className="stats-col-frames" style={{ color: "#fff" }}>{framesP2}</span>
         </div>
 

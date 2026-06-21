@@ -27,6 +27,7 @@ export interface MatchState {
   currentFrame: number;
   tableNumber: string | null;
   finished: boolean;
+  startedAt?: string;
   inputMode?: InputMode;
   redsCount?: number;
   bbState?: import("./ballbyball").BBState | null;
@@ -55,6 +56,7 @@ export function createInitialMatchState(): MatchState {
     currentFrame: 1,
     tableNumber: localStorage.getItem("tableNumber"),
     finished: false,
+    startedAt: new Date().toISOString(),
   };
 }
 

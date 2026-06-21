@@ -421,9 +421,9 @@ export function BallByBallDialog({
               const redsEditor = phase !== "colors_only" ? (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5vw", border: "1px solid #666", borderRadius: "6px", padding: "0.4vh 0.6vw" }}>
                   <span style={{ color: "#777", fontSize: "1.5vw" }}>Rote:</span>
-                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.max(0, redsRemaining - 1))} disabled={redsRemaining <= 0} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining <= 0 ? 0.3 : 1, cursor: redsRemaining <= 0 ? "not-allowed" : "pointer", border: "1px solid #777" }}>−</button>
+                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.max(0, redsRemaining - 1))} disabled={redsRemaining <= 0} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining <= 0 ? 0.3 : 1, cursor: redsRemaining <= 0 ? "not-allowed" : "pointer", border: "1.5px solid #c0c0c0" }}>−</button>
                   <span style={{ color: "#bbb", fontSize: "1.5vw", minWidth: "1.5vw", textAlign: "center" }}>{redsRemaining}</span>
-                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.min(15, redsRemaining + 1))} disabled={redsRemaining >= 15} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining >= 15 ? 0.3 : 1, cursor: redsRemaining >= 15 ? "not-allowed" : "pointer", border: "1px solid #777" }}>+</button>
+                  <button className="bbb-btn-stepper" onClick={() => setPendingReds(Math.min(15, redsRemaining + 1))} disabled={redsRemaining >= 15} style={{ ...actionBtnLg("#222", "#aaa"), padding: "1.1vh 0.95vw", opacity: redsRemaining >= 15 ? 0.3 : 1, cursor: redsRemaining >= 15 ? "not-allowed" : "pointer", border: "1.5px solid #c0c0c0" }}>+</button>
                 </div>
               ) : <div />;
               return (

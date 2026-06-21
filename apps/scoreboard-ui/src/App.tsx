@@ -1872,6 +1872,7 @@ export function App() {
       {showStats && (
         <MatchStatsDialog
           history={history}
+          matchStartedAt={match.startedAt ?? null}
           nameP1={match.players[0].name}
           nameP2={match.players[1].name}
           bestOf={match.bestOf}

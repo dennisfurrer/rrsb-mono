@@ -2790,7 +2790,7 @@ div { font-weight: bold; }
   text-overflow: ellipsis;
 }
 
-.stats-col-labels span:nth-child(2) {
+.stats-col-labels > *:nth-child(2) {
   width: 22%;
   text-align: center;
   font-size: 1.5vw;
@@ -3055,5 +3055,5 @@ div { font-weight: bold; }
 }
 
 .frame-end-btn-glow {
-  animation: frame-end-glow 0.9s ease-in-out infinite;
+  animation: frame-end-glow 4s ease-in-out infinite;
 }
