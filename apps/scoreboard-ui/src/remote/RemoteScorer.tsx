@@ -491,6 +491,12 @@ function BreakPad({
           </FlashButton>
         )}
       </div>
+
+      {pointsRunning && (
+        <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+          Frame beenden
+        </FlashButton>
+      )}
     </>
   );
 }
