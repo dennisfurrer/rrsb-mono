@@ -1,6 +1,7 @@
 # Cloudflare Pages — scoreboard UI.
 # Direct-upload deploy via .github/workflows/deploy-scoreboard.yml (no Cloudflare
 # git build). `wrangler pages deploy` reads name + output dir from here.
+# Production URL: https://rrsb-scoreboard.pages.dev
 name = "rrsb-scoreboard"
 compatibility_date = "2026-06-21"
 pages_build_output_dir = "dist"
