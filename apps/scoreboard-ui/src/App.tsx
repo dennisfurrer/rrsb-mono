@@ -1643,6 +1643,8 @@ export function App() {
           framesP2={match.players[1].frames}
           nameP1={match.players[0].name}
           nameP2={match.players[1].name}
+          colorP1={resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff"}
+          colorP2={resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833"}
           bestOf={match.bestOf}
           isFrameStart={isFrameStart}
           onChangeBestOf={changeBestOf}

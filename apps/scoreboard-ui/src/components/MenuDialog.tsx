@@ -31,6 +31,98 @@ function AutoTextButton({ children, className, onClick, style, disabled }: {
   );
 }
 
+function FitWidthText({ text }: { text: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.fontSize = "";
+    void el.offsetWidth;
+    let fs = parseFloat(getComputedStyle(el).fontSize);
+    while (fs > 6 && el.scrollWidth > el.clientWidth + 1) {
+      fs -= 0.5;
+      el.style.fontSize = `${fs}px`;
+    }
+  }, [text]);
+
+  return (
+    <span style={{ display: "block", width: "100%", fontSize: "0.5em", fontWeight: "normal" }}>
+      <span ref={ref} style={{ display: "block", whiteSpace: "nowrap", overflow: "hidden" }}>
+        {text}
+      </span>
+    </span>
+  );
+}
+
+function RedsTriangleIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  const radius = 3.2;
+  const spacing = 9;
+  const circles: { cx: number; cy: number }[] = [];
+  [1, 2, 3, 4, 5].forEach((count, r) => {
+    const cy = 6 + r * spacing;
+    for (let i = 0; i < count; i++) {
+      circles.push({ cx: 25 + (i - (count - 1) / 2) * spacing, cy });
+    }
+  });
+  return (
+    <svg viewBox="0 0 50 48" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      {circles.map((c, i) => (
+        <circle key={i} cx={c.cx} cy={c.cy} r={radius} fill="#dd2222" />
+      ))}
+    </svg>
+  );
+}
+
+function SnookerTableIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 30 60" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      <rect x={1} y={1} width={28} height={58} rx={3} fill="#6a3a18" />
+      <rect x={5} y={5} width={20} height={50} rx={1.5} fill="#1a7a3a" />
+      {[[5, 5], [25, 5], [5, 55], [25, 55], [5, 30], [25, 30]].map(([cx, cy], i) => (
+        <circle key={i} cx={cx} cy={cy} r={2.4} fill="#111" />
+      ))}
+    </svg>
+  );
+}
+
+function BallIcon({ size = "1em", style, fill = "#dd2222", highlight = "#ff9999" }: { size?: string; style?: React.CSSProperties; fill?: string; highlight?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      <circle cx={10} cy={10} r={9} fill={fill} stroke="#0006" strokeWidth={0.6} />
+      <circle cx={7.3} cy={6.8} r={2.2} fill={highlight} opacity={0.6} />
+    </svg>
+  );
+}
+
+function FinishFlagIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 20 20" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      <rect x={2.6} y={1} width={1.4} height={18} fill="#ccc" />
+      <rect x={4} y={1} width={6.5} height={4} fill="#111" />
+      <rect x={10.5} y={1} width={6.1} height={4} fill="#eee" />
+      <rect x={4} y={5} width={6.5} height={4} fill="#eee" />
+      <rect x={10.5} y={5} width={6.1} height={4} fill="#111" />
+    </svg>
+  );
+}
+
+function UndoArrowIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function RedoArrowIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      <path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z" fill="currentColor" />
+    </svg>
+  );
+}
+
 interface Props {
   onUndo?: () => void;
   onRedo?: () => void;
@@ -46,6 +138,8 @@ interface Props {
   framesP2: number;
   nameP1: string;
   nameP2: string;
+  colorP1?: string;
+  colorP2?: string;
   matchFinished: boolean;
   hasEntries: boolean;
   bestOf: number;
@@ -68,6 +162,8 @@ export function MenuDialog({
   framesP2,
   nameP1,
   nameP2,
+  colorP1,
+  colorP2,
   matchFinished,
   hasEntries,
   bestOf,
@@ -83,6 +179,8 @@ export function MenuDialog({
   const newBestOf = framesP1 + framesP2;
   const isTied = framesP1 === framesP2;
   const p1Wins = framesP1 > framesP2;
+  const frameEndActive = onFrameEnd !== undefined && !isFrameTied;
+  const matchEndActive = !!onMatchEnd;
 
   if (confirmMatchEnd && onMatchEnd) {
     return (
@@ -100,7 +198,7 @@ export function MenuDialog({
             width: "52vw",
           }}
         >
-          <div style={{ color: "#fff", fontSize: "3.16vw", fontWeight: "bold", textAlign: "center" }}>
+          <div style={{ color: "#ddd", fontSize: "2.8vw", fontWeight: "bold", textAlign: "center" }}>
             Match wirklich mit folgendem Ergebnis vorzeitig beenden?
           </div>
           <div
@@ -121,7 +219,7 @@ export function MenuDialog({
               }}
             >
               {/* Left name */}
-              <span style={{ color: isTied ? "#fff" : (p1Wins ? "#fff" : "#777"), flex: 1, textAlign: "left", display: "flex", alignItems: "center", gap: "0.5vw", overflow: "hidden", minWidth: 0 }}>
+              <span style={{ color: colorP1 ?? "#5599ff", flex: 1, textAlign: "left", display: "flex", alignItems: "center", gap: "0.5vw", overflow: "hidden", minWidth: 0 }}>
                 <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{nameP1}</span>
                 {p1Wins && <span style={{ fontSize: "55%", lineHeight: 1, flexShrink: 0 }}>🏆</span>}
               </span>
@@ -145,7 +243,7 @@ export function MenuDialog({
                 </span>
               </div>
               {/* Right name */}
-              <span style={{ color: isTied ? "#fff" : (p1Wins ? "#777" : "#fff"), flex: 1, textAlign: "right", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5vw", overflow: "hidden", minWidth: 0 }}>
+              <span style={{ color: colorP2 ?? "#ff8833", flex: 1, textAlign: "right", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5vw", overflow: "hidden", minWidth: 0 }}>
                 {!isTied && !p1Wins && <span style={{ fontSize: "55%", lineHeight: 1, flexShrink: 0 }}>🏆</span>}
                 <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{nameP2}</span>
               </span>
@@ -331,43 +429,49 @@ export function MenuDialog({
             style={{ background: "none", border: "none", color: "#555", fontSize: "1.6vw", cursor: "pointer", padding: "0 0.3vw", lineHeight: 1, minHeight: "unset", height: "auto" }}
           >✕</button>
         </div>
-        <button className="menu-btn-new-game" onClick={matchFinished || !hasEntries ? onNewGame : () => setConfirmNewGame(true)}>
-          New game / Neues Spiel
-        </button>
+        <AutoTextButton className="menu-btn-new-game" onClick={matchFinished || !hasEntries ? onNewGame : () => setConfirmNewGame(true)}>
+          <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+            <SnookerTableIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+            <span>New game</span>
+            <FitWidthText text="Neues Spiel starten" />
+          </span>
+        </AutoTextButton>
         {!matchFinished && (
-          <button className="menu-btn-rerack" onClick={() => setConfirmRerack(true)}>
-            Re-rack
-          </button>
+          <AutoTextButton className="menu-btn-rerack" onClick={() => setConfirmRerack(true)}>
+            <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+              <RedsTriangleIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+              <span>Re-rack</span>
+              <FitWidthText text="Laufenden Frame neu starten" />
+            </span>
+          </AutoTextButton>
         )}
-        {((onFrameEnd !== undefined && !isFrameTied) || !!onMatchEnd) && (
+        {(frameEndActive || matchEndActive) && (
           <div style={{ display: "flex", gap: "0.8vw" }}>
-            <AutoTextButton
-              className="menu-btn-frame-end"
-              onClick={onFrameEnd !== undefined && !isFrameTied ? onFrameEnd : undefined}
-              disabled={onFrameEnd === undefined || isFrameTied}
-              style={{
-                flex: 1,
-                ...(onFrameEnd === undefined
-                  ? { opacity: 0.3, cursor: "not-allowed" }
-                  : isFrameTied
-                    ? { opacity: 0.4, cursor: "not-allowed" }
-                    : {}),
-              }}
-            >
-              🔴 {onFrameEnd !== undefined
-                ? (isFrameTied ? "Frame-Ende (Unentschieden!)" : `Frame-Ende (${frameLeader} gewinnt Frame)`)
-                : "Frame-Ende"}
-            </AutoTextButton>
-            <AutoTextButton
-              className="menu-btn-match-end"
-              style={{ flex: 1, background: "#265c26", color: "#00e600", ...(!onMatchEnd ? { opacity: 0.3, cursor: "not-allowed" } : {}) }}
-              onClick={onMatchEnd ? () => setConfirmMatchEnd(true) : undefined}
-              disabled={!onMatchEnd}
-            >
-              🏁 {onMatchEnd
-                ? (isTied ? "Match-Ende (Unentschieden)" : `Match-Ende (${matchLeader} gewinnt)`)
-                : "Match-Ende"}
-            </AutoTextButton>
+            {frameEndActive ? (
+              <AutoTextButton
+                className="menu-btn-frame-end"
+                onClick={onFrameEnd}
+                style={{ flex: 1 }}
+              >
+                <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+                  <BallIcon fill="#f4f4f4" highlight="#ffffff" style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+                  <span>Frame-Ende</span>
+                  <FitWidthText text={`${frameLeader} gewinnt Frame`} />
+                </span>
+              </AutoTextButton>
+            ) : (
+              <AutoTextButton
+                className="menu-btn-match-end"
+                style={{ flex: 1, background: "#265c26", color: "#00e600" }}
+                onClick={() => setConfirmMatchEnd(true)}
+              >
+                <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+                  <FinishFlagIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+                  <span>Match-Ende</span>
+                  <FitWidthText text={isTied ? "Spiel endet Unentschieden" : `Spiel endet ${framesP1}:${framesP2} für ${matchLeader}`} />
+                </span>
+              </AutoTextButton>
+            )}
           </div>
         )}
         {(onUndo || onRedo) && (
@@ -378,7 +482,11 @@ export function MenuDialog({
               onClick={onUndo}
               disabled={!onUndo}
             >
-              <span style={{ fontFamily: "'Wingdings 3'" }}>L</span>{" Undo / Letzte Eingabe löschen"}
+              <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+                <UndoArrowIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+                <span>Undo</span>
+                <FitWidthText text="Letzte Eingabe löschen" />
+              </span>
             </AutoTextButton>
             <AutoTextButton
               className="menu-btn-redo"
@@ -386,7 +494,11 @@ export function MenuDialog({
               onClick={onRedo}
               disabled={!onRedo}
             >
-              {"Redo / Gelöschtes wiederherstellen. "}<span style={{ fontFamily: "'Wingdings 3'" }}>M</span>
+              <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
+                <RedoArrowIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+                <span>Redo</span>
+                <FitWidthText text="Gelöschtes wiederherstellen." />
+              </span>
             </AutoTextButton>
           </div>
         )}
@@ -401,35 +513,35 @@ export function MenuDialog({
             gap: "1.4vh",
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6vw" }}>
-                <span style={{ color: "#8899cc", fontSize: "1.9vw", fontWeight: "bold" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                <span style={{ color: "#8899cc", fontSize: "1.5vw", fontWeight: "bold", whiteSpace: "nowrap" }}>
                   Ausspielziel ändern
                 </span>
                 <button
                   className="menu-btn-info"
                   onClick={(e) => { e.stopPropagation(); setShowBestOfInfo(true); }}
                   type="button"
-                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "1.8vw", height: "1.8vw", fontSize: "1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
                 >
                   ?
                 </button>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "1.2vw" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "1vw" }}>
                 <button
                   className="menu-btn-bestof"
                   onClick={() => setPendingBestOf((v) => Math.max(totalFrames, v - 1))}
                   disabled={pendingBestOf <= totalFrames}
-                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
+                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "1.6vw", fontWeight: "bold", padding: "0.6vh 1.2vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   −
                 </button>
-                <span style={{ color: pendingChanged ? "#f0c040" : "#fff", fontSize: "2.2vw", fontWeight: "bold", minWidth: "7vw", textAlign: "center" }}>
+                <span style={{ color: pendingChanged ? "#f0c040" : "#fff", fontSize: "1.7vw", fontWeight: "bold", minWidth: "5.5vw", textAlign: "center", whiteSpace: "nowrap" }}>
                   Best of {pendingBestOf}
                 </span>
                 <button
                   className="menu-btn-bestof"
                   onClick={() => setPendingBestOf((v) => v + 1)}
-                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "2vw", fontWeight: "bold", padding: "0.6vh 1.5vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
+                  style={{ background: "#2a2a3a", color: "#ccc", border: "1px solid #555", borderRadius: "6px", fontSize: "1.6vw", fontWeight: "bold", padding: "0.6vh 1.2vw", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   +
                 </button>
@@ -438,12 +550,14 @@ export function MenuDialog({
             {pendingChanged && (
               <div style={{ display: "flex", gap: "1vw" }}>
                 <button
+                  className="bbb-btn-cancel"
                   onClick={() => setPendingBestOf(bestOf)}
                   style={{ flex: 1, background: "#3a1a1a", color: "#f87171", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
                   Abbrechen
                 </button>
                 <button
+                  className="bbb-btn-ok"
                   onClick={() => { onChangeBestOf(pendingBestOf); }}
                   style={{ flex: 1, background: "#1a5c1a", color: "#4ade80", border: "none", borderRadius: "6px", fontSize: "1.8vw", fontWeight: "bold", padding: "0.8vh 0", cursor: "pointer", width: "auto", textAlign: "center", height: "auto" }}
                 >
