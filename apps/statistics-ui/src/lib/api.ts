@@ -98,17 +98,6 @@ export interface FrameAction {
   timestamp: string;
 }
 
-export interface HighlightPeriods {
-  months: { year: number; month: number }[];
-  years: number[];
-}
-
-export interface HighlightPlayer {
-  name: string;
-  nationality: string;
-  achievements: { stat: string; value: number | string; icon: string }[];
-}
-
 export interface BreakMatrixEntry {
   player_name: string;
   "Total Frames Played": number;
@@ -122,81 +111,6 @@ export interface BreakMatrixEntry {
   "80+": number;
   "90+": number;
   "100+": number;
-}
-
-// ===== Practice (solo training) =====
-
-export type PracticeMode = "break" | "hitmiss";
-export type PracticeKind = "break" | "cleared" | "missed" | "hit" | "miss";
-export type BallColor = "red" | "yellow" | "green" | "brown" | "blue" | "pink" | "black";
-export type MissType = "long" | "easy" | "difficult" | "position";
-export type Pocket = "corner" | "middle";
-
-export interface PracticeAttempt {
-  id: string;
-  orderIndex: number;
-  kind: PracticeKind;
-  value: number | null;
-  missType: MissType | null;
-  ball: BallColor | null;
-  pocket: Pocket | null;
-  timestamp: string;
-}
-
-export interface PracticeSessionSummary {
-  id: string;
-  playerName: string;
-  routineId: string;
-  routineName: string;
-  mode: PracticeMode;
-  redsCount: number | null;
-  deviceId: string | null;
-  tableNumber: number | null;
-  locationId: string | null;
-  startedAt: string;
-  finishedAt: string | null;
-  finalized: boolean;
-  attemptCount?: number;
-}
-
-export interface PracticeSessionDetail extends PracticeSessionSummary {
-  attempts: PracticeAttempt[];
-}
-
-export interface PracticeSessionListResponse {
-  data: PracticeSessionSummary[];
-  metadata: {
-    pagination: {
-      currentPage: number;
-      pageSize: number;
-      totalSessions: number;
-      totalPages: number;
-    };
-  };
-}
-
-export interface PracticeStatsPerRoutine {
-  routineId: string;
-  routineName: string;
-  mode: PracticeMode;
-  sessionCount: number;
-  totalAttempts: number;
-  highestBreak: number;
-  averageBreak: number;
-  clearedCount: number;
-  missedCount: number;
-  hits: number;
-  misses: number;
-  hitRate: number;
-  bestStreak: number;
-  lastSessionAt: string;
-}
-
-export interface PracticeStatsResponse {
-  playerName: string;
-  totalSessions: number;
-  totalAttempts: number;
-  perRoutine: PracticeStatsPerRoutine[];
 }
 
 export const api = {
@@ -226,48 +140,5 @@ export const api = {
   },
   data: {
     years: () => fetchJSON<number[]>("/data/years"),
-  },
-  highlights: {
-    availablePeriods: () =>
-      fetchJSON<HighlightPeriods>("/highlights/available-periods"),
-    month: (year: number, month: number) =>
-      fetchJSON<{
-        month: string;
-        year: number;
-        playerOfTheMonth: HighlightPlayer | null;
-      }>(`/highlights/month/${year}/${month}`),
-    year: (year: number) =>
-      fetchJSON<{
-        year: number;
-        playerOfTheYear: HighlightPlayer | null;
-      }>(`/highlights/year/${year}`),
-  },
-  practice: {
-    list: (params: {
-      player?: string;
-      routine?: string;
-      from?: string;
-      to?: string;
-      page?: number;
-      limit?: number;
-    } = {}) => {
-      const qs = new URLSearchParams();
-      if (params.player) qs.set("player", params.player);
-      if (params.routine) qs.set("routine", params.routine);
-      if (params.from) qs.set("from", params.from);
-      if (params.to) qs.set("to", params.to);
-      if (params.page) qs.set("page", String(params.page));
-      if (params.limit) qs.set("limit", String(params.limit));
-      const url = `/api/practice-sessions${qs.toString() ? `?${qs}` : ""}`;
-      return fetch(`${API_BASE_URL}${url}`)
-        .then((r) => r.json())
-        .then((r) => r as PracticeSessionListResponse);
-    },
-    session: (id: string) =>
-      fetchJSON<PracticeSessionDetail>(`/api/practice-sessions/${id}`),
-    playerStats: (name: string) =>
-      fetchJSON<PracticeStatsResponse>(
-        `/api/practice-stats/player/${encodeURIComponent(name)}`
-      ),
   },
 };

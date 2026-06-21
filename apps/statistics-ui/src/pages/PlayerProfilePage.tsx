@@ -1,405 +1,266 @@
-import { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Chart, registerables } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useState, useEffect, useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
-  api,
-  type PlayerProfile,
-  type PracticeStatsResponse,
-} from "../lib/api";
+  apiV3,
+  type V3PlayerProfile,
+  type V3PlayerListItem,
+} from "../lib/apiV3";
+import { Flag, BreakBadge, StatTile } from "../components/ui";
+import { matchTypeLabel, pct, formatDate } from "../lib/snooker";
 
-Chart.register(...registerables, ChartDataLabels);
-
-function getBreakClass(value: number): string {
-  if (value >= 100) return "century";
-  if (value >= 70) return "elite";
-  if (value >= 50) return "high";
-  if (value >= 20) return "mid";
-  return "low";
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((s) => s[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
-function AnimatedNumber({ value }: { value: number }) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    const duration = 1500;
-    const start = performance.now();
-    let raf: number;
-
-    function tick(now: number) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(value * eased));
-      if (progress < 1) raf = requestAnimationFrame(tick);
-    }
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [value]);
-
-  return <>{display}</>;
-}
-
-export function PlayerProfilePage() {
-  const { name } = useParams<{ name: string }>();
-  const [profile, setProfile] = useState<PlayerProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstance = useRef<Chart | null>(null);
-
-  useEffect(() => {
-    if (!name) return;
-    setLoading(true);
-    setError(null);
-    api.players
-      .profile(name)
-      .then(setProfile)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, [name]);
-
-  // Win rate chart
-  useEffect(() => {
-    if (!chartRef.current || !profile) return;
-    if (chartInstance.current) chartInstance.current.destroy();
-
-    const matchWinRate =
-      profile.matchesCompleted > 0
-        ? Math.round((profile.matchesWon / profile.matchesCompleted) * 100)
-        : 0;
-    const frameWinRate =
-      profile.framesWon + profile.framesLost > 0
-        ? Math.round(
-            (profile.framesWon / (profile.framesWon + profile.framesLost)) * 100
-          )
-        : 0;
-    const deciderRate = Math.round(profile.deciderWinRate);
-
-    chartInstance.current = new Chart(chartRef.current, {
-      type: "doughnut",
-      data: {
-        labels: ["Match Win %", "Frame Win %", "Decider Win %"],
-        datasets: [
-          {
-            data: [matchWinRate, frameWinRate, deciderRate],
-            backgroundColor: [
-              "rgba(234,179,8,0.9)",
-              "rgba(20,255,236,0.9)",
-              "rgba(139,92,246,0.9)",
-            ],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "65%",
-        plugins: {
-          legend: {
-            position: "bottom",
-            labels: { color: "#94a3b8", padding: 16 },
-          },
-          datalabels: {
-            color: "#fff",
-            font: { weight: "bold", size: 14 },
-            formatter: (val: number) => `${val}%`,
-          },
-        },
-      },
-    });
-
-    return () => {
-      chartInstance.current?.destroy();
-    };
-  }, [profile]);
-
-  if (loading) return <div className="empty-state">Loading...</div>;
-  if (error) return <div className="empty-state">Error: {error}</div>;
-  if (!profile) return <div className="empty-state">Player not found.</div>;
-
-  const matchWinRate =
-    profile.matchesCompleted > 0
-      ? Math.round((profile.matchesWon / profile.matchesCompleted) * 100)
-      : 0;
-  const frameWinRate =
-    profile.framesWon + profile.framesLost > 0
-      ? Math.round(
-          (profile.framesWon / (profile.framesWon + profile.framesLost)) * 100
-        )
-      : 0;
-
-  const topBreaks = [...profile.highBreaks].sort((a, b) => b - a).slice(0, 10);
-  const hasCentury = profile.highBreaks.some((b) => b >= 100);
-
-  const stats = [
-    { label: "Matches Won", value: profile.matchesWon },
-    { label: "Matches Lost", value: profile.matchesLost },
-    { label: "Match Win Rate", value: matchWinRate, suffix: "%" },
-    { label: "Frames Won", value: profile.framesWon },
-    { label: "Frames Lost", value: profile.framesLost },
-    { label: "Frame Win Rate", value: frameWinRate, suffix: "%" },
-    { label: "Avg Break / Match", value: Math.round(profile.averageBreakPerMatch) },
-    { label: "Win Streak", value: profile.longestWinStreak },
-    { label: "Decider Win Rate", value: Math.round(profile.deciderWinRate), suffix: "%" },
-  ];
-
+/** SVG donut showing a win-rate percentage. */
+function WinRing({ value, label }: { value: number; label: string }) {
+  const r = 46;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - value / 100);
   return (
-    <div className="animate-in">
-      {/* Hero */}
-      <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <h1 className="page-title" style={{ marginBottom: 8 }}>
-          {profile.name}
-        </h1>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 8,
-            flexWrap: "wrap",
-          }}
-        >
-          {hasCentury && (
-            <span className="break-badge century" style={{ fontSize: "0.8em" }}>
-              Century Maker
-            </span>
-          )}
-          {profile.matchesWon > 100 && (
-            <span
-              className="break-badge elite"
-              style={{ fontSize: "0.8em" }}
-            >
-              Champion
-            </span>
-          )}
-          {matchWinRate >= 70 && profile.matchesCompleted >= 10 && (
-            <span
-              className="break-badge high"
-              style={{ fontSize: "0.8em" }}
-            >
-              Win Rate Master
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Stats grid */}
-      <div className="grid-auto" style={{ marginBottom: 32 }}>
-        {stats.map((s, i) => (
-          <div
-            key={s.label}
-            className="glass-card stat-card animate-in"
-            style={{ animationDelay: `${i * 0.05}s` }}
-          >
-            <div className="stat-value">
-              <AnimatedNumber value={s.value} />
-              {s.suffix ?? ""}
-            </div>
-            <div className="stat-label">{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Charts and top breaks row */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-          marginBottom: 32,
-        }}
-      >
-        {/* Win rate chart */}
-        <div className="glass-card" style={{ height: 300, padding: 16 }}>
-          <h3
-            style={{
-              fontSize: "0.9em",
-              color: "var(--text-muted)",
-              marginBottom: 8,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Win Rate Analysis
-          </h3>
-          <div style={{ height: "calc(100% - 30px)" }}>
-            <canvas ref={chartRef} />
-          </div>
-        </div>
-
-        {/* Top 10 breaks */}
-        <div className="glass-card" style={{ padding: 16 }}>
-          <h3
-            style={{
-              fontSize: "0.9em",
-              color: "var(--text-muted)",
-              marginBottom: 12,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Top 10 Breaks
-          </h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))",
-              gap: 8,
-            }}
-          >
-            {topBreaks.map((b, i) => (
-              <div
-                key={i}
-                className={`break-badge ${getBreakClass(b)} animate-in`}
-                style={{
-                  animationDelay: `${i * 0.08}s`,
-                  fontSize: "1.1em",
-                  padding: "8px 12px",
-                  textAlign: "center",
-                }}
-              >
-                {b}
-              </div>
-            ))}
-            {topBreaks.length === 0 && (
-              <span style={{ color: "var(--text-muted)" }}>No breaks yet</span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Most frequent opponent */}
-      {profile.mostFrequentOpponent && (
-        <div className="glass-card" style={{ marginBottom: 32 }}>
-          <h3
-            style={{
-              fontSize: "0.9em",
-              color: "var(--text-muted)",
-              marginBottom: 8,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Rivalry
-          </h3>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Link
-              to={`/profile/${encodeURIComponent(profile.mostFrequentOpponent.opponent)}`}
-              style={{ fontWeight: 600, fontSize: "1.1em" }}
-            >
-              {profile.mostFrequentOpponent.opponent}
-            </Link>
-            <span style={{ color: "var(--text-secondary)" }}>
-              {profile.mostFrequentOpponent.total_matches} matches &middot;{" "}
-              {profile.mostFrequentOpponent.wins} wins &middot;{" "}
-              {Math.round(profile.mostFrequentOpponent.win_percentage)}% win rate
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Solo Training panel */}
-      <TrainingPanel playerName={profile.name} />
-
-      {/* CTA */}
-      <div style={{ textAlign: "center" }}>
-        <Link
-          to={`/matches/${encodeURIComponent(profile.name)}`}
-          className="glass-btn active"
-          style={{ padding: "12px 24px", fontSize: "1em" }}
-        >
-          View Match History
-        </Link>
-      </div>
+    <div className="winrate-ring">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r={r} fill="none" stroke="var(--surface-3)" strokeWidth="10" />
+        <circle
+          cx="60" cy="60" r={r} fill="none"
+          stroke="url(#wr)" strokeWidth="10" strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={off}
+          transform="rotate(-90 60 60)"
+          style={{ transition: "stroke-dashoffset 0.6s ease" }}
+        />
+        <defs>
+          <linearGradient id="wr" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#2ee6c4" />
+            <stop offset="100%" stopColor="#34d0ff" />
+          </linearGradient>
+        </defs>
+        <text x="60" y="56" textAnchor="middle" fontFamily="Space Grotesk" fontSize="26" fontWeight="700" fill="var(--text)">
+          {value}%
+        </text>
+        <text x="60" y="76" textAnchor="middle" fontSize="10" fill="var(--text-3)" letterSpacing="1.2">
+          {label}
+        </text>
+      </svg>
     </div>
   );
 }
 
-function TrainingPanel({ playerName }: { playerName: string }) {
-  const [stats, setStats] = useState<PracticeStatsResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+function ComparePanel({ me, players }: { me: V3PlayerProfile; players: V3PlayerListItem[] }) {
+  const [oppName, setOppName] = useState("");
+  const [opp, setOpp] = useState<V3PlayerProfile | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    api.practice
-      .playerStats(playerName)
-      .then(setStats)
-      .catch(() => setStats(null))
-      .finally(() => setLoading(false));
-  }, [playerName]);
+    if (!oppName) {
+      setOpp(null);
+      return;
+    }
+    apiV3.players.profile(oppName).then(setOpp).catch(() => setOpp(null));
+  }, [oppName]);
 
-  if (loading) return null;
-  if (!stats || stats.totalSessions === 0) return null;
+  const rows: { label: string; a: number; b: number; suffix?: string }[] = opp
+    ? [
+        { label: "Matches", a: me.lifetime.matchesPlayed, b: opp.lifetime.matchesPlayed },
+        { label: "Win %", a: pct(me.lifetime.matchesWon, me.lifetime.matchesPlayed), b: pct(opp.lifetime.matchesWon, opp.lifetime.matchesPlayed), suffix: "%" },
+        { label: "Frames won", a: me.lifetime.framesWon, b: opp.lifetime.framesWon },
+        { label: "Frame win %", a: pct(me.lifetime.framesWon, me.lifetime.framesWon + me.lifetime.framesLost), b: pct(opp.lifetime.framesWon, opp.lifetime.framesWon + opp.lifetime.framesLost), suffix: "%" },
+        { label: "High break", a: me.lifetime.highBreak, b: opp.lifetime.highBreak },
+        { label: "Centuries", a: me.lifetime.centuries, b: opp.lifetime.centuries },
+        { label: "Breaks 8+", a: me.lifetime.breaksOver7, b: opp.lifetime.breaksOver7 },
+      ]
+    : [];
 
   return (
-    <div className="glass-card" style={{ marginBottom: 32 }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 12,
-        }}
+    <div className="card">
+      <div className="section-label">Compare</div>
+      <select
+        className="glass-btn"
+        value={oppName}
+        onChange={(e) => setOppName(e.target.value)}
+        style={{ width: "100%", marginBottom: 16 }}
       >
-        <h3
-          style={{
-            fontSize: "0.9em",
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-          }}
-        >
-          Solo Training
-        </h3>
-        <Link
-          to={`/training?player=${encodeURIComponent(playerName)}`}
-          style={{ fontSize: "0.9em" }}
-        >
-          {stats.totalSessions} Sessions &rsaquo;
-        </Link>
-      </div>
-      <div className="training-routine-summary">
-        {stats.perRoutine.map((r) => (
-          <div key={r.routineId} className="training-routine-card">
-            <div className="training-routine-card-name">{r.routineName}</div>
-            <div className="training-routine-card-meta">
-              {r.sessionCount} Sessions &middot; {r.totalAttempts} Versuche
+        <option value="">Select a player to compare…</option>
+        {players
+          .filter((p) => p.name !== me.name)
+          .map((p) => (
+            <option key={p.id} value={p.name}>
+              {p.name}
+            </option>
+          ))}
+      </select>
+
+      {opp && (
+        <div className="compare-grid animate-in">
+          <div className="compare-val left" style={{ color: "var(--accent)" }}>{me.name.split(" ")[0]}</div>
+          <div className="compare-metric" />
+          <div className="compare-val right" style={{ color: "var(--violet)" }}>{opp.name.split(" ")[0]}</div>
+          {rows.map((r) => (
+            <div className="compare-row" key={r.label}>
+              <div className={`compare-val left ${r.a >= r.b ? "win" : ""}`}>{r.a}{r.suffix ?? ""}</div>
+              <div className="compare-metric">{r.label}</div>
+              <div className={`compare-val right ${r.b >= r.a ? "win" : ""}`}>{r.b}{r.suffix ?? ""}</div>
             </div>
-            {r.mode === "break" ? (
-              <div className="training-routine-card-stats">
-                <span>
-                  <strong>{r.highestBreak || "—"}</strong> Höchste
-                </span>
-                <span>
-                  <strong>
-                    {r.totalAttempts === 0 ? "—" : r.averageBreak.toFixed(1)}
-                  </strong>{" "}
-                  Schnitt
-                </span>
-                <span>
-                  <strong>{r.clearedCount}</strong> Aufgeräumt
-                </span>
-              </div>
-            ) : (
-              <div className="training-routine-card-stats">
-                <span>
-                  <strong>
-                    {r.hits + r.misses === 0
-                      ? "—"
-                      : `${Math.round(r.hitRate * 100)}%`}
-                  </strong>{" "}
-                  Quote
-                </span>
-                <span>
-                  <strong>{r.bestStreak}</strong> Beste Serie
-                </span>
-              </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function PlayerProfilePage() {
+  const { name } = useParams<{ name: string }>();
+  const [profile, setProfile] = useState<V3PlayerProfile | null>(null);
+  const [players, setPlayers] = useState<V3PlayerListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [typeFilter, setTypeFilter] = useState<string>("ALL");
+
+  useEffect(() => {
+    if (!name) return;
+    setLoading(true);
+    setError(false);
+    apiV3.players
+      .profile(name)
+      .then(setProfile)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+    apiV3.players.list().then(setPlayers).catch(() => {});
+  }, [name]);
+
+  const filteredMatches = useMemo(() => {
+    if (!profile) return [];
+    if (typeFilter === "ALL") return profile.recentMatches;
+    return profile.recentMatches.filter((m) => m.matchType === typeFilter);
+  }, [profile, typeFilter]);
+
+  if (loading) return <div className="spinner" />;
+  if (error || !profile) return <div className="card empty-state">Player not found.</div>;
+
+  const lt = profile.lifetime;
+  const winPct = pct(lt.matchesWon, lt.matchesPlayed);
+  const framePct = pct(lt.framesWon, lt.framesWon + lt.framesLost);
+  const avgFor = lt.matchesPlayed ? Math.round(lt.pointsFor / lt.matchesPlayed) : 0;
+  const topBreaks = [...lt.highBreaks].sort((a, b) => b - a).slice(0, 8);
+  const matchTypes = Array.from(new Set(profile.recentMatches.map((m) => m.matchType)));
+
+  return (
+    <div className="animate-in">
+      <Link to="/players" className="back-link">‹ All players</Link>
+
+      {/* Hero */}
+      <div className="profile-hero">
+        <div className="profile-avatar">{initials(profile.name)}</div>
+        <div className="profile-id">
+          <div className="profile-name">
+            {profile.name}
+            <Flag ioc={profile.nationalityIOC} size={26} />
+          </div>
+          <div className="profile-meta">
+            {profile.club && <span>{profile.club}</span>}
+            {profile.club && <span>·</span>}
+            <span>{lt.matchesPlayed} matches</span>
+            <span>·</span>
+            <span>{lt.framesWon + lt.framesLost} frames</span>
+            {lt.highBreak > 0 && (
+              <>
+                <span>·</span>
+                <span>High break {lt.highBreak}</span>
+              </>
             )}
           </div>
-        ))}
+        </div>
+        <div className="profile-spacer" />
+        <WinRing value={winPct} label="Win rate" />
+      </div>
+
+      {/* Key stats */}
+      <div className="stat-grid" style={{ marginTop: 18 }}>
+        <StatTile label="Matches won" value={lt.matchesWon} sub={`${lt.matchesLost} lost`} accent />
+        <StatTile label="Frame win %" value={<span className="grad-text">{framePct}%</span>} sub={`${lt.framesWon}–${lt.framesLost}`} />
+        <StatTile label="High break" value={lt.highBreak} sub={`${lt.breaksOver7} breaks 8+`} />
+        <StatTile label="Centuries" value={<span className="gold-text">{lt.centuries}</span>} />
+        <StatTile label="Avg points / match" value={avgFor} />
+        <StatTile label="Fouls conceded" value={lt.foulPointsConceded} sub={`${lt.foulsCommitted} fouls`} />
+      </div>
+
+      <div className="two-col" style={{ marginTop: 18 }}>
+        <div className="col-stack">
+          {/* By match type */}
+          {profile.byMatchType.length > 0 && (
+            <div className="card">
+              <div className="section-label">By format</div>
+              {profile.byMatchType.map((s) => {
+                const wp = pct(s.matchesWon, s.matchesPlayed);
+                return (
+                  <div className="bar-row" key={s.matchType}>
+                    <div className="bar-label">{matchTypeLabel(s.matchType)}</div>
+                    <div className="bar-track">
+                      <div className="bar-fill" style={{ width: `${wp}%` }} />
+                    </div>
+                    <div className="bar-val">{s.matchesWon}/{s.matchesPlayed} · {wp}%</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Recent matches */}
+          <div className="card">
+            <div className="frame-detail-head" style={{ marginBottom: 14 }}>
+              <div className="section-label" style={{ margin: 0 }}>Recent matches</div>
+              {matchTypes.length > 1 && (
+                <select className="glass-btn" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+                  <option value="ALL">All formats</option>
+                  {matchTypes.map((t) => (
+                    <option key={t} value={t}>{matchTypeLabel("", t)}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className="col-stack">
+              {filteredMatches.length === 0 ? (
+                <div className="empty-state" style={{ padding: "24px 0" }}>No matches.</div>
+              ) : (
+                filteredMatches.map((m) => {
+                  const res = m.isWinner ? "w" : m.status !== "ACTIVE" && m.framesWon === m.framesLost ? "d" : "l";
+                  return (
+                    <Link key={m.matchId} to={`/match/${m.matchId}`} className="match-row">
+                      <span className={`match-row-result ${res}`}>{res.toUpperCase()}</span>
+                      <div style={{ minWidth: 0 }}>
+                        <div className="match-row-opp">vs {m.opponent ?? "—"}</div>
+                        <div className="match-row-sub">{matchTypeLabel("", m.matchType)} · {formatDate(m.startedAt)}{m.highBreak > 0 ? ` · HB ${m.highBreak}` : ""}</div>
+                      </div>
+                      <span className="match-row-score">{m.framesWon}–{m.framesLost}</span>
+                      <span style={{ color: "var(--text-dim)" }}>›</span>
+                    </Link>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-stack">
+          {/* Top breaks */}
+          <div className="card">
+            <div className="section-label">Top breaks</div>
+            {topBreaks.length > 0 ? (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {topBreaks.map((b, i) => (
+                  <BreakBadge key={i} value={b} />
+                ))}
+              </div>
+            ) : (
+              <div style={{ color: "var(--text-3)", fontSize: "0.88rem" }}>No breaks above 7 yet.</div>
+            )}
+          </div>
+
+          {/* Compare */}
+          <ComparePanel me={profile} players={players} />
+        </div>
       </div>
     </div>
   );

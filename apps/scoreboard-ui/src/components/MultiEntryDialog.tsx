@@ -1,16 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 import {
   BALL_COLORS,
+  FOUL_TYPES,
   MISS_TYPES,
   POCKETS,
   routineById,
   type BallColor,
   type BreakAttempt,
+  type FoulType,
   type MissType,
   type Pocket,
   type SoloRoutineId,
 } from "../lib/solo";
 import { BreakEntryDialog } from "./BreakEntryDialog";
+
+const BALL_ICON_COLOR: Record<BallColor, string> = {
+  red: "#dd2222",
+  yellow: "#f0c020",
+  green: "#1f9e4a",
+  brown: "#7a4a1e",
+  blue: "#2255cc",
+  pink: "#ff77b3",
+  black: "#161616",
+};
+
+function BallDot({ color, label }: { color: string; label: string }) {
+  return (
+    <svg viewBox="0 0 20 20" style={{ width: "1.2vw", height: "1.2vw", display: "block" }} aria-label={label}>
+      <circle cx={10} cy={10} r={9} fill={color} stroke="#0006" strokeWidth={0.6} />
+      <circle cx={7.3} cy={6.8} r={2.2} fill="#ffffff" opacity={0.55} />
+    </svg>
+  );
+}
 
 interface Props {
   playerName: string;
@@ -63,7 +84,7 @@ export function MultiEntryDialog({
 
   const addBreak = (
     value: number,
-    details?: { missType?: MissType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
   ) => {
     setPending((p) => [
       ...p,
@@ -71,6 +92,7 @@ export function MultiEntryDialog({
         kind: "break",
         value,
         missType: details?.missType,
+        foulType: details?.foulType,
         ball: details?.ball,
         pocket: details?.pocket,
         timestamp: Date.now(),
@@ -299,7 +321,7 @@ export function MultiEntryDialog({
                   </div>
                   <div className="multi-entry-confirm-buttons" style={{ flexDirection: "column", gap: "0.8vh" }}>
                     <button
-                      className="multi-entry-confirm-yes"
+                      className="multi-entry-confirm-yes multi-entry-confirm-yes--save frame-end-btn-glow"
                       style={{ background: "#1a5c1a", color: "#4ade80", borderColor: "#2a8c2a", padding: "2.2vh 1.5vw" }}
                       onClick={() => {
                         onSaveAndNewSession?.(pending);
@@ -389,7 +411,7 @@ export function MultiEntryDialog({
             Statistik
           </button>
           <button
-            className={`multi-entry-save ${pending.length === 0 ? "disabled" : ""}`}
+            className={`multi-entry-save ${pending.length === 0 ? "disabled" : "frame-end-btn-glow"}`}
             onClick={commit}
             disabled={pending.length === 0}
           >
@@ -424,6 +446,7 @@ export function MultiEntryDialog({
               {routine.explanation ?? "Erklärung folgt…"}
             </div>
             <button
+              className="bbb-btn-ok"
               onClick={() => setShowInfo(false)}
               style={{ flexShrink: 0, alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.6vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a5c1a", color: "#4ade80", fontFamily: "inherit" }}
             >
@@ -476,22 +499,33 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
         { label: "100+",     count: values.filter((v) => v >= 100).length },
       ];
 
-  const missTypeCounts: { label: string; count: number }[] = MISS_TYPES.map((m) => ({
+  const missTypeCounts: { label: string; count: number }[] = MISS_TYPES.filter((m) => m.id !== "foul").map((m) => ({
     label: m.label,
     count: breaks.filter((b) => b.missType === m.id).length,
   })).filter((x) => x.count > 0);
 
-  const ballCounts: { label: string; count: number }[] = BALL_COLORS.map((bc) => ({
+  const foulTotal = breaks.filter((b) => b.missType === "foul").length;
+
+  const foulTypeCounts: { label: string; count: number }[] = FOUL_TYPES.map((f) => ({
+    label: f.label,
+    count: breaks.filter((b) => b.foulType === f.id).length,
+  })).filter((x) => x.count > 0);
+
+  const ballCounts: { id: BallColor; label: string; count: number }[] = BALL_COLORS.map((bc) => ({
+    id: bc.id,
     label: bc.label,
     count: breaks.filter((b) => b.ball === bc.id).length,
   })).filter((x) => x.count > 0);
 
-  const pocketCounts: { label: string; count: number }[] = POCKETS.map((p) => ({
+  const pocketCounts: { label: string; side: "yellow" | "green"; blackSpot: boolean; hasS: boolean; count: number }[] = POCKETS.map((p) => ({
     label: p.label,
+    side: p.side,
+    blackSpot: p.blackSpot,
+    hasS: p.blackSpot || p.id.startsWith("middle"),
     count: breaks.filter((b) => b.pocket === p.id).length,
   })).filter((x) => x.count > 0);
 
-  const hasMissDetails = missTypeCounts.length > 0 || ballCounts.length > 0 || pocketCounts.length > 0;
+  const hasMissDetails = missTypeCounts.length > 0 || foulTotal > 0 || ballCounts.length > 0 || pocketCounts.length > 0;
 
   return (
     <div className="stats-overlay" onClick={onClose}>
@@ -560,31 +594,58 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
         {hasMissDetails && (
           <div className="stats-section">
             <div className="stats-section-title">Fehler-Details</div>
-            <div className="stats-detail-grid">
-              {missTypeCounts.length > 0 && (
-                <div className="stats-detail-group">
-                  <div className="stats-detail-group-label">Fehlerart</div>
-                  {missTypeCounts.map((x) => (
-                    <div className="stats-detail-row" key={x.label}>
-                      <span>{x.label}</span><span>{x.count}</span>
-                    </div>
-                  ))}
+
+            {foulTotal > 0 && (
+              <div className="stats-fouls-group">
+                <div className="stats-fouls-group-label">
+                  Fouls <span className="stats-fouls-group-total">{foulTotal}</span>
                 </div>
-              )}
+                {foulTypeCounts.length > 0 && (
+                  <div className="stats-detail-grid">
+                    <div className="stats-detail-group">
+                      {foulTypeCounts.map((x) => (
+                        <div className="stats-detail-row" key={x.label}>
+                          <span>{x.label}</span><span>{x.count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="stats-detail-grid">
               {ballCounts.length > 0 && (
                 <div className="stats-detail-group">
-                  <div className="stats-detail-group-label">Kugel</div>
+                  <div className="stats-detail-group-label">Ball</div>
                   {ballCounts.map((x) => (
-                    <div className="stats-detail-row" key={x.label}>
-                      <span>{x.label}</span><span>{x.count}</span>
+                    <div className="stats-detail-row" key={x.label} style={{ justifyContent: "flex-start", gap: "0.5em" }}>
+                      <BallDot color={BALL_ICON_COLOR[x.id]} label={x.label} />
+                      <span>{x.count}</span>
                     </div>
                   ))}
                 </div>
               )}
               {pocketCounts.length > 0 && (
-                <div className="stats-detail-group">
+                <div className="stats-detail-group" style={{ marginLeft: "-5.5vw" }}>
                   <div className="stats-detail-group-label">Loch</div>
-                  {pocketCounts.map((x) => (
+                  {pocketCounts.map((x, i) => (
+                    <div className="stats-detail-row" key={i}>
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.3em" }}>
+                        {x.label}
+                        {x.blackSpot && <BallDot color={BALL_ICON_COLOR.black} label="Schwarz" />}
+                        {x.hasS && <span>s.</span>}
+                        <BallDot color={BALL_ICON_COLOR[x.side]} label={x.side === "yellow" ? "Gelb" : "Grün"} />
+                      </span>
+                      <span>{x.count}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {missTypeCounts.length > 0 && (
+                <div className="stats-detail-group">
+                  <div className="stats-detail-group-label">Fehlerart</div>
+                  {missTypeCounts.map((x) => (
                     <div className="stats-detail-row" key={x.label}>
                       <span>{x.label}</span><span>{x.count}</span>
                     </div>
@@ -630,13 +691,17 @@ function PendingRow({ attempt, index, isClearanceCandidate, seriesMode, onCleara
     const m = MISS_TYPES.find((x) => x.id === attempt.missType);
     if (m) tags.push(m.label);
   }
+  if (attempt.foulType) {
+    const f = FOUL_TYPES.find((x) => x.id === attempt.foulType);
+    if (f) tags.push(f.label);
+  }
   if (attempt.ball) {
     const b = BALL_COLORS.find((x) => x.id === attempt.ball);
     if (b) tags.push(b.label);
   }
   if (attempt.pocket) {
     const p = POCKETS.find((x) => x.id === attempt.pocket);
-    if (p) tags.push(p.label);
+    if (p) tags.push(p.fullLabel);
   }
   return (
     <div className="multi-entry-row-content">

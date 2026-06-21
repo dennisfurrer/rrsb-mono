@@ -394,7 +394,17 @@ export const ModelName = {
   FrameAction: 'FrameAction',
   MatchAssignment: 'MatchAssignment',
   PracticeSession: 'PracticeSession',
-  PracticeAttempt: 'PracticeAttempt'
+  PracticeAttempt: 'PracticeAttempt',
+  V3Player: 'V3Player',
+  V3PlayerMatchTypeStat: 'V3PlayerMatchTypeStat',
+  V3Match: 'V3Match',
+  V3MatchPlayer: 'V3MatchPlayer',
+  V3Frame: 'V3Frame',
+  V3Break: 'V3Break',
+  V3Ball: 'V3Ball',
+  V3Event: 'V3Event',
+  V3RemoteSession: 'V3RemoteSession',
+  V3RemoteEvent: 'V3RemoteEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "player" | "location" | "user" | "scoreboardConfig" | "namesList" | "namesListEntry" | "match" | "frameAction" | "matchAssignment" | "practiceSession" | "practiceAttempt"
+    modelProps: "player" | "location" | "user" | "scoreboardConfig" | "namesList" | "namesListEntry" | "match" | "frameAction" | "matchAssignment" | "practiceSession" | "practiceAttempt" | "v3Player" | "v3PlayerMatchTypeStat" | "v3Match" | "v3MatchPlayer" | "v3Frame" | "v3Break" | "v3Ball" | "v3Event" | "v3RemoteSession" | "v3RemoteEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1228,6 +1238,746 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    V3Player: {
+      payload: Prisma.$V3PlayerPayload<ExtArgs>
+      fields: Prisma.V3PlayerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3PlayerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3PlayerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        findFirst: {
+          args: Prisma.V3PlayerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3PlayerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        findMany: {
+          args: Prisma.V3PlayerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>[]
+        }
+        create: {
+          args: Prisma.V3PlayerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        createMany: {
+          args: Prisma.V3PlayerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3PlayerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>[]
+        }
+        delete: {
+          args: Prisma.V3PlayerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        update: {
+          args: Prisma.V3PlayerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3PlayerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3PlayerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3PlayerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3PlayerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerPayload>
+        }
+        aggregate: {
+          args: Prisma.V3PlayerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Player>
+        }
+        groupBy: {
+          args: Prisma.V3PlayerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3PlayerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3PlayerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3PlayerCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3PlayerMatchTypeStat: {
+      payload: Prisma.$V3PlayerMatchTypeStatPayload<ExtArgs>
+      fields: Prisma.V3PlayerMatchTypeStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3PlayerMatchTypeStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3PlayerMatchTypeStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        findFirst: {
+          args: Prisma.V3PlayerMatchTypeStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3PlayerMatchTypeStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        findMany: {
+          args: Prisma.V3PlayerMatchTypeStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>[]
+        }
+        create: {
+          args: Prisma.V3PlayerMatchTypeStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        createMany: {
+          args: Prisma.V3PlayerMatchTypeStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3PlayerMatchTypeStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>[]
+        }
+        delete: {
+          args: Prisma.V3PlayerMatchTypeStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        update: {
+          args: Prisma.V3PlayerMatchTypeStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3PlayerMatchTypeStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3PlayerMatchTypeStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3PlayerMatchTypeStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3PlayerMatchTypeStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3PlayerMatchTypeStatPayload>
+        }
+        aggregate: {
+          args: Prisma.V3PlayerMatchTypeStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3PlayerMatchTypeStat>
+        }
+        groupBy: {
+          args: Prisma.V3PlayerMatchTypeStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3PlayerMatchTypeStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3PlayerMatchTypeStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3PlayerMatchTypeStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3Match: {
+      payload: Prisma.$V3MatchPayload<ExtArgs>
+      fields: Prisma.V3MatchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3MatchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3MatchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        findFirst: {
+          args: Prisma.V3MatchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3MatchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        findMany: {
+          args: Prisma.V3MatchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>[]
+        }
+        create: {
+          args: Prisma.V3MatchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        createMany: {
+          args: Prisma.V3MatchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3MatchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>[]
+        }
+        delete: {
+          args: Prisma.V3MatchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        update: {
+          args: Prisma.V3MatchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3MatchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3MatchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3MatchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3MatchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPayload>
+        }
+        aggregate: {
+          args: Prisma.V3MatchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Match>
+        }
+        groupBy: {
+          args: Prisma.V3MatchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3MatchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3MatchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3MatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3MatchPlayer: {
+      payload: Prisma.$V3MatchPlayerPayload<ExtArgs>
+      fields: Prisma.V3MatchPlayerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3MatchPlayerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3MatchPlayerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        findFirst: {
+          args: Prisma.V3MatchPlayerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3MatchPlayerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        findMany: {
+          args: Prisma.V3MatchPlayerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>[]
+        }
+        create: {
+          args: Prisma.V3MatchPlayerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        createMany: {
+          args: Prisma.V3MatchPlayerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3MatchPlayerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>[]
+        }
+        delete: {
+          args: Prisma.V3MatchPlayerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        update: {
+          args: Prisma.V3MatchPlayerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3MatchPlayerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3MatchPlayerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3MatchPlayerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3MatchPlayerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3MatchPlayerPayload>
+        }
+        aggregate: {
+          args: Prisma.V3MatchPlayerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3MatchPlayer>
+        }
+        groupBy: {
+          args: Prisma.V3MatchPlayerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3MatchPlayerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3MatchPlayerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3MatchPlayerCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3Frame: {
+      payload: Prisma.$V3FramePayload<ExtArgs>
+      fields: Prisma.V3FrameFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3FrameFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3FrameFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        findFirst: {
+          args: Prisma.V3FrameFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3FrameFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        findMany: {
+          args: Prisma.V3FrameFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>[]
+        }
+        create: {
+          args: Prisma.V3FrameCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        createMany: {
+          args: Prisma.V3FrameCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3FrameCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>[]
+        }
+        delete: {
+          args: Prisma.V3FrameDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        update: {
+          args: Prisma.V3FrameUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        deleteMany: {
+          args: Prisma.V3FrameDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3FrameUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3FrameUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>[]
+        }
+        upsert: {
+          args: Prisma.V3FrameUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3FramePayload>
+        }
+        aggregate: {
+          args: Prisma.V3FrameAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Frame>
+        }
+        groupBy: {
+          args: Prisma.V3FrameGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3FrameGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3FrameCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3FrameCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3Break: {
+      payload: Prisma.$V3BreakPayload<ExtArgs>
+      fields: Prisma.V3BreakFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3BreakFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3BreakFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        findFirst: {
+          args: Prisma.V3BreakFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3BreakFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        findMany: {
+          args: Prisma.V3BreakFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>[]
+        }
+        create: {
+          args: Prisma.V3BreakCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        createMany: {
+          args: Prisma.V3BreakCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3BreakCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>[]
+        }
+        delete: {
+          args: Prisma.V3BreakDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        update: {
+          args: Prisma.V3BreakUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3BreakDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3BreakUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3BreakUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3BreakUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BreakPayload>
+        }
+        aggregate: {
+          args: Prisma.V3BreakAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Break>
+        }
+        groupBy: {
+          args: Prisma.V3BreakGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3BreakGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3BreakCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3BreakCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3Ball: {
+      payload: Prisma.$V3BallPayload<ExtArgs>
+      fields: Prisma.V3BallFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3BallFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3BallFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        findFirst: {
+          args: Prisma.V3BallFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3BallFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        findMany: {
+          args: Prisma.V3BallFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>[]
+        }
+        create: {
+          args: Prisma.V3BallCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        createMany: {
+          args: Prisma.V3BallCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3BallCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>[]
+        }
+        delete: {
+          args: Prisma.V3BallDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        update: {
+          args: Prisma.V3BallUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3BallDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3BallUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3BallUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3BallUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3BallPayload>
+        }
+        aggregate: {
+          args: Prisma.V3BallAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Ball>
+        }
+        groupBy: {
+          args: Prisma.V3BallGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3BallGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3BallCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3BallCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3Event: {
+      payload: Prisma.$V3EventPayload<ExtArgs>
+      fields: Prisma.V3EventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3EventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3EventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        findFirst: {
+          args: Prisma.V3EventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3EventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        findMany: {
+          args: Prisma.V3EventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>[]
+        }
+        create: {
+          args: Prisma.V3EventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        createMany: {
+          args: Prisma.V3EventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3EventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>[]
+        }
+        delete: {
+          args: Prisma.V3EventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        update: {
+          args: Prisma.V3EventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3EventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3EventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3EventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3EventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3EventPayload>
+        }
+        aggregate: {
+          args: Prisma.V3EventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3Event>
+        }
+        groupBy: {
+          args: Prisma.V3EventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3EventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3EventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3EventCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3RemoteSession: {
+      payload: Prisma.$V3RemoteSessionPayload<ExtArgs>
+      fields: Prisma.V3RemoteSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3RemoteSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3RemoteSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.V3RemoteSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3RemoteSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        findMany: {
+          args: Prisma.V3RemoteSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>[]
+        }
+        create: {
+          args: Prisma.V3RemoteSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        createMany: {
+          args: Prisma.V3RemoteSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3RemoteSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.V3RemoteSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        update: {
+          args: Prisma.V3RemoteSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3RemoteSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3RemoteSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3RemoteSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3RemoteSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.V3RemoteSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3RemoteSession>
+        }
+        groupBy: {
+          args: Prisma.V3RemoteSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3RemoteSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3RemoteSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3RemoteSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    V3RemoteEvent: {
+      payload: Prisma.$V3RemoteEventPayload<ExtArgs>
+      fields: Prisma.V3RemoteEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.V3RemoteEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.V3RemoteEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        findFirst: {
+          args: Prisma.V3RemoteEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.V3RemoteEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        findMany: {
+          args: Prisma.V3RemoteEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>[]
+        }
+        create: {
+          args: Prisma.V3RemoteEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        createMany: {
+          args: Prisma.V3RemoteEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.V3RemoteEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>[]
+        }
+        delete: {
+          args: Prisma.V3RemoteEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        update: {
+          args: Prisma.V3RemoteEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.V3RemoteEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.V3RemoteEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.V3RemoteEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.V3RemoteEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$V3RemoteEventPayload>
+        }
+        aggregate: {
+          args: Prisma.V3RemoteEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateV3RemoteEvent>
+        }
+        groupBy: {
+          args: Prisma.V3RemoteEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3RemoteEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.V3RemoteEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.V3RemoteEventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1429,6 +2179,7 @@ export const PracticeAttemptScalarFieldEnum = {
   kind: 'kind',
   value: 'value',
   missType: 'missType',
+  foulType: 'foulType',
   ball: 'ball',
   pocket: 'pocket',
   timestamp: 'timestamp'
@@ -1437,12 +2188,228 @@ export const PracticeAttemptScalarFieldEnum = {
 export type PracticeAttemptScalarFieldEnum = (typeof PracticeAttemptScalarFieldEnum)[keyof typeof PracticeAttemptScalarFieldEnum]
 
 
+export const V3PlayerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nationalityIOC: 'nationalityIOC',
+  club: 'club',
+  matchesPlayed: 'matchesPlayed',
+  matchesWon: 'matchesWon',
+  matchesLost: 'matchesLost',
+  matchesDrawn: 'matchesDrawn',
+  framesWon: 'framesWon',
+  framesLost: 'framesLost',
+  pointsFor: 'pointsFor',
+  pointsAgainst: 'pointsAgainst',
+  breaksOver7: 'breaksOver7',
+  highBreak: 'highBreak',
+  highBreaks: 'highBreaks',
+  centuries: 'centuries',
+  foulsCommitted: 'foulsCommitted',
+  foulPointsConceded: 'foulPointsConceded',
+  potsByColor: 'potsByColor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3PlayerScalarFieldEnum = (typeof V3PlayerScalarFieldEnum)[keyof typeof V3PlayerScalarFieldEnum]
+
+
+export const V3PlayerMatchTypeStatScalarFieldEnum = {
+  id: 'id',
+  playerId: 'playerId',
+  matchType: 'matchType',
+  matchesPlayed: 'matchesPlayed',
+  matchesWon: 'matchesWon',
+  matchesLost: 'matchesLost',
+  matchesDrawn: 'matchesDrawn',
+  framesWon: 'framesWon',
+  framesLost: 'framesLost',
+  highBreak: 'highBreak',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3PlayerMatchTypeStatScalarFieldEnum = (typeof V3PlayerMatchTypeStatScalarFieldEnum)[keyof typeof V3PlayerMatchTypeStatScalarFieldEnum]
+
+
+export const V3MatchScalarFieldEnum = {
+  id: 'id',
+  matchType: 'matchType',
+  matchTypeCode: 'matchTypeCode',
+  inputMode: 'inputMode',
+  redsCount: 'redsCount',
+  bestOf: 'bestOf',
+  status: 'status',
+  isDraw: 'isDraw',
+  winnerPlayerIndex: 'winnerPlayerIndex',
+  tableNumber: 'tableNumber',
+  locationId: 'locationId',
+  deviceId: 'deviceId',
+  remoteRoomId: 'remoteRoomId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3MatchScalarFieldEnum = (typeof V3MatchScalarFieldEnum)[keyof typeof V3MatchScalarFieldEnum]
+
+
+export const V3MatchPlayerScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  playerIndex: 'playerIndex',
+  playerId: 'playerId',
+  name: 'name',
+  nationalityIOC: 'nationalityIOC',
+  club: 'club',
+  startingHandicap: 'startingHandicap',
+  framesWon: 'framesWon',
+  isWinner: 'isWinner',
+  highBreak: 'highBreak',
+  highBreaks: 'highBreaks',
+  pointsFor: 'pointsFor',
+  pointsAgainst: 'pointsAgainst'
+} as const
+
+export type V3MatchPlayerScalarFieldEnum = (typeof V3MatchPlayerScalarFieldEnum)[keyof typeof V3MatchPlayerScalarFieldEnum]
+
+
+export const V3FrameScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameNumber: 'frameNumber',
+  redsCount: 'redsCount',
+  inputMode: 'inputMode',
+  breakerPlayerIndex: 'breakerPlayerIndex',
+  winnerPlayerIndex: 'winnerPlayerIndex',
+  scoreP0: 'scoreP0',
+  scoreP1: 'scoreP1',
+  rerackCount: 'rerackCount',
+  respottedBlack: 'respottedBlack',
+  status: 'status',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type V3FrameScalarFieldEnum = (typeof V3FrameScalarFieldEnum)[keyof typeof V3FrameScalarFieldEnum]
+
+
+export const V3BreakScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameId: 'frameId',
+  playerIndex: 'playerIndex',
+  sequence: 'sequence',
+  totalPoints: 'totalPoints',
+  ballCount: 'ballCount',
+  isClearance: 'isClearance',
+  isManualEntry: 'isManualEntry',
+  endReason: 'endReason',
+  missType: 'missType',
+  foulType: 'foulType',
+  ball: 'ball',
+  pocket: 'pocket',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type V3BreakScalarFieldEnum = (typeof V3BreakScalarFieldEnum)[keyof typeof V3BreakScalarFieldEnum]
+
+
+export const V3BallScalarFieldEnum = {
+  id: 'id',
+  breakId: 'breakId',
+  frameId: 'frameId',
+  sequence: 'sequence',
+  ballType: 'ballType',
+  points: 'points',
+  isFreeBall: 'isFreeBall',
+  phase: 'phase',
+  redsRemainingAfter: 'redsRemainingAfter',
+  createdAt: 'createdAt'
+} as const
+
+export type V3BallScalarFieldEnum = (typeof V3BallScalarFieldEnum)[keyof typeof V3BallScalarFieldEnum]
+
+
+export const V3EventScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameId: 'frameId',
+  breakId: 'breakId',
+  seq: 'seq',
+  type: 'type',
+  playerIndex: 'playerIndex',
+  ballType: 'ballType',
+  points: 'points',
+  missType: 'missType',
+  foulType: 'foulType',
+  pocket: 'pocket',
+  isFreeBall: 'isFreeBall',
+  freeBallGranted: 'freeBallGranted',
+  phase: 'phase',
+  redsRemaining: 'redsRemaining',
+  oldReds: 'oldReds',
+  newReds: 'newReds',
+  source: 'source',
+  remotePlayerIndex: 'remotePlayerIndex',
+  wasUndone: 'wasUndone',
+  manualFlagToIgnore: 'manualFlagToIgnore',
+  label: 'label',
+  payload: 'payload',
+  clientTs: 'clientTs',
+  createdAt: 'createdAt'
+} as const
+
+export type V3EventScalarFieldEnum = (typeof V3EventScalarFieldEnum)[keyof typeof V3EventScalarFieldEnum]
+
+
+export const V3RemoteSessionScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  roomId: 'roomId',
+  playerIndex: 'playerIndex',
+  token: 'token',
+  connectCount: 'connectCount',
+  createdAt: 'createdAt',
+  rotatedAt: 'rotatedAt',
+  lastConnectedAt: 'lastConnectedAt',
+  lastDisconnectedAt: 'lastDisconnectedAt'
+} as const
+
+export type V3RemoteSessionScalarFieldEnum = (typeof V3RemoteSessionScalarFieldEnum)[keyof typeof V3RemoteSessionScalarFieldEnum]
+
+
+export const V3RemoteEventScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  roomId: 'roomId',
+  sessionId: 'sessionId',
+  type: 'type',
+  playerIndex: 'playerIndex',
+  commandType: 'commandType',
+  commandPayload: 'commandPayload',
+  createdAt: 'createdAt'
+} as const
+
+export type V3RemoteEventScalarFieldEnum = (typeof V3RemoteEventScalarFieldEnum)[keyof typeof V3RemoteEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1459,6 +2426,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1587,6 +2563,20 @@ export type ListEnumMissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'FoulType'
+ */
+export type EnumFoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FoulType'>
+    
+
+
+/**
+ * Reference to a field of type 'FoulType[]'
+ */
+export type ListEnumFoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FoulType[]'>
+    
+
+
+/**
  * Reference to a field of type 'BallColor'
  */
 export type EnumBallColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BallColor'>
@@ -1611,6 +2601,216 @@ export type EnumPocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
  * Reference to a field of type 'Pocket[]'
  */
 export type ListEnumPocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Pocket[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MatchType'
+ */
+export type EnumV3MatchTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MatchType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MatchType[]'
+ */
+export type ListEnumV3MatchTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MatchType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3InputMode'
+ */
+export type EnumV3InputModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3InputMode'>
+    
+
+
+/**
+ * Reference to a field of type 'V3InputMode[]'
+ */
+export type ListEnumV3InputModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3InputMode[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MatchStatus'
+ */
+export type EnumV3MatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MatchStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MatchStatus[]'
+ */
+export type ListEnumV3MatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MatchStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3FrameStatus'
+ */
+export type EnumV3FrameStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3FrameStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'V3FrameStatus[]'
+ */
+export type ListEnumV3FrameStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3FrameStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BreakEndReason'
+ */
+export type EnumV3BreakEndReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BreakEndReason'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BreakEndReason[]'
+ */
+export type ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BreakEndReason[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MissType'
+ */
+export type EnumV3MissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MissType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3MissType[]'
+ */
+export type ListEnumV3MissTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3MissType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3FoulType'
+ */
+export type EnumV3FoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3FoulType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3FoulType[]'
+ */
+export type ListEnumV3FoulTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3FoulType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BallColor'
+ */
+export type EnumV3BallColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BallColor'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BallColor[]'
+ */
+export type ListEnumV3BallColorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BallColor[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3Pocket'
+ */
+export type EnumV3PocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3Pocket'>
+    
+
+
+/**
+ * Reference to a field of type 'V3Pocket[]'
+ */
+export type ListEnumV3PocketFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3Pocket[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BallType'
+ */
+export type EnumV3BallTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BallType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BallType[]'
+ */
+export type ListEnumV3BallTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BallType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BBPhase'
+ */
+export type EnumV3BBPhaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BBPhase'>
+    
+
+
+/**
+ * Reference to a field of type 'V3BBPhase[]'
+ */
+export type ListEnumV3BBPhaseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3BBPhase[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3EventType'
+ */
+export type EnumV3EventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3EventType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3EventType[]'
+ */
+export type ListEnumV3EventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3EventType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3EventSource'
+ */
+export type EnumV3EventSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3EventSource'>
+    
+
+
+/**
+ * Reference to a field of type 'V3EventSource[]'
+ */
+export type ListEnumV3EventSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3EventSource[]'>
+    
+
+
+/**
+ * Reference to a field of type 'V3RemoteEventType'
+ */
+export type EnumV3RemoteEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3RemoteEventType'>
+    
+
+
+/**
+ * Reference to a field of type 'V3RemoteEventType[]'
+ */
+export type ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'V3RemoteEventType[]'>
     
 
 
@@ -1733,6 +2933,16 @@ export type GlobalOmitConfig = {
   matchAssignment?: Prisma.MatchAssignmentOmit
   practiceSession?: Prisma.PracticeSessionOmit
   practiceAttempt?: Prisma.PracticeAttemptOmit
+  v3Player?: Prisma.V3PlayerOmit
+  v3PlayerMatchTypeStat?: Prisma.V3PlayerMatchTypeStatOmit
+  v3Match?: Prisma.V3MatchOmit
+  v3MatchPlayer?: Prisma.V3MatchPlayerOmit
+  v3Frame?: Prisma.V3FrameOmit
+  v3Break?: Prisma.V3BreakOmit
+  v3Ball?: Prisma.V3BallOmit
+  v3Event?: Prisma.V3EventOmit
+  v3RemoteSession?: Prisma.V3RemoteSessionOmit
+  v3RemoteEvent?: Prisma.V3RemoteEventOmit
 }
 
 /* Types for Logging */

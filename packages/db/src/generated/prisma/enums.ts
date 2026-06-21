@@ -64,15 +64,198 @@ export const MissType = {
   LONG: 'LONG',
   EASY: 'EASY',
   DIFFICULT: 'DIFFICULT',
-  POSITION: 'POSITION'
+  POSITION: 'POSITION',
+  FOUL: 'FOUL'
 } as const
 
 export type MissType = (typeof MissType)[keyof typeof MissType]
 
 
+export const FoulType = {
+  WHITE_POTTED: 'WHITE_POTTED',
+  WRONG_BALL_HIT: 'WRONG_BALL_HIT',
+  NO_BALL_HIT: 'NO_BALL_HIT',
+  WHITE_OFF_TABLE: 'WHITE_OFF_TABLE',
+  CLOTHING_FOUL: 'CLOTHING_FOUL',
+  CUE_FOUL: 'CUE_FOUL'
+} as const
+
+export type FoulType = (typeof FoulType)[keyof typeof FoulType]
+
+
 export const Pocket = {
   CORNER: 'CORNER',
-  MIDDLE: 'MIDDLE'
+  MIDDLE: 'MIDDLE',
+  CORNER_YELLOW: 'CORNER_YELLOW',
+  CORNER_GREEN: 'CORNER_GREEN',
+  MIDDLE_YELLOW: 'MIDDLE_YELLOW',
+  MIDDLE_GREEN: 'MIDDLE_GREEN',
+  CORNER_BLACK_YELLOW: 'CORNER_BLACK_YELLOW',
+  CORNER_BLACK_GREEN: 'CORNER_BLACK_GREEN'
 } as const
 
 export type Pocket = (typeof Pocket)[keyof typeof Pocket]
+
+
+export const V3MatchType = {
+  SIX_REDS: 'SIX_REDS',
+  LIGA_A: 'LIGA_A',
+  LIGA_BC: 'LIGA_BC',
+  OPEN_TURNIER: 'OPEN_TURNIER',
+  QT: 'QT',
+  SONSTIGES_TURNIER: 'SONSTIGES_TURNIER',
+  SWISS_SNOOKER_CUP: 'SWISS_SNOOKER_CUP',
+  TRAININGS_SPIEL: 'TRAININGS_SPIEL',
+  WOCHENTURNIER: 'WOCHENTURNIER',
+  OTHER: 'OTHER'
+} as const
+
+export type V3MatchType = (typeof V3MatchType)[keyof typeof V3MatchType]
+
+
+export const V3InputMode = {
+  BREAK: 'BREAK',
+  BALL_BY_BALL: 'BALL_BY_BALL'
+} as const
+
+export type V3InputMode = (typeof V3InputMode)[keyof typeof V3InputMode]
+
+
+export const V3MatchStatus = {
+  ACTIVE: 'ACTIVE',
+  FINISHED: 'FINISHED',
+  ABORTED: 'ABORTED'
+} as const
+
+export type V3MatchStatus = (typeof V3MatchStatus)[keyof typeof V3MatchStatus]
+
+
+export const V3FrameStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type V3FrameStatus = (typeof V3FrameStatus)[keyof typeof V3FrameStatus]
+
+
+export const V3BallType = {
+  RED: 'RED',
+  YELLOW: 'YELLOW',
+  GREEN: 'GREEN',
+  BROWN: 'BROWN',
+  BLUE: 'BLUE',
+  PINK: 'PINK',
+  BLACK: 'BLACK',
+  FREE_BALL: 'FREE_BALL'
+} as const
+
+export type V3BallType = (typeof V3BallType)[keyof typeof V3BallType]
+
+
+export const V3BallColor = {
+  RED: 'RED',
+  YELLOW: 'YELLOW',
+  GREEN: 'GREEN',
+  BROWN: 'BROWN',
+  BLUE: 'BLUE',
+  PINK: 'PINK',
+  BLACK: 'BLACK'
+} as const
+
+export type V3BallColor = (typeof V3BallColor)[keyof typeof V3BallColor]
+
+
+export const V3BBPhase = {
+  RED: 'RED',
+  COLOR: 'COLOR',
+  COLORS_ONLY: 'COLORS_ONLY'
+} as const
+
+export type V3BBPhase = (typeof V3BBPhase)[keyof typeof V3BBPhase]
+
+
+export const V3MissType = {
+  LONG: 'LONG',
+  EASY: 'EASY',
+  DIFFICULT: 'DIFFICULT',
+  POSITION: 'POSITION',
+  FOUL: 'FOUL'
+} as const
+
+export type V3MissType = (typeof V3MissType)[keyof typeof V3MissType]
+
+
+export const V3FoulType = {
+  WHITE_POTTED: 'WHITE_POTTED',
+  WRONG_BALL_HIT: 'WRONG_BALL_HIT',
+  NO_BALL_HIT: 'NO_BALL_HIT',
+  WHITE_OFF_TABLE: 'WHITE_OFF_TABLE',
+  CLOTHING_FOUL: 'CLOTHING_FOUL',
+  CUE_FOUL: 'CUE_FOUL'
+} as const
+
+export type V3FoulType = (typeof V3FoulType)[keyof typeof V3FoulType]
+
+
+export const V3Pocket = {
+  CORNER: 'CORNER',
+  MIDDLE: 'MIDDLE',
+  CORNER_YELLOW: 'CORNER_YELLOW',
+  CORNER_GREEN: 'CORNER_GREEN',
+  MIDDLE_YELLOW: 'MIDDLE_YELLOW',
+  MIDDLE_GREEN: 'MIDDLE_GREEN',
+  CORNER_BLACK_YELLOW: 'CORNER_BLACK_YELLOW',
+  CORNER_BLACK_GREEN: 'CORNER_BLACK_GREEN'
+} as const
+
+export type V3Pocket = (typeof V3Pocket)[keyof typeof V3Pocket]
+
+
+export const V3BreakEndReason = {
+  MISS: 'MISS',
+  FOUL: 'FOUL',
+  FRAME_END: 'FRAME_END',
+  EDIT: 'EDIT',
+  RESPOTTED_BLACK: 'RESPOTTED_BLACK'
+} as const
+
+export type V3BreakEndReason = (typeof V3BreakEndReason)[keyof typeof V3BreakEndReason]
+
+
+export const V3EventType = {
+  POT: 'POT',
+  MANUAL_BREAK: 'MANUAL_BREAK',
+  FOUL: 'FOUL',
+  MISS: 'MISS',
+  HANDICAP: 'HANDICAP',
+  CORRECT_REDS: 'CORRECT_REDS',
+  SWITCH_PLAYER: 'SWITCH_PLAYER',
+  RERACK: 'RERACK',
+  RESPOTTED_BLACK: 'RESPOTTED_BLACK',
+  FRAME_END: 'FRAME_END',
+  MATCH_END: 'MATCH_END',
+  UNDO: 'UNDO',
+  REDO: 'REDO',
+  EDIT_LAST_BREAK: 'EDIT_LAST_BREAK'
+} as const
+
+export type V3EventType = (typeof V3EventType)[keyof typeof V3EventType]
+
+
+export const V3EventSource = {
+  DISPLAY: 'DISPLAY',
+  REMOTE_PHONE: 'REMOTE_PHONE'
+} as const
+
+export type V3EventSource = (typeof V3EventSource)[keyof typeof V3EventSource]
+
+
+export const V3RemoteEventType = {
+  SESSION_CREATED: 'SESSION_CREATED',
+  SESSION_ROTATED: 'SESSION_ROTATED',
+  PHONE_CONNECTED: 'PHONE_CONNECTED',
+  PHONE_DISCONNECTED: 'PHONE_DISCONNECTED',
+  COMMAND_RECEIVED: 'COMMAND_RECEIVED'
+} as const
+
+export type V3RemoteEventType = (typeof V3RemoteEventType)[keyof typeof V3RemoteEventType]

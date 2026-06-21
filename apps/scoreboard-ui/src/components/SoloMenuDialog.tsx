@@ -82,6 +82,7 @@ export function SoloMenuDialog({
           </div>
           <div style={{ display: "flex", gap: "2vw", width: "100%" }}>
             <button
+              className="bbb-btn-ok"
               onClick={onEndPractice}
               style={{
                 flex: 1,
@@ -98,6 +99,7 @@ export function SoloMenuDialog({
               Ja
             </button>
             <button
+              className="bbb-btn-cancel"
               onClick={() => setConfirmEnd(false)}
               style={{
                 flex: 1,

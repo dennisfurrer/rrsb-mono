@@ -272,9 +272,22 @@ export interface CreatePracticeSessionPayload {
 export interface PracticeAttemptInput {
   kind: "BREAK" | "CLEARED" | "MISSED" | "HIT" | "MISS";
   value?: number;
-  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION";
+  missType?: "LONG" | "EASY" | "DIFFICULT" | "POSITION" | "FOUL";
+  foulType?:
+    | "WHITE_POTTED"
+    | "WRONG_BALL_HIT"
+    | "NO_BALL_HIT"
+    | "WHITE_OFF_TABLE"
+    | "CLOTHING_FOUL"
+    | "CUE_FOUL";
   ball?: "RED" | "YELLOW" | "GREEN" | "BROWN" | "BLUE" | "PINK" | "BLACK";
-  pocket?: "CORNER" | "MIDDLE";
+  pocket?:
+    | "CORNER_YELLOW"
+    | "CORNER_GREEN"
+    | "MIDDLE_YELLOW"
+    | "MIDDLE_GREEN"
+    | "CORNER_BLACK_YELLOW"
+    | "CORNER_BLACK_GREEN";
 }
 
 export async function createPracticeSession(

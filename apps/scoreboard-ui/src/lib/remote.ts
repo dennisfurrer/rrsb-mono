@@ -4,6 +4,9 @@ import type { BBState, BBBallColor, BBBallType } from "./ballbyball";
 
 export { API_BASE_URL };
 
+/** v3 remote relay base — logs session/connection/command meta to the database. */
+const REMOTE_BASE = `${API_BASE_URL}/api/v3/remote`;
+
 /**
  * Commands flow phone -> display. The display applies each command through its
  * existing scoring handlers, so the display stays the single source of truth.
@@ -98,7 +101,7 @@ export async function createRemoteSession(
   playerIndex: 0 | 1
 ): Promise<string | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/remote/${roomId}/session`, {
+    const res = await fetch(`${REMOTE_BASE}/${roomId}/session`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ displayKey, playerIndex }),
@@ -117,7 +120,7 @@ export async function pushRemoteState(
   snapshot: RemoteSnapshot
 ): Promise<void> {
   try {
-    await fetch(`${API_BASE_URL}/api/remote/${roomId}/state`, {
+    await fetch(`${REMOTE_BASE}/${roomId}/state`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ displayKey, snapshot }),
@@ -135,7 +138,7 @@ export async function sendRemoteCommand(
   command: RemoteCommand
 ): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/remote/${roomId}/command`, {
+    const res = await fetch(`${REMOTE_BASE}/${roomId}/command`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, command }),
@@ -147,9 +150,9 @@ export async function sendRemoteCommand(
 }
 
 export function commandStreamUrl(roomId: string, displayKey: string): string {
-  return `${API_BASE_URL}/api/remote/${roomId}/commands?key=${encodeURIComponent(displayKey)}`;
+  return `${REMOTE_BASE}/${roomId}/commands?key=${encodeURIComponent(displayKey)}`;
 }
 
 export function stateStreamUrl(roomId: string, token: string): string {
-  return `${API_BASE_URL}/api/remote/${roomId}/stream?token=${encodeURIComponent(token)}`;
+  return `${REMOTE_BASE}/${roomId}/stream?token=${encodeURIComponent(token)}`;
 }

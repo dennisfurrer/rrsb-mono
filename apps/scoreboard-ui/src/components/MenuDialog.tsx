@@ -75,22 +75,82 @@ function RedsTriangleIcon({ size = "1em", style }: { size?: string; style?: Reac
 }
 
 function SnookerTableIcon({ size = "1em", style }: { size?: string; style?: React.CSSProperties }) {
+  const cx = 16;
+  const ballR = 0.8;
+  const rowDy = ballR * Math.sqrt(3); // vertical spacing so diagonal neighbours touch
+  const colDx = ballR * 2; // horizontal spacing so same-row neighbours touch
+  const apexCy = 17.25;
+  const redRows: { cy: number; count: number }[] = [
+    { cy: apexCy - 4 * rowDy, count: 5 },
+    { cy: apexCy - 3 * rowDy, count: 4 },
+    { cy: apexCy - 2 * rowDy, count: 3 },
+    { cy: apexCy - 1 * rowDy, count: 2 },
+    { cy: apexCy, count: 1 },
+  ];
+  const redDots = redRows.flatMap((row, ri) =>
+    Array.from({ length: row.count }, (_, i) => ({
+      key: `${ri}-${i}`,
+      cx: cx + (i - (row.count - 1) / 2) * colDx,
+      cy: row.cy,
+    }))
+  );
+
   return (
-    <svg viewBox="0 0 30 60" style={{ width: size, height: size, display: "inline-block", ...style }}>
-      <rect x={1} y={1} width={28} height={58} rx={3} fill="#6a3a18" />
-      <rect x={5} y={5} width={20} height={50} rx={1.5} fill="#1a7a3a" />
-      {[[5, 5], [25, 5], [5, 55], [25, 55], [5, 30], [25, 30]].map(([cx, cy], i) => (
-        <circle key={i} cx={cx} cy={cy} r={2.4} fill="#111" />
+    <svg viewBox="0 0 32 60" style={{ width: size, height: size, display: "inline-block", ...style }}>
+      {/* Wooden rail */}
+      <rect x={1} y={1} width={30} height={58} rx={3} fill="#6a3a18" />
+      {/* Cushions */}
+      <rect x={4} y={4} width={24} height={52} rx={1.5} fill="#0e5c28" />
+      {/* Baize playing surface */}
+      <rect x={5} y={5} width={22} height={50} rx={1.2} fill="#1a8a3a" />
+
+      {/* Baulk line + D */}
+      <line x1={5} y1={45} x2={27} y2={45} stroke="#eee" strokeWidth={0.2} opacity={0.85} />
+      <path d="M 12 45 A 4 4 0 0 0 20 45" fill="none" stroke="#eee" strokeWidth={0.2} opacity={0.85} />
+
+      {/* Pockets */}
+      {[[5, 5], [27, 5], [5, 55], [27, 55], [5, 30], [27, 30]].map(([px, py], i) => (
+        <circle key={i} cx={px} cy={py} r={1.7} fill="#0a0a0a" />
       ))}
+
+      {/* Colour spots */}
+      <circle cx={cx} cy={45} r={ballR} fill="#7a4a1e" />{/* brown */}
+      <circle cx={cx - 4} cy={45} r={ballR} fill="#1f9e4a" />{/* green */}
+      <circle cx={cx + 4} cy={45} r={ballR} fill="#f0c020" />{/* yellow */}
+      <circle cx={cx} cy={30} r={ballR} fill="#2255cc" />{/* blue */}
+      <circle cx={cx} cy={19} r={ballR} fill="#ff77b3" />{/* pink */}
+      <circle cx={cx} cy={7} r={ballR} fill="#111" />{/* black */}
+
+      {/* Reds triangle */}
+      {redDots.map((d) => (
+        <circle key={d.key} cx={d.cx} cy={d.cy} r={ballR} fill="#dd2222" />
+      ))}
+
+      {/* Cue ball resting in the D */}
+      <circle cx={cx + 1.8} cy={46.3} r={ballR} fill="#f4f4f4" />
     </svg>
   );
 }
 
-function BallIcon({ size = "1em", style, fill = "#dd2222", highlight = "#ff9999" }: { size?: string; style?: React.CSSProperties; fill?: string; highlight?: string }) {
+function BallIcon({ size = "1em", style, fill = "#dd2222", highlight = "#ff9999", lines }: { size?: string; style?: React.CSSProperties; fill?: string; highlight?: string; lines?: string[] }) {
   return (
     <svg viewBox="0 0 20 20" style={{ width: size, height: size, display: "inline-block", ...style }}>
       <circle cx={10} cy={10} r={9} fill={fill} stroke="#0006" strokeWidth={0.6} />
       <circle cx={7.3} cy={6.8} r={2.2} fill={highlight} opacity={0.6} />
+      {lines?.map((line, i) => (
+        <text
+          key={line}
+          x={10}
+          y={10 + (i - (lines.length - 1) / 2) * 4.6 + 1.5}
+          textAnchor="middle"
+          fontSize={3.6}
+          fontWeight="bold"
+          fontFamily="sans-serif"
+          fill="#111"
+        >
+          {line}
+        </text>
+      ))}
     </svg>
   );
 }
@@ -439,7 +499,13 @@ export function MenuDialog({
         {!matchFinished && (
           <AutoTextButton className="menu-btn-rerack" onClick={() => setConfirmRerack(true)}>
             <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
-              <RedsTriangleIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+              <span style={{ gridRow: "span 2", position: "relative", height: "2.4em", width: "auto", justifySelf: "center", display: "inline-block" }}>
+                <RedsTriangleIcon style={{ height: "100%", width: "auto" }} />
+                <UndoArrowIcon
+                  size="1.2em"
+                  style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#5599ff" }}
+                />
+              </span>
               <span>Re-rack</span>
               <FitWidthText text="Laufenden Frame neu starten" />
             </span>
@@ -454,7 +520,7 @@ export function MenuDialog({
                 style={{ flex: 1 }}
               >
                 <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
-                  <BallIcon fill="#f4f4f4" highlight="#ffffff" style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
+                  <BallIcon fill="#f4f4f4" highlight="#ffffff" lines={["END", "FRAME"]} style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
                   <span>Frame-Ende</span>
                   <FitWidthText text={`${frameLeader} gewinnt Frame`} />
                 </span>

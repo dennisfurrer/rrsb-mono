@@ -52,9 +52,9 @@ export function SettingsDialog({ currentTableNumber, currentCenterName, onSave, 
     width: "100%",
     padding: "0.75rem",
     fontSize: "1.1rem",
-    borderRadius: "6px",
+    borderRadius: "8px",
     border: "1px solid #555",
-    background: "#222",
+    background: "#1e1e1e",
     color: "#fff",
     marginBottom: "1rem",
     boxSizing: "border-box" as const,
@@ -66,9 +66,11 @@ export function SettingsDialog({ currentTableNumber, currentCenterName, onSave, 
         className="dialog"
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: "#333",
+          background: "linear-gradient(165deg, #2a2a2a, #181818)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "0 26px 70px rgba(0,0,0,0.65), 0 0 0 1px rgba(0,0,0,0.4)",
           padding: "2rem",
-          borderRadius: "12px",
+          borderRadius: "20px",
           minWidth: "320px",
           color: "#fff",
           fontSize: "1.2rem",
@@ -95,30 +97,34 @@ export function SettingsDialog({ currentTableNumber, currentCenterName, onSave, 
             )}
             <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
               <button
+                className="bbb-btn-ok"
                 onClick={handleAuth}
                 style={{
                   flex: 1,
                   padding: "0.75rem",
                   fontSize: "1.1rem",
-                  borderRadius: "6px",
-                  border: "none",
-                  background: "#4a9",
-                  color: "#fff",
+                  borderRadius: "10px",
+                  border: "1px solid #3a8c3a",
+                  background: "linear-gradient(165deg, #143a14, #0d2410)",
+                  color: "#4ade80",
+                  fontWeight: "bold",
                   cursor: "pointer",
                 }}
               >
                 OK
               </button>
               <button
+                className="bbb-btn-cancel"
                 onClick={onClose}
                 style={{
                   flex: 1,
                   padding: "0.75rem",
                   fontSize: "1.1rem",
-                  borderRadius: "6px",
-                  border: "none",
-                  background: "#666",
-                  color: "#fff",
+                  borderRadius: "10px",
+                  border: "1px solid #666",
+                  background: "linear-gradient(165deg, #4a4a4a, #333)",
+                  color: "#ccc",
+                  fontWeight: "bold",
                   cursor: "pointer",
                 }}
               >
@@ -156,30 +162,34 @@ export function SettingsDialog({ currentTableNumber, currentCenterName, onSave, 
             </datalist>
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <button
+                className="bbb-btn-ok"
                 onClick={handleSave}
                 style={{
                   flex: 1,
                   padding: "0.75rem",
                   fontSize: "1.1rem",
-                  borderRadius: "6px",
-                  border: "none",
-                  background: "#4a9",
-                  color: "#fff",
+                  borderRadius: "10px",
+                  border: "1px solid #3a8c3a",
+                  background: "linear-gradient(165deg, #143a14, #0d2410)",
+                  color: "#4ade80",
+                  fontWeight: "bold",
                   cursor: "pointer",
                 }}
               >
                 Speichern
               </button>
               <button
+                className="bbb-btn-cancel"
                 onClick={onClose}
                 style={{
                   flex: 1,
                   padding: "0.75rem",
                   fontSize: "1.1rem",
-                  borderRadius: "6px",
-                  border: "none",
-                  background: "#666",
-                  color: "#fff",
+                  borderRadius: "10px",
+                  border: "1px solid #666",
+                  background: "linear-gradient(165deg, #4a4a4a, #333)",
+                  color: "#ccc",
+                  fontWeight: "bold",
                   cursor: "pointer",
                 }}
               >

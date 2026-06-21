@@ -43,6 +43,7 @@ export type PracticeAttemptMinAggregateOutputType = {
   kind: $Enums.PracticeAttemptKind | null
   value: number | null
   missType: $Enums.MissType | null
+  foulType: $Enums.FoulType | null
   ball: $Enums.BallColor | null
   pocket: $Enums.Pocket | null
   timestamp: Date | null
@@ -55,6 +56,7 @@ export type PracticeAttemptMaxAggregateOutputType = {
   kind: $Enums.PracticeAttemptKind | null
   value: number | null
   missType: $Enums.MissType | null
+  foulType: $Enums.FoulType | null
   ball: $Enums.BallColor | null
   pocket: $Enums.Pocket | null
   timestamp: Date | null
@@ -67,6 +69,7 @@ export type PracticeAttemptCountAggregateOutputType = {
   kind: number
   value: number
   missType: number
+  foulType: number
   ball: number
   pocket: number
   timestamp: number
@@ -91,6 +94,7 @@ export type PracticeAttemptMinAggregateInputType = {
   kind?: true
   value?: true
   missType?: true
+  foulType?: true
   ball?: true
   pocket?: true
   timestamp?: true
@@ -103,6 +107,7 @@ export type PracticeAttemptMaxAggregateInputType = {
   kind?: true
   value?: true
   missType?: true
+  foulType?: true
   ball?: true
   pocket?: true
   timestamp?: true
@@ -115,6 +120,7 @@ export type PracticeAttemptCountAggregateInputType = {
   kind?: true
   value?: true
   missType?: true
+  foulType?: true
   ball?: true
   pocket?: true
   timestamp?: true
@@ -214,6 +220,7 @@ export type PracticeAttemptGroupByOutputType = {
   kind: $Enums.PracticeAttemptKind
   value: number | null
   missType: $Enums.MissType | null
+  foulType: $Enums.FoulType | null
   ball: $Enums.BallColor | null
   pocket: $Enums.Pocket | null
   timestamp: Date
@@ -249,6 +256,7 @@ export type PracticeAttemptWhereInput = {
   kind?: Prisma.EnumPracticeAttemptKindFilter<"PracticeAttempt"> | $Enums.PracticeAttemptKind
   value?: Prisma.IntNullableFilter<"PracticeAttempt"> | number | null
   missType?: Prisma.EnumMissTypeNullableFilter<"PracticeAttempt"> | $Enums.MissType | null
+  foulType?: Prisma.EnumFoulTypeNullableFilter<"PracticeAttempt"> | $Enums.FoulType | null
   ball?: Prisma.EnumBallColorNullableFilter<"PracticeAttempt"> | $Enums.BallColor | null
   pocket?: Prisma.EnumPocketNullableFilter<"PracticeAttempt"> | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFilter<"PracticeAttempt"> | Date | string
@@ -262,6 +270,7 @@ export type PracticeAttemptOrderByWithRelationInput = {
   kind?: Prisma.SortOrder
   value?: Prisma.SortOrderInput | Prisma.SortOrder
   missType?: Prisma.SortOrderInput | Prisma.SortOrder
+  foulType?: Prisma.SortOrderInput | Prisma.SortOrder
   ball?: Prisma.SortOrderInput | Prisma.SortOrder
   pocket?: Prisma.SortOrderInput | Prisma.SortOrder
   timestamp?: Prisma.SortOrder
@@ -279,6 +288,7 @@ export type PracticeAttemptWhereUniqueInput = Prisma.AtLeast<{
   kind?: Prisma.EnumPracticeAttemptKindFilter<"PracticeAttempt"> | $Enums.PracticeAttemptKind
   value?: Prisma.IntNullableFilter<"PracticeAttempt"> | number | null
   missType?: Prisma.EnumMissTypeNullableFilter<"PracticeAttempt"> | $Enums.MissType | null
+  foulType?: Prisma.EnumFoulTypeNullableFilter<"PracticeAttempt"> | $Enums.FoulType | null
   ball?: Prisma.EnumBallColorNullableFilter<"PracticeAttempt"> | $Enums.BallColor | null
   pocket?: Prisma.EnumPocketNullableFilter<"PracticeAttempt"> | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFilter<"PracticeAttempt"> | Date | string
@@ -292,6 +302,7 @@ export type PracticeAttemptOrderByWithAggregationInput = {
   kind?: Prisma.SortOrder
   value?: Prisma.SortOrderInput | Prisma.SortOrder
   missType?: Prisma.SortOrderInput | Prisma.SortOrder
+  foulType?: Prisma.SortOrderInput | Prisma.SortOrder
   ball?: Prisma.SortOrderInput | Prisma.SortOrder
   pocket?: Prisma.SortOrderInput | Prisma.SortOrder
   timestamp?: Prisma.SortOrder
@@ -312,6 +323,7 @@ export type PracticeAttemptScalarWhereWithAggregatesInput = {
   kind?: Prisma.EnumPracticeAttemptKindWithAggregatesFilter<"PracticeAttempt"> | $Enums.PracticeAttemptKind
   value?: Prisma.IntNullableWithAggregatesFilter<"PracticeAttempt"> | number | null
   missType?: Prisma.EnumMissTypeNullableWithAggregatesFilter<"PracticeAttempt"> | $Enums.MissType | null
+  foulType?: Prisma.EnumFoulTypeNullableWithAggregatesFilter<"PracticeAttempt"> | $Enums.FoulType | null
   ball?: Prisma.EnumBallColorNullableWithAggregatesFilter<"PracticeAttempt"> | $Enums.BallColor | null
   pocket?: Prisma.EnumPocketNullableWithAggregatesFilter<"PracticeAttempt"> | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeWithAggregatesFilter<"PracticeAttempt"> | Date | string
@@ -323,6 +335,7 @@ export type PracticeAttemptCreateInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -336,6 +349,7 @@ export type PracticeAttemptUncheckedCreateInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -347,6 +361,7 @@ export type PracticeAttemptUpdateInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -360,6 +375,7 @@ export type PracticeAttemptUncheckedUpdateInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -372,6 +388,7 @@ export type PracticeAttemptCreateManyInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -383,6 +400,7 @@ export type PracticeAttemptUpdateManyMutationInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -395,6 +413,7 @@ export type PracticeAttemptUncheckedUpdateManyInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,6 +441,7 @@ export type PracticeAttemptCountOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   value?: Prisma.SortOrder
   missType?: Prisma.SortOrder
+  foulType?: Prisma.SortOrder
   ball?: Prisma.SortOrder
   pocket?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
@@ -439,6 +459,7 @@ export type PracticeAttemptMaxOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   value?: Prisma.SortOrder
   missType?: Prisma.SortOrder
+  foulType?: Prisma.SortOrder
   ball?: Prisma.SortOrder
   pocket?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
@@ -451,6 +472,7 @@ export type PracticeAttemptMinOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   value?: Prisma.SortOrder
   missType?: Prisma.SortOrder
+  foulType?: Prisma.SortOrder
   ball?: Prisma.SortOrder
   pocket?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
@@ -511,6 +533,10 @@ export type NullableEnumMissTypeFieldUpdateOperationsInput = {
   set?: $Enums.MissType | null
 }
 
+export type NullableEnumFoulTypeFieldUpdateOperationsInput = {
+  set?: $Enums.FoulType | null
+}
+
 export type NullableEnumBallColorFieldUpdateOperationsInput = {
   set?: $Enums.BallColor | null
 }
@@ -525,6 +551,7 @@ export type PracticeAttemptCreateWithoutSessionInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -536,6 +563,7 @@ export type PracticeAttemptUncheckedCreateWithoutSessionInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -577,6 +605,7 @@ export type PracticeAttemptScalarWhereInput = {
   kind?: Prisma.EnumPracticeAttemptKindFilter<"PracticeAttempt"> | $Enums.PracticeAttemptKind
   value?: Prisma.IntNullableFilter<"PracticeAttempt"> | number | null
   missType?: Prisma.EnumMissTypeNullableFilter<"PracticeAttempt"> | $Enums.MissType | null
+  foulType?: Prisma.EnumFoulTypeNullableFilter<"PracticeAttempt"> | $Enums.FoulType | null
   ball?: Prisma.EnumBallColorNullableFilter<"PracticeAttempt"> | $Enums.BallColor | null
   pocket?: Prisma.EnumPocketNullableFilter<"PracticeAttempt"> | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFilter<"PracticeAttempt"> | Date | string
@@ -588,6 +617,7 @@ export type PracticeAttemptCreateManySessionInput = {
   kind: $Enums.PracticeAttemptKind
   value?: number | null
   missType?: $Enums.MissType | null
+  foulType?: $Enums.FoulType | null
   ball?: $Enums.BallColor | null
   pocket?: $Enums.Pocket | null
   timestamp?: Date | string
@@ -599,6 +629,7 @@ export type PracticeAttemptUpdateWithoutSessionInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -610,6 +641,7 @@ export type PracticeAttemptUncheckedUpdateWithoutSessionInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -621,6 +653,7 @@ export type PracticeAttemptUncheckedUpdateManyWithoutSessionInput = {
   kind?: Prisma.EnumPracticeAttemptKindFieldUpdateOperationsInput | $Enums.PracticeAttemptKind
   value?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   missType?: Prisma.NullableEnumMissTypeFieldUpdateOperationsInput | $Enums.MissType | null
+  foulType?: Prisma.NullableEnumFoulTypeFieldUpdateOperationsInput | $Enums.FoulType | null
   ball?: Prisma.NullableEnumBallColorFieldUpdateOperationsInput | $Enums.BallColor | null
   pocket?: Prisma.NullableEnumPocketFieldUpdateOperationsInput | $Enums.Pocket | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -635,6 +668,7 @@ export type PracticeAttemptSelect<ExtArgs extends runtime.Types.Extensions.Inter
   kind?: boolean
   value?: boolean
   missType?: boolean
+  foulType?: boolean
   ball?: boolean
   pocket?: boolean
   timestamp?: boolean
@@ -648,6 +682,7 @@ export type PracticeAttemptSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   kind?: boolean
   value?: boolean
   missType?: boolean
+  foulType?: boolean
   ball?: boolean
   pocket?: boolean
   timestamp?: boolean
@@ -661,6 +696,7 @@ export type PracticeAttemptSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   kind?: boolean
   value?: boolean
   missType?: boolean
+  foulType?: boolean
   ball?: boolean
   pocket?: boolean
   timestamp?: boolean
@@ -674,12 +710,13 @@ export type PracticeAttemptSelectScalar = {
   kind?: boolean
   value?: boolean
   missType?: boolean
+  foulType?: boolean
   ball?: boolean
   pocket?: boolean
   timestamp?: boolean
 }
 
-export type PracticeAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "orderIndex" | "kind" | "value" | "missType" | "ball" | "pocket" | "timestamp", ExtArgs["result"]["practiceAttempt"]>
+export type PracticeAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sessionId" | "orderIndex" | "kind" | "value" | "missType" | "foulType" | "ball" | "pocket" | "timestamp", ExtArgs["result"]["practiceAttempt"]>
 export type PracticeAttemptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   session?: boolean | Prisma.PracticeSessionDefaultArgs<ExtArgs>
 }
@@ -702,6 +739,7 @@ export type $PracticeAttemptPayload<ExtArgs extends runtime.Types.Extensions.Int
     kind: $Enums.PracticeAttemptKind
     value: number | null
     missType: $Enums.MissType | null
+    foulType: $Enums.FoulType | null
     ball: $Enums.BallColor | null
     pocket: $Enums.Pocket | null
     timestamp: Date
@@ -1135,6 +1173,7 @@ export interface PracticeAttemptFieldRefs {
   readonly kind: Prisma.FieldRef<"PracticeAttempt", 'PracticeAttemptKind'>
   readonly value: Prisma.FieldRef<"PracticeAttempt", 'Int'>
   readonly missType: Prisma.FieldRef<"PracticeAttempt", 'MissType'>
+  readonly foulType: Prisma.FieldRef<"PracticeAttempt", 'FoulType'>
   readonly ball: Prisma.FieldRef<"PracticeAttempt", 'BallColor'>
   readonly pocket: Prisma.FieldRef<"PracticeAttempt", 'Pocket'>
   readonly timestamp: Prisma.FieldRef<"PracticeAttempt", 'DateTime'>
