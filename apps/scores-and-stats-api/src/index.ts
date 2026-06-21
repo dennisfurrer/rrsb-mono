@@ -15,6 +15,7 @@ import { adminRouter } from "./routes/admin/index.js";
 import { scoreboardsPublicRouter } from "./routes/admin/ping.js";
 import { practiceRouter, practiceStatsRouter } from "./routes/practice.js";
 import { remoteRouter } from "./routes/remote.js";
+import { v3Router } from "./routes/v3/index.js";
 
 const app = express();
 
@@ -49,6 +50,9 @@ app.use("/api/practice-stats", practiceStatsRouter);
 
 // Remote scorer relay (phone-based scoring over SSE)
 app.use("/api/remote", remoteRouter);
+
+// v3 API — full play-by-play capture across all modes (new schema)
+app.use("/api/v3", v3Router);
 
 app.use(
   (

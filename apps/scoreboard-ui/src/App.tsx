@@ -13,7 +13,6 @@ import {
   cancelAssignment,
   claimAssignment,
   completeAssignment,
-  createMatch,
   createPracticeSession,
   deleteLastPracticeAttempt,
   fetchNamesList,
@@ -21,12 +20,20 @@ import {
   getDeviceId,
   patchPracticeSession,
   pingScoreboard,
-  sendFrameAction,
-  updateMatch,
   type MatchAssignment,
   type NamesListEntry,
   type ScoreboardConfig,
 } from "./lib/api";
+import {
+  appendEventsV3,
+  ballToApi,
+  createMatchV3,
+  getRemoteRoomId,
+  inputModeToApi,
+  patchMatchV3,
+  phaseToApi,
+  type V3EventInput,
+} from "./lib/apiV3";
 import { Scoreboard } from "./components/Scoreboard";
 import { SetupDialog, PRACTICE_MODE_VALUE } from "./components/SetupDialog";
 import { CalculatorDialog } from "./components/CalculatorDialog";
@@ -95,6 +102,29 @@ function adjustColor(hex: string, f: number): string {
 function resolvePlayerColor(own: string | null, other: string | null, lighter: boolean): string | undefined {
   if (!own) return undefined;
   return own === other ? adjustColor(own, lighter ? 1.7 : 0.5) : own;
+}
+
+/** Origin of a scoring action: the display itself, or a player's remote phone. */
+type EvtMeta = { source: "REMOTE_PHONE"; remotePlayerIndex: 0 | 1 } | undefined;
+
+/** Authoritative per-frame state snapshot sent with every v3 event. */
+function frameSnap(m: MatchState): { scoreP0: number; scoreP1: number; activePlayerIndex: 0 | 1 } {
+  return {
+    scoreP0: m.players[0].score,
+    scoreP1: m.players[1].score,
+    activePlayerIndex: m.activePlayerIndex as 0 | 1,
+  };
+}
+
+/**
+ * Spread the source/remote-player tag onto an event (defaults to DISPLAY).
+ * Defensive: some handlers double as onClick callbacks, so a stray MouseEvent
+ * may arrive here — only a genuine remote tag flips the source.
+ */
+function withMeta(meta: EvtMeta): Pick<V3EventInput, "source" | "remotePlayerIndex"> {
+  return meta && meta.source === "REMOTE_PHONE"
+    ? { source: "REMOTE_PHONE", remotePlayerIndex: meta.remotePlayerIndex }
+    : { source: "DISPLAY" };
 }
 
 export function App() {
@@ -285,20 +315,29 @@ export function App() {
         bestOf: a.bestOf,
       };
 
-      const matchId = await createMatch({
-        players: [
-          { name: a.player1Name, nationalityIOC: nat1 || "SUI", frames: 0, highbreaks: [], winner: false },
-          { name: a.player2Name, nationalityIOC: nat2 || "SUI", frames: 0, highbreaks: [], winner: false },
-        ],
-        bestOf: a.bestOf,
-        tableNumber: newState.tableNumber,
-      });
-
-      newState.matchId = matchId;
-
       if (a.handicap && a.handicap > 0) {
         newState.players[1].score = a.handicap;
       }
+
+      const matchId = await createMatchV3({
+        matchType: newState.matchType ?? "Trainings-Spiel",
+        inputMode: inputModeToApi(newState.inputMode),
+        redsCount: newState.redsCount ?? 15,
+        bestOf: a.bestOf,
+        players: [
+          { name: a.player1Name, nationalityIOC: nat1 || "SUI" },
+          {
+            name: a.player2Name,
+            nationalityIOC: nat2 || "SUI",
+            startingHandicap: a.handicap && a.handicap > 0 ? a.handicap : 0,
+          },
+        ],
+        tableNumber: newState.tableNumber ? Number(newState.tableNumber) : null,
+        deviceId: deviceId.current,
+        remoteRoomId: getRemoteRoomId(),
+      });
+
+      newState.matchId = matchId;
 
       setMatch(newState);
       setHistory([]);
@@ -353,25 +392,18 @@ export function App() {
       setPlayerColors([null, null]);
       setShowSetup(false);
 
-      const matchId = await createMatch({
-        players: [
-          {
-            name: name1,
-            nationalityIOC: nat1,
-            frames: 0,
-            highbreaks: [],
-            winner: false,
-          },
-          {
-            name: name2,
-            nationalityIOC: nat2,
-            frames: 0,
-            highbreaks: [],
-            winner: false,
-          },
-        ],
+      const matchId = await createMatchV3({
+        matchType,
+        inputMode: inputModeToApi(inputMode),
+        redsCount,
         bestOf,
-        tableNumber: newState.tableNumber,
+        players: [
+          { name: name1, nationalityIOC: nat1, club: club1 },
+          { name: name2, nationalityIOC: nat2, club: club2 },
+        ],
+        tableNumber: newState.tableNumber ? Number(newState.tableNumber) : null,
+        deviceId: deviceId.current,
+        remoteRoomId: getRemoteRoomId(),
       });
 
       if (matchId) {
@@ -387,7 +419,8 @@ export function App() {
       playerIndex: 0 | 1,
       points: number,
       isFoul: boolean,
-      isHandicap: boolean
+      isHandicap: boolean,
+      meta?: EvtMeta
     ) => {
       const label = isFoul
         ? `${match.players[playerIndex].name} - Foul ${points}`
@@ -407,11 +440,6 @@ export function App() {
 
       setMatch((prev) => {
         const next = structuredClone(prev);
-        const actionType = isHandicap
-          ? "handicap"
-          : isFoul
-            ? "foul"
-            : "break";
 
         if (isFoul) {
           const opponentIndex = playerIndex === 0 ? 1 : 0;
@@ -431,28 +459,16 @@ export function App() {
         }
 
         if (next.matchId) {
-          sendFrameAction({
-            matchId: next.matchId,
-            frameNumber: next.currentFrame,
-            actionType,
-            playerIndex: playerIndex + 1,
-            points,
-          });
-
-          updateMatch({
-            type: isFoul ? "ADD_FOUL" : "ADD_BREAK",
-            matchState: {
-              matchId: next.matchId,
-              bestOf: next.bestOf,
-              players: next.players.map((p) => ({
-                name: p.name,
-                frames: p.frames,
-                highbreaks: p.highbreaks,
-                winner: p.winner,
-              })),
+          appendEventsV3(next.matchId, [
+            {
+              type: isHandicap ? "HANDICAP" : isFoul ? "FOUL" : "MANUAL_BREAK",
+              frameNumber: next.currentFrame,
+              playerIndex,
+              points,
+              state: frameSnap(next),
+              ...withMeta(meta),
             },
-            tableNumber: next.tableNumber,
-          });
+          ]);
         }
 
         return next;
@@ -464,11 +480,11 @@ export function App() {
   );
 
   // ===== BALL BY BALL =====
-  const handleBBPot = useCallback((ball: BBBallType) => {
+  const handleBBPot = useCallback((ball: BBBallType, meta?: EvtMeta) => {
     if (!match.bbState) return;
+    const phaseBefore = match.bbState.phase;
     const result = applyPot(match.bbState, ball);
     const playerIdx = match.activePlayerIndex as 0 | 1;
-    const opponentIdx = (playerIdx === 0 ? 1 : 0) as 0 | 1;
 
     pushHistory(
       "",
@@ -481,13 +497,27 @@ export function App() {
       next.players[playerIdx].score += result.points;
       next.bbState = result.newState;
       if (next.matchId) {
-        sendFrameAction({ matchId: next.matchId, frameNumber: next.currentFrame, actionType: "break", playerIndex: playerIdx + 1, points: result.points });
+        appendEventsV3(next.matchId, [
+          {
+            type: "POT",
+            frameNumber: next.currentFrame,
+            playerIndex: playerIdx,
+            ballType: ballToApi(ball),
+            points: result.points,
+            isFreeBall: ball === "freeball",
+            phase: phaseToApi(phaseBefore),
+            redsRemaining: result.newState.redsRemaining,
+            breakTotal: result.newState.breakTotal,
+            state: frameSnap(next),
+            ...withMeta(meta),
+          },
+        ]);
       }
       return next;
     });
   }, [match, pushHistory]);
 
-  const handleBBFoul = useCallback((ball: BBBallColor) => {
+  const handleBBFoul = useCallback((ball: BBBallColor, meta?: EvtMeta) => {
     isEditingBreakRef.current = false;
     preEditHistoryRef.current = null;
     preEditMatchRef.current = null;
@@ -497,6 +527,17 @@ export function App() {
     const playerIdx = match.activePlayerIndex as 0 | 1;
     const opponentIdx = (playerIdx === 0 ? 1 : 0) as 0 | 1;
     const bbState = match.bbState;
+    // The foul is committed by the active player; opponent receives the points.
+    const foulEvent = (next: MatchState): V3EventInput => ({
+      type: "FOUL",
+      frameNumber: next.currentFrame,
+      playerIndex: playerIdx,
+      ballType: ballToApi(ball),
+      points: result.points,
+      freeBallGranted: result.newState.freeBallAvailable,
+      state: frameSnap(next),
+      ...withMeta(meta),
+    });
 
     // After a foul the incoming player starts a fresh break — normalize phase back to red (or colors_only)
     const normalizedBBState = result.newState.phase === "color"
@@ -537,7 +578,10 @@ export function App() {
             respottedBlack: true,
           };
           if (next.matchId) {
-            sendFrameAction({ matchId: next.matchId, frameNumber: next.currentFrame, actionType: "foul", playerIndex: prev.activePlayerIndex + 1, points: result.points });
+            appendEventsV3(next.matchId, [
+              foulEvent(next),
+              { type: "RESPOTTED_BLACK", frameNumber: next.currentFrame, state: frameSnap(next), ...withMeta(meta) },
+            ]);
           }
           return next;
         });
@@ -548,7 +592,7 @@ export function App() {
           next.activePlayerIndex = opponentIdx;
           next.bbState = { ...normalizedBBState, foulByPlayerIndex: playerIdx };
           if (next.matchId) {
-            sendFrameAction({ matchId: next.matchId, frameNumber: next.currentFrame, actionType: "foul", playerIndex: prev.activePlayerIndex + 1, points: result.points });
+            appendEventsV3(next.matchId, [foulEvent(next)]);
           }
           return next;
         });
@@ -564,14 +608,14 @@ export function App() {
       next.activePlayerIndex = opponentIdx;
       next.bbState = { ...normalizedBBState, foulByPlayerIndex: playerIdx };
       if (next.matchId) {
-        sendFrameAction({ matchId: next.matchId, frameNumber: next.currentFrame, actionType: "foul", playerIndex: prev.activePlayerIndex + 1, points: result.points });
+        appendEventsV3(next.matchId, [foulEvent(next)]);
       }
       return next;
     });
     setShowBBDialog(false);
   }, [match, pushHistory]);
 
-  const handleBBCorrectReds = useCallback((newCount: number) => {
+  const handleBBCorrectReds = useCallback((newCount: number, meta?: EvtMeta) => {
     if (!match.bbState) return;
     const old = match.bbState.redsRemaining;
     const nextMatch = structuredClone(match);
@@ -588,12 +632,24 @@ export function App() {
       undefined,
       { kind: "correction", frameNumber: match.currentFrame }
     );
+    if (nextMatch.matchId) {
+      appendEventsV3(nextMatch.matchId, [
+        {
+          type: "CORRECT_REDS",
+          frameNumber: nextMatch.currentFrame,
+          oldReds: old,
+          newReds: newCount,
+          state: frameSnap(nextMatch),
+          ...withMeta(meta),
+        },
+      ]);
+    }
     setMatch(nextMatch);
     setShowBBDialog(false);
   }, [match, pushHistory]);
 
   // ===== FRAME END =====
-  const endFrame = useCallback(() => {
+  const endFrame = useCallback((meta?: EvtMeta) => {
     if (match.finished) return;
     const frameWinner = determineFrameWinner(match);
     if (frameWinner === null) return;
@@ -640,15 +696,21 @@ export function App() {
         next.players[winner].frames += 1;
       }
 
-      // Send frame action
+      // Record the frame end (scores are still the final frame scores here).
       if (next.matchId) {
-        sendFrameAction({
-          matchId: next.matchId,
-          frameNumber: next.currentFrame,
-          actionType: "frame_end",
-          playerIndex: winner !== null ? winner + 1 : 1,
-          points: 0,
-        });
+        appendEventsV3(next.matchId, [
+          {
+            type: "FRAME_END",
+            frameNumber: next.currentFrame,
+            state: {
+              ...frameSnap(next),
+              frameWinnerIndex: winner,
+              framesP0: next.players[0].frames,
+              framesP1: next.players[1].frames,
+            },
+            ...withMeta(meta),
+          },
+        ]);
       }
 
       // Check if match is over
@@ -660,28 +722,24 @@ export function App() {
         }
         next.finished = true;
 
-        if (next.matchId && matchWinner !== null) {
-          sendFrameAction({
-            matchId: next.matchId,
-            frameNumber: next.currentFrame,
-            actionType: "match_end",
-            playerIndex: matchWinner + 1,
-            points: 0,
-          });
-
-          updateMatch({
-            type: "END_MATCH",
-            matchState: {
-              matchId: next.matchId,
-              bestOf: next.bestOf,
-              players: next.players.map((p) => ({
-                name: p.name,
-                frames: p.frames,
-                highbreaks: p.highbreaks,
-                winner: p.winner,
-              })),
+        if (next.matchId) {
+          appendEventsV3(next.matchId, [
+            {
+              type: "MATCH_END",
+              frameNumber: next.currentFrame,
+              state: {
+                matchWinnerIndex: matchWinner,
+                framesP0: next.players[0].frames,
+                framesP1: next.players[1].frames,
+              },
+              ...withMeta(meta),
             },
-            tableNumber: next.tableNumber,
+          ]);
+          patchMatchV3(next.matchId, {
+            status: "FINISHED",
+            winnerPlayerIndex: matchWinner,
+            isDraw,
+            bestOf: next.bestOf,
           });
         }
       } else {
@@ -696,26 +754,10 @@ export function App() {
         }
         next.activePlayerIndex = next.hasBreak;
 
-        // Reset ball-by-ball state for new frame
+        // Reset ball-by-ball state for new frame. The new frame row is created
+        // server-side on its first event.
         if (next.inputMode === "ballbyball" && next.redsCount) {
           next.bbState = createBBState(next.redsCount);
-        }
-
-        if (next.matchId) {
-          updateMatch({
-            type: "NEW_FRAME",
-            matchState: {
-              matchId: next.matchId,
-              bestOf: next.bestOf,
-              players: next.players.map((p) => ({
-                name: p.name,
-                frames: p.frames,
-                highbreaks: p.highbreaks,
-                winner: p.winner,
-              })),
-            },
-            tableNumber: next.tableNumber,
-          });
         }
       }
 
@@ -734,7 +776,7 @@ export function App() {
     }
   }, [pendingEndFrame, endFrame]);
 
-  const handleBBMiss = useCallback(() => {
+  const handleBBMiss = useCallback((meta?: EvtMeta) => {
     isEditingBreakRef.current = false;
     preEditHistoryRef.current = null;
     preEditMatchRef.current = null;
@@ -742,6 +784,15 @@ export function App() {
     const playerIdx = match.activePlayerIndex as 0 | 1;
     const opponentIdx = (playerIdx === 0 ? 1 : 0) as 0 | 1;
     const bbState = match.bbState;
+    // A miss ends the current visit; the v3 MISS event closes the open break.
+    const missEvent = (next: MatchState): V3EventInput => ({
+      type: "MISS",
+      frameNumber: next.currentFrame,
+      playerIndex: playerIdx,
+      breakTotal: bbState?.breakTotal ?? 0,
+      state: frameSnap(next),
+      ...withMeta(meta),
+    });
     if (bbState && bbState.breakTotal > 0) {
       pushHistory(
         `${match.players[playerIdx].name} (${bbState.breakTotal})`,
@@ -763,6 +814,12 @@ export function App() {
             next.players[playerIdx].highbreaks = insertHighBreak(next.players[playerIdx].highbreaks, next.bbState.breakTotal);
             next.bbState = { ...next.bbState, frameOver: false, colorsOnlyIndex: 5, breakBalls: [], breakTotal: 0, respottedBlack: true };
           }
+          if (next.matchId) {
+            appendEventsV3(next.matchId, [
+              missEvent(next),
+              { type: "RESPOTTED_BLACK", frameNumber: next.currentFrame, state: frameSnap(next), ...withMeta(meta) },
+            ]);
+          }
           return next;
         });
         return;
@@ -774,6 +831,7 @@ export function App() {
           next.players[playerIdx].highbreaks = insertHighBreak(next.players[playerIdx].highbreaks, next.bbState.breakTotal);
           next.bbState = { ...next.bbState, breakBalls: [], breakTotal: 0 };
         }
+        if (next.matchId) appendEventsV3(next.matchId, [missEvent(next)]);
         return next;
       });
       setShowMenuFrameEndStats(true);
@@ -790,6 +848,7 @@ export function App() {
             next.players[playerIdx].highbreaks = insertHighBreak(next.players[playerIdx].highbreaks, next.bbState.breakTotal);
             next.bbState = { ...next.bbState, breakBalls: [], breakTotal: 0 };
           }
+          if (next.matchId) appendEventsV3(next.matchId, [missEvent(next)]);
           return next;
         });
         setShowMenuFrameEndStats(true);
@@ -814,6 +873,7 @@ export function App() {
           next.bbState = afterReset;
         }
       }
+      if (next.matchId) appendEventsV3(next.matchId, [missEvent(next)]);
       return next;
     });
   }, [match, pushHistory, endFrame, setShowMenuFrameEndStats]);
@@ -863,13 +923,14 @@ export function App() {
       }
 
       if (next.matchId) {
-        sendFrameAction({
-          matchId: next.matchId,
-          frameNumber: next.currentFrame,
-          actionType: "rerack",
-          playerIndex: next.activePlayerIndex + 1,
-          points: 0,
-        });
+        appendEventsV3(next.matchId, [
+          {
+            type: "RERACK",
+            frameNumber: next.currentFrame,
+            state: frameSnap(next),
+            source: "DISPLAY",
+          },
+        ]);
       }
 
       return next;
@@ -878,7 +939,7 @@ export function App() {
   }, [match, history, playerColors, pushHistory]);
 
   // ===== EDIT LAST BREAK (ball-by-ball only) =====
-  const handleEditLastBreak = useCallback(() => {
+  const handleEditLastBreak = useCallback((meta?: EvtMeta) => {
     preEditHistoryRef.current = history;
     preEditMatchRef.current = match;
     isEditingBreakRef.current = true;
@@ -890,6 +951,16 @@ export function App() {
       return prev.slice(0, -1);
     });
     setShowBBDialog(true);
+    if (match.matchId) {
+      appendEventsV3(match.matchId, [
+        {
+          type: "EDIT_LAST_BREAK",
+          frameNumber: match.currentFrame,
+          state: frameSnap(match),
+          ...withMeta(meta),
+        },
+      ]);
+    }
   }, [history, match]);
 
   const handleCancelBreakEdit = useCallback(() => {
@@ -915,7 +986,7 @@ export function App() {
   }, []);
 
   // ===== UNDO (ball-by-ball — used inside BBDialog edit mode) =====
-  const undo = useCallback(() => {
+  const undo = useCallback((meta?: EvtMeta) => {
     if (history.length === 0) return;
     const last = history[history.length - 1];
     const restored = JSON.parse(last.snapshot) as MatchState;
@@ -925,18 +996,20 @@ export function App() {
     setShowMenu(false);
 
     if (restored.matchId) {
-      sendFrameAction({
-        matchId: restored.matchId,
-        frameNumber: restored.currentFrame,
-        actionType: "undo",
-        playerIndex: restored.activePlayerIndex + 1,
-        points: 0,
-      });
+      appendEventsV3(restored.matchId, [
+        {
+          type: "UNDO",
+          frameNumber: restored.currentFrame,
+          playerIndex: restored.activePlayerIndex as 0 | 1,
+          state: frameSnap(restored),
+          ...withMeta(meta),
+        },
+      ]);
     }
   }, [history, match]);
 
   // ===== UNDO FULL (whole break — used from main menu) =====
-  const undoFull = useCallback(() => {
+  const undoFull = useCallback((meta?: EvtMeta) => {
     if (history.length === 0) return;
     const last = history[history.length - 1];
 
@@ -957,24 +1030,37 @@ export function App() {
     setShowMenu(false);
 
     if (restored.matchId) {
-      sendFrameAction({
-        matchId: restored.matchId,
-        frameNumber: restored.currentFrame,
-        actionType: "undo",
-        playerIndex: restored.activePlayerIndex + 1,
-        points: 0,
-      });
+      appendEventsV3(restored.matchId, [
+        {
+          type: "UNDO",
+          frameNumber: restored.currentFrame,
+          playerIndex: restored.activePlayerIndex as 0 | 1,
+          state: frameSnap(restored),
+          ...withMeta(meta),
+        },
+      ]);
     }
   }, [history, match]);
 
   // ===== REDO =====
-  const redo = useCallback(() => {
+  const redo = useCallback((meta?: EvtMeta) => {
     if (redoStack.length === 0) return;
     const top = redoStack[redoStack.length - 1];
     setRedoStack(redoStack.slice(0, -1));
     setHistory(h => [...h, ...top.entries]);
-    setMatch(JSON.parse(top.matchAfter) as MatchState);
+    const restored = JSON.parse(top.matchAfter) as MatchState;
+    setMatch(restored);
     setShowMenu(false);
+    if (restored.matchId) {
+      appendEventsV3(restored.matchId, [
+        {
+          type: "REDO",
+          frameNumber: restored.currentFrame,
+          state: frameSnap(restored),
+          ...withMeta(meta),
+        },
+      ]);
+    }
   }, [redoStack]);
 
   // ===== MATCH END (EARLY) =====
@@ -995,28 +1081,25 @@ export function App() {
       const totalFrames = next.players[0].frames + next.players[1].frames;
       next.bestOf = totalFrames;
 
-      if (next.matchId && !isDraw) {
-        sendFrameAction({
-          matchId: next.matchId,
-          frameNumber: next.currentFrame,
-          actionType: "match_end",
-          playerIndex: leader + 1,
-          points: 0,
-        });
-
-        updateMatch({
-          type: "END_MATCH",
-          matchState: {
-            matchId: next.matchId,
-            bestOf: next.bestOf,
-            players: next.players.map((p) => ({
-              name: p.name,
-              frames: p.frames,
-              highbreaks: p.highbreaks,
-              winner: p.winner,
-            })),
+      if (next.matchId) {
+        const matchWinner = isDraw ? null : (leader as 0 | 1);
+        appendEventsV3(next.matchId, [
+          {
+            type: "MATCH_END",
+            frameNumber: next.currentFrame,
+            state: {
+              matchWinnerIndex: matchWinner,
+              framesP0: next.players[0].frames,
+              framesP1: next.players[1].frames,
+            },
+            source: "DISPLAY",
           },
-          tableNumber: next.tableNumber,
+        ]);
+        patchMatchV3(next.matchId, {
+          status: "ABORTED",
+          winnerPlayerIndex: matchWinner,
+          isDraw,
+          bestOf: next.bestOf,
         });
       }
 
@@ -1421,22 +1504,41 @@ export function App() {
 
   const dispatchRemote = useCallback(
     (cmd: RemoteCommand & { fromPlayerIndex?: 0 | 1 }) => {
+      // Tag every remote-originated action with the controlling player's phone.
+      const meta: EvtMeta =
+        cmd.fromPlayerIndex === 0 || cmd.fromPlayerIndex === 1
+          ? { source: "REMOTE_PHONE", remotePlayerIndex: cmd.fromPlayerIndex }
+          : undefined;
       switch (cmd.t) {
-        case "bb_pot": handleBBPot(cmd.ball); setShowBBDialog(true); break;
-        case "bb_foul": handleBBFoul(cmd.ball); break;
-        case "bb_miss": handleBBMiss(); break;
-        case "bb_correct_reds": handleBBCorrectReds(cmd.count); break;
-        case "add_points": addPoints(cmd.playerIndex, cmd.points, cmd.isFoul, cmd.isHandicap); break;
+        case "bb_pot": handleBBPot(cmd.ball, meta); setShowBBDialog(true); break;
+        case "bb_foul": handleBBFoul(cmd.ball, meta); break;
+        case "bb_miss": handleBBMiss(meta); break;
+        case "bb_correct_reds": handleBBCorrectReds(cmd.count, meta); break;
+        case "add_points": addPoints(cmd.playerIndex, cmd.points, cmd.isFoul, cmd.isHandicap, meta); break;
         case "switch_player":
-          setMatch((prev) => ({ ...prev, activePlayerIndex: cmd.playerIndex }));
+          setMatch((prev) => {
+            const next = { ...prev, activePlayerIndex: cmd.playerIndex };
+            if (next.matchId) {
+              appendEventsV3(next.matchId, [
+                {
+                  type: "SWITCH_PLAYER",
+                  frameNumber: next.currentFrame,
+                  playerIndex: cmd.playerIndex,
+                  state: frameSnap(next),
+                  ...withMeta(meta),
+                },
+              ]);
+            }
+            return next;
+          });
           break;
-        case "undo": undoFull(); break;
-        case "redo": redo(); break;
-        case "end_frame": endFrame(); break;
-        case "edit_last_break": handleEditLastBreak(); break;
+        case "undo": undoFull(meta); break;
+        case "redo": redo(meta); break;
+        case "end_frame": endFrame(meta); break;
+        case "edit_last_break": handleEditLastBreak(meta); break;
       }
     },
-    [handleBBPot, handleBBFoul, handleBBMiss, handleBBCorrectReds, addPoints, undoFull, endFrame, handleEditLastBreak]
+    [handleBBPot, handleBBFoul, handleBBMiss, handleBBCorrectReds, addPoints, undoFull, endFrame, handleEditLastBreak, redo]
   );
   const dispatchRef = useRef(dispatchRemote);
   useEffect(() => {
@@ -1475,11 +1577,25 @@ export function App() {
               const bb = match.bbState;
               const autoFrameOver = !!bb && bb.phase === "colors_only" && bb.colorsOnlyIndex === 5
                 && !bb.frameOver && bb.breakTotal === 0 && Math.abs(match.players[0].score - match.players[1].score) > 7;
-              setMatch(prev => ({
-                ...prev,
-                activePlayerIndex: idx as 0 | 1,
-                bbState: autoFrameOver && prev.bbState ? { ...prev.bbState, frameOver: true } : prev.bbState,
-              }));
+              setMatch(prev => {
+                const next: MatchState = {
+                  ...prev,
+                  activePlayerIndex: idx as 0 | 1,
+                  bbState: autoFrameOver && prev.bbState ? { ...prev.bbState, frameOver: true } : prev.bbState,
+                };
+                if (next.matchId && prev.activePlayerIndex !== idx) {
+                  appendEventsV3(next.matchId, [
+                    {
+                      type: "SWITCH_PLAYER",
+                      frameNumber: next.currentFrame,
+                      playerIndex: idx as 0 | 1,
+                      state: frameSnap(next),
+                      source: "DISPLAY",
+                    },
+                  ]);
+                }
+                return next;
+              });
               setShowBBDialog(true);
             } else {
               setCalcPlayer(idx as 0 | 1);

@@ -15,7 +15,9 @@
     "reset": "prisma migrate reset",
     "studio": "prisma studio",
     "db:seed-by-copying-v1matches": "bash scripts/migrate-from-remote.sh",
-    "seed:admin": "tsx scripts/seed-admin.ts"
+    "seed:admin": "tsx scripts/seed-admin.ts",
+    "seed:v3-fake": "tsx scripts/v3-fake-seed.ts",
+    "clear:v3-fake": "tsx scripts/v3-fake-clear.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",

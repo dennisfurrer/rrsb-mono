@@ -338,6 +338,342 @@ export type EnumPocketNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
 }
 
+export type JsonNullableFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+    Required<JsonNullableFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+export type JsonNullableFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string[]
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  lte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+    Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string[]
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  lte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedJsonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
+}
+
+export type EnumV3MatchTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchType | Prisma.EnumV3MatchTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel> | $Enums.V3MatchType
+}
+
+export type EnumV3MatchTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchType | Prisma.EnumV3MatchTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3MatchType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel>
+}
+
+export type EnumV3InputModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3InputMode | Prisma.EnumV3InputModeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel> | $Enums.V3InputMode
+}
+
+export type EnumV3MatchStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchStatus | Prisma.EnumV3MatchStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel> | $Enums.V3MatchStatus
+}
+
+export type EnumV3InputModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3InputMode | Prisma.EnumV3InputModeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3InputModeWithAggregatesFilter<$PrismaModel> | $Enums.V3InputMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel>
+}
+
+export type EnumV3MatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchStatus | Prisma.EnumV3MatchStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.V3MatchStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel>
+}
+
+export type EnumV3FrameStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FrameStatus | Prisma.EnumV3FrameStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel> | $Enums.V3FrameStatus
+}
+
+export type EnumV3FrameStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FrameStatus | Prisma.EnumV3FrameStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3FrameStatusWithAggregatesFilter<$PrismaModel> | $Enums.V3FrameStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel>
+}
+
+export type EnumV3BreakEndReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BreakEndReason | Prisma.EnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel> | $Enums.V3BreakEndReason | null
+}
+
+export type EnumV3MissTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MissType | Prisma.EnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel> | $Enums.V3MissType | null
+}
+
+export type EnumV3FoulTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FoulType | Prisma.EnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel> | $Enums.V3FoulType | null
+}
+
+export type EnumV3BallColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallColor | Prisma.EnumV3BallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel> | $Enums.V3BallColor | null
+}
+
+export type EnumV3PocketNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3Pocket | Prisma.EnumV3PocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel> | $Enums.V3Pocket | null
+}
+
+export type EnumV3BreakEndReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BreakEndReason | Prisma.EnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BreakEndReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BreakEndReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel>
+}
+
+export type EnumV3MissTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MissType | Prisma.EnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3MissTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3MissType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumV3FoulTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FoulType | Prisma.EnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3FoulTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3FoulType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel>
+}
+
+export type EnumV3BallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallColor | Prisma.EnumV3BallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BallColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel>
+}
+
+export type EnumV3PocketNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3Pocket | Prisma.EnumV3PocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3PocketNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3Pocket | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel>
+}
+
+export type EnumV3BallTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel> | $Enums.V3BallType
+}
+
+export type EnumV3BBPhaseFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel> | $Enums.V3BBPhase
+}
+
+export type EnumV3BallTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BallTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3BallType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel>
+}
+
+export type EnumV3BBPhaseWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BBPhaseWithAggregatesFilter<$PrismaModel> | $Enums.V3BBPhase
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel>
+}
+
+export type EnumV3EventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventType | Prisma.EnumV3EventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel> | $Enums.V3EventType
+}
+
+export type EnumV3BallTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel> | $Enums.V3BallType | null
+}
+
+export type BoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
+export type EnumV3BBPhaseNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel> | $Enums.V3BBPhase | null
+}
+
+export type EnumV3EventSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventSource | Prisma.EnumV3EventSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel> | $Enums.V3EventSource
+}
+
+export type EnumV3EventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventType | Prisma.EnumV3EventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3EventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel>
+}
+
+export type EnumV3BallTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BallType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel>
+}
+
+export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type EnumV3BBPhaseNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BBPhaseNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BBPhase | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel>
+}
+
+export type EnumV3EventSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventSource | Prisma.EnumV3EventSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventSourceWithAggregatesFilter<$PrismaModel> | $Enums.V3EventSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel>
+}
+
+export type EnumV3RemoteEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3RemoteEventType | Prisma.EnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel> | $Enums.V3RemoteEventType
+}
+
+export type EnumV3RemoteEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3RemoteEventType | Prisma.EnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3RemoteEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3RemoteEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -673,6 +1009,315 @@ export type NestedEnumPocketNullableWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPocketNullableFilter<$PrismaModel>
+}
+
+export type NestedJsonNullableFilter<$PrismaModel = never> =
+| Prisma.PatchUndefined<
+    Prisma.Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+    Required<NestedJsonNullableFilterBase<$PrismaModel>>
+  >
+| Prisma.OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+  equals?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+  path?: string[]
+  mode?: Prisma.QueryMode | Prisma.EnumQueryModeFieldRefInput<$PrismaModel>
+  string_contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_starts_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  string_ends_with?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  array_starts_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_ends_with?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  array_contains?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | null
+  lt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  lte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
+  not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumV3MatchTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchType | Prisma.EnumV3MatchTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel> | $Enums.V3MatchType
+}
+
+export type NestedEnumV3MatchTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchType | Prisma.EnumV3MatchTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchType[] | Prisma.ListEnumV3MatchTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3MatchType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MatchTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumV3InputModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3InputMode | Prisma.EnumV3InputModeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel> | $Enums.V3InputMode
+}
+
+export type NestedEnumV3MatchStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchStatus | Prisma.EnumV3MatchStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel> | $Enums.V3MatchStatus
+}
+
+export type NestedEnumV3InputModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3InputMode | Prisma.EnumV3InputModeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3InputMode[] | Prisma.ListEnumV3InputModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3InputModeWithAggregatesFilter<$PrismaModel> | $Enums.V3InputMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3InputModeFilter<$PrismaModel>
+}
+
+export type NestedEnumV3MatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MatchStatus | Prisma.EnumV3MatchStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3MatchStatus[] | Prisma.ListEnumV3MatchStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3MatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.V3MatchStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MatchStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumV3FrameStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FrameStatus | Prisma.EnumV3FrameStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel> | $Enums.V3FrameStatus
+}
+
+export type NestedEnumV3FrameStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FrameStatus | Prisma.EnumV3FrameStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3FrameStatus[] | Prisma.ListEnumV3FrameStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3FrameStatusWithAggregatesFilter<$PrismaModel> | $Enums.V3FrameStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3FrameStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BreakEndReason | Prisma.EnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel> | $Enums.V3BreakEndReason | null
+}
+
+export type NestedEnumV3MissTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MissType | Prisma.EnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel> | $Enums.V3MissType | null
+}
+
+export type NestedEnumV3FoulTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FoulType | Prisma.EnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel> | $Enums.V3FoulType | null
+}
+
+export type NestedEnumV3BallColorNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallColor | Prisma.EnumV3BallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel> | $Enums.V3BallColor | null
+}
+
+export type NestedEnumV3PocketNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3Pocket | Prisma.EnumV3PocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel> | $Enums.V3Pocket | null
+}
+
+export type NestedEnumV3BreakEndReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BreakEndReason | Prisma.EnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BreakEndReason[] | Prisma.ListEnumV3BreakEndReasonFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BreakEndReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BreakEndReason | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BreakEndReasonNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3MissTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3MissType | Prisma.EnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3MissType[] | Prisma.ListEnumV3MissTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3MissTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3MissType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3MissTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3FoulTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3FoulType | Prisma.EnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3FoulType[] | Prisma.ListEnumV3FoulTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3FoulTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3FoulType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3FoulTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BallColorNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallColor | Prisma.EnumV3BallColorFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallColor[] | Prisma.ListEnumV3BallColorFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallColorNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BallColor | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallColorNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3PocketNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3Pocket | Prisma.EnumV3PocketFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3Pocket[] | Prisma.ListEnumV3PocketFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3PocketNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3Pocket | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3PocketNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BallTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel> | $Enums.V3BallType
+}
+
+export type NestedEnumV3BBPhaseFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel> | $Enums.V3BBPhase
+}
+
+export type NestedEnumV3BallTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BallTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3BallType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BBPhaseWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel>
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3BBPhaseWithAggregatesFilter<$PrismaModel> | $Enums.V3BBPhase
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BBPhaseFilter<$PrismaModel>
+}
+
+export type NestedEnumV3EventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventType | Prisma.EnumV3EventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel> | $Enums.V3EventType
+}
+
+export type NestedEnumV3BallTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel> | $Enums.V3BallType | null
+}
+
+export type NestedBoolNullableFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableFilter<$PrismaModel> | boolean | null
+}
+
+export type NestedEnumV3BBPhaseNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel> | $Enums.V3BBPhase | null
+}
+
+export type NestedEnumV3EventSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventSource | Prisma.EnumV3EventSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel> | $Enums.V3EventSource
+}
+
+export type NestedEnumV3EventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventType | Prisma.EnumV3EventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventType[] | Prisma.ListEnumV3EventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3EventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3EventTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BallTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BallType | Prisma.EnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BallType[] | Prisma.ListEnumV3BallTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BallTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BallType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BallTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3BBPhaseNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3BBPhase | Prisma.EnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  in?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.V3BBPhase[] | Prisma.ListEnumV3BBPhaseFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumV3BBPhaseNullableWithAggregatesFilter<$PrismaModel> | $Enums.V3BBPhase | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3BBPhaseNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumV3EventSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3EventSource | Prisma.EnumV3EventSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3EventSource[] | Prisma.ListEnumV3EventSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3EventSourceWithAggregatesFilter<$PrismaModel> | $Enums.V3EventSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3EventSourceFilter<$PrismaModel>
+}
+
+export type NestedEnumV3RemoteEventTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3RemoteEventType | Prisma.EnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel> | $Enums.V3RemoteEventType
+}
+
+export type NestedEnumV3RemoteEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.V3RemoteEventType | Prisma.EnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.V3RemoteEventType[] | Prisma.ListEnumV3RemoteEventTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumV3RemoteEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.V3RemoteEventType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumV3RemoteEventTypeFilter<$PrismaModel>
 }
 
 

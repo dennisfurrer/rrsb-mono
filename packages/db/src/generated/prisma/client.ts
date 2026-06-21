@@ -94,3 +94,53 @@ export type PracticeSession = Prisma.PracticeSessionModel
  * 
  */
 export type PracticeAttempt = Prisma.PracticeAttemptModel
+/**
+ * Model V3Player
+ * 
+ */
+export type V3Player = Prisma.V3PlayerModel
+/**
+ * Model V3PlayerMatchTypeStat
+ * 
+ */
+export type V3PlayerMatchTypeStat = Prisma.V3PlayerMatchTypeStatModel
+/**
+ * Model V3Match
+ * 
+ */
+export type V3Match = Prisma.V3MatchModel
+/**
+ * Model V3MatchPlayer
+ * 
+ */
+export type V3MatchPlayer = Prisma.V3MatchPlayerModel
+/**
+ * Model V3Frame
+ * 
+ */
+export type V3Frame = Prisma.V3FrameModel
+/**
+ * Model V3Break
+ * 
+ */
+export type V3Break = Prisma.V3BreakModel
+/**
+ * Model V3Ball
+ * 
+ */
+export type V3Ball = Prisma.V3BallModel
+/**
+ * Model V3Event
+ * 
+ */
+export type V3Event = Prisma.V3EventModel
+/**
+ * Model V3RemoteSession
+ * 
+ */
+export type V3RemoteSession = Prisma.V3RemoteSessionModel
+/**
+ * Model V3RemoteEvent
+ * 
+ */
+export type V3RemoteEvent = Prisma.V3RemoteEventModel

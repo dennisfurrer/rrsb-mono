@@ -61,7 +61,17 @@ export const ModelName = {
   FrameAction: 'FrameAction',
   MatchAssignment: 'MatchAssignment',
   PracticeSession: 'PracticeSession',
-  PracticeAttempt: 'PracticeAttempt'
+  PracticeAttempt: 'PracticeAttempt',
+  V3Player: 'V3Player',
+  V3PlayerMatchTypeStat: 'V3PlayerMatchTypeStat',
+  V3Match: 'V3Match',
+  V3MatchPlayer: 'V3MatchPlayer',
+  V3Frame: 'V3Frame',
+  V3Break: 'V3Break',
+  V3Ball: 'V3Ball',
+  V3Event: 'V3Event',
+  V3RemoteSession: 'V3RemoteSession',
+  V3RemoteEvent: 'V3RemoteEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -251,12 +261,231 @@ export const PracticeAttemptScalarFieldEnum = {
 export type PracticeAttemptScalarFieldEnum = (typeof PracticeAttemptScalarFieldEnum)[keyof typeof PracticeAttemptScalarFieldEnum]
 
 
+export const V3PlayerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nationalityIOC: 'nationalityIOC',
+  club: 'club',
+  matchesPlayed: 'matchesPlayed',
+  matchesWon: 'matchesWon',
+  matchesLost: 'matchesLost',
+  matchesDrawn: 'matchesDrawn',
+  framesWon: 'framesWon',
+  framesLost: 'framesLost',
+  pointsFor: 'pointsFor',
+  pointsAgainst: 'pointsAgainst',
+  breaksOver7: 'breaksOver7',
+  highBreak: 'highBreak',
+  highBreaks: 'highBreaks',
+  centuries: 'centuries',
+  foulsCommitted: 'foulsCommitted',
+  foulPointsConceded: 'foulPointsConceded',
+  potsByColor: 'potsByColor',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3PlayerScalarFieldEnum = (typeof V3PlayerScalarFieldEnum)[keyof typeof V3PlayerScalarFieldEnum]
+
+
+export const V3PlayerMatchTypeStatScalarFieldEnum = {
+  id: 'id',
+  playerId: 'playerId',
+  matchType: 'matchType',
+  matchesPlayed: 'matchesPlayed',
+  matchesWon: 'matchesWon',
+  matchesLost: 'matchesLost',
+  matchesDrawn: 'matchesDrawn',
+  framesWon: 'framesWon',
+  framesLost: 'framesLost',
+  highBreak: 'highBreak',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3PlayerMatchTypeStatScalarFieldEnum = (typeof V3PlayerMatchTypeStatScalarFieldEnum)[keyof typeof V3PlayerMatchTypeStatScalarFieldEnum]
+
+
+export const V3MatchScalarFieldEnum = {
+  id: 'id',
+  matchType: 'matchType',
+  matchTypeCode: 'matchTypeCode',
+  inputMode: 'inputMode',
+  redsCount: 'redsCount',
+  bestOf: 'bestOf',
+  status: 'status',
+  isDraw: 'isDraw',
+  winnerPlayerIndex: 'winnerPlayerIndex',
+  schemaVersion: 'schemaVersion',
+  producer: 'producer',
+  producerVersion: 'producerVersion',
+  tableNumber: 'tableNumber',
+  locationId: 'locationId',
+  deviceId: 'deviceId',
+  remoteRoomId: 'remoteRoomId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type V3MatchScalarFieldEnum = (typeof V3MatchScalarFieldEnum)[keyof typeof V3MatchScalarFieldEnum]
+
+
+export const V3MatchPlayerScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  playerIndex: 'playerIndex',
+  playerId: 'playerId',
+  name: 'name',
+  nationalityIOC: 'nationalityIOC',
+  club: 'club',
+  startingHandicap: 'startingHandicap',
+  framesWon: 'framesWon',
+  isWinner: 'isWinner',
+  highBreak: 'highBreak',
+  highBreaks: 'highBreaks',
+  pointsFor: 'pointsFor',
+  pointsAgainst: 'pointsAgainst'
+} as const
+
+export type V3MatchPlayerScalarFieldEnum = (typeof V3MatchPlayerScalarFieldEnum)[keyof typeof V3MatchPlayerScalarFieldEnum]
+
+
+export const V3FrameScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameNumber: 'frameNumber',
+  redsCount: 'redsCount',
+  inputMode: 'inputMode',
+  breakerPlayerIndex: 'breakerPlayerIndex',
+  winnerPlayerIndex: 'winnerPlayerIndex',
+  scoreP0: 'scoreP0',
+  scoreP1: 'scoreP1',
+  rerackCount: 'rerackCount',
+  respottedBlack: 'respottedBlack',
+  status: 'status',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type V3FrameScalarFieldEnum = (typeof V3FrameScalarFieldEnum)[keyof typeof V3FrameScalarFieldEnum]
+
+
+export const V3BreakScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameId: 'frameId',
+  playerIndex: 'playerIndex',
+  sequence: 'sequence',
+  totalPoints: 'totalPoints',
+  ballCount: 'ballCount',
+  isClearance: 'isClearance',
+  isManualEntry: 'isManualEntry',
+  endReason: 'endReason',
+  missType: 'missType',
+  foulType: 'foulType',
+  ball: 'ball',
+  pocket: 'pocket',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type V3BreakScalarFieldEnum = (typeof V3BreakScalarFieldEnum)[keyof typeof V3BreakScalarFieldEnum]
+
+
+export const V3BallScalarFieldEnum = {
+  id: 'id',
+  breakId: 'breakId',
+  frameId: 'frameId',
+  sequence: 'sequence',
+  ballType: 'ballType',
+  points: 'points',
+  isFreeBall: 'isFreeBall',
+  phase: 'phase',
+  redsRemainingAfter: 'redsRemainingAfter',
+  createdAt: 'createdAt'
+} as const
+
+export type V3BallScalarFieldEnum = (typeof V3BallScalarFieldEnum)[keyof typeof V3BallScalarFieldEnum]
+
+
+export const V3EventScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  frameId: 'frameId',
+  breakId: 'breakId',
+  seq: 'seq',
+  type: 'type',
+  playerIndex: 'playerIndex',
+  ballType: 'ballType',
+  points: 'points',
+  missType: 'missType',
+  foulType: 'foulType',
+  pocket: 'pocket',
+  isFreeBall: 'isFreeBall',
+  freeBallGranted: 'freeBallGranted',
+  phase: 'phase',
+  redsRemaining: 'redsRemaining',
+  oldReds: 'oldReds',
+  newReds: 'newReds',
+  source: 'source',
+  remotePlayerIndex: 'remotePlayerIndex',
+  wasUndone: 'wasUndone',
+  manualFlagToIgnore: 'manualFlagToIgnore',
+  label: 'label',
+  payload: 'payload',
+  clientTs: 'clientTs',
+  createdAt: 'createdAt'
+} as const
+
+export type V3EventScalarFieldEnum = (typeof V3EventScalarFieldEnum)[keyof typeof V3EventScalarFieldEnum]
+
+
+export const V3RemoteSessionScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  roomId: 'roomId',
+  playerIndex: 'playerIndex',
+  token: 'token',
+  connectCount: 'connectCount',
+  createdAt: 'createdAt',
+  rotatedAt: 'rotatedAt',
+  lastConnectedAt: 'lastConnectedAt',
+  lastDisconnectedAt: 'lastDisconnectedAt'
+} as const
+
+export type V3RemoteSessionScalarFieldEnum = (typeof V3RemoteSessionScalarFieldEnum)[keyof typeof V3RemoteSessionScalarFieldEnum]
+
+
+export const V3RemoteEventScalarFieldEnum = {
+  id: 'id',
+  matchId: 'matchId',
+  roomId: 'roomId',
+  sessionId: 'sessionId',
+  type: 'type',
+  playerIndex: 'playerIndex',
+  commandType: 'commandType',
+  commandPayload: 'commandPayload',
+  createdAt: 'createdAt'
+} as const
+
+export type V3RemoteEventScalarFieldEnum = (typeof V3RemoteEventScalarFieldEnum)[keyof typeof V3RemoteEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -273,4 +502,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
