@@ -2,9 +2,11 @@ import React, { useCallback, useRef, useState } from "react";
 import csvText from "../assets/spielerliste.csv?raw";
 import { type MatchAssignment, type NamesListEntry } from "../lib/api";
 import { iocToFlag } from "../lib/flags";
+import { NorthernIrelandFlagIcon } from "./NorthernIrelandFlagIcon";
 
 const SETTINGS_CLICKS = 8;
 const CLICK_RESET_MS = 2000;
+const HOME_CLUB = "Round Robin Sports";
 
 export const PRACTICE_MODE_VALUE = "__practice__";
 
@@ -82,10 +84,16 @@ function PlayerPicker({
           </div>
         )}
         {filtered.map(p => {
-          const flag = p.ioc ? iocToFlag(p.ioc) : "";
+          const isNIR = p.ioc?.toUpperCase() === "NIR";
+          const flag = !isNIR && p.ioc ? iocToFlag(p.ioc) : "";
+          const isHomeClub = p.club === HOME_CLUB;
           return (
-            <div key={p.name} className="picker-item" onClick={() => onSelect(p.name)}>
-              {flag ? (
+            <div key={p.name} className={`picker-item${isHomeClub ? " picker-item-home" : ""}`} onClick={() => onSelect(p.name)}>
+              {isNIR ? (
+                <span style={{ marginRight: "0.5em", display: "inline-block", width: "1.4em", textAlign: "center" }}>
+                  <NorthernIrelandFlagIcon style={{ width: "1.1em", height: "0.82em", verticalAlign: "middle" }} />
+                </span>
+              ) : flag ? (
                 <span style={{ marginRight: "0.5em", display: "inline-block", width: "1.4em", textAlign: "center" }}>{flag}</span>
               ) : (
                 <span style={{ marginRight: "0.5em", display: "inline-block", width: "1.4em", textAlign: "center", color: "#e0a030", fontWeight: "bold" }}>?</span>

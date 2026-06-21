@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import type { MatchState } from "../lib/model";
 import { iocToFlag } from "../lib/flags";
+import { NorthernIrelandFlagIcon } from "./NorthernIrelandFlagIcon";
+
+function flagNode(ioc?: string): React.ReactNode {
+  if (ioc?.toUpperCase() === "NIR") {
+    return <NorthernIrelandFlagIcon style={{ width: "1.1em", height: "0.82em", verticalAlign: "middle" }} />;
+  }
+  return (ioc && iocToFlag(ioc)) || "🏳️";
+}
 
 interface HistoryEntry {
   label: string;
@@ -111,8 +119,8 @@ interface Props {
 }
 
 export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP1, iocP2, bestOf, framesP1, framesP2, currentFrame, currentScores, colorP1, colorP2, onClose }: Props) {
-  const flag1 = (iocP1 && iocToFlag(iocP1)) || "🏳️";
-  const flag2 = (iocP2 && iocToFlag(iocP2)) || "🏳️";
+  const flag1 = flagNode(iocP1);
+  const flag2 = flagNode(iocP2);
   const c1 = colorP1 ?? "#5599ff";
   const c2 = colorP2 ?? "#ff8833";
   const frames = deriveFrameStats(history, matchStartedAt);

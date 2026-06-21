@@ -607,35 +607,62 @@ div { font-weight: bold; }
   grid-template-columns: repeat(3, 26vw);
   justify-content: center;
   align-content: start;
-  gap: 0;
+  gap: 0.9vh 0.9vw;
+  padding: 1.5vh 1.5vw;
 }
 
 .picker-item {
-  padding: 1.8vh 1.5vw;
+  padding: 1.6vh 1.4vw;
   font-size: 1.5vw;
   color: #ddd;
   cursor: pointer;
-  border-bottom: 1px solid #222;
-  border-right: 1px solid #222;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  transition: transform 0.15s, box-shadow 0.2s, background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .picker-item:hover {
-  background: #2a2a2a;
+  background: #2c2c2c;
   color: #fff;
+  border-color: #5599ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45), 0 0 14px rgba(85,153,255,0.25);
+}
+
+.picker-item:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 18px rgba(85,153,255,0.4);
+}
+
+.picker-item-home {
+  background: rgba(255, 221, 87, 0.13);
+  border-color: rgba(255, 221, 87, 0.4);
+}
+
+.picker-item-home:hover {
+  background: rgba(255, 221, 87, 0.22);
+  border-color: rgba(255, 221, 87, 0.7);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45), 0 0 16px rgba(255, 221, 87, 0.35);
 }
 
 .picker-item-extra {
   grid-column: 1 / -1;
   color: #ffee44;
   font-weight: bold;
-  background: #1a1a00;
-  border-bottom: 2px solid #444;
+  background: #2a2400;
+  border: 1px solid #554a00;
+  border-radius: 10px;
   font-size: 1.8vw;
   text-align: center;
 }
 
 .picker-item-extra:hover {
-  background: #2a2a00;
+  background: #3a3000;
+  border-color: #ffee44;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45), 0 0 16px rgba(255,238,68,0.3);
 }
 
 .picker-no-result {
