@@ -63,10 +63,11 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
     ? (snapshot.activePlayerIndex as 0 | 1)
     : 0;
 
-  // Fouls are credited to the opponent; everything else goes to the active player.
+  // playerIndex always refers to the player at the table; the display applies
+  // the foul -> opponent crediting itself (same convention as the desktop calculator).
   useEffect(() => {
-    setTarget(isFoul ? (active === 0 ? 1 : 0) : active);
-  }, [active, isFoul]);
+    setTarget(active);
+  }, [active]);
 
   useEffect(() => {
     setFoulPicking(false);

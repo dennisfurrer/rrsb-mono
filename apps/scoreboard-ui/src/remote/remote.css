@@ -180,6 +180,7 @@
   background: #0a0a0c; border: 1px solid #25252b; border-radius: 12px;
   text-align: center; font-size: 40px; font-weight: bold !important; padding: 10px 16px; min-height: 60px;
   display: flex; align-items: center; justify-content: center;
+  color: #ffee00;
 }
 .rmt-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .rmt-key {
