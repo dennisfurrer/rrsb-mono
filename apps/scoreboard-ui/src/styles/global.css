@@ -20,43 +20,6 @@ html, body, #root {
 /* ===== SCOREBOARD LAYOUT ===== */
 div { font-weight: bold; }
 
-.dancing-smiley-wiggle {
-  transform-origin: 32px 30px;
-  animation: dancing-smiley-wiggle 0.6s ease-in-out infinite;
-}
-@keyframes dancing-smiley-wiggle {
-  0%, 100% { transform: rotate(-6deg) translateY(0); }
-  50%       { transform: rotate(6deg) translateY(-2px); }
-}
-
-.dancing-smiley-pose-grin {
-  animation: dancing-smiley-pose-grin 2.4s steps(1) infinite;
-}
-@keyframes dancing-smiley-pose-grin {
-  0%, 68%  { opacity: 1; }
-  72%, 96% { opacity: 0; }
-  100%     { opacity: 1; }
-}
-.dancing-smiley-pose-shout {
-  animation: dancing-smiley-pose-shout 2.4s steps(1) infinite;
-}
-@keyframes dancing-smiley-pose-shout {
-  0%, 68%  { opacity: 0; }
-  72%, 96% { opacity: 1; }
-  100%     { opacity: 0; }
-}
-
-.dancing-smiley-hand-a, .dancing-smiley-hand-b, .dancing-smiley-hand-c, .dancing-smiley-hand-d {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: dancing-smiley-hand-wiggle 0.6s ease-in-out infinite;
-}
-.dancing-smiley-hand-b, .dancing-smiley-hand-d { animation-delay: 0.3s; }
-@keyframes dancing-smiley-hand-wiggle {
-  0%, 100% { transform: rotate(-8deg); }
-  50%      { transform: rotate(8deg); }
-}
-
 .sb-active-dot {
   transition: opacity 1.6s ease-in-out;
   animation: sb-active-dot-pulse 2.6s ease-in-out infinite;

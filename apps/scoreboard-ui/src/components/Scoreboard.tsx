@@ -4,7 +4,7 @@ import type { MatchState } from "../lib/model";
 import { useAutoFontSize } from "../hooks/useAutoFontSize";
 import { useApiStatus } from "../lib/connection";
 import { VERSION } from "../version";
-import { DancingSmiley } from "./DancingSmiley";
+import trophyGif from "../assets/trophy.gif";
 
 interface Props {
   match: MatchState;
@@ -473,8 +473,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <div className="sb-table-number">Tisch {match.tableNumber}</div>
             )}
             {centerName && <div className="sb-center-name">{centerName}</div>}
-            {p1.winner && <DancingSmiley style={{ height: "48%" }} />}
-            {p2.winner && <DancingSmiley style={{ height: "48%" }} />}
+            {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
+            {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
             {match.finished && !p1.winner && !p2.winner && (
               <div className="sb-draw-pulse" style={{ fontSize: "1.9vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
                 UNENTSCHIEDEN
