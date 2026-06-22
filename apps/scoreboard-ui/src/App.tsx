@@ -140,8 +140,28 @@ export function App() {
     return createInitialMatchState();
   });
 
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [redoStack, setRedoStack] = useState<RedoEntry[]>([]);
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    const saved = sessionStorage.getItem("matchHistory");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        /* ignore */
+      }
+    }
+    return [];
+  });
+  const [redoStack, setRedoStack] = useState<RedoEntry[]>(() => {
+    const saved = sessionStorage.getItem("matchRedoStack");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        /* ignore */
+      }
+    }
+    return [];
+  });
   const [playerColors, setPlayerColors] = useState<[string | null, string | null]>([null, null]);
   const [showSetup, setShowSetup] = useState(!match.matchId);
   const [lastPlayerNames, setLastPlayerNames] = useState<{ name1: string; name2: string } | null>(null);
@@ -218,6 +238,15 @@ export function App() {
   useEffect(() => {
     sessionStorage.setItem("matchState", JSON.stringify(match));
   }, [match]);
+
+  // Persist break/action history + redo stack so a reload doesn't lose undo/redo
+  // or the frame-stats view (the DB already has every event independently of this).
+  useEffect(() => {
+    sessionStorage.setItem("matchHistory", JSON.stringify(history));
+  }, [history]);
+  useEffect(() => {
+    sessionStorage.setItem("matchRedoStack", JSON.stringify(redoStack));
+  }, [redoStack]);
 
   // Ping loop - every 30s
   useEffect(() => {
