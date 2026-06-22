@@ -440,6 +440,7 @@ function BreakPad({
   const pointsRunning = snapshot.players[0].score > 0 || snapshot.players[1].score > 0;
   const [confirmFrameEnd, setConfirmFrameEnd] = useState(false);
   const [foulPoints, setFoulPoints] = useState(4);
+  const [preFoulInput, setPreFoulInput] = useState("");
   const value = input === "" ? 0 : parseInt(input, 10);
   const press = (d: string) => {
     const next = (input + d).replace(/^0+(?=\d)/, "").slice(0, 4);
@@ -451,6 +452,7 @@ function BreakPad({
     if (isFoul) {
       onCommand({ t: "add_points", playerIndex: target, points: foulPoints, isFoul: true, isHandicap: false });
       setIsFoul(false);
+      setInput("");
       return;
     }
     if (value <= 0) return;
@@ -461,7 +463,9 @@ function BreakPad({
 
   return (
     <>
-      <div className="rmt-input-display">{input === "" ? "0" : input}</div>
+      <div className="rmt-input-display" style={{ color: isFoul ? "#ff4d4d" : "#ffee00" }}>
+        {isFoul ? `F ${foulPoints}` : input === "" ? "0" : input}
+      </div>
 
       <div className="rmt-keys">
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
@@ -480,7 +484,7 @@ function BreakPad({
         <span className="rmt-btn-icon-slot">{target === 0 ? "🙋🏻‍♂️" : ""}</span>
         <span>
           {isFoul ? (
-            <>Foul <span style={{ color: "#ffee00", fontWeight: "bold", fontSize: "1.15em" }}>{foulPoints}</span> eintragen</>
+            <>Foul <span style={{ color: "#ff4d4d", fontWeight: "bold", fontSize: "1.15em" }}>{foulPoints}</span> eintragen</>
           ) : value > 0 ? (
             isHandicap ? "Handicap eintragen" : "Break eintragen"
           ) : (
@@ -496,7 +500,14 @@ function BreakPad({
             <FlashButton
               key={n}
               className={`rmt-toggle${foulPoints === n ? " rmt-toggle--on" : ""}`}
-              onClick={() => (n === foulPoints ? setIsFoul(false) : setFoulPoints(n))}
+              onClick={() => {
+                if (n === foulPoints) {
+                  setInput(preFoulInput);
+                  setIsFoul(false);
+                } else {
+                  setFoulPoints(n);
+                }
+              }}
             >
               {n}
             </FlashButton>
@@ -506,6 +517,7 @@ function BreakPad({
             <FlashButton
               className="rmt-toggle rmt-toggle--on"
               onClick={() => {
+                setPreFoulInput(input);
                 setIsFoul(true);
                 setFoulPoints(4);
                 setIsHandicap(false);
