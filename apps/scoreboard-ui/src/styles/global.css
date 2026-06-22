@@ -21,65 +21,40 @@ html, body, #root {
 div { font-weight: bold; }
 
 .dancing-smiley-wiggle {
-  transform-origin: 32px 40px;
+  transform-origin: 32px 30px;
   animation: dancing-smiley-wiggle 0.6s ease-in-out infinite;
 }
 @keyframes dancing-smiley-wiggle {
-  0%, 100% { transform: rotate(-7deg) translateY(0); }
-  50%       { transform: rotate(7deg) translateY(-3px); }
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50%       { transform: rotate(6deg) translateY(-2px); }
 }
-.dancing-smiley-arm-left {
-  transform-origin: 11px 28px;
-  animation: dancing-smiley-arm-left 0.6s ease-in-out infinite;
+
+.dancing-smiley-pose-grin {
+  animation: dancing-smiley-pose-grin 2.4s steps(1) infinite;
 }
-@keyframes dancing-smiley-arm-left {
-  0%, 100% { transform: translateY(4px) rotate(-10deg); }
-  50%       { transform: translateY(-6px) rotate(15deg); }
+@keyframes dancing-smiley-pose-grin {
+  0%, 68%  { opacity: 1; }
+  72%, 96% { opacity: 0; }
+  100%     { opacity: 1; }
 }
-.dancing-smiley-arm-right {
-  transform-origin: 53px 28px;
-  animation: dancing-smiley-arm-right 0.6s ease-in-out infinite;
-  animation-delay: 0.3s;
+.dancing-smiley-pose-shout {
+  animation: dancing-smiley-pose-shout 2.4s steps(1) infinite;
 }
-@keyframes dancing-smiley-arm-right {
-  0%, 100% { transform: translateY(-6px) rotate(10deg); }
-  50%       { transform: translateY(4px) rotate(-15deg); }
+@keyframes dancing-smiley-pose-shout {
+  0%, 68%  { opacity: 0; }
+  72%, 96% { opacity: 1; }
+  100%     { opacity: 0; }
 }
-.dancing-smiley-leg-left {
-  transform-origin: 26px 46px;
-  animation: dancing-smiley-leg-left 0.6s ease-in-out infinite;
-}
-@keyframes dancing-smiley-leg-left {
-  0%, 100% { transform: rotate(-14deg); }
-  50%       { transform: rotate(14deg); }
-}
-.dancing-smiley-leg-right {
-  transform-origin: 38px 46px;
-  animation: dancing-smiley-leg-right 0.6s ease-in-out infinite;
-  animation-delay: 0.3s;
-}
-@keyframes dancing-smiley-leg-right {
-  0%, 100% { transform: rotate(14deg); }
-  50%       { transform: rotate(-14deg); }
-}
-.dancing-smiley-hat {
-  transform-origin: 32px 18px;
-  animation: dancing-smiley-hat 0.6s ease-in-out infinite;
-}
-@keyframes dancing-smiley-hat {
-  0%, 100% { transform: rotate(-6deg); }
-  50%       { transform: rotate(6deg); }
-}
-.dancing-smiley-sparkle {
+
+.dancing-smiley-hand-a, .dancing-smiley-hand-b, .dancing-smiley-hand-c, .dancing-smiley-hand-d {
   transform-box: fill-box;
   transform-origin: center;
-  animation: dancing-smiley-sparkle 1.2s ease-in-out infinite;
+  animation: dancing-smiley-hand-wiggle 0.6s ease-in-out infinite;
 }
-.dancing-smiley-sparkle-2 { animation-delay: 0.3s; }
-.dancing-smiley-sparkle-3 { animation-delay: 0.6s; }
-@keyframes dancing-smiley-sparkle {
-  0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
-  50%       { opacity: 1; transform: scale(1.15) rotate(25deg); }
+.dancing-smiley-hand-b, .dancing-smiley-hand-d { animation-delay: 0.3s; }
+@keyframes dancing-smiley-hand-wiggle {
+  0%, 100% { transform: rotate(-8deg); }
+  50%      { transform: rotate(8deg); }
 }
 
 .sb-active-dot {
