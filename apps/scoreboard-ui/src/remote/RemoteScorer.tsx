@@ -383,11 +383,11 @@ function BallByBallPad({
           )}
 
           {frameOver ? (
-            <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+            <FlashButton className="rmt-btn rmt-btn--frame-end rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden ▸
             </FlashButton>
           ) : (
-            <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+            <FlashButton className="rmt-btn rmt-btn--frame-end rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden
             </FlashButton>
           )}
@@ -499,7 +499,7 @@ function BreakPad({
           [4, 5, 6, 7].map((n) => (
             <FlashButton
               key={n}
-              className={`rmt-toggle${foulPoints === n ? " rmt-toggle--on" : ""}`}
+              className={`rmt-toggle ${foulPoints === n ? "rmt-toggle--on" : "rmt-toggle--foul"}`}
               onClick={() => {
                 if (n === foulPoints) {
                   setInput(preFoulInput);
@@ -559,7 +559,7 @@ function BreakPad({
             </div>
           </div>
         ) : (
-          <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" disabled={isFoul} onClick={() => setConfirmFrameEnd(true)}>
+          <FlashButton className="rmt-btn rmt-btn--frame-end rmt-btn--wide" disabled={isFoul} onClick={() => setConfirmFrameEnd(true)}>
             Frame beenden
           </FlashButton>
         )
