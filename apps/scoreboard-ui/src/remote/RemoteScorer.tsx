@@ -387,7 +387,7 @@ function BallByBallPad({
               Frame beenden ▸
             </FlashButton>
           ) : (
-            <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
+            <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden
             </FlashButton>
           )}
@@ -547,7 +547,7 @@ function BreakPad({
             </div>
           </div>
         ) : (
-          <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" disabled={isFoul} onClick={() => setConfirmFrameEnd(true)}>
+          <FlashButton className="rmt-btn rmt-btn--primary rmt-btn--wide" disabled={isFoul} onClick={() => setConfirmFrameEnd(true)}>
             Frame beenden
           </FlashButton>
         )
