@@ -110,7 +110,6 @@ export function RemoteScorer({ snapshot, myPlayerIndex, status, onCommand, onDis
             <div className="rmt-pname">{snapshot.players[pi].name}</div>
             <div className="rmt-pscore">{snapshot.players[pi].score}</div>
             <div className="rmt-pmeta">Frames: {snapshot.players[pi].frames}</div>
-            {pi === active && !snapshot.finished && <span className="rmt-tag">Am Tisch</span>}
           </FlashButton>
         ))}
       </div>
