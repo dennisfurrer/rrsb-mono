@@ -198,7 +198,10 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     const computeSize = (el: HTMLDivElement) => {
       const parent = el.parentElement;
       if (!parent) return 500;
-      const maxW = parent.clientWidth * 0.95 * SCORE_SCALE;
+      // Reserve the 1cm outer-edge padding (CSS reference px) so it shows as
+      // real space instead of just shrinking the font to fill the same width.
+      const ONE_CM_PX = 37.8;
+      const maxW = parent.clientWidth * 0.95 * SCORE_SCALE - ONE_CM_PX;
       const maxH = parent.clientHeight * 0.9 * SCORE_SCALE;
       el.style.height = "auto";
       let lo = 8, hi = 500;
@@ -404,7 +407,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             {noScores && !matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
-                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
+                style={{ position: "absolute", top: "calc(1vh + 1cm)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
               >
                 ✎
               </button>
@@ -543,7 +546,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             {noScores && !matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
-                style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
+                style={{ position: "absolute", top: "calc(1vh + 1cm)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
               >
                 ✎
               </button>
