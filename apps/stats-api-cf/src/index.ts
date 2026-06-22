@@ -10,7 +10,10 @@ import { remoteRouter } from "./routes/remote";
 
 const app = new Hono<AppEnv>();
 
-app.use("*", cors({ origin: "*" }));
+// maxAge lets the browser cache the CORS preflight (OPTIONS) instead of
+// re-sending it before every POST — the phone remote fires one POST per tap,
+// so an uncached preflight doubles the round-trip latency on every action.
+app.use("*", cors({ origin: "*", maxAge: 86400 }));
 
 // Per-request Prisma client bound to this Worker's D1 database.
 app.use("*", async (c, next) => {

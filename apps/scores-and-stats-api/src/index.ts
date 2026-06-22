@@ -19,7 +19,10 @@ import { v3Router } from "./routes/v3/index.js";
 
 const app = express();
 
-app.use(cors({ origin: "*", credentials: true }));
+// maxAge lets the browser cache the CORS preflight (OPTIONS) instead of
+// re-sending it before every POST — the phone remote fires one POST per tap,
+// so an uncached preflight doubles the round-trip latency on every action.
+app.use(cors({ origin: "*", credentials: true, maxAge: 86400 }));
 app.use(express.json());
 
 const port = process.env.PORT || 7200;

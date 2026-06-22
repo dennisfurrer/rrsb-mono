@@ -103,6 +103,10 @@ async function logRemote(
 }
 
 function sseHeaders(res: Response) {
+  // Disable Nagle's algorithm — these are small, latency-sensitive event
+  // writes (remote scoring commands), not bulk data, so we want each one on
+  // the wire immediately rather than batched.
+  res.socket?.setNoDelay(true);
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache, no-transform",
