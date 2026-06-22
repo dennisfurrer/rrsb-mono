@@ -385,10 +385,14 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
       )}
       <div className="sb-main">
         {/* Left 40% */}
-        <div className="sb-left" onClick={() => {
-          if (matchFinished) { setShowFinishedHint(true); return; }
-          onPlayerClick(0);
-        }}>
+        <div
+          className="sb-left"
+          style={{ background: `linear-gradient(135deg, ${effP1Color ?? "#5599ff"}1f 0%, transparent 55%)` }}
+          onClick={() => {
+            if (matchFinished) { setShowFinishedHint(true); return; }
+            onPlayerClick(0);
+          }}
+        >
           <div
             ref={p1NameRowRef}
             className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}
@@ -520,10 +524,14 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         </div>
 
         {/* Right 40% */}
-        <div className="sb-right" onClick={() => {
-          if (matchFinished) { setShowFinishedHint(true); return; }
-          onPlayerClick(1);
-        }}>
+        <div
+          className="sb-right"
+          style={{ background: `linear-gradient(225deg, ${effP2Color ?? "#ff8833"}1f 0%, transparent 55%)` }}
+          onClick={() => {
+            if (matchFinished) { setShowFinishedHint(true); return; }
+            onPlayerClick(1);
+          }}
+        >
           <div
             ref={p2NameRowRef}
             className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}
