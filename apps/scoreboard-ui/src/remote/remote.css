@@ -151,6 +151,10 @@
   width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0;
   animation: rmt-active-dot-pulse 2.6s ease-in-out infinite;
 }
+.rmt-btn-icon-slot {
+  width: 24px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 18px; line-height: 1;
+}
 @keyframes rmt-active-dot-pulse {
   0%, 100% { background: #fff066; box-shadow: 0 0 8px #fff066; }
   50%       { background: #e8c100; box-shadow: 0 0 5px #e8c100; }
