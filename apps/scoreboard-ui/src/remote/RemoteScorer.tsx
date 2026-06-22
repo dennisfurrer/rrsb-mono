@@ -483,44 +483,43 @@ function BreakPad({
       </FlashButton>
 
       <div className="rmt-toggles">
-        <FlashButton
-          className={`rmt-toggle${isFoul ? " rmt-toggle--on" : ""}`}
-          onClick={() => {
-            const next = !isFoul;
-            setIsFoul(next);
-            if (next) { setFoulPoints(4); setIsHandicap(false); }
-          }}
-        >
-          Foul (an Gegner)
-        </FlashButton>
-        {pointsRunning ? (
-          <FlashButton className="rmt-toggle rmt-toggle--undo" disabled={isFoul} onClick={() => onCommand({ t: "undo" })}>
-            ↶ Undo
-          </FlashButton>
-        ) : (
-          <FlashButton
-            className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
-            disabled={isFoul}
-            onClick={() => { setIsHandicap(!isHandicap); if (!isHandicap) setIsFoul(false); }}
-          >
-            Handicap
-          </FlashButton>
-        )}
-      </div>
-
-      {isFoul && (
-        <div className="rmt-toggles">
-          {[4, 5, 6, 7].map((n) => (
+        {isFoul ? (
+          [4, 5, 6, 7].map((n) => (
             <FlashButton
               key={n}
               className={`rmt-toggle${foulPoints === n ? " rmt-toggle--on" : ""}`}
-              onClick={() => setFoulPoints(n)}
+              onClick={() => (n === foulPoints ? setIsFoul(false) : setFoulPoints(n))}
             >
               {n}
             </FlashButton>
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <>
+            <FlashButton
+              className="rmt-toggle"
+              onClick={() => {
+                setIsFoul(true);
+                setFoulPoints(4);
+                setIsHandicap(false);
+              }}
+            >
+              Foul
+            </FlashButton>
+            {pointsRunning ? (
+              <FlashButton className="rmt-toggle rmt-toggle--undo" onClick={() => onCommand({ t: "undo" })}>
+                ↶ Undo
+              </FlashButton>
+            ) : (
+              <FlashButton
+                className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
+                onClick={() => setIsHandicap(!isHandicap)}
+              >
+                Handicap
+              </FlashButton>
+            )}
+          </>
+        )}
+      </div>
 
       {pointsRunning && (
         confirmFrameEnd ? (
