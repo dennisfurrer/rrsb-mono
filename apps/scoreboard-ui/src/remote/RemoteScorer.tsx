@@ -474,7 +474,7 @@ function BreakPad({
 
       <FlashButton
         className="rmt-btn rmt-btn--primary rmt-btn--wide"
-        style={{ display: "grid", gridTemplateColumns: "24px 1fr 24px", alignItems: "center", gap: 14 }}
+        style={{ display: "grid", gridTemplateColumns: "24px 1fr 24px", alignItems: "center", gap: 14, padding: "0 19px" }}
         onClick={isFoul || value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
       >
         <span className="rmt-btn-icon-slot">{target === 0 ? "🙋🏻‍♂️" : ""}</span>
