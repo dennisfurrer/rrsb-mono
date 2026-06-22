@@ -478,7 +478,15 @@ function BreakPad({
         onClick={isFoul || value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
       >
         <span className="rmt-btn-icon-slot">{target === 0 ? "🙋🏻‍♂️" : ""}</span>
-        <span>{isFoul ? "Foul eintragen" : value > 0 ? (isHandicap ? "Handicap eintragen" : "Break eintragen") : "Spielerwechsel"}</span>
+        <span>
+          {isFoul ? (
+            <>Foul <span style={{ color: "#ffee00", fontWeight: "bold", fontSize: "1.15em" }}>{foulPoints}</span> eintragen</>
+          ) : value > 0 ? (
+            isHandicap ? "Handicap eintragen" : "Break eintragen"
+          ) : (
+            "Spielerwechsel"
+          )}
+        </span>
         <span className="rmt-btn-icon-slot">{target === 1 ? "🙋🏻‍♂️" : ""}</span>
       </FlashButton>
 
@@ -496,7 +504,7 @@ function BreakPad({
         ) : (
           <>
             <FlashButton
-              className="rmt-toggle"
+              className="rmt-toggle rmt-toggle--on"
               onClick={() => {
                 setIsFoul(true);
                 setFoulPoints(4);
