@@ -45,6 +45,42 @@ div { font-weight: bold; }
   0%, 100% { transform: translateY(-6px) rotate(10deg); }
   50%       { transform: translateY(4px) rotate(-15deg); }
 }
+.dancing-smiley-leg-left {
+  transform-origin: 26px 46px;
+  animation: dancing-smiley-leg-left 0.6s ease-in-out infinite;
+}
+@keyframes dancing-smiley-leg-left {
+  0%, 100% { transform: rotate(-14deg); }
+  50%       { transform: rotate(14deg); }
+}
+.dancing-smiley-leg-right {
+  transform-origin: 38px 46px;
+  animation: dancing-smiley-leg-right 0.6s ease-in-out infinite;
+  animation-delay: 0.3s;
+}
+@keyframes dancing-smiley-leg-right {
+  0%, 100% { transform: rotate(14deg); }
+  50%       { transform: rotate(-14deg); }
+}
+.dancing-smiley-hat {
+  transform-origin: 32px 18px;
+  animation: dancing-smiley-hat 0.6s ease-in-out infinite;
+}
+@keyframes dancing-smiley-hat {
+  0%, 100% { transform: rotate(-6deg); }
+  50%       { transform: rotate(6deg); }
+}
+.dancing-smiley-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dancing-smiley-sparkle 1.2s ease-in-out infinite;
+}
+.dancing-smiley-sparkle-2 { animation-delay: 0.3s; }
+.dancing-smiley-sparkle-3 { animation-delay: 0.6s; }
+@keyframes dancing-smiley-sparkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+  50%       { opacity: 1; transform: scale(1.15) rotate(25deg); }
+}
 
 .sb-active-dot {
   transition: opacity 1.6s ease-in-out;
