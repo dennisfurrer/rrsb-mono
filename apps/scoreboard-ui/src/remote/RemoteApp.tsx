@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  decodeRemoteParam,
   sendRemoteCommand,
   stateStreamUrl,
   type RemoteCommand,
   type RemoteSnapshot,
 } from "../lib/remote";
 import { RemoteScorer } from "./RemoteScorer";
+import { QrScanner } from "./QrScanner";
 import "./remote.css";
 
 export type ConnStatus = "connecting" | "live" | "reconnecting" | "kicked" | "invalid";
@@ -15,6 +17,8 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
   const [myPlayerIndex, setMyPlayerIndex] = useState<0 | 1 | null>(null);
   const [status, setStatus] = useState<ConnStatus>("connecting");
   const [disconnected, setDisconnected] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanError, setScanError] = useState<string | null>(null);
   const queue = useRef<RemoteCommand[]>([]);
   const flushing = useRef(false);
   const esRef = useRef<EventSource | null>(null);
@@ -81,6 +85,25 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
     setDisconnected(true);
   }, []);
 
+  const handleScanResult = useCallback((text: string) => {
+    try {
+      const url = new URL(text, window.location.origin);
+      const param = url.searchParams.get("r");
+      const decoded = param ? decodeRemoteParam(param) : null;
+      if (!decoded || url.origin !== window.location.origin) {
+        throw new Error("invalid");
+      }
+      window.location.href = url.toString();
+    } catch {
+      setScanning(false);
+      setScanError("Das war kein gültiger Scoreboard-QR-Code. Bitte erneut versuchen.");
+    }
+  }, []);
+
+  if (scanning) {
+    return <QrScanner onResult={handleScanResult} onCancel={() => setScanning(false)} />;
+  }
+
   if (disconnected || status === "kicked" || status === "invalid") {
     const msg = status === "kicked"
       ? "Diese Verbindung wurde auf einem anderen Gerät geöffnet."
@@ -91,8 +114,21 @@ export function RemoteApp({ roomId, token }: { roomId: string; token: string }) 
         <div style={{ color: "#fff", fontSize: 17, fontWeight: "bold" }}>{msg}</div>
         <div style={{ color: "#aaa", fontSize: 14, lineHeight: 1.6 }}>
           Falls der PC neu gestartet wurde:<br />
-          Bitte den <strong style={{ color: "#fff" }}>neuen QR-Code</strong> auf dem Scoreboard-Bildschirm mit der Kamera-App scannen.
+          Bitte den <strong style={{ color: "#fff" }}>neuen QR-Code</strong> auf dem Scoreboard-Bildschirm scannen.
         </div>
+        {scanError && (
+          <div style={{ color: "#ff8080", fontSize: 13 }}>{scanError}</div>
+        )}
+        <button
+          className="rmt-btn rmt-btn--primary"
+          style={{ width: "100%", maxWidth: 280 }}
+          onClick={() => {
+            setScanError(null);
+            setScanning(true);
+          }}
+        >
+          📷 QR-Code scannen
+        </button>
         <button
           className="rmt-btn rmt-btn--ghost"
           style={{ width: "100%", maxWidth: 280 }}
