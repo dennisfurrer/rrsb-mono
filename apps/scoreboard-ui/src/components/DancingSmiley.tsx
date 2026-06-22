@@ -23,8 +23,8 @@ export function DancingSmiley({ style }: { style?: CSSProperties }) {
       </g>
 
       <g className="dancing-smiley-wiggle">
-        <rect x="23" y="46" width="6" height="13" rx="3" fill="#222" className="dancing-smiley-leg-left" />
-        <rect x="35" y="46" width="6" height="13" rx="3" fill="#222" className="dancing-smiley-leg-right" />
+        <rect x="23" y="46" width="6" height="13" rx="3" fill="#3a5fcd" stroke="#1a2a55" strokeWidth="1" className="dancing-smiley-leg-left" />
+        <rect x="35" y="46" width="6" height="13" rx="3" fill="#3a5fcd" stroke="#1a2a55" strokeWidth="1" className="dancing-smiley-leg-right" />
 
         <g className="dancing-smiley-hat">
           <path d="M32 2 L40 18 L24 18 Z" fill="#ff5577" stroke="#3a2a00" strokeWidth="1.2" />
