@@ -439,6 +439,7 @@ function BreakPad({
 }) {
   const pointsRunning = snapshot.players[0].score > 0 || snapshot.players[1].score > 0;
   const [confirmFrameEnd, setConfirmFrameEnd] = useState(false);
+  const [foulPoints, setFoulPoints] = useState(4);
   const value = input === "" ? 0 : parseInt(input, 10);
   const press = (d: string) => {
     const next = (input + d).replace(/^0+(?=\d)/, "").slice(0, 4);
@@ -447,10 +448,14 @@ function BreakPad({
   };
 
   const submit = () => {
+    if (isFoul) {
+      onCommand({ t: "add_points", playerIndex: target, points: foulPoints, isFoul: true, isHandicap: false });
+      setIsFoul(false);
+      return;
+    }
     if (value <= 0) return;
-    onCommand({ t: "add_points", playerIndex: target, points: value, isFoul, isHandicap });
+    onCommand({ t: "add_points", playerIndex: target, points: value, isFoul: false, isHandicap });
     setInput("");
-    setIsFoul(false);
     setIsHandicap(false);
   };
 
@@ -460,51 +465,62 @@ function BreakPad({
 
       <div className="rmt-keys">
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
-          <FlashButton key={d} className="rmt-key" onClick={() => press(d)}>{d}</FlashButton>
+          <FlashButton key={d} className="rmt-key" disabled={isFoul} onClick={() => press(d)}>{d}</FlashButton>
         ))}
-        <FlashButton className="rmt-key" onClick={() => setInput("")}>C</FlashButton>
-        <FlashButton className="rmt-key" onClick={() => press("0")}>0</FlashButton>
-        <FlashButton className="rmt-key" onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => setInput("")}>C</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => press("0")}>0</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
       </div>
 
       <FlashButton
         className="rmt-btn rmt-btn--primary rmt-btn--wide"
-        style={{ gap: 14 }}
-        onClick={value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
+        style={{ display: "grid", gridTemplateColumns: "24px 1fr 24px", alignItems: "center", gap: 14 }}
+        onClick={isFoul || value > 0 ? submit : () => onCommand({ t: "switch_player", playerIndex: target === 0 ? 1 : 0 })}
       >
-        {target === 0 && (
-          <span className="rmt-btn-icon-slot">
-            {value > 0 ? <span className="rmt-active-dot" /> : "🙋🏻‍♂️"}
-          </span>
-        )}
-        {value > 0 ? (isFoul ? "Foul eintragen" : isHandicap ? "Handicap eintragen" : "Break eintragen") : "Spielerwechsel"}
-        {target === 1 && (
-          <span className="rmt-btn-icon-slot">
-            {value > 0 ? <span className="rmt-active-dot" /> : "🙋🏻‍♂️"}
-          </span>
-        )}
+        <span className="rmt-btn-icon-slot">{target === 0 ? "🙋🏻‍♂️" : ""}</span>
+        <span>{isFoul ? "Foul eintragen" : value > 0 ? (isHandicap ? "Handicap eintragen" : "Break eintragen") : "Spielerwechsel"}</span>
+        <span className="rmt-btn-icon-slot">{target === 1 ? "🙋🏻‍♂️" : ""}</span>
       </FlashButton>
 
       <div className="rmt-toggles">
         <FlashButton
           className={`rmt-toggle${isFoul ? " rmt-toggle--on" : ""}`}
-          onClick={() => { setIsFoul(!isFoul); if (!isFoul) setIsHandicap(false); }}
+          onClick={() => {
+            const next = !isFoul;
+            setIsFoul(next);
+            if (next) { setFoulPoints(4); setIsHandicap(false); }
+          }}
         >
           Foul (an Gegner)
         </FlashButton>
         {pointsRunning ? (
-          <FlashButton className="rmt-toggle rmt-toggle--undo" onClick={() => onCommand({ t: "undo" })}>
+          <FlashButton className="rmt-toggle rmt-toggle--undo" disabled={isFoul} onClick={() => onCommand({ t: "undo" })}>
             ↶ Undo
           </FlashButton>
         ) : (
           <FlashButton
             className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
+            disabled={isFoul}
             onClick={() => { setIsHandicap(!isHandicap); if (!isHandicap) setIsFoul(false); }}
           >
             Handicap
           </FlashButton>
         )}
       </div>
+
+      {isFoul && (
+        <div className="rmt-toggles">
+          {[4, 5, 6, 7].map((n) => (
+            <FlashButton
+              key={n}
+              className={`rmt-toggle${foulPoints === n ? " rmt-toggle--on" : ""}`}
+              onClick={() => setFoulPoints(n)}
+            >
+              {n}
+            </FlashButton>
+          ))}
+        </div>
+      )}
 
       {pointsRunning && (
         confirmFrameEnd ? (
@@ -524,7 +540,7 @@ function BreakPad({
             </div>
           </div>
         ) : (
-          <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" onClick={() => setConfirmFrameEnd(true)}>
+          <FlashButton className="rmt-btn rmt-btn--ghost rmt-btn--wide" disabled={isFoul} onClick={() => setConfirmFrameEnd(true)}>
             Frame beenden
           </FlashButton>
         )

@@ -147,17 +147,9 @@
 .rmt-btn--miss { background: #243a24; border-color: #2f5a2f; color: #9ce29c; font-weight: bold !important; }
 .rmt-btn--foul { background: #3a2424; border-color: #5a2f2f; color: #e2a0a0; }
 .rmt-btn--primary { background: #1a5c1a; border: none; color: #b6f5b6; font-weight: bold !important; }
-.rmt-active-dot {
-  width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0;
-  animation: rmt-active-dot-pulse 2.6s ease-in-out infinite;
-}
 .rmt-btn-icon-slot {
   width: 24px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
   font-size: 18px; line-height: 1;
-}
-@keyframes rmt-active-dot-pulse {
-  0%, 100% { background: #fff066; box-shadow: 0 0 8px #fff066; }
-  50%       { background: #e8c100; box-shadow: 0 0 5px #e8c100; }
 }
 .rmt-btn--ghost { background: #161619; color: #aaa; }
 .rmt-btn--undo { background: #1a1a40; border-color: #3344aa; color: #6688ff; }
@@ -200,11 +192,13 @@
   color: #fff; font-size: 24px; font-weight: bold !important; cursor: pointer;
 }
 .rmt-key:active { background: #26262e; }
+.rmt-key:disabled { opacity: 0.3; cursor: default; }
 .rmt-toggles { display: flex; gap: 8px; }
 .rmt-toggle {
   flex: 1; min-height: 44px; border-radius: 10px; border: 1px solid #2c2c34;
   background: #17171b; color: #aaa; font-size: 14px; cursor: pointer;
 }
+.rmt-toggle:disabled { opacity: 0.3; cursor: default; }
 .rmt-toggle--on { background: #3a2424; border-color: #5a2f2f; color: #e2a0a0; }
 .rmt-toggle--undo { background: #1a1a40; border-color: #3344aa; color: #6688ff; }
 .rmt-toggle--hc-on { background: #3a3024; border-color: #6a5a2f; color: #e2c890; }
