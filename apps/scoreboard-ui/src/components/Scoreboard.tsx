@@ -79,9 +79,15 @@ function isGrayish(hex: string): boolean {
 
 function nameGlowStyle(color: string | undefined): CSSProperties | undefined {
   if (!color) return undefined;
+  const light = adjustColor(color, 2.2);
+  const dark = adjustColor(color, 0.8);
   return {
-    color,
-    textShadow: `0 0 4px ${color}cc, 0 0 10px ${color}88, 0 0 20px ${color}44`,
+    backgroundImage: `linear-gradient(180deg, ${light} 0%, ${light} 38%, ${dark} 62%, ${dark} 100%)`,
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    color: "transparent",
+    textShadow: `0 0 10px ${color}88, 0 0 20px ${color}44`,
   };
 }
 
@@ -198,10 +204,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     const computeSize = (el: HTMLDivElement) => {
       const parent = el.parentElement;
       if (!parent) return 500;
-      // Reserve the 1cm outer-edge padding (CSS reference px) so it shows as
-      // real space instead of just shrinking the font to fill the same width.
-      const ONE_CM_PX = 37.8;
-      const maxW = parent.clientWidth * 0.95 * SCORE_SCALE - ONE_CM_PX;
+      const maxW = parent.clientWidth * 0.95 * SCORE_SCALE;
       const maxH = parent.clientHeight * 0.9 * SCORE_SCALE;
       el.style.height = "auto";
       let lo = 8, hi = 500;
@@ -407,7 +410,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             {noScores && !matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
-                style={{ position: "absolute", top: "calc(1vh + 1cm)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
+                style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
               >
                 ✎
               </button>
@@ -546,7 +549,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             {noScores && !matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
-                style={{ position: "absolute", top: "calc(1vh + 1cm)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
+                style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
               >
                 ✎
               </button>
