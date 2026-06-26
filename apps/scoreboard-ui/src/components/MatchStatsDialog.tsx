@@ -406,6 +406,9 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
         const p1wins = scores !== null && !isLive && fs1 > fs0;
         const hasAnyHandicap = f.handicap[0] > 0 || f.handicap[1] > 0;
         const durationStr = f.startTime ? formatDuration(f.startTime, f.endTime) : null;
+        const fmtTime = (ts: string | number) => { const d = new Date(ts); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+        const startTimeStr = f.startTime ? fmtTime(f.startTime) : null;
+        const endTimeStr = f.endTime ? fmtTime(f.endTime) : fmtTime(Date.now());
 
         // Chart
         const fh = history.filter(e => e.frameNumber === f.frameNumber);
@@ -533,8 +536,13 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 {(durationStr || f.reracks > 0) && <>
                   <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
                   <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong> : ""}</div>
-                  <div style={{ color: "#ffa040" }}>{f.reracks > 0 ? "🔴 Re-racks:" : ""}</div>
-                  <div style={{ color: "#ffa040" }}>{f.reracks > 0 ? f.reracks : ""}</div>
+                  <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
+                  <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
+                  {f.reracks > 0 && <>
+                    <div /><div />
+                    <div style={{ color: "#ffa040" }}>🔴 Re-racks:</div>
+                    <div style={{ color: "#ffa040" }}>{f.reracks}</div>
+                  </>}
                 </>}
               </div>
 
