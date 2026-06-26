@@ -214,6 +214,7 @@ interface Props {
   bestOf: number;
   isFrameStart: boolean;
   onChangeBestOf?: (newBestOf: number) => void;
+  pulseFrameEnd?: boolean;
 }
 
 export function MenuDialog({
@@ -238,6 +239,7 @@ export function MenuDialog({
   bestOf,
   isFrameStart,
   onChangeBestOf,
+  pulseFrameEnd,
 }: Props) {
   const [confirmMatchEnd, setConfirmMatchEnd] = useState(false);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
@@ -524,7 +526,7 @@ export function MenuDialog({
           <div style={{ display: "flex", gap: "0.8vw" }}>
             {frameEndActive ? (
               <AutoTextButton
-                className="menu-btn-frame-end"
+                className={`menu-btn-frame-end${pulseFrameEnd ? " frame-end-btn-glow" : ""}`}
                 onClick={onFrameEnd}
                 style={{ flex: 1 }}
               >

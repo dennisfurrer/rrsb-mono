@@ -1820,6 +1820,11 @@ export function App() {
           bestOf={match.bestOf}
           isFrameStart={isFrameStart}
           onChangeBestOf={changeBestOf}
+          pulseFrameEnd={
+            match.inputMode !== "ballbyball" &&
+            !match.finished &&
+            (match.players[0].score > 0 || match.players[1].score > 0)
+          }
         />
       )}
 
