@@ -208,6 +208,8 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
     return () => clearInterval(id);
   }, []);
 
+  const [selectedFrame, setSelectedFrame] = useState<FrameStat | null>(null);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (scrollRef.current) {
@@ -255,7 +257,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
             const hasAnyHandicap = frame.handicap[0] > 0 || frame.handicap[1] > 0;
 
             return (
-              <div key={frame.frameNumber} className={`stats-frame${isLive ? " stats-frame-live" : i % 2 === 1 ? " stats-frame-odd" : ""}`}>
+              <div key={frame.frameNumber} className={`stats-frame${isLive ? " stats-frame-live" : i % 2 === 1 ? " stats-frame-odd" : ""}`} style={{ cursor: "pointer" }} onClick={(e) => { e.stopPropagation(); setSelectedFrame(frame); }}>
                 {/* Left: P1 data */}
                 <div className="stats-player-col stats-player-col-left">
                   <span className="stats-grid-val" style={{ color: frame.breaks[0].length > 0 ? c1 : "#555" }}>
@@ -393,6 +395,163 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           </div>
         )}
       </div>
+
+      {selectedFrame && (() => {
+        const f = selectedFrame;
+        const isLive = f.scores === null && f.frameNumber === currentFrame;
+        const scores = f.scores ?? (isLive ? currentScores : null);
+        const fs0 = scores?.[0] ?? 0;
+        const fs1 = scores?.[1] ?? 0;
+        const p0wins = scores !== null && !isLive && fs0 > fs1;
+        const p1wins = scores !== null && !isLive && fs1 > fs0;
+        const hasAnyHandicap = f.handicap[0] > 0 || f.handicap[1] > 0;
+        const durationStr = f.startTime ? formatDuration(f.startTime, f.endTime) : null;
+
+        // Chart
+        const fh = history.filter(e => e.frameNumber === f.frameNumber);
+        const chartNode = (() => {
+          if (fs0 === 0 && fs1 === 0) return null;
+          const svgW = 500, svgH = 150, px = 32, py = 20;
+          const cW = svgW - 2 * px, cH = svgH - 2 * py;
+          const yMax = Math.max(fs0, fs1) + 5;
+          const lastRerackIdx = fh.reduce((idx, e, i) => e.kind === "rerack" ? i : idx, -1);
+          const eventsAfterRerack = lastRerackIdx >= 0 ? fh.slice(lastRerackIdx + 1) : fh;
+          const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+          const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+          const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1 }> = [{ s: [initHC0, initHC1] }];
+          let acc0 = initHC0, acc1 = initHC1;
+          for (const e of eventsAfterRerack) {
+            if (e.kind === "handicap") continue;
+            let n0 = acc0, n1 = acc1;
+            if (e.kind === "break") {
+              if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
+              else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
+            } else if (e.kind === "foul") {
+              if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
+              else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
+            } else { continue; }
+            if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
+              acc0 = n0; acc1 = n1;
+              const isFoul = e.kind === "foul";
+              scoreData.push({ s: [acc0, acc1], b: !isFoul ? (e.playerIndex as 0 | 1) : undefined, f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined });
+            }
+          }
+          const last = scoreData[scoreData.length - 1];
+          if (last.s[0] !== fs0 || last.s[1] !== fs1) scoreData.push({ s: [fs0, fs1] });
+          const firstEvent = eventsAfterRerack.find(e => e.kind === "break" || e.kind === "foul");
+          const p0First = firstEvent ? (firstEvent.kind === "break" ? firstEvent.playerIndex === 0 : firstEvent.playerIndex === 1) : true;
+          const n = scoreData.length;
+          const toX = (i: number) => px + (n > 1 ? (i / (n - 1)) * cW : cW / 2);
+          const toY = (score: number) => py + cH - (score / yMax) * cH;
+          const pts0 = scoreData.map((pt, i) => `${toX(i).toFixed(1)},${toY(pt.s[0]).toFixed(1)}`).join(" ");
+          const pts1 = scoreData.map((pt, i) => `${toX(i).toFixed(1)},${toY(pt.s[1]).toFixed(1)}`).join(" ");
+          const midY = toY(Math.max(fs0, fs1) / 2);
+          const lastX = toX(n - 1);
+          const lastY0 = toY(fs0), lastY1 = toY(fs1);
+          const lcMin = 14;
+          const lcGap0 = initHC0 > 0 && initHC1 === 0 ? toY(0) - toY(initHC0) : Infinity;
+          const lcGap1 = initHC1 > 0 && initHC0 === 0 ? toY(0) - toY(initHC1) : Infinity;
+          const lcHC0y = lcGap0 < lcMin ? (toY(initHC0) + toY(0)) / 2 - lcMin / 2 : toY(initHC0);
+          const lcHC1y = lcGap1 < lcMin ? (toY(initHC1) + toY(0)) / 2 - lcMin / 2 : toY(initHC1);
+          const lcZ1y  = lcGap0 < lcMin ? (toY(initHC0) + toY(0)) / 2 + lcMin / 2 : toY(0);
+          const lcZ0y  = lcGap1 < lcMin ? (toY(initHC1) + toY(0)) / 2 + lcMin / 2 : toY(0);
+          const rcGap = Math.abs(lastY0 - lastY1);
+          const rcMid = (lastY0 + lastY1) / 2;
+          const rcFs0y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid - lcMin / 2 : rcMid + lcMin / 2) : lastY0;
+          const rcFs1y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid + lcMin / 2 : rcMid - lcMin / 2) : lastY1;
+          return (
+            <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw" }}>
+              <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", display: "block", overflow: "visible" }}>
+                <text x={svgW / 2} y={toY(Math.max(fs0, fs1)) / 2} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="#666">Frameverlauf</text>
+                <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                {initHC0 > 0 && <text x={px - 4} y={lcHC0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c1}>{initHC0}</text>}
+                {initHC1 > 0 && <text x={px - 4} y={lcHC1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c2}>{initHC1}</text>}
+                {initHC0 === 0 && initHC1 > 0 && <text x={px - 4} y={lcZ0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c1}>0</text>}
+                {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c2}>0</text>}
+                {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c1 : c2}>0</text>}
+                {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c2 : c1}>0</text>}
+                <polyline points={pts0} fill="none" stroke={c1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                <polyline points={pts1} fill="none" stroke={c2} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c1} /> : null)}
+                {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c2} /> : null)}
+                {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c2} /> : null)}
+                {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c1} /> : null)}
+                <circle cx={lastX} cy={lastY0} r={4} fill={c1} />
+                <circle cx={lastX} cy={lastY1} r={4} fill={c2} />
+                <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c1}>{fs0}</text>
+                <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c2}>{fs1}</text>
+                <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
+                <text x={svgW + 8} y={midY} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.floor(Math.max(fs0, fs1) / 2)}</text>
+                <text x={svgW + 8} y={toY(Math.max(fs0, fs1))} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.max(fs0, fs1)}</text>
+              </svg>
+            </div>
+          );
+        })();
+
+        return (
+          <div
+            onClick={(e) => { e.stopPropagation(); setSelectedFrame(null); }}
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "inherit", zIndex: 10 }}
+          >
+            <div onClick={(e) => e.stopPropagation()} style={{ background: "#1e1e1e", border: "1px solid #555", borderRadius: "14px", padding: "2.5vh 3vw", display: "flex", flexDirection: "column", gap: "1.5vh", alignItems: "center", minWidth: "55vw", maxWidth: "90vw" }}>
+              {/* Title */}
+              <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold" }}>Frame {f.frameNumber}{isLive ? " · Live" : ""}</div>
+
+              {/* Score */}
+              {scores !== null && (
+                <div style={{ width: "100%", background: "#111", borderRadius: "10px", padding: "1.5vh 2vw", display: "flex", alignItems: "center", gap: "1vw" }}>
+                  <span style={{ flex: 1, textAlign: "left", color: c1, fontSize: "1.6vw", fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{nameP1}{p0wins ? " 🏆" : ""}</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", background: "#222", borderRadius: "8px", padding: "0.6vh 1.2vw" }}>
+                    <span style={{ color: p0wins ? "#ffee44" : "#888", fontSize: "2.8vw", fontWeight: "bold" }}>{fs0}</span>
+                    <span style={{ color: "#555", fontSize: "1.6vw" }}>:</span>
+                    <span style={{ color: p1wins ? "#ffee44" : "#888", fontSize: "2.8vw", fontWeight: "bold" }}>{fs1}</span>
+                  </div>
+                  <span style={{ flex: 1, textAlign: "right", color: c2, fontSize: "1.6vw", fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p1wins ? "🏆 " : ""}{nameP2}</span>
+                </div>
+              )}
+
+              {/* Stats */}
+              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "auto 1fr auto 1fr", columnGap: "0.6vw", rowGap: "0.35vh", fontSize: "1.25vw", alignItems: "baseline" }}>
+                <div style={{ gridColumn: "1 / 3", color: c1, fontWeight: "bold", fontSize: "1.1vw", paddingBottom: "0.1vh" }}>{nameP1}</div>
+                <div style={{ gridColumn: "3 / 5", color: c2, fontWeight: "bold", fontSize: "1.1vw", paddingBottom: "0.1vh" }}>{nameP2}</div>
+                <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
+                <div style={{ color: c1 }}>{f.breaks[0].length > 0 ? [...f.breaks[0]].sort((a,b)=>b-a).join(", ") : "—"}</div>
+                <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
+                <div style={{ color: c2 }}>{f.breaks[1].length > 0 ? [...f.breaks[1]].sort((a,b)=>b-a).join(", ") : "—"}</div>
+                <div style={{ color: "#ccc" }}>Foulpunkte:</div>
+                <div style={{ color: "#ff4444" }}>{f.fouls[0] > 0 ? `${f.fouls[0]} (${f.foulCount[0]}×)` : "—"}</div>
+                <div style={{ color: "#ccc" }}>Foulpunkte:</div>
+                <div style={{ color: "#ff4444" }}>{f.fouls[1] > 0 ? `${f.fouls[1]} (${f.foulCount[1]}×)` : "—"}</div>
+                {hasAnyHandicap && <>
+                  <div style={{ color: "#ccc" }}>Handicap:</div>
+                  <div style={{ color: "#c87832" }}>{f.handicap[0] > 0 ? `${f.handicap[0]} Pkt` : "—"}</div>
+                  <div style={{ color: "#ccc" }}>Handicap:</div>
+                  <div style={{ color: "#c87832" }}>{f.handicap[1] > 0 ? `${f.handicap[1]} Pkt` : "—"}</div>
+                </>}
+                {(durationStr || f.reracks > 0) && <>
+                  <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
+                  <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong> : ""}</div>
+                  <div style={{ color: "#ffa040" }}>{f.reracks > 0 ? "🔴 Re-racks:" : ""}</div>
+                  <div style={{ color: "#ffa040" }}>{f.reracks > 0 ? f.reracks : ""}</div>
+                </>}
+              </div>
+
+              {/* Chart */}
+              {chartNode}
+
+              {/* Close */}
+              <button
+                onClick={() => setSelectedFrame(null)}
+                style={{ width: "100%", padding: "1vh 0", fontSize: "1.4vw", borderRadius: "8px", border: "1px solid #555", background: "#333", color: "#fff", cursor: "pointer", fontWeight: "bold" }}
+              >
+                Schliessen
+              </button>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

@@ -181,7 +181,6 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     const d2 = effP2Color ? colorDistance(c, effP2Color) : Infinity;
     return d1 >= 90 && d2 >= 90;
   }) ?? "#88ff88";
-  const noScores = p1.score === 0 && p2.score === 0;
 
   const pickColor = (idx: 0 | 1, color: string) => {
     onColorChange?.(idx, color);
@@ -407,7 +406,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
               <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>{(p1.club && p1.club !== "?") ? p1.club : "Club ?"}</div>
             </div>
-            {noScores && !matchFinished && (
+            {!matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
                 style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
@@ -467,7 +466,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             className="sb-break-row sb-break-row-clickable"
             onClick={(e) => {
               e.stopPropagation();
-              if (match.matchId) onBreaksClick(0);
+              onBreaksClick(0);
             }}
           >
             <div className="break-text" style={{ color: effP1Color ?? "#5599ff" }}>
@@ -546,7 +545,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
               <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
               <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>{(p2.club && p2.club !== "?") ? p2.club : "Club ?"}</div>
             </div>
-            {noScores && !matchFinished && (
+            {!matchFinished && (
               <button
                 onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
                 style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
@@ -606,7 +605,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             className="sb-break-row sb-break-row-clickable"
             onClick={(e) => {
               e.stopPropagation();
-              if (match.matchId) onBreaksClick(1);
+              onBreaksClick(1);
             }}
           >
             <div className="break-text" style={{ color: effP2Color ?? "#ff8833" }}>

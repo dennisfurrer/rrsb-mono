@@ -9,6 +9,7 @@ interface Props {
   matchId: string;
   playerIndex: number;
   playerName: string;
+  localBreaks?: number[];
   onClose: () => void;
 }
 
@@ -16,14 +17,25 @@ export function BreaksDialog({
   matchId,
   playerIndex,
   playerName,
+  localBreaks,
   onClose,
 }: Props) {
-  const [breaks, setBreaks] = useState<BreakAction[]>([]);
+  const localFallback: BreakAction[] = (localBreaks ?? []).map((pts, i) => ({
+    id: `local-${i}`,
+    points: pts,
+    frameNumber: 0,
+    manualFlagToIgnore: false,
+    timestamp: "",
+  }));
+
+const [breaks, setBreaks] = useState<BreakAction[]>(localFallback);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPlayerBreaks(matchId, playerIndex + 1) // API uses 1-indexed playerIndex
-      .then(setBreaks)
+      .then((apiBreaks) => {
+        if (apiBreaks.length > 0) setBreaks(apiBreaks);
+      })
       .finally(() => setLoading(false));
   }, [matchId, playerIndex]);
 
@@ -60,19 +72,19 @@ export function BreaksDialog({
           Top Breaks &mdash; {playerName}
         </div>
 
-        {loading ? (
+        {loading && breaks.length === 0 ? (
           <div style={{ color: "#888", padding: "1rem 0" }}>Laden...</div>
         ) : breaks.length === 0 ? (
           <div style={{ color: "#888", padding: "1rem 0" }}>
             Keine Breaks &gt;7
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", maxHeight: "60vh", overflowY: "auto", paddingRight: "4px" }}>
             {breaks.map((b, i) => (
               <div
                 key={b.id}
                 className={`breaks-row ${b.manualFlagToIgnore ? "breaks-row--flagged" : ""}`}
-                onClick={() => handleToggle(b.id)}
+                onClick={() => { if (!b.id.startsWith("local-")) handleToggle(b.id); }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -108,9 +120,11 @@ export function BreaksDialog({
                   >
                     {b.points}
                   </span>
-                  <span style={{ color: "#888", fontSize: "0.85rem" }}>
-                    Frame {b.frameNumber}
-                  </span>
+                  {b.frameNumber > 0 && (
+                    <span style={{ color: "#888", fontSize: "0.85rem" }}>
+                      Frame {b.frameNumber}
+                    </span>
+                  )}
                 </div>
                 <div
                   style={{
@@ -133,16 +147,18 @@ export function BreaksDialog({
           </div>
         )}
 
-        <div
-          style={{
-            marginTop: "1rem",
-            fontSize: "0.75rem",
-            color: "#666",
-            textAlign: "center",
-          }}
-        >
-          Antippen um Break aus Statistik auszuschliessen
-        </div>
+        {breaks.some(b => !b.id.startsWith("local-")) && (
+          <div
+            style={{
+              marginTop: "1rem",
+              fontSize: "0.75rem",
+              color: "#666",
+              textAlign: "center",
+            }}
+          >
+            Antippen um Break aus Statistik auszuschliessen
+          </div>
+        )}
 
         <button
           className="breaks-close"

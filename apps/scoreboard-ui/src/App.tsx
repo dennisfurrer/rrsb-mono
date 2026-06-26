@@ -2034,11 +2034,12 @@ export function App() {
         />
       )}
 
-      {breaksPlayer !== null && match.matchId && (
+      {breaksPlayer !== null && (
         <BreaksDialog
-          matchId={match.matchId}
+          matchId={match.matchId ?? ""}
           playerIndex={breaksPlayer}
           playerName={match.players[breaksPlayer].name}
+          localBreaks={match.players[breaksPlayer].highbreaks}
           onClose={() => setBreaksPlayer(null)}
         />
       )}

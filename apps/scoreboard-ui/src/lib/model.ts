@@ -60,11 +60,9 @@ export function createInitialMatchState(): MatchState {
   };
 }
 
-/** Insert a break into the player's top-10 highbreaks list (descending) */
 export function insertHighBreak(highbreaks: number[], value: number): number[] {
   if (value <= 7) return highbreaks;
-  const updated = [...highbreaks, value].sort((a, b) => b - a);
-  return updated.slice(0, 10);
+  return [...highbreaks, value].sort((a, b) => b - a);
 }
 
 /** Determine frame winner: the player with more points */

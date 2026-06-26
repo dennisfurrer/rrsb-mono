@@ -3399,6 +3399,7 @@ div { font-weight: bold; }
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #999;
+  position: relative;
 }
 
 .stats-header {
