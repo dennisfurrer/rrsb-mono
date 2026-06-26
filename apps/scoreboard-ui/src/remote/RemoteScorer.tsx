@@ -442,7 +442,13 @@ function BreakPad({
   const [foulPoints, setFoulPoints] = useState(4);
   const [preFoulInput, setPreFoulInput] = useState("");
   const value = input === "" ? 0 : parseInt(input, 10);
+  const FOUL_DIGITS = new Set([4, 5, 6, 7]);
   const press = (d: string) => {
+    if (isFoul) {
+      const n = parseInt(d, 10);
+      if (FOUL_DIGITS.has(n)) setFoulPoints(n);
+      return;
+    }
     const next = (input + d).replace(/^0+(?=\d)/, "").slice(0, 4);
     if (parseInt(next, 10) > 155) return;
     setInput(next);
@@ -468,12 +474,15 @@ function BreakPad({
       </div>
 
       <div className="rmt-keys">
-        {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
-          <FlashButton key={d} className="rmt-key" disabled={isFoul} onClick={() => press(d)}>{d}</FlashButton>
-        ))}
-        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => setInput("")}>C</FlashButton>
-        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => press("0")}>0</FlashButton>
-        <FlashButton className="rmt-key" disabled={isFoul} onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
+        {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => {
+          const dimmed = isFoul && !FOUL_DIGITS.has(parseInt(d, 10));
+          return (
+            <FlashButton key={d} className="rmt-key" disabled={dimmed} style={dimmed ? { opacity: 0.2 } : undefined} onClick={() => press(d)}>{d}</FlashButton>
+          );
+        })}
+        <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => setInput("")}>C</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => press("0")}>0</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
       </div>
 
       <FlashButton
@@ -486,7 +495,7 @@ function BreakPad({
           {isFoul ? (
             <>Foul <span style={{ color: "#ff4d4d", fontWeight: "bold", fontSize: "1.15em" }}>{foulPoints}</span> eintragen</>
           ) : value > 0 ? (
-            isHandicap ? "Handicap eintragen" : "Break eintragen"
+            isHandicap ? "Handicap eintragen" : <>Break <span style={{ color: "#ffee44", fontWeight: "bold", fontSize: "1.15em" }}>{value}</span> eintragen</>
           ) : (
             "Spielerwechsel"
           )}
@@ -495,49 +504,35 @@ function BreakPad({
       </FlashButton>
 
       <div className="rmt-toggles">
-        {isFoul ? (
-          [4, 5, 6, 7].map((n) => (
-            <FlashButton
-              key={n}
-              className={`rmt-toggle ${foulPoints === n ? "rmt-toggle--on" : "rmt-toggle--foul"}`}
-              onClick={() => {
-                if (n === foulPoints) {
-                  setInput(preFoulInput);
-                  setIsFoul(false);
-                } else {
-                  setFoulPoints(n);
-                }
-              }}
-            >
-              {n}
-            </FlashButton>
-          ))
+        <FlashButton
+          className={`rmt-toggle ${isFoul ? "rmt-toggle--foul" : "rmt-toggle--on"}`}
+          onClick={() => {
+            if (isFoul) {
+              setInput(preFoulInput);
+              setIsFoul(false);
+            } else {
+              setPreFoulInput(input);
+              setIsFoul(true);
+              setFoulPoints(4);
+              setIsHandicap(false);
+            }
+          }}
+        >
+          Foul
+        </FlashButton>
+        {pointsRunning ? (
+          <FlashButton className="rmt-toggle rmt-toggle--undo" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => onCommand({ t: "undo" })}>
+            ↶ Undo
+          </FlashButton>
         ) : (
-          <>
-            <FlashButton
-              className="rmt-toggle rmt-toggle--on"
-              onClick={() => {
-                setPreFoulInput(input);
-                setIsFoul(true);
-                setFoulPoints(4);
-                setIsHandicap(false);
-              }}
-            >
-              Foul
-            </FlashButton>
-            {pointsRunning ? (
-              <FlashButton className="rmt-toggle rmt-toggle--undo" onClick={() => onCommand({ t: "undo" })}>
-                ↶ Undo
-              </FlashButton>
-            ) : (
-              <FlashButton
-                className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
-                onClick={() => setIsHandicap(!isHandicap)}
-              >
-                Handicap
-              </FlashButton>
-            )}
-          </>
+          <FlashButton
+            className={`rmt-toggle${isHandicap ? " rmt-toggle--hc-on" : ""}`}
+            disabled={isFoul}
+            style={isFoul ? { opacity: 0.2 } : undefined}
+            onClick={() => setIsHandicap(!isHandicap)}
+          >
+            Handicap
+          </FlashButton>
         )}
       </div>
 
