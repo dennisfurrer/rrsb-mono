@@ -1886,6 +1886,9 @@ export function App() {
                 const s = tot % 60;
                 return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
               })() : null;
+              const fmtTime = (ts: string | number) => { const d = new Date(ts); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+              const startTimeStr = startTs ? fmtTime(startTs) : null;
+              const endTimeStr = fmtTime(Date.now());
               return (
                 <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1.2vh", borderTop: "1px solid #333", paddingTop: "1.5vh" }}>
                   <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto 1fr", columnGap: "0.6vw", rowGap: "0.35vh", fontSize: "1.35vw", alignItems: "baseline" }}>
@@ -1911,8 +1914,15 @@ export function App() {
                       <>
                         <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
                         <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
-                        <div style={{ color: "#ffa040" }}>{reracks > 0 ? "🔴 Re-racks:" : ""}</div>
-                        <div style={{ color: "#ffa040" }}>{reracks > 0 ? reracks : ""}</div>
+                        <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
+                        <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
+                        {reracks > 0 && (
+                          <>
+                            <div /><div />
+                            <div style={{ color: "#ffa040" }}>🔴 Re-racks:</div>
+                            <div style={{ color: "#ffa040" }}>{reracks}</div>
+                          </>
+                        )}
                       </>
                     )}
                     {corrections.map((e, i) => (

@@ -641,6 +641,9 @@ export function BallByBallDialog({
             const corrections = frameHistory.filter(e => e.kind === "correction");
             const startTs = frameHistory.find(e => e.timestamp)?.timestamp;
             const durationStr = startTs ? formatFrameDuration(startTs) : null;
+            const fmtTime = (ts: string | number) => { const d = new Date(ts); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+            const startTimeStr = startTs ? fmtTime(startTs) : null;
+            const endTimeStr = fmtTime(Date.now());
             return (
               <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1.2vh", borderTop: "1px solid #333", paddingTop: "1.5vh" }}>
                 {breakTotal > 0 && (
@@ -671,8 +674,15 @@ export function BallByBallDialog({
                     <>
                       <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
                       <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
-                      <div style={{ color: "#ffa040" }}>{reracks > 0 ? "🔴 Re-racks:" : ""}</div>
-                      <div style={{ color: "#ffa040" }}>{reracks > 0 ? reracks : ""}</div>
+                      <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
+                      <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
+                      {reracks > 0 && (
+                        <>
+                          <div /><div />
+                          <div style={{ color: "#ffa040" }}>🔴 Re-racks:</div>
+                          <div style={{ color: "#ffa040" }}>{reracks}</div>
+                        </>
+                      )}
                     </>
                   )}
                   {corrections.map((e, i) => (
