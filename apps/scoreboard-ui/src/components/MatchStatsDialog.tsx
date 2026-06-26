@@ -398,6 +398,10 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
 
       {selectedFrame && (() => {
         const f = selectedFrame;
+        const framesSorted = [...frames].sort((a, b) => a.frameNumber - b.frameNumber);
+        const fIdx = framesSorted.findIndex(fr => fr.frameNumber === f.frameNumber);
+        const prevFrame = fIdx > 0 ? framesSorted[fIdx - 1] : null;
+        const nextFrame = fIdx < framesSorted.length - 1 ? framesSorted[fIdx + 1] : null;
         const isLive = f.scores === null && f.frameNumber === currentFrame;
         const scores = f.scores ?? (isLive ? currentScores : null);
         const fs0 = scores?.[0] ?? 0;
@@ -500,7 +504,19 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           >
             <div onClick={(e) => e.stopPropagation()} style={{ background: "#1e1e1e", border: "1px solid #555", borderRadius: "14px", padding: "2.5vh 3vw", display: "flex", flexDirection: "column", gap: "1.5vh", alignItems: "center", minWidth: "55vw", maxWidth: "90vw" }}>
               {/* Title */}
-              <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold" }}>Frame {f.frameNumber}{isLive ? " · Live" : ""}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "1.2vw", width: "100%", justifyContent: "center" }}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); if (prevFrame) setSelectedFrame(prevFrame); }}
+                  disabled={!prevFrame}
+                  style={{ background: "none", border: "none", color: prevFrame ? "#aaa" : "#333", fontSize: "2vw", cursor: prevFrame ? "pointer" : "default", padding: "0 0.4vw", lineHeight: 1 }}
+                >◀</button>
+                <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>Frame {f.frameNumber}{isLive ? " · Live" : ""}</div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); if (nextFrame) setSelectedFrame(nextFrame); }}
+                  disabled={!nextFrame}
+                  style={{ background: "none", border: "none", color: nextFrame ? "#aaa" : "#333", fontSize: "2vw", cursor: nextFrame ? "pointer" : "default", padding: "0 0.4vw", lineHeight: 1 }}
+                >▶</button>
+              </div>
 
               {/* Score */}
               {scores !== null && (
