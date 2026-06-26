@@ -265,7 +265,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   </span>
                   <span className="stats-grid-label">Breaks:</span>
                   <span className="stats-grid-val" style={{ color: frame.fouls[0] > 0 ? "#ff2222" : "#555" }}>
-                    {frame.fouls[0] > 0 ? <>{frame.fouls[0]} Pkt<span className="stats-count"> ({frame.foulCount[0]})</span></> : "–"}
+                    {frame.fouls[0] > 0 ? <>{frame.fouls[0]} Pkt<span className="stats-count"> ({frame.foulCount[0] === 1 ? "1 Foul" : `${frame.foulCount[0]} Fouls`})</span></> : "–"}
                   </span>
                   <span className="stats-grid-label">Fouls:</span>
                   {hasAnyHandicap && <>
@@ -316,7 +316,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   </span>
                   <span className="stats-grid-label">Fouls:</span>
                   <span className="stats-grid-val" style={{ color: frame.fouls[1] > 0 ? "#ff2222" : "#555" }}>
-                    {frame.fouls[1] > 0 ? <>{frame.fouls[1]} Pkt<span className="stats-count"> ({frame.foulCount[1]})</span></> : "–"}
+                    {frame.fouls[1] > 0 ? <>{frame.fouls[1]} Pkt<span className="stats-count"> ({frame.foulCount[1] === 1 ? "1 Foul" : `${frame.foulCount[1]} Fouls`})</span></> : "–"}
                   </span>
                   {hasAnyHandicap && <>
                     <span className="stats-grid-label">HC:</span>
@@ -342,7 +342,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
               </span>
               <span className="stats-grid-label">Top Breaks:</span>
               <span className="stats-grid-val" style={{ color: totalFouls[0] > 0 ? "#ff2222" : "#555" }}>
-                {totalFouls[0] > 0 ? <>{totalFouls[0]} Pkt<span className="stats-count"> ({totalFoulCount[0]})</span></> : "–"}
+                {totalFouls[0] > 0 ? <>{totalFouls[0]} Pkt<span className="stats-count"> ({totalFoulCount[0] === 1 ? "1 Foul" : `${totalFoulCount[0]} Fouls`})</span></> : "–"}
               </span>
               <span className="stats-grid-label">Fouls:</span>
             </div>
@@ -389,7 +389,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
               </span>
               <span className="stats-grid-label">Fouls:</span>
               <span className="stats-grid-val" style={{ color: totalFouls[1] > 0 ? "#ff2222" : "#555" }}>
-                {totalFouls[1] > 0 ? <>{totalFouls[1]} Pkt<span className="stats-count"> ({totalFoulCount[1]})</span></> : "–"}
+                {totalFouls[1] > 0 ? <>{totalFouls[1]} Pkt<span className="stats-count"> ({totalFoulCount[1] === 1 ? "1 Foul" : `${totalFoulCount[1]} Fouls`})</span></> : "–"}
               </span>
             </div>
           </div>
@@ -476,10 +476,10 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 <polyline points={pts1} fill="none" stroke={c2} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
                 {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c1} /> : null)}
                 {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c2} /> : null)}
+                <circle cx={lastX} cy={lastY0} r={5} fill={c1} />
+                <circle cx={lastX} cy={lastY1} r={5} fill={c2} />
                 {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c2} /> : null)}
                 {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c1} /> : null)}
-                <circle cx={lastX} cy={lastY0} r={4} fill={c1} />
-                <circle cx={lastX} cy={lastY1} r={4} fill={c2} />
                 <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c1}>{fs0}</text>
                 <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c2}>{fs1}</text>
                 <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
@@ -521,9 +521,9 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
                 <div style={{ color: c2 }}>{f.breaks[1].length > 0 ? [...f.breaks[1]].sort((a,b)=>b-a).join(", ") : "—"}</div>
                 <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                <div style={{ color: "#ff4444" }}>{f.fouls[0] > 0 ? `${f.fouls[0]} (${f.foulCount[0]}×)` : "—"}</div>
+                <div style={{ color: "#ff4444" }}>{f.fouls[0] > 0 ? `${f.fouls[0]} Pkt (${f.foulCount[0] === 1 ? "1 Foul" : `${f.foulCount[0]} Fouls`})` : "—"}</div>
                 <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                <div style={{ color: "#ff4444" }}>{f.fouls[1] > 0 ? `${f.fouls[1]} (${f.foulCount[1]}×)` : "—"}</div>
+                <div style={{ color: "#ff4444" }}>{f.fouls[1] > 0 ? `${f.fouls[1]} Pkt (${f.foulCount[1] === 1 ? "1 Foul" : `${f.foulCount[1]} Fouls`})` : "—"}</div>
                 {hasAnyHandicap && <>
                   <div style={{ color: "#ccc" }}>Handicap:</div>
                   <div style={{ color: "#c87832" }}>{f.handicap[0] > 0 ? `${f.handicap[0]} Pkt` : "—"}</div>

@@ -13,6 +13,9 @@ interface Props {
   onClose: () => void;
 }
 
+// Valid foul values in snooker: 4 (min), 5 (blue), 6 (pink), 7 (black)
+const FOUL_DIGITS = new Set([4, 5, 6, 7]);
+
 export function CalculatorDialog({
   playerName,
   playerIndex,
@@ -25,6 +28,11 @@ export function CalculatorDialog({
   const [handicapMode, setHandicapMode] = useState(false);
 
   const appendDigit = (d: number) => {
+    if (foulMode) {
+      // In foul mode only 4–7 are valid; each press replaces the value
+      if (FOUL_DIGITS.has(d)) setDisplay(String(d));
+      return;
+    }
     const next = display + String(d);
     const val = parseInt(next);
     if (val <= 155) setDisplay(next);
@@ -48,10 +56,12 @@ export function CalculatorDialog({
 
   const handleFoul = () => {
     if (foulMode) {
-      if (points > 0) onSubmit(playerIndex, points, true, false);
+      setFoulMode(false);
+      setDisplay("");
     } else {
       setFoulMode(true);
       setHandicapMode(false);
+      setDisplay("4"); // default minimum foul
     }
   };
 
@@ -65,6 +75,20 @@ export function CalculatorDialog({
   };
 
   const modeLabel = foulMode ? "Foul von" : handicapMode ? "Handicap für" : "Break für";
+
+  const digitBtn = (d: number) => {
+    const disabled = foulMode && !FOUL_DIGITS.has(d);
+    return (
+      <div
+        key={d}
+        className="calc-butt"
+        onClick={() => appendDigit(d)}
+        style={disabled ? { opacity: 0.2, pointerEvents: "none" } : undefined}
+      >
+        {d}
+      </div>
+    );
+  };
 
   return (
     <div className="overlay" onClick={onClose}>
@@ -82,7 +106,7 @@ export function CalculatorDialog({
               <div className="calc-break-name">{playerName}</div>
             </div>
             <div className={`calc-break-value ${foulMode ? "foul-mode" : handicapMode ? "handicap-mode" : ""}`}>
-              {display || "0"}
+              {foulMode ? `F${display}` : (display || "0")}
             </div>
           </div>
           {showHandicap ? (
@@ -112,29 +136,29 @@ export function CalculatorDialog({
 
         {/* Row 2: 1 2 3 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(1)}>1</div>
-          <div className="calc-butt" onClick={() => appendDigit(2)}>2</div>
-          <div className="calc-butt" onClick={() => appendDigit(3)}>3</div>
+          {digitBtn(1)}{digitBtn(2)}{digitBtn(3)}
         </div>
 
         {/* Row 3: 4 5 6 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(4)}>4</div>
-          <div className="calc-butt" onClick={() => appendDigit(5)}>5</div>
-          <div className="calc-butt" onClick={() => appendDigit(6)}>6</div>
+          {digitBtn(4)}{digitBtn(5)}{digitBtn(6)}
         </div>
 
         {/* Row 4: 7 8 9 */}
         <div className="calc-line">
-          <div className="calc-butt" onClick={() => appendDigit(7)}>7</div>
-          <div className="calc-butt" onClick={() => appendDigit(8)}>8</div>
-          <div className="calc-butt" onClick={() => appendDigit(9)}>9</div>
+          {digitBtn(7)}{digitBtn(8)}{digitBtn(9)}
         </div>
 
         {/* Row 5: Löschen 0 OK */}
         <div className="calc-line">
           <div className="calc-butt calc-clear" onClick={clear}>Löschen</div>
-          <div className="calc-butt" onClick={() => appendDigit(0)}>0</div>
+          <div
+            className="calc-butt"
+            onClick={() => appendDigit(0)}
+            style={foulMode ? { opacity: 0.2, pointerEvents: "none" } : undefined}
+          >
+            0
+          </div>
           <div className="calc-butt calc-ok" onClick={submit}>OK</div>
         </div>
       </div>

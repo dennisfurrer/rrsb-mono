@@ -1863,6 +1863,8 @@ export function App() {
               const hBreaks1 = fh.filter(e => e.kind === "break" && e.playerIndex === 1 && (e.points ?? 0) > 7).map(e => e.points!).sort((a, b) => b - a);
               const fouls0 = fh.filter(e => e.kind === "foul" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
               const fouls1 = fh.filter(e => e.kind === "foul" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+              const foulCount0 = fh.filter(e => e.kind === "foul" && e.playerIndex === 0).length;
+              const foulCount1 = fh.filter(e => e.kind === "foul" && e.playerIndex === 1).length;
               const hc0 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
               const hc1 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
               const showHandicap = hc0 > 0 || hc1 > 0;
@@ -1889,9 +1891,9 @@ export function App() {
                     <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
                     <div style={{ color: effCol1 }}>{hBreaks1.join(", ") || "—"}</div>
                     <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                    <div style={{ color: "#ff4444" }}>{fouls0}</div>
+                    <div style={{ color: "#ff4444" }}>{fouls0 > 0 ? `${fouls0} Pkt (${foulCount0 === 1 ? "1 Foul" : `${foulCount0} Fouls`})` : "—"}</div>
                     <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                    <div style={{ color: "#ff4444" }}>{fouls1}</div>
+                    <div style={{ color: "#ff4444" }}>{fouls1 > 0 ? `${fouls1} Pkt (${foulCount1 === 1 ? "1 Foul" : `${foulCount1} Fouls`})` : "—"}</div>
                     {showHandicap && (
                       <>
                         <div style={{ color: "#ccc" }}>Handicap:</div>
@@ -1989,10 +1991,10 @@ export function App() {
                           <polyline points={pts1} fill="none" stroke={col1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
                           {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col0} /> : null)}
                           {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col1} /> : null)}
+                          <circle cx={lastX} cy={lastY0} r={5} fill={col0} />
+                          <circle cx={lastX} cy={lastY1} r={5} fill={col1} />
                           {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
                           {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col0} /> : null)}
-                          <circle cx={lastX} cy={lastY0} r={4} fill={col0} />
-                          <circle cx={lastX} cy={lastY1} r={4} fill={col1} />
                           <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col0}>{fs0}</text>
                           <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col1}>{fs1}</text>
                           <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
