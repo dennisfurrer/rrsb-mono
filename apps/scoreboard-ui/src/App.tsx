@@ -178,6 +178,7 @@ export function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [breaksPlayer, setBreaksPlayer] = useState<0 | 1 | null>(null);
+  const [anstossInfoDismissedKey, setAnstossInfoDismissedKey] = useState<string | null>(null);
   const [scoreboardConfig, setScoreboardConfig] =
     useState<ScoreboardConfig | null>(() => {
       const savedLocation = localStorage.getItem("scoreboardLocationName");
@@ -508,6 +509,35 @@ export function App() {
     [match, pushHistory, playerColors]
   );
 
+  // ===== ANSTOSS =====
+  const recordAnstoss = useCallback((playerIndex: 0 | 1) => {
+    const [p1c, p2c] = playerColors;
+    const playerColor = playerIndex === 0
+      ? (resolvePlayerColor(p1c, p2c, true) ?? "#5599ff")
+      : (resolvePlayerColor(p2c, p1c, false) ?? "#ff8833");
+    pushHistory(`Anstoss: ${match.players[playerIndex].name}`, match, playerColor, {
+      kind: "break",
+      playerIndex,
+      points: 0,
+      frameNumber: match.currentFrame,
+    });
+    setMatch(prev => {
+      const next = structuredClone(prev);
+      next.activePlayerIndex = playerIndex;
+      if (next.matchId) {
+        appendEventsV3(next.matchId, [{
+          type: "MANUAL_BREAK",
+          frameNumber: next.currentFrame,
+          playerIndex,
+          points: 0,
+          state: frameSnap(next),
+          source: "DISPLAY",
+        }]);
+      }
+      return next;
+    });
+  }, [match, pushHistory, playerColors]);
+
   // ===== BALL BY BALL =====
   const handleBBPot = useCallback((ball: BBBallType, meta?: EvtMeta) => {
     if (!match.bbState) return;
@@ -777,9 +807,12 @@ export function App() {
         next.players[1].score = 0;
         next.currentFrame += 1;
 
-        // Alternate break
+        // Alternate break, anchored to whoever had Anstoss in frame 1
         if (next.bestOf % 2 === 1) {
-          next.hasBreak = next.currentFrame % 2 === 1 ? 0 : 1;
+          const anstossEntry = history.find(e => e.kind === "break" && e.points === 0 && e.frameNumber === 1);
+          const frame1Player = anstossEntry?.playerIndex ?? 0;
+          const isOddFrame = next.currentFrame % 2 === 1;
+          next.hasBreak = (isOddFrame ? frame1Player : 1 - frame1Player) as 0 | 1;
         }
         next.activePlayerIndex = next.hasBreak;
 
@@ -793,9 +826,15 @@ export function App() {
       return next;
     });
     setShowMenu(false);
-  }, [match, pushHistory, activeAssignmentId]);
+  }, [match, history, pushHistory, activeAssignmentId]);
 
   useEffect(() => { endFrameRef.current = endFrame; }, [endFrame]);
+
+  // Reset anstoss info overlay whenever frame or rerack count changes (covers undo/redo navigation)
+  const currentRerackCount = history.filter(e => e.kind === "rerack" && e.frameNumber === match.currentFrame).length;
+  useEffect(() => {
+    setAnstossInfoDismissedKey(null);
+  }, [match.currentFrame, currentRerackCount]);
 
   // Deferred endFrame call: ensures endFrame runs AFTER React re-renders with updated scores
   useEffect(() => {
@@ -1662,7 +1701,8 @@ export function App() {
           history={history}
           onEditLastBreak={
             match.inputMode === "ballbyball" && !match.finished &&
-            history.length > 0 && history[history.length - 1].kind === "break" && history[history.length - 1].label !== ""
+            history.length > 0 && history[history.length - 1].kind === "break" &&
+            (history[history.length - 1].points ?? 0) > 0 && history[history.length - 1].label !== ""
               ? handleEditLastBreak
               : undefined
           }
@@ -1679,6 +1719,138 @@ export function App() {
           remoteConnected={remote.connected}
         />
       )}
+
+      {!soloSession && !showSetup && !match.finished &&
+        match.currentFrame === 1 &&
+        match.players[0].score === 0 && match.players[1].score === 0 &&
+        !history.some(e => e.kind === "break" && e.points === 0 && e.frameNumber === 1) && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          display: "flex", alignItems: "center",
+          background: "rgba(0,0,0,0.6)",
+        }}>
+          <div style={{
+            width: "100%",
+            display: "flex", alignItems: "center",
+            background: "rgba(10,10,10,0.85)",
+            padding: "2.5vh 0",
+            borderTop: "2px solid #aaa",
+            borderBottom: "2px solid #aaa",
+            boxShadow: "0 -1px 0 #555, 0 1px 0 #555",
+          }}>
+            {/* Left: Spieler 0 */}
+            <div
+              onClick={() => recordAnstoss(0)}
+              style={{
+                flex: "0 0 40%",
+                display: "flex", flexDirection: "column", alignItems: "center",
+                cursor: "pointer", gap: "1vh",
+              }}
+            >
+              <div style={{
+                width: "8vw", height: "8vw", borderRadius: "50%",
+                background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
+                border: "2px solid rgba(255,255,255,0.6)",
+                transition: "transform 0.1s",
+              }}>
+                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.15vw", letterSpacing: "0.04em" }}>Anstoss</span>
+              </div>
+              <span style={{ color: "#ccc", fontSize: "1vw", letterSpacing: "0.04em" }}>{match.players[0].name}</span>
+            </div>
+
+            {/* Center */}
+            <div style={{ flex: "0 0 20%", textAlign: "center", userSelect: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6vw" }}>
+              <span style={{ color: "#ffee44", fontSize: "2vw" }}>◀</span>
+              <span style={{ color: "#ffee44", fontSize: "2vw", fontWeight: "bold", letterSpacing: "0.06em" }}>Wer macht den Anstoss?</span>
+              <span style={{ color: "#ffee44", fontSize: "2vw" }}>▶</span>
+            </div>
+
+            {/* Right: Spieler 1 */}
+            <div
+              onClick={() => recordAnstoss(1)}
+              style={{
+                flex: "0 0 40%",
+                display: "flex", flexDirection: "column", alignItems: "center",
+                cursor: "pointer", gap: "1vh",
+              }}
+            >
+              <div style={{
+                width: "8vw", height: "8vw", borderRadius: "50%",
+                background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
+                border: "2px solid rgba(255,255,255,0.6)",
+                transition: "transform 0.1s",
+              }}>
+                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.15vw", letterSpacing: "0.04em" }}>Anstoss</span>
+              </div>
+              <span style={{ color: "#ccc", fontSize: "1vw", letterSpacing: "0.04em" }}>{match.players[1].name}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {(() => {
+        const rerackCount = currentRerackCount;
+        const frameKey = `${match.currentFrame}-${rerackCount}`;
+        const showFirstOverlay = !match.finished && !soloSession && !showSetup &&
+          match.currentFrame === 1 && match.players[0].score === 0 && match.players[1].score === 0 &&
+          !history.some(e => e.kind === "break" && e.points === 0 && e.frameNumber === 1);
+        const showInfo = !match.finished && !soloSession && !showSetup &&
+          match.players[0].score === 0 && match.players[1].score === 0 &&
+          (match.currentFrame > 1 || rerackCount > 0) &&
+          !showFirstOverlay &&
+          anstossInfoDismissedKey !== frameKey;
+        if (!showInfo) return null;
+        const isRerack = rerackCount > 0;
+        const anstossEntry = history.find(e => e.kind === "break" && e.points === 0 && e.frameNumber === 1);
+        const frame1Player = anstossEntry?.playerIndex ?? (match.hasBreak as 0 | 1);
+        const isOddFrame = match.currentFrame % 2 === 1;
+        const breakPlayerIdx = (isOddFrame ? frame1Player : 1 - frame1Player) as 0 | 1;
+        const breakPlayer = match.players[breakPlayerIdx];
+        return (
+          <div style={{
+            position: "fixed", inset: 0, zIndex: 200,
+            display: "flex", alignItems: "center",
+            background: "rgba(0,0,0,0.6)",
+          }}>
+            <div style={{
+              width: "100%",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "4vw",
+              background: "rgba(10,10,10,0.85)",
+              padding: "2.5vh 0",
+              borderTop: "2px solid #aaa",
+              borderBottom: "2px solid #aaa",
+              boxShadow: "0 -1px 0 #555, 0 1px 0 #555",
+            }}>
+              <div style={{ textAlign: "center", userSelect: "none" }}>
+                <div style={{ color: "#ffee44", fontSize: "5vw", fontWeight: "bold", letterSpacing: "0.06em" }}>
+                  Frame {match.currentFrame}{isRerack ? " (Re-rack)" : ""}
+                </div>
+                <div style={{ color: "#fff", fontSize: "2.6vw", marginTop: "0.6vh", letterSpacing: "0.04em" }}>
+                  {breakPlayer.name} <span style={{ color: "#aaa", fontWeight: "normal" }}>to break</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setAnstossInfoDismissedKey(frameKey)}
+                className="frame-end-btn-glow"
+                style={{
+                  padding: "1.2vh 3.5vw", fontSize: "2vw", fontWeight: "bold",
+                  border: "2px solid #22c55e", borderRadius: "10px",
+                  background: "#15803d", color: "#bbf7d0",
+                  cursor: "pointer", letterSpacing: "0.06em",
+                }}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        );
+      })()}
 
       {showSetup && !soloSession && !showRoutinePicker && (
         <SetupDialog
@@ -1794,7 +1966,7 @@ export function App() {
           if (!e) return undefined;
           const hi = (txt: string) => <span style={{ color: hiColor }}>{txt}</span>;
           switch (e.kind) {
-            case "break":     return <>{hi(`Break ${e.points}`)} {action}</>;
+            case "break":     return e.points === 0 ? <>{hi("Anstoss")} {action}</> : <>{hi(`Break ${e.points}`)} {action}</>;
             case "foul":      return <>{hi(`Foul ${e.points}`)} {action}</>;
             case "handicap":  return <>{hi(`Handicap ${e.points}`)} {action}</>;
             case "frame_end": return <>{hi("Frame-Ende")} {action}</>;
