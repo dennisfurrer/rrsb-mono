@@ -22,12 +22,14 @@ interface HistoryEntry {
 
 interface FrameStat {
   frameNumber: number;
+  rerackIndex: number;   // 0 = first attempt, 1 = after first rerack, …
+  isRerack: boolean;     // true if this segment ended with a rerack (not the final result)
+  entries: HistoryEntry[];
   scores: [number, number] | null;
   breaks: [number[], number[]];
   fouls: [number, number];
   foulCount: [number, number];
   handicap: [number, number];
-  reracks: number;
   corrections: string[];
   startTime: string | null;
   endTime: string | null;
@@ -56,49 +58,71 @@ function formatDuration(startIso: string, endIso?: string | null): string {
 }
 
 function deriveFrameStats(history: HistoryEntry[], matchStartedAt?: string | null): FrameStat[] {
-  const map = new Map<number, FrameStat>();
-  const firstTimestamps = new Map<number, string>();
-
+  // Group all entries by frameNumber, preserving insertion order
+  const byFrame = new Map<number, HistoryEntry[]>();
   for (const entry of history) {
     const fn = entry.frameNumber;
     if (fn === undefined) continue;
-    if (!map.has(fn)) {
-      map.set(fn, { frameNumber: fn, scores: null, breaks: [[], []], fouls: [0, 0], foulCount: [0, 0], handicap: [0, 0], reracks: 0, corrections: [], startTime: null, endTime: null });
-    }
-    if (entry.timestamp && !firstTimestamps.has(fn)) {
-      firstTimestamps.set(fn, entry.timestamp);
-    }
-    const frame = map.get(fn)!;
-    if (entry.kind === "rerack") {
-      frame.reracks += 1;
-      frame.handicap = [0, 0];
-    } else if (entry.kind === "break" && entry.playerIndex !== undefined && entry.points !== undefined && entry.points > 7) {
-      frame.breaks[entry.playerIndex].push(entry.points);
-    } else if (entry.kind === "foul" && entry.playerIndex !== undefined && entry.points !== undefined) {
-      frame.fouls[entry.playerIndex] += entry.points;
-      frame.foulCount[entry.playerIndex]++;
-    } else if (entry.kind === "handicap" && entry.playerIndex !== undefined && entry.points !== undefined) {
-      frame.handicap[entry.playerIndex] += entry.points;
-    } else if (entry.kind === "correction") {
-      frame.corrections.push(entry.label);
-    } else if (entry.kind === "frame_end") {
-      try {
-        const snap = JSON.parse(entry.snapshot) as MatchState;
-        frame.scores = [snap.players[0].score, snap.players[1].score];
-      } catch {
-        /* ignore */
-      }
-      if (entry.timestamp) frame.endTime = entry.timestamp;
-    }
+    if (!byFrame.has(fn)) byFrame.set(fn, []);
+    byFrame.get(fn)!.push(entry);
   }
 
-  const sorted = Array.from(map.values()).sort((a, b) => a.frameNumber - b.frameNumber);
-  for (let i = 0; i < sorted.length; i++) {
-    sorted[i].startTime = i === 0
-      ? (matchStartedAt ?? firstTimestamps.get(sorted[0].frameNumber) ?? null)
-      : (sorted[i - 1].endTime ?? firstTimestamps.get(sorted[i].frameNumber) ?? null);
+  const result: FrameStat[] = [];
+
+  for (const [frameNumber, entries] of byFrame) {
+    // Split at each rerack boundary; the rerack entry is included at the END of its segment
+    const segments: HistoryEntry[][] = [];
+    let current: HistoryEntry[] = [];
+    for (const entry of entries) {
+      current.push(entry);
+      if (entry.kind === "rerack") {
+        segments.push(current);
+        current = [];
+      }
+    }
+    segments.push(current);
+
+    segments.forEach((segEntries, rerackIndex) => {
+      const isRerack = rerackIndex < segments.length - 1;
+      const stat: FrameStat = {
+        frameNumber, rerackIndex, isRerack, entries: segEntries,
+        scores: null, breaks: [[], []], fouls: [0, 0], foulCount: [0, 0],
+        handicap: [0, 0], corrections: [], startTime: null, endTime: null,
+      };
+      for (const entry of segEntries) {
+        if (entry.kind === "rerack") {
+          // Snapshot contains the scores just before the rerack
+          try { const snap = JSON.parse(entry.snapshot) as MatchState; stat.scores = [snap.players[0].score, snap.players[1].score]; } catch { /* ignore */ }
+          if (entry.timestamp) stat.endTime = entry.timestamp;
+        } else if (entry.kind === "break" && entry.playerIndex !== undefined && entry.points !== undefined && entry.points > 7) {
+          stat.breaks[entry.playerIndex].push(entry.points);
+        } else if (entry.kind === "foul" && entry.playerIndex !== undefined && entry.points !== undefined) {
+          stat.fouls[entry.playerIndex] += entry.points;
+          stat.foulCount[entry.playerIndex]++;
+        } else if (entry.kind === "handicap" && entry.playerIndex !== undefined && entry.points !== undefined) {
+          stat.handicap[entry.playerIndex] += entry.points;
+        } else if (entry.kind === "correction") {
+          stat.corrections.push(entry.label);
+        } else if (entry.kind === "frame_end") {
+          try { const snap = JSON.parse(entry.snapshot) as MatchState; stat.scores = [snap.players[0].score, snap.players[1].score]; } catch { /* ignore */ }
+          if (entry.timestamp) stat.endTime = entry.timestamp;
+        }
+      }
+      result.push(stat);
+    });
   }
-  return sorted;
+
+  // Sort by frame then rerack-segment order
+  result.sort((a, b) => a.frameNumber !== b.frameNumber ? a.frameNumber - b.frameNumber : a.rerackIndex - b.rerackIndex);
+
+  // Each segment starts when the previous one ended
+  for (let i = 0; i < result.length; i++) {
+    const firstTs = result[i].entries.find(e => e.timestamp)?.timestamp ?? null;
+    result[i].startTime = i === 0
+      ? (matchStartedAt ?? firstTs)
+      : (result[i - 1].endTime ?? firstTs);
+  }
+  return result;
 }
 
 interface Props {
@@ -158,7 +182,6 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
     }
   }
   const hasAnyHandicapTotal = frames.some(f => f.handicap[0] > 0 || f.handicap[1] > 0);
-  const rerackCount = history.filter(e => e.kind === "rerack").length;
 
   const matchStartIso = matchStartedAt ?? frames[0]?.startTime ?? null;
   const isMatchStartToday = matchStartIso !== null && (() => {
@@ -166,7 +189,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
     const now = new Date();
     return start.getFullYear() === now.getFullYear() && start.getMonth() === now.getMonth() && start.getDate() === now.getDate();
   })();
-  const isMatchLive = frames.some(f => f.scores === null && f.frameNumber === currentFrame);
+  const isMatchLive = frames.some(f => f.scores === null && f.frameNumber === currentFrame && !f.isRerack);
   const isMatchFinished = bestOf % 2 === 0
     ? framesP1 + framesP2 >= bestOf
     : framesP1 >= Math.ceil(bestOf / 2) || framesP2 >= Math.ceil(bestOf / 2);
@@ -176,25 +199,19 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
     ? Math.floor(((isMatchFinished && lastEndIso ? new Date(lastEndIso).getTime() : Date.now()) - new Date(matchStartIso).getTime()) / 60000)
     : null;
 
-  // Add current frame as empty live frame if not yet in history
+  // Add current frame as empty live entry if no final segment exists yet
   const displayFrames = [...frames];
-  if (!isMatchFinished && !displayFrames.some(f => f.frameNumber === currentFrame)) {
+  if (!isMatchFinished && !displayFrames.some(f => f.frameNumber === currentFrame && !f.isRerack)) {
+    const rerackIndex = displayFrames.filter(f => f.frameNumber === currentFrame).length;
     displayFrames.push({
-      frameNumber: currentFrame,
-      scores: null,
-      breaks: [[], []],
-      fouls: [0, 0],
-      foulCount: [0, 0],
-      handicap: [0, 0],
-      reracks: 0,
-      corrections: [],
-      startTime: lastEndIso ?? null,
-      endTime: null,
+      frameNumber: currentFrame, rerackIndex, isRerack: false, entries: [],
+      scores: null, breaks: [[], []], fouls: [0, 0], foulCount: [0, 0],
+      handicap: [0, 0], corrections: [], startTime: lastEndIso ?? null, endTime: null,
     });
   }
 
   // Include live frame in average
-  const liveFrame = isMatchLive ? frames.find(f => f.frameNumber === currentFrame && f.startTime !== null) : null;
+  const liveFrame = isMatchLive ? frames.find(f => f.frameNumber === currentFrame && f.scores === null && !f.isRerack && f.startTime !== null) : null;
   const liveDurationMins = liveFrame?.startTime ? (Date.now() - new Date(liveFrame.startTime).getTime()) / 60000 : 0;
   const totalFrameCount = completedFrames.length + (liveFrame ? 1 : 0);
   const totalFrameMins = completedFrames.reduce((sum, f) =>
@@ -257,7 +274,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
             const hasAnyHandicap = frame.handicap[0] > 0 || frame.handicap[1] > 0;
 
             return (
-              <div key={frame.frameNumber} className={`stats-frame${isLive ? " stats-frame-live" : i % 2 === 1 ? " stats-frame-odd" : ""}`} style={{ cursor: "pointer" }} onClick={(e) => { e.stopPropagation(); setSelectedFrame(frame); }}>
+              <div key={`${frame.frameNumber}-${frame.rerackIndex}`} className={`stats-frame${isLive ? " stats-frame-live" : i % 2 === 1 ? " stats-frame-odd" : ""}`} style={{ cursor: "pointer" }} onClick={(e) => { e.stopPropagation(); setSelectedFrame(frame); }}>
                 {/* Left: P1 data */}
                 <div className="stats-player-col stats-player-col-left">
                   <span className="stats-grid-val" style={{ color: frame.breaks[0].length > 0 ? c1 : "#555" }}>
@@ -279,18 +296,13 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 {/* Center: frame number + score */}
                 <div className="stats-frame-center">
                   <div className="stats-frame-num">
-                    Frame {frame.frameNumber}
+                    {frame.isRerack ? `Frame ${frame.frameNumber} (Re-rack)` : `Frame ${frame.frameNumber}`}
                   </div>
                   {scores !== null && (
                     <div className="stats-frame-score">
                       <span style={{ color: isLive ? "#aaa" : p1wins ? "#ffee44" : "#999" }}>{scores[0]}</span>
                       <span className="stats-frame-colon">:</span>
                       <span style={{ color: isLive ? "#aaa" : p2wins ? "#ffee44" : "#999" }}>{scores[1]}</span>
-                    </div>
-                  )}
-                  {frame.reracks > 0 && (
-                    <div style={{ color: "#888", fontSize: "0.75vw", marginTop: "0.2vh" }}>
-                      {frame.reracks === 1 ? "1 Rerack" : `${frame.reracks} Reracks`}
                     </div>
                   )}
                   {frame.corrections.map((label, i) => (
@@ -353,11 +365,6 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 <span className="stats-frame-colon">:</span>
                 <span style={{ color: totalPts[1] > totalPts[0] ? "#ffee44" : "#aaa" }}>{totalPts[1]}</span>
               </div>
-              {rerackCount > 0 && (
-                <div style={{ color: "#999", fontSize: "0.8vw", marginTop: "0.3vh" }}>
-                  ({rerackCount} {rerackCount === 1 ? "Rerack" : "Reracks"})
-                </div>
-              )}
               {matchTotalMins !== null && (
                 isMatchFinished && lastEndIso ? (
                   <div style={{ display: "flex", alignItems: "center", width: "100%", fontSize: "0.9vw", color: "#bbb", fontWeight: "normal", marginTop: "0.4vh" }}>
@@ -398,8 +405,8 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
 
       {selectedFrame && (() => {
         const f = selectedFrame;
-        const framesSorted = [...frames].sort((a, b) => a.frameNumber - b.frameNumber);
-        const fIdx = framesSorted.findIndex(fr => fr.frameNumber === f.frameNumber);
+        const framesSorted = [...displayFrames].sort((a, b) => a.frameNumber !== b.frameNumber ? a.frameNumber - b.frameNumber : a.rerackIndex - b.rerackIndex);
+        const fIdx = framesSorted.findIndex(fr => fr.frameNumber === f.frameNumber && fr.rerackIndex === f.rerackIndex);
         const prevFrame = fIdx > 0 ? framesSorted[fIdx - 1] : null;
         const nextFrame = fIdx < framesSorted.length - 1 ? framesSorted[fIdx + 1] : null;
         const isLive = f.scores === null && f.frameNumber === currentFrame;
@@ -414,20 +421,18 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
         const startTimeStr = f.startTime ? fmtTime(f.startTime) : null;
         const endTimeStr = f.endTime ? fmtTime(f.endTime) : fmtTime(Date.now());
 
-        // Chart
-        const fh = history.filter(e => e.frameNumber === f.frameNumber);
+        // Chart — uses only this segment's entries (already split at rerack boundaries)
         const chartNode = (() => {
           if (fs0 === 0 && fs1 === 0) return null;
           const svgW = 500, svgH = 150, px = 32, py = 20;
           const cW = svgW - 2 * px, cH = svgH - 2 * py;
           const yMax = Math.max(fs0, fs1) + 5;
-          const lastRerackIdx = fh.reduce((idx, e, i) => e.kind === "rerack" ? i : idx, -1);
-          const eventsAfterRerack = lastRerackIdx >= 0 ? fh.slice(lastRerackIdx + 1) : fh;
-          const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
-          const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
+          const fh = f.entries;
+          const initHC0 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
+          const initHC1 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
           const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1 }> = [{ s: [initHC0, initHC1] }];
           let acc0 = initHC0, acc1 = initHC1;
-          for (const e of eventsAfterRerack) {
+          for (const e of fh) {
             if (e.kind === "handicap") continue;
             let n0 = acc0, n1 = acc1;
             if (e.kind === "break") {
@@ -445,7 +450,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           }
           const last = scoreData[scoreData.length - 1];
           if (last.s[0] !== fs0 || last.s[1] !== fs1) scoreData.push({ s: [fs0, fs1] });
-          const firstEvent = eventsAfterRerack.find(e => e.kind === "break" || e.kind === "foul");
+          const firstEvent = fh.find(e => e.kind === "break" || e.kind === "foul");
           const p0First = firstEvent ? (firstEvent.kind === "break" ? firstEvent.playerIndex === 0 : firstEvent.playerIndex === 1) : true;
           const n = scoreData.length;
           const toX = (i: number) => px + (n > 1 ? (i / (n - 1)) * cW : cW / 2);
@@ -510,7 +515,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   disabled={!prevFrame}
                   style={{ background: "none", border: "none", color: prevFrame ? "#aaa" : "#333", fontSize: "2vw", cursor: prevFrame ? "pointer" : "default", padding: "0 0.4vw", lineHeight: 1 }}
                 >◀</button>
-                <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>Frame {f.frameNumber}{isLive ? " · Live" : ""}</div>
+                <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>{f.isRerack ? `Frame ${f.frameNumber} (Re-rack)` : `Frame ${f.frameNumber}`}{isLive ? " · Live" : ""}</div>
                 <button
                   onClick={(e) => { e.stopPropagation(); if (nextFrame) setSelectedFrame(nextFrame); }}
                   disabled={!nextFrame}
@@ -549,16 +554,11 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   <div style={{ color: "#ccc" }}>Handicap:</div>
                   <div style={{ color: "#c87832" }}>{f.handicap[1] > 0 ? `${f.handicap[1]} Pkt` : "—"}</div>
                 </>}
-                {(durationStr || f.reracks > 0) && <>
-                  <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
-                  <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong> : ""}</div>
+                {durationStr && <>
+                  <div style={{ color: "#aaa" }}>⏱ Framedauer:</div>
+                  <div style={{ color: "#fff" }}><strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong></div>
                   <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
                   <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
-                  {f.reracks > 0 && <>
-                    <div /><div />
-                    <div style={{ color: "#ffa040" }}>🔴 Re-racks:</div>
-                    <div style={{ color: "#ffa040" }}>{f.reracks}</div>
-                  </>}
                 </>}
               </div>
 
