@@ -183,6 +183,17 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
   }
   const hasAnyHandicapTotal = frames.some(f => f.handicap[0] > 0 || f.handicap[1] > 0);
 
+  // Anzahl Re-racks pro Frame — für Nummerierung bei mehrfachen Re-racks
+  const rerackCountByFrame = new Map<number, number>();
+  for (const f of frames) {
+    if (f.isRerack) rerackCountByFrame.set(f.frameNumber, (rerackCountByFrame.get(f.frameNumber) ?? 0) + 1);
+  }
+  const frameLabel = (f: FrameStat) => {
+    if (!f.isRerack) return `Frame ${f.frameNumber}`;
+    const rrTotal = rerackCountByFrame.get(f.frameNumber) ?? 1;
+    return rrTotal > 1 ? `Frame ${f.frameNumber} (${f.rerackIndex + 1}. Re-rack)` : `Frame ${f.frameNumber} (Re-rack)`;
+  };
+
   const matchStartIso = matchStartedAt ?? frames[0]?.startTime ?? null;
   const isMatchStartToday = matchStartIso !== null && (() => {
     const start = new Date(matchStartIso);
@@ -296,7 +307,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 {/* Center: frame number + score */}
                 <div className="stats-frame-center">
                   <div className="stats-frame-num">
-                    {frame.isRerack ? `Frame ${frame.frameNumber} (Re-rack)` : `Frame ${frame.frameNumber}`}
+                    {frameLabel(frame)}
                   </div>
                   {scores !== null && (
                     <div className="stats-frame-score">
@@ -382,6 +393,11 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
               {avgFrameMins !== null && (
                 <div style={{ color: "#999", fontSize: "0.8vw", fontWeight: "normal" }}>
                   Ø {avgFrameMins} Min./Frame
+                </div>
+              )}
+              {frames.filter(f => f.isRerack).length > 0 && (
+                <div style={{ color: "#999", fontSize: "0.8vw", marginTop: "0.2vh" }}>
+                  {frames.filter(f => f.isRerack).length === 1 ? "1 Re-rack" : `${frames.filter(f => f.isRerack).length} Re-racks`}
                 </div>
               )}
             </div>
@@ -515,7 +531,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   disabled={!prevFrame}
                   style={{ background: "none", border: "none", color: prevFrame ? "#aaa" : "#333", fontSize: "2vw", cursor: prevFrame ? "pointer" : "default", padding: "0 0.4vw", lineHeight: 1 }}
                 >◀</button>
-                <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>{f.isRerack ? `Frame ${f.frameNumber} (Re-rack)` : `Frame ${f.frameNumber}`}{isLive ? " · Live" : ""}</div>
+                <div style={{ color: "#fff", fontSize: "1.8vw", fontWeight: "bold", textAlign: "center" }}>{frameLabel(f)}{isLive ? " · Live" : ""}</div>
                 <button
                   onClick={(e) => { e.stopPropagation(); if (nextFrame) setSelectedFrame(nextFrame); }}
                   disabled={!nextFrame}
