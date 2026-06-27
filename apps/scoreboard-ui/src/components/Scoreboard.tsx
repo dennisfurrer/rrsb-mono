@@ -196,9 +196,10 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     const p2El = p2ScoreRef.current;
     if (!p1El || !p2El) return;
 
-    // Reset forced width so binary search uses natural content width
+    // Reset forced width and padding so binary search measures pure content
     p1El.style.width = "";
     p2El.style.width = "";
+    p1El.style.paddingRight = "";
 
     const computeSize = (el: HTMLDivElement) => {
       const parent = el.parentElement;
@@ -225,6 +226,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     const equalW = Math.max(p1El.offsetWidth, p2El.offsetWidth);
     p1El.style.width = `${equalW}px`;
     p2El.style.width = `${equalW}px`;
+    // Shift left player digits away from right edge (covered by center column overlap)
+    p1El.style.paddingRight = "2mm";
   }, []);
 
   useEffect(() => {

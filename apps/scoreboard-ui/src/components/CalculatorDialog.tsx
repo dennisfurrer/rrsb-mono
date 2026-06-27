@@ -85,7 +85,9 @@ export function CalculatorDialog({
   const modeLabel = foulMode ? "Foul von" : handicapMode ? "Handicap für" : "Break für";
 
   const digitBtn = (d: number) => {
-    const disabled = foulMode && !FOUL_DIGITS.has(d);
+    const foulDisabled = foulMode && !FOUL_DIGITS.has(d);
+    const breakDisabled = !foulMode && !handicapMode && parseInt(display + String(d)) > 155;
+    const disabled = foulDisabled || breakDisabled;
     return (
       <div
         key={d}
@@ -188,7 +190,7 @@ export function CalculatorDialog({
           <div
             className="calc-butt"
             onClick={() => appendDigit(0)}
-            style={foulMode ? { opacity: 0.2, pointerEvents: "none" } : undefined}
+            style={(foulMode || (!handicapMode && parseInt(display + "0") > 155)) ? { opacity: 0.2, pointerEvents: "none" } : undefined}
           >
             0
           </div>

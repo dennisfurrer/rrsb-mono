@@ -1789,10 +1789,28 @@ export function App() {
         />
       )}
 
-      {showMenu && (
+      {showMenu && (() => {
+        const entryLabel = (e: { kind?: string; points?: number } | null | undefined, action: string, hiColor: string) => {
+          if (!e) return undefined;
+          const hi = (txt: string) => <span style={{ color: hiColor }}>{txt}</span>;
+          switch (e.kind) {
+            case "break":     return <>{hi(`Break ${e.points}`)} {action}</>;
+            case "foul":      return <>{hi(`Foul ${e.points}`)} {action}</>;
+            case "handicap":  return <>{hi(`Handicap ${e.points}`)} {action}</>;
+            case "frame_end": return <>{hi("Frame-Ende")} {action}</>;
+            case "rerack":    return <>{hi("Re-rack")} {action}</>;
+            case "correction":return <>{hi("Korrektur")} {action}</>;
+            default:          return undefined;
+          }
+        };
+        const lastUndo = history.length > 0 ? history[history.length - 1] : null;
+        const lastRedo = redoStack.length > 0 ? redoStack[redoStack.length - 1].entries.at(-1) : null;
+        return (
         <MenuDialog
           onUndo={history.length > 0 ? undoFull : undefined}
           onRedo={redoStack.length > 0 ? redo : undefined}
+          undoLabel={entryLabel(lastUndo, "löschen", "#ffaaaa")}
+          redoLabel={entryLabel(lastRedo, "zurücksetzen", "#d4fce8")}
           onFrameEnd={match.finished ? undefined : () => setShowMenuFrameEndStats(true)}
           isFrameTied={isFrameTied}
           onRerack={rerack}
@@ -1826,7 +1844,8 @@ export function App() {
             (match.players[0].score > 0 || match.players[1].score > 0)
           }
         />
-      )}
+        );
+      })()}
 
       {showMenuFrameEndStats && (
         <div

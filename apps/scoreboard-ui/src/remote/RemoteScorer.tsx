@@ -475,13 +475,15 @@ function BreakPad({
 
       <div className="rmt-keys">
         {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => {
-          const dimmed = isFoul && !FOUL_DIGITS.has(parseInt(d, 10));
+          const foulDimmed = isFoul && !FOUL_DIGITS.has(parseInt(d, 10));
+          const breakDimmed = !isFoul && parseInt(input + d, 10) > 155;
+          const dimmed = foulDimmed || breakDimmed;
           return (
             <FlashButton key={d} className="rmt-key" disabled={dimmed} style={dimmed ? { opacity: 0.2 } : undefined} onClick={() => press(d)}>{d}</FlashButton>
           );
         })}
         <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => setInput("")}>C</FlashButton>
-        <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => press("0")}>0</FlashButton>
+        <FlashButton className="rmt-key" disabled={isFoul || (!isFoul && parseInt(input + "0", 10) > 155)} style={(isFoul || (!isFoul && parseInt(input + "0", 10) > 155)) ? { opacity: 0.2 } : undefined} onClick={() => press("0")}>0</FlashButton>
         <FlashButton className="rmt-key" disabled={isFoul} style={isFoul ? { opacity: 0.2 } : undefined} onClick={() => setInput(input.slice(0, -1))}>⌫</FlashButton>
       </div>
 

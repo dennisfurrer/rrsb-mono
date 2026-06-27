@@ -31,8 +31,9 @@ function AutoTextButton({ children, className, onClick, style, disabled }: {
   );
 }
 
-function FitWidthText({ text }: { text: string }) {
+function FitWidthText({ text, children }: { text?: string; children?: React.ReactNode }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const content = children ?? text;
 
   useEffect(() => {
     const el = ref.current;
@@ -44,12 +45,12 @@ function FitWidthText({ text }: { text: string }) {
       fs -= 0.5;
       el.style.fontSize = `${fs}px`;
     }
-  }, [text]);
+  }, [text, children]);
 
   return (
     <span style={{ display: "block", width: "100%", fontSize: "0.5em", fontWeight: "normal" }}>
       <span ref={ref} style={{ display: "block", whiteSpace: "nowrap", overflow: "hidden" }}>
-        {text}
+        {content}
       </span>
     </span>
   );
@@ -215,6 +216,8 @@ interface Props {
   isFrameStart: boolean;
   onChangeBestOf?: (newBestOf: number) => void;
   pulseFrameEnd?: boolean;
+  undoLabel?: React.ReactNode;
+  redoLabel?: React.ReactNode;
 }
 
 export function MenuDialog({
@@ -240,6 +243,8 @@ export function MenuDialog({
   isFrameStart,
   onChangeBestOf,
   pulseFrameEnd,
+  undoLabel,
+  redoLabel,
 }: Props) {
   const [confirmMatchEnd, setConfirmMatchEnd] = useState(false);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
@@ -562,7 +567,7 @@ export function MenuDialog({
               <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
                 <UndoArrowIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
                 <span>Undo</span>
-                <FitWidthText text="Letzte Eingabe löschen" />
+                <FitWidthText>{undoLabel ?? "Letzte Eingabe löschen"}</FitWidthText>
               </span>
             </AutoTextButton>
             <AutoTextButton
@@ -574,7 +579,7 @@ export function MenuDialog({
               <span style={{ display: "grid", gridTemplateColumns: "2em 1fr", gridTemplateRows: "auto auto", columnGap: "0.4em", alignItems: "center", width: "100%" }}>
                 <RedoArrowIcon style={{ gridRow: "span 2", height: "2.4em", width: "auto", justifySelf: "center" }} />
                 <span>Redo</span>
-                <FitWidthText text="Gelöschtes wiederherstellen." />
+                <FitWidthText>{redoLabel ?? "Gelöschtes zurücksetzen"}</FitWidthText>
               </span>
             </AutoTextButton>
           </div>
