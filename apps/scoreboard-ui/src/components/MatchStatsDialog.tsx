@@ -311,9 +311,9 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   </div>
                   {scores !== null && (
                     <div className="stats-frame-score">
-                      <span style={{ color: isLive ? "#aaa" : p1wins ? "#ffee44" : "#999" }}>{scores[0]}</span>
+                      <span style={{ color: frame.isRerack ? "#666" : isLive ? "#aaa" : p1wins ? "#ffee44" : "#999" }}>{frame.isRerack ? `(${scores[0]}` : scores[0]}</span>
                       <span className="stats-frame-colon">:</span>
-                      <span style={{ color: isLive ? "#aaa" : p2wins ? "#ffee44" : "#999" }}>{scores[1]}</span>
+                      <span style={{ color: frame.isRerack ? "#666" : isLive ? "#aaa" : p2wins ? "#ffee44" : "#999" }}>{frame.isRerack ? `${scores[1]})` : scores[1]}</span>
                     </div>
                   )}
                   {frame.corrections.map((label, i) => (
@@ -491,17 +491,17 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
             <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw" }}>
               <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", display: "block", overflow: "visible" }}>
                 <text x={svgW / 2} y={toY(Math.max(fs0, fs1)) / 2} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="#666">Frameverlauf</text>
-                <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
-                <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
-                <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
+                <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
+                <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
+                <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
                 {initHC0 > 0 && <text x={px - 4} y={lcHC0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c1}>{initHC0}</text>}
                 {initHC1 > 0 && <text x={px - 4} y={lcHC1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c2}>{initHC1}</text>}
                 {initHC0 === 0 && initHC1 > 0 && <text x={px - 4} y={lcZ0y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c1}>0</text>}
                 {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c2}>0</text>}
                 {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c1 : c2}>0</text>}
                 {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c2 : c1}>0</text>}
-                <polyline points={pts0} fill="none" stroke={c1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-                <polyline points={pts1} fill="none" stroke={c2} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                <polyline points={pts0} fill="none" stroke={c1} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
+                <polyline points={pts1} fill="none" stroke={c2} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
                 {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c1} /> : null)}
                 {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c2} /> : null)}
                 <circle cx={lastX} cy={lastY0} r={5} fill={c1} />

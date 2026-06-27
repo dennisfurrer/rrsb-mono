@@ -24,6 +24,7 @@ export function CalculatorDialog({
   onClose,
 }: Props) {
   const [display, setDisplay] = useState("");
+  const [prevDisplay, setPrevDisplay] = useState("");
   const [foulMode, setFoulMode] = useState(false);
   const [handicapMode, setHandicapMode] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -42,6 +43,7 @@ export function CalculatorDialog({
 
   const clear = () => {
     setDisplay("");
+    setPrevDisplay("");
     setFoulMode(false);
     setHandicapMode(false);
   };
@@ -65,11 +67,13 @@ export function CalculatorDialog({
   const handleFoul = () => {
     if (foulMode) {
       setFoulMode(false);
-      setDisplay("");
+      setDisplay(prevDisplay);
     } else {
+      const currentVal = parseInt(display);
+      setPrevDisplay(display);
       setFoulMode(true);
       setHandicapMode(false);
-      setDisplay("4"); // default minimum foul
+      setDisplay(FOUL_DIGITS.has(currentVal) ? String(currentVal) : "4");
     }
   };
 
