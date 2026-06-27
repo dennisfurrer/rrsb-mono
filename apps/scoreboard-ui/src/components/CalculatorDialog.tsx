@@ -26,6 +26,8 @@ export function CalculatorDialog({
   const [display, setDisplay] = useState("");
   const [foulMode, setFoulMode] = useState(false);
   const [handicapMode, setHandicapMode] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [showDiscard, setShowDiscard] = useState(false);
 
   const appendDigit = (d: number) => {
     if (foulMode) {
@@ -45,12 +47,18 @@ export function CalculatorDialog({
   };
 
   const points = parseInt(display) || 0;
+  const hasInput = points > 0 || foulMode;
+  const handleOverlayClick = () => {
+    if (hasInput) setShowDiscard(true);
+    else onClose();
+  };
 
   const submit = () => {
     if (points > 0) {
       onSubmit(playerIndex, points, foulMode, handicapMode);
     } else {
-      onClose();
+      setShowHint(true);
+      setTimeout(() => setShowHint(false), 1500);
     }
   };
 
@@ -90,8 +98,24 @@ export function CalculatorDialog({
     );
   };
 
+  if (showDiscard) {
+    return (
+      <div className="overlay" onClick={() => setShowDiscard(false)}>
+        <div onClick={(e) => e.stopPropagation()} style={{ background: "#2a2a2a", borderRadius: "12px", padding: "3vh 3vw", display: "flex", flexDirection: "column", alignItems: "center", gap: "2vh", minWidth: "42vw" }}>
+          <div style={{ color: "#fff", fontSize: "2vw", fontWeight: "bold", textAlign: "center" }}>
+            {foulMode ? `Foul ${display} verwerfen?` : `Break ${points} verwerfen?`}
+          </div>
+          <div style={{ display: "flex", gap: "1.5vw", width: "100%" }}>
+            <button onClick={onClose} style={{ flex: 1, padding: "1.5vh 0", fontSize: "1.8vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#7a1a1a", color: "#f87171" }}>Ja, verwerfen</button>
+            <button onClick={() => setShowDiscard(false)} style={{ flex: 1, padding: "1.5vh 0", fontSize: "1.8vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a5c1a", color: "#4ade80" }}>Nein, zurück</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="overlay" onClick={onClose}>
+    <div className="overlay" onClick={handleOverlayClick}>
       <div
         className="calc-fullscreen"
         onClick={(e) => e.stopPropagation()}
@@ -134,6 +158,13 @@ export function CalculatorDialog({
           )}
         </div>
 
+        {/* Hint row */}
+        {showHint && (
+          <div style={{ width: "100%", textAlign: "center", color: "#ff5555", fontWeight: "bold", fontSize: "2vw", padding: "0.3vh 0", letterSpacing: "0.05em" }}>
+            Break eingeben!
+          </div>
+        )}
+
         {/* Row 2: 1 2 3 */}
         <div className="calc-line">
           {digitBtn(1)}{digitBtn(2)}{digitBtn(3)}
@@ -151,7 +182,9 @@ export function CalculatorDialog({
 
         {/* Row 5: Löschen 0 OK */}
         <div className="calc-line">
-          <div className="calc-butt calc-clear" onClick={clear}>Löschen</div>
+          <div className="calc-butt calc-clear" onClick={points === 0 && !foulMode ? onClose : clear}>
+            {points === 0 && !foulMode ? "Exit" : "Löschen"}
+          </div>
           <div
             className="calc-butt"
             onClick={() => appendDigit(0)}
