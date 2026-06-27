@@ -836,6 +836,11 @@ export function App() {
     setAnstossInfoDismissedKey(null);
   }, [match.currentFrame, currentRerackCount]);
 
+  // Close CalculatorDialog if Anstoss is still pending (BDE mode: player area was clicked too early)
+  useEffect(() => {
+    if (anstossPending && calcPlayer !== null) setCalcPlayer(null);
+  });
+
   // Deferred endFrame call: ensures endFrame runs AFTER React re-renders with updated scores
   useEffect(() => {
     if (pendingEndFrame) {
@@ -1645,6 +1650,16 @@ export function App() {
   const isFrameStart =
     match.players[0].score === 0 && match.players[1].score === 0;
 
+  // True when an Anstoss overlay (ball-picker or info bar) is active — blocks player clicks in BDE mode
+  const anstossPending =
+    !match.finished && !soloSession && !showSetup && isFrameStart && (
+      (match.currentFrame === 1 && !history.some(e => e.kind === "break" && e.points === 0 && e.frameNumber === 1)) ||
+      (
+        (match.currentFrame > 1 || currentRerackCount > 0) &&
+        anstossInfoDismissedKey !== `${match.currentFrame}-${currentRerackCount}`
+      )
+    );
+
   const isFrameTied = match.players[0].score === match.players[1].score;
 
   const canEndMatchEarly =
@@ -1667,6 +1682,7 @@ export function App() {
           match={match}
           onPlayerClick={(idx) => {
             if (match.finished) return;
+            if (anstossPending) return;
             if (match.inputMode === "ballbyball") {
               const bb = match.bbState;
               const autoFrameOver = !!bb && bb.phase === "colors_only" && bb.colorsOnlyIndex === 5
