@@ -47,7 +47,7 @@ export function CalculatorDialog({
   };
 
   const points = parseInt(display) || 0;
-  const hasInput = points > 0 || foulMode;
+  const hasInput = points > 0 || foulMode || handicapMode;
   const handleOverlayClick = () => {
     if (hasInput) setShowDiscard(true);
     else onClose();
@@ -103,7 +103,7 @@ export function CalculatorDialog({
       <div className="overlay" onClick={() => setShowDiscard(false)}>
         <div onClick={(e) => e.stopPropagation()} style={{ background: "#2a2a2a", borderRadius: "12px", padding: "3vh 3vw", display: "flex", flexDirection: "column", alignItems: "center", gap: "2vh", minWidth: "42vw" }}>
           <div style={{ color: "#fff", fontSize: "2vw", fontWeight: "bold", textAlign: "center" }}>
-            {foulMode ? `Foul ${display} verwerfen?` : `Break ${points} verwerfen?`}
+            {foulMode ? `Foul ${display} verwerfen?` : handicapMode ? `Handicap ${points > 0 ? points : ""} verwerfen?`.trim() : `Break ${points} verwerfen?`}
           </div>
           <div style={{ display: "flex", gap: "1.5vw", width: "100%" }}>
             <button onClick={onClose} style={{ flex: 1, padding: "1.5vh 0", fontSize: "1.8vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#7a1a1a", color: "#f87171" }}>Ja, verwerfen</button>
