@@ -195,6 +195,7 @@ export function SetupDialog({
   const [showRedsInfo, setShowRedsInfo] = useState(false);
   const [showBreakModeInfo, setShowBreakModeInfo] = useState(false);
   const [showMatchTypeInfo, setShowMatchTypeInfo] = useState(false);
+  const [showPlayerInfo, setShowPlayerInfo] = useState(false);
   const [showMatchTypePicker, setShowMatchTypePicker] = useState(false);
   const [hoveredMatchType, setHoveredMatchType] = useState<string | null>(null);
   const hoveredMatchTypeRef = useRef<string | null>(null);
@@ -267,9 +268,9 @@ export function SetupDialog({
 
   const isReady = !isSameName && !!name1 && (isPractice || !!name2);
   const okLabel = !name1
-    ? "Spieler 1 wählen"
+    ? "Wähle Spieler 1"
     : !isPractice && !name2
-    ? "Spieler 2 wählen"
+    ? "Wähle Spieler 2"
     : isSameName
     ? "Gleiche Namen!"
     : isPractice
@@ -310,7 +311,7 @@ export function SetupDialog({
       {picking !== null && (
         <PlayerPicker
           players={players}
-          title={picking === 1 ? "Spieler 1 wählen" : <>Spieler 2 oder <span style={{ color: "#4ade80" }}>SOLO Training</span> wählen</>}
+          title={picking === 1 ? "Wähle Spieler 1" : <>Wähle Spieler 2 oder <span style={{ color: "#4ade80", cursor: "pointer" }} onClick={(e) => { e.stopPropagation(); setName2(PRACTICE_MODE_VALUE); setPicking(null); }}>SOLO-Training</span></>}
           extraOption={picking === 2 ? { label: "SOLO TRAINING", value: PRACTICE_MODE_VALUE } : undefined}
           onSelect={(val) => {
             if (picking === 1) setName1(val);
@@ -338,8 +339,16 @@ export function SetupDialog({
         <div style={{ ...groupBox, flexDirection: "row", gap: "1.5vw" }}>
           {/* Spieler 1 */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.9vh" }}>
-            <div className="setup-player-header setup-player1-header">
+            <div className="setup-player-header setup-player1-header" style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
               Spieler 1:
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowPlayerInfo(true); }}
+                type="button"
+                className="setup-info-btn"
+                style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+              >
+                ?
+              </button>
             </div>
             <div className="setup-player-btn-row">
               {name1 && <div style={{ width: "3.8vw", flexShrink: 0 }} />}
@@ -643,6 +652,31 @@ export function SetupDialog({
         </div>
       )}
 
+      {showPlayerInfo && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={() => setShowPlayerInfo(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#1a1e2e", border: "1px solid #3366aa", borderRadius: "14px", padding: "4vh 3.5vw", width: "62vw", display: "flex", flexDirection: "column", gap: "2vh" }}
+          >
+            <div style={{ color: "#66aaff", fontSize: "2.2vw", fontWeight: "bold" }}>Wähle Spieler 1</div>
+            <ul style={{ color: "#ccc", fontSize: "1.65vw", lineHeight: 1.7, paddingLeft: "1.6em", margin: 0, display: "flex", flexDirection: "column", gap: "0.8vh" }}>
+              <li>Klicke auf <span style={{ color: "#ffcc00" }}>Spieler wählen…</span> und dann auf einen Buchstaben, um nur Spieler mit diesem Nachnamen anzuzeigen.</li>
+              <li>Klicke erneut auf den Buchstaben, damit wieder alle Namen angezeigt werden.</li>
+              <li>Unsere Clubspieler sind im Auswahlfenster hell hinterlegt.</li>
+            </ul>
+            <button
+              onClick={() => setShowPlayerInfo(false)}
+              className="menu-btn-info"
+              style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
       {showMatchTypeInfo && (
         <div
           style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center" }}
