@@ -166,6 +166,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
   const p2NameRowRef = useRef<HTMLDivElement>(null);
   const p1NameTextRef = useRef<HTMLDivElement>(null);
   const p2NameTextRef = useRef<HTMLDivElement>(null);
+  const centerRef = useRef<HTMLDivElement>(null);
+  const matchTypeRef = useRef<HTMLSpanElement>(null);
   const [tick, setTick] = useState(0);
   const [secsAnimDelay, setSecsAnimDelay] = useState("0s");
   const [showFinishedHint, setShowFinishedHint] = useState(false);
@@ -236,6 +238,27 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     return () => window.removeEventListener("resize", resizeScores);
   }, [resizeScores, p1.score, p2.score]);
 
+  useEffect(() => {
+    const resize = () => {
+      const el = matchTypeRef.current;
+      const center = centerRef.current;
+      if (!el || !center) return;
+      const maxW = center.clientWidth - 40; // ~0.5cm gap on each side
+      if (maxW <= 0) return;
+      let lo = 8, hi = 200;
+      while (lo < hi - 1) {
+        const mid = Math.floor((lo + hi) / 2);
+        el.style.fontSize = `${mid}px`;
+        if (el.scrollWidth <= maxW) lo = mid;
+        else hi = mid;
+      }
+      el.style.fontSize = `${lo}px`;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, [match.matchType]);
+
   const resizeNames = useCallback(() => {
     const p1El = p1NameTextRef.current;
     const p2El = p2NameTextRef.current;
@@ -244,8 +267,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
     if (!p1El || !p2El || !p1Row || !p2Row) return;
 
     const computeSize = (el: HTMLDivElement, row: HTMLDivElement) => {
-      const maxW = row.clientWidth * 0.95 * 0.88;
-      const maxH = row.clientHeight * 0.9 * 0.88;
+      const maxW = row.clientWidth * 0.95 * 0.78;
+      const maxH = row.clientHeight * 0.9 * 0.78;
       if (maxW <= 0 || maxH <= 0) return 500;
       el.style.height = "auto";
       let lo = 8, hi = 500;
@@ -316,14 +339,15 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
           left: 0,
           right: 0,
           textAlign: "center",
-          fontSize: "2vw",
           color: "#aaa",
           letterSpacing: "0.06em",
           textTransform: "uppercase",
           pointerEvents: "none",
           zIndex: 10,
         }}>
-          {match.matchType}
+          <span ref={matchTypeRef} style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+            {match.matchType}
+          </span>
         </div>
       )}
       {match.bbState?.respottedBlack && !match.bbState.frameOver && !match.finished && (
@@ -478,7 +502,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         </div>
 
         {/* Center 20% */}
-        <div className="sb-center" onClick={onCenterClick} style={onCenterClick ? { cursor: "pointer" } : undefined}>
+        <div ref={centerRef} className="sb-center" onClick={onCenterClick} style={onCenterClick ? { cursor: "pointer" } : undefined}>
           <div className="sb-name-row sb-name-row-center">
             <div className="sb-name-player-part" style={p1.winner ? { alignItems: "flex-start" } : p2.winner ? { alignItems: "flex-end" } : undefined}>
               {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "52%" }} />}

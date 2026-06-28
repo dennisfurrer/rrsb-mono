@@ -127,6 +127,41 @@ function withMeta(meta: EvtMeta): Pick<V3EventInput, "source" | "remotePlayerInd
     : { source: "DISPLAY" };
 }
 
+function CueSvg({ side }: { side: "left" | "right" }) {
+  const s = side;
+  return (
+    <svg
+      viewBox="0 0 112 40"
+      style={{ width: "15vw", height: "5vw", display: "block", transform: s === "right" ? "scaleX(-1)" : undefined }}
+    >
+      <defs>
+        <linearGradient id={`cue-wood-${s}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#d4aa50" />
+          <stop offset="40%" stopColor="#c8962a" />
+          <stop offset="100%" stopColor="#7a5010" />
+        </linearGradient>
+      </defs>
+      {/* Cue (animated forward and back) */}
+      <g>
+        <animateTransform
+          attributeName="transform" type="translate"
+          values="-20,0; 0,0; -20,0"
+          keyTimes="0; 0.38; 1"
+          dur="1.8s" repeatCount="indefinite"
+          calcMode="spline"
+          keySplines="0.2 0 0.1 1; 0.7 0 0.9 1"
+        />
+        {/* Cue body: slight taper, mostly rectangular */}
+        <polygon points="-300,14 102,15 102,25 -300,26" fill={`url(#cue-wood-${s})`} />
+        {/* Ferrule (messing) */}
+        <rect x="100" y="15" width="5" height="10" fill="#eecf58" rx="0.8" />
+        {/* Tip (blue-grey leather) */}
+        <path d="M 105,15 L 106,15 A 5,5 0 0 1 106,25 L 105,25 Z" fill="#4a7a9b" />
+      </g>
+    </svg>
+  );
+}
+
 export function App() {
   const [match, setMatch] = useState<MatchState>(() => {
     const saved = sessionStorage.getItem("matchState");
@@ -182,6 +217,7 @@ export function App() {
   const [showStats, setShowStats] = useState(false);
   const [breaksPlayer, setBreaksPlayer] = useState<0 | 1 | null>(null);
   const [anstossInfoDismissedKey, setAnstossInfoDismissedKey] = useState<string | null>(null);
+  const [anstossFlashing, setAnstossFlashing] = useState<0 | 1 | null>(null);
   const [scoreboardConfig, setScoreboardConfig] =
     useState<ScoreboardConfig | null>(() => {
       const savedLocation = localStorage.getItem("scoreboardLocationName");
@@ -540,6 +576,14 @@ export function App() {
       return next;
     });
   }, [match, pushHistory, playerColors]);
+
+  const handleAnstossClick = useCallback((playerIndex: 0 | 1) => {
+    setAnstossFlashing(playerIndex);
+    setTimeout(() => {
+      setAnstossFlashing(null);
+      recordAnstoss(playerIndex);
+    }, 750);
+  }, [recordAnstoss]);
 
   // ===== BALL BY BALL =====
   const handleBBPot = useCallback((ball: BBBallType, meta?: EvtMeta) => {
@@ -1775,61 +1819,63 @@ export function App() {
             display: "flex", alignItems: "center",
             background: "rgba(10,10,10,0.85)",
             padding: "2.5vh 0",
-            borderTop: "2px solid #aaa",
-            borderBottom: "2px solid #aaa",
-            boxShadow: "0 -1px 0 #555, 0 1px 0 #555",
+            borderTop: "2px solid #ccc",
+            borderBottom: "2px solid #ccc",
+            boxShadow: "0 -6px 28px rgba(210,210,210,0.55), 0 6px 28px rgba(210,210,210,0.55), 0 -1px 0 #666, 0 1px 0 #666",
           }}>
             {/* Left: Spieler 0 */}
             <div
-              onClick={() => recordAnstoss(0)}
+              onClick={() => handleAnstossClick(0)}
               style={{
-                flex: "0 0 40%",
+                flex: "0 0 38%",
                 display: "flex", flexDirection: "column", alignItems: "center",
                 cursor: "pointer", gap: "1vh",
               }}
             >
-              <div style={{
+              <div className={anstossFlashing === 0 ? "anstoss-ball-flash" : undefined} style={{
                 width: "8vw", height: "8vw", borderRadius: "50%",
                 background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center",
                 boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
                 border: "2px solid rgba(255,255,255,0.6)",
-                transition: "transform 0.1s",
               }}>
-                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.15vw", letterSpacing: "0.04em" }}>Anstoss</span>
+                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em" }}>Anstoss</span>
               </div>
-              <span style={{ color: "#ccc", fontSize: "1vw", letterSpacing: "0.04em" }}>{match.players[0].name}</span>
+              <span style={{ color: resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[0].name}</span>
             </div>
 
             {/* Center */}
-            <div style={{ flex: "0 0 20%", textAlign: "center", userSelect: "none", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6vw" }}>
-              <span style={{ color: "#ffee44", fontSize: "2vw" }}>◀</span>
-              <span style={{ color: "#ffee44", fontSize: "2vw", fontWeight: "bold", letterSpacing: "0.06em" }}>Wer macht den Anstoss?</span>
-              <span style={{ color: "#ffee44", fontSize: "2vw" }}>▶</span>
+            <div style={{ flex: "0 0 24%", textAlign: "center", userSelect: "none", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ position: "absolute", right: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)" }}>
+                <CueSvg side="right" />
+              </div>
+              <span style={{ color: "#ffee44", fontSize: "2.5vw", fontWeight: "bold", letterSpacing: "0.06em" }}>Wer macht den Anstoss?</span>
+              <div style={{ position: "absolute", left: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)" }}>
+                <CueSvg side="left" />
+              </div>
             </div>
 
             {/* Right: Spieler 1 */}
             <div
-              onClick={() => recordAnstoss(1)}
+              onClick={() => handleAnstossClick(1)}
               style={{
-                flex: "0 0 40%",
+                flex: "0 0 38%",
                 display: "flex", flexDirection: "column", alignItems: "center",
                 cursor: "pointer", gap: "1vh",
               }}
             >
-              <div style={{
+              <div className={anstossFlashing === 1 ? "anstoss-ball-flash" : undefined} style={{
                 width: "8vw", height: "8vw", borderRadius: "50%",
                 background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center",
                 boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
                 border: "2px solid rgba(255,255,255,0.6)",
-                transition: "transform 0.1s",
               }}>
-                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.15vw", letterSpacing: "0.04em" }}>Anstoss</span>
+                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em" }}>Anstoss</span>
               </div>
-              <span style={{ color: "#ccc", fontSize: "1vw", letterSpacing: "0.04em" }}>{match.players[1].name}</span>
+              <span style={{ color: resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[1].name}</span>
             </div>
           </div>
         </div>
@@ -1864,9 +1910,9 @@ export function App() {
               display: "flex", alignItems: "center", justifyContent: "center", gap: "4vw",
               background: "rgba(10,10,10,0.85)",
               padding: "2.5vh 0",
-              borderTop: "2px solid #aaa",
-              borderBottom: "2px solid #aaa",
-              boxShadow: "0 -1px 0 #555, 0 1px 0 #555",
+              borderTop: "2px solid #ccc",
+              borderBottom: "2px solid #ccc",
+              boxShadow: "0 -6px 28px rgba(210,210,210,0.55), 0 6px 28px rgba(210,210,210,0.55), 0 -1px 0 #666, 0 1px 0 #666",
             }}>
               <div style={{ textAlign: "center", userSelect: "none" }}>
                 <div style={{ color: "#ffee44", fontSize: "5vw", fontWeight: "bold", letterSpacing: "0.06em" }}>

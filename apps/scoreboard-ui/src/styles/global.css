@@ -77,7 +77,7 @@ div { font-weight: bold; }
 /* name-text height controlled by auto-sizer inline style */
 .sb-name-player-part .name-text {
   height: auto;
-  line-height: 1;
+  line-height: 1.18;
 }
 
 /* Club name area: absolute at bottom, fixed 12mm height */
@@ -3731,3 +3731,18 @@ div { font-weight: bold; }
 .frame-end-btn-glow {
   animation: frame-end-glow 4s ease-in-out infinite;
 }
+
+/* ===== ANSTOSS BALL FLASH ===== */
+@keyframes anstoss-flash {
+  0%   { box-shadow: 0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7); transform: scale(1);    filter: brightness(1); }
+  15%  { box-shadow: 0 0 80px rgba(255,255,255,1), 0 0 160px rgba(255,255,255,0.9), 0 0 240px rgba(255,255,255,0.5); transform: scale(1.22); filter: brightness(2.5); }
+  32%  { box-shadow: 0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7); transform: scale(1);    filter: brightness(1); }
+  50%  { box-shadow: 0 0 80px rgba(255,255,255,1), 0 0 160px rgba(255,255,255,0.9), 0 0 240px rgba(255,255,255,0.5); transform: scale(1.22); filter: brightness(2.5); }
+  68%  { box-shadow: 0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7); transform: scale(1);    filter: brightness(1); }
+  100% { box-shadow: 0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7); transform: scale(1);    filter: brightness(1); }
+}
+
+.anstoss-ball-flash {
+  animation: anstoss-flash 0.7s ease-out forwards;
+}
+
