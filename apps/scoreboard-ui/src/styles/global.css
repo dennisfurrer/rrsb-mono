@@ -50,7 +50,7 @@ div { font-weight: bold; }
 .sb-right { width: 40%; height: 100%; cursor: pointer; position: relative; }
 
 /* Row heights */
-.sb-name-row { height: 30%; color: #fff; display: flex; flex-direction: column; }
+.sb-name-row { height: 30%; color: #fff; position: relative; }
 .sb-frames-row { height: 25%; }
 .sb-score-row { height: 40%; color: #fff; }
 .sb-break-row {
@@ -62,29 +62,31 @@ div { font-weight: bold; }
   overflow: hidden;
 }
 
-/* Player name sub-row: fills remaining space, name text aligns to bottom */
+/* Player name area: absolute, from top to 12mm above bottom — name text anchored to bottom edge */
 .sb-name-player-part {
-  flex: 1;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  bottom: 12mm;
   display: flex;
   align-items: flex-end;
-  position: relative;
   overflow: hidden;
 }
 .sb-left  .sb-name-player-part { justify-content: flex-end; }
 .sb-right .sb-name-player-part { justify-content: flex-start; }
 
-/* name-text is a normal flex item — no absolute positioning needed */
+/* name-text height controlled by auto-sizer inline style */
 .sb-name-player-part .name-text {
   height: auto;
   line-height: 1;
 }
 
-/* Club name sub-row: auto-sized by content, same height across all columns */
+/* Club name area: absolute at bottom, fixed 12mm height */
 .sb-name-club-part {
-  flex-shrink: 0;
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 12mm;
   display: flex;
   align-items: center;
-  padding: 0.25vh 0 0.55vh;
 }
 .sb-left  .sb-name-club-part { justify-content: flex-end; }
 .sb-right .sb-name-club-part { justify-content: flex-start; }
@@ -115,7 +117,7 @@ div { font-weight: bold; }
   color: #666;
   font-size: 1.5vw;
 }
-.sb-name-row-center .sb-name-player-part { justify-content: center; align-items: flex-end; }
+.sb-name-row-center .sb-name-player-part { flex-direction: column; justify-content: flex-end; align-items: center; }
 .sb-name-row-center .sb-name-club-part   { justify-content: center; }
 
 .sb-table-number {

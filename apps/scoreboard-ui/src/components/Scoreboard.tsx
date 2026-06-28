@@ -401,8 +401,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             onPlayerClick(0);
           }}
         >
-          <div className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}>
-            <div ref={p1NameRowRef} className="sb-name-player-part">
+          <div ref={p1NameRowRef} className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}>
+            <div className="sb-name-player-part">
               <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
               {!matchFinished && (
                 <button
@@ -480,16 +480,16 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         {/* Center 20% */}
         <div className="sb-center" onClick={onCenterClick} style={onCenterClick ? { cursor: "pointer" } : undefined}>
           <div className="sb-name-row sb-name-row-center">
-            <div className="sb-name-player-part">
-              {match.tableNumber && Number(match.tableNumber) > 0 && (
-                <div className="sb-table-number">Tisch {match.tableNumber}</div>
-              )}
-              {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "80%" }} />}
-              {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "80%" }} />}
+            <div className="sb-name-player-part" style={p1.winner ? { alignItems: "flex-start" } : p2.winner ? { alignItems: "flex-end" } : undefined}>
+              {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "52%" }} />}
+              {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "52%" }} />}
               {match.finished && !p1.winner && !p2.winner && (
                 <div className="sb-draw-pulse" style={{ fontSize: "1.9vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
                   UNENTSCHIEDEN
                 </div>
+              )}
+              {match.tableNumber && Number(match.tableNumber) > 0 && (
+                <div className="sb-table-number" style={{ alignSelf: "center" }}>Tisch {match.tableNumber}</div>
               )}
             </div>
             <div className="sb-name-club-part">
@@ -543,8 +543,8 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             onPlayerClick(1);
           }}
         >
-          <div className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}>
-            <div ref={p2NameRowRef} className="sb-name-player-part">
+          <div ref={p2NameRowRef} className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}>
+            <div className="sb-name-player-part">
               <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
               {!matchFinished && (
                 <button
