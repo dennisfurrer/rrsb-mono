@@ -255,7 +255,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         if (el.offsetWidth <= maxW && el.offsetHeight <= maxH) lo = mid;
         else hi = mid;
       }
-      el.style.height = "";
+      // Keep height:auto as inline style — overrides CSS height:100% permanently
       return lo;
     };
 
@@ -401,43 +401,42 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             onPlayerClick(0);
           }}
         >
-          <div
-            ref={p1NameRowRef}
-            className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}
-          >
-            <div className="sb-name-with-club sb-name-with-club--left">
+          <div className={`sb-name-row ${!p1Active ? "name-inactive" : ""}`}>
+            <div ref={p1NameRowRef} className="sb-name-player-part">
               <div ref={p1NameTextRef} className="name-text lc" style={nameGlowStyle(effP1Color)}>{p1.name}</div>
+              {!matchFinished && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
+                  style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
+                >
+                  ✎
+                </button>
+              )}
+              {onRemoteClick && !matchFinished && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onRemoteClick(0); }}
+                  title="Fernbedienung (Handy)"
+                  style={{ position: "absolute", bottom: "calc(0.4vh + 1cm + 2vw)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4vh" }}
+                >
+                  <span style={{ position: "relative", display: "inline-flex" }}>
+                    <QrGlyph color={effP1Color ?? "#5599ff"} />
+                    {remoteConnected?.[0] && (
+                      <span style={{ position: "absolute", top: "-0.2vw", right: "-0.2vw", width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} />
+                    )}
+                  </span>
+                  <span
+                    className="sb-active-dot"
+                    style={{
+                      width: "1.6vw", height: "1.6vw", borderRadius: "50%",
+                      opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 0 ? 1 : 0,
+                    }}
+                  />
+                </button>
+              )}
+            </div>
+            <div className="sb-name-club-part">
               <div className="sb-club-name" style={effP1Color ? { color: effP1Color } : undefined}>{(p1.club && p1.club !== "?") ? p1.club : "Club ?"}</div>
             </div>
-            {!matchFinished && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 0 ? null : 0); }}
-                style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP1Color ?? "#5599ff" }}
-              >
-                ✎
-              </button>
-            )}
-            {onRemoteClick && !matchFinished && (
-              <button
-                onClick={(e) => { e.stopPropagation(); onRemoteClick(0); }}
-                title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm + 2vw)", left: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4vh" }}
-              >
-                <span style={{ position: "relative", display: "inline-flex" }}>
-                  <QrGlyph color={effP1Color ?? "#5599ff"} />
-                  {remoteConnected?.[0] && (
-                    <span style={{ position: "absolute", top: "-0.2vw", right: "-0.2vw", width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} />
-                  )}
-                </span>
-                <span
-                  className="sb-active-dot"
-                  style={{
-                    width: "1.6vw", height: "1.6vw", borderRadius: "50%",
-                    opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 0 ? 1 : 0,
-                  }}
-                />
-              </button>
-            )}
           </div>
           {colorPickerFor === 0 && (
             <div className="sb-color-picker" onClick={e => e.stopPropagation()}>
@@ -480,18 +479,22 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
 
         {/* Center 20% */}
         <div className="sb-center" onClick={onCenterClick} style={onCenterClick ? { cursor: "pointer" } : undefined}>
-          <div className="sb-name-row sb-name-row-center" style={p1.winner ? { justifyContent: "flex-start" } : p2.winner ? { justifyContent: "flex-end" } : undefined}>
-            {match.tableNumber && Number(match.tableNumber) > 0 && (
-              <div className="sb-table-number">Tisch {match.tableNumber}</div>
-            )}
-            {centerName && <div className="sb-center-name">{centerName}</div>}
-            {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
-            {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "48%" }} />}
-            {match.finished && !p1.winner && !p2.winner && (
-              <div className="sb-draw-pulse" style={{ fontSize: "1.9vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
-                UNENTSCHIEDEN
-              </div>
-            )}
+          <div className="sb-name-row sb-name-row-center">
+            <div className="sb-name-player-part">
+              {match.tableNumber && Number(match.tableNumber) > 0 && (
+                <div className="sb-table-number">Tisch {match.tableNumber}</div>
+              )}
+              {p1.winner && <img src={trophyGif} alt="trophy" style={{ height: "80%" }} />}
+              {p2.winner && <img src={trophyGif} alt="trophy" style={{ height: "80%" }} />}
+              {match.finished && !p1.winner && !p2.winner && (
+                <div className="sb-draw-pulse" style={{ fontSize: "1.9vw", fontWeight: "bold", textAlign: "center", letterSpacing: "0.05em" }}>
+                  UNENTSCHIEDEN
+                </div>
+              )}
+            </div>
+            <div className="sb-name-club-part">
+              {centerName && <div className="sb-center-name">{centerName}</div>}
+            </div>
           </div>
           <div className="sb-frames-row sb-frames-row-center">
             <div>Frames</div>
@@ -540,43 +543,42 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
             onPlayerClick(1);
           }}
         >
-          <div
-            ref={p2NameRowRef}
-            className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}
-          >
-            <div className="sb-name-with-club sb-name-with-club--right">
+          <div className={`sb-name-row ${!p2Active ? "name-inactive" : ""}`}>
+            <div ref={p2NameRowRef} className="sb-name-player-part">
               <div ref={p2NameTextRef} className="name-text rc" style={nameGlowStyle(effP2Color)}>{p2.name}</div>
+              {!matchFinished && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
+                  style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
+                >
+                  ✎
+                </button>
+              )}
+              {onRemoteClick && !matchFinished && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); onRemoteClick(1); }}
+                  title="Fernbedienung (Handy)"
+                  style={{ position: "absolute", bottom: "calc(0.4vh + 1cm + 2vw)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4vh" }}
+                >
+                  <span style={{ position: "relative", display: "inline-flex" }}>
+                    <QrGlyph color={effP2Color ?? "#ff8833"} />
+                    {remoteConnected?.[1] && (
+                      <span style={{ position: "absolute", top: "-0.2vw", left: "-0.2vw", width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} />
+                    )}
+                  </span>
+                  <span
+                    className="sb-active-dot"
+                    style={{
+                      width: "1.6vw", height: "1.6vw", borderRadius: "50%",
+                      opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 1 ? 1 : 0,
+                    }}
+                  />
+                </button>
+              )}
+            </div>
+            <div className="sb-name-club-part">
               <div className="sb-club-name" style={effP2Color ? { color: effP2Color } : undefined}>{(p2.club && p2.club !== "?") ? p2.club : "Club ?"}</div>
             </div>
-            {!matchFinished && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setColorPickerFor(prev => prev === 1 ? null : 1); }}
-                style={{ position: "absolute", top: "calc(50% - 1.5cm)", transform: "translateY(-50%)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", fontSize: "1.6vw", opacity: 0.55, padding: 0, lineHeight: 1, color: effP2Color ?? "#ff8833" }}
-              >
-                ✎
-              </button>
-            )}
-            {onRemoteClick && !matchFinished && (
-              <button
-                onClick={(e) => { e.stopPropagation(); onRemoteClick(1); }}
-                title="Fernbedienung (Handy)"
-                style={{ position: "absolute", bottom: "calc(0.4vh + 1cm + 2vw)", right: "0.8vw", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0, opacity: 0.8, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4vh" }}
-              >
-                <span style={{ position: "relative", display: "inline-flex" }}>
-                  <QrGlyph color={effP2Color ?? "#ff8833"} />
-                  {remoteConnected?.[1] && (
-                    <span style={{ position: "absolute", top: "-0.2vw", left: "-0.2vw", width: "0.55vw", height: "0.55vw", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} />
-                  )}
-                </span>
-                <span
-                  className="sb-active-dot"
-                  style={{
-                    width: "1.6vw", height: "1.6vw", borderRadius: "50%",
-                    opacity: (remoteConnected?.[0] || remoteConnected?.[1]) && match.activePlayerIndex === 1 ? 1 : 0,
-                  }}
-                />
-              </button>
-            )}
           </div>
           {colorPickerFor === 1 && (
             <div className="sb-color-picker" onClick={e => e.stopPropagation()}>

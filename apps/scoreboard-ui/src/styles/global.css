@@ -50,34 +50,7 @@ div { font-weight: bold; }
 .sb-right { width: 40%; height: 100%; cursor: pointer; position: relative; }
 
 /* Row heights */
-.sb-name-row { height: 30%; color: #fff; }
-
-/* Wrapper groups name + club so they share the same edge.
-   inline-flex → sized to content → positioned by parent text-align.
-   height: 100% → fills the name row vertically. */
-.sb-name-with-club {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 100%;
-}
-/* Left player: left-align both items inside the wrapper */
-.sb-name-with-club--left  { align-items: flex-start; }
-/* Right player: right-align both items inside the wrapper */
-.sb-name-with-club--right { align-items: flex-end; }
-
-.sb-name-with-club .name-text { height: auto; }
-
-.sb-club-name {
-  font-size: 0.68vw;
-  font-weight: normal;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  text-transform: uppercase;
-  padding-bottom: 0.5vh;
-}
-.sb-left .sb-club-name  { color: #5599ff; }
-.sb-right .sb-club-name { color: #ff8833; }
+.sb-name-row { height: 30%; color: #fff; display: flex; flex-direction: column; }
 .sb-frames-row { height: 25%; }
 .sb-score-row { height: 40%; color: #fff; }
 .sb-break-row {
@@ -89,46 +62,72 @@ div { font-weight: bold; }
   overflow: hidden;
 }
 
-/* Left column — push text to right (toward center) */
-.sb-left .sb-name-row { text-align: right; position: relative; }
-.sb-left .sb-frames-row { text-align: right; }
-.sb-left .sb-score-row { text-align: right; }
-.sb-left .sb-break-row { text-align: right; }
-
-/* Right column — push text to left (toward center) */
-.sb-right .sb-name-row { text-align: left; position: relative; }
-.sb-right .sb-frames-row { text-align: left; }
-.sb-right .sb-score-row { text-align: left; }
-.sb-right .sb-break-row { text-align: left; }
-
-/* Center column */
-.sb-name-row-center {
+/* Player name sub-row: fills remaining space, name text aligns to bottom */
+.sb-name-player-part {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
   position: relative;
+  overflow: hidden;
+}
+.sb-left  .sb-name-player-part { justify-content: flex-end; }
+.sb-right .sb-name-player-part { justify-content: flex-start; }
+
+/* name-text is a normal flex item — no absolute positioning needed */
+.sb-name-player-part .name-text {
+  height: auto;
+  line-height: 1;
+}
+
+/* Club name sub-row: auto-sized by content, same height across all columns */
+.sb-name-club-part {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 0.25vh 0 0.55vh;
+}
+.sb-left  .sb-name-club-part { justify-content: flex-end; }
+.sb-right .sb-name-club-part { justify-content: flex-start; }
+
+.sb-club-name {
+  font-size: 0.68vw;
+  font-weight: normal;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.sb-left .sb-club-name  { color: #5599ff; }
+.sb-right .sb-club-name { color: #ff8833; }
+
+/* Left column */
+.sb-left .sb-frames-row { text-align: right; }
+.sb-left .sb-score-row  { text-align: right; }
+.sb-left .sb-break-row  { text-align: right; }
+
+/* Right column */
+.sb-right .sb-frames-row { text-align: left; }
+.sb-right .sb-score-row  { text-align: left; }
+.sb-right .sb-break-row  { text-align: left; }
+
+/* Center column name row */
+.sb-name-row-center {
   background: #000;
   color: #666;
   font-size: 1.5vw;
 }
+.sb-name-row-center .sb-name-player-part { justify-content: center; align-items: flex-end; }
+.sb-name-row-center .sb-name-club-part   { justify-content: center; }
 
 .sb-table-number {
-  position: absolute;
-  bottom: calc(1vh + 2.2vw);
-  left: 50%;
-  transform: translateX(-50%);
   color: #888;
   font-size: 1.8vw;
   font-weight: bold;
   white-space: nowrap;
   letter-spacing: 0.05em;
+  line-height: 1;
 }
 
 .sb-center-name {
-  position: absolute;
-  bottom: 1vh;
-  left: 50%;
-  transform: translateX(-50%);
   color: #555;
   font-size: 1.05vw;
   white-space: nowrap;
