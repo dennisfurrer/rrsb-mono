@@ -1663,6 +1663,15 @@ export function App() {
     return null;
   });
 
+  // After a reload, remoteModalPlayer is set from sessionStorage but ensureSession was never called.
+  // This effect calls it whenever the dialog opens so the QR URL is always generated.
+  useEffect(() => {
+    if (remoteModalPlayer !== null) {
+      remote.ensureSession(remoteModalPlayer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remoteModalPlayer]);
+
   const isFrameStart =
     match.players[0].score === 0 && match.players[1].score === 0;
 
