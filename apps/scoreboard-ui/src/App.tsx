@@ -153,10 +153,15 @@ function CueSvg({ side }: { side: "left" | "right" }) {
         />
         {/* Cue body: slight taper, mostly rectangular */}
         <polygon points="-300,14 102,15 102,25 -300,26" fill={`url(#cue-wood-${s})`} />
+        {/* Wood grain lines */}
+        <path d="M -300,16.8 Q -200,16.2 -100,17.1 Q -50,17.5 0,16.9 Q 20,16.5 40,17.3 Q 65,17.8 85,16.7 Q 95,16.4 102,17"   stroke="#5a2a06" strokeWidth="0.55" fill="none" opacity="0.55" />
+        <path d="M -300,19.2 Q -180,18.6  -80,19.8 Q -30,20.3 0,19.5 Q 18,19.1 42,20.1 Q 68,20.6 88,19.4 Q 97,19   102,19.7" stroke="#4a2005" strokeWidth="0.45" fill="none" opacity="0.45" />
+        <path d="M -300,21.5 Q -220,21   -120,22.2 Q -60,22.7 0,21.8 Q 25,21.3 50,22.4 Q 75,22.9 92,21.6 Q 98,21.2 102,21.9" stroke="#5a2a06" strokeWidth="0.5"  fill="none" opacity="0.5"  />
+        <path d="M -300,23.5 Q -240,23   -140,23.8 Q -70,24.2 0,23.4 Q 30,23   55,23.7 Q 78,24.1 95,23.3 Q 100,23  102,23.5" stroke="#3e1a04" strokeWidth="0.4"  fill="none" opacity="0.4"  />
         {/* Ferrule (messing) */}
-        <rect x="100" y="15" width="5" height="10" fill="#eecf58" rx="0.8" />
+        <path d="M 100.8,15 A 0.8,0.8 0 0 0 100,15.8 L 100,24.2 A 0.8,0.8 0 0 0 100.8,25 L 107,25 L 107,15 Z" fill="#eecf58" />
         {/* Tip (blue-grey leather) */}
-        <path d="M 105,15 L 106,15 A 5,5 0 0 1 106,25 L 105,25 Z" fill="#4a7a9b" />
+        <path d="M 107,15 L 108,15 A 5,5 0 0 1 108,25 L 107,25 Z" fill="#4a7a9b" />
       </g>
     </svg>
   );
@@ -1834,13 +1839,13 @@ export function App() {
             >
               <div className={anstossFlashing === 0 ? "anstoss-ball-flash" : undefined} style={{
                 width: "8vw", height: "8vw", borderRadius: "50%",
-                background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
+                background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center",
                 boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
-                border: "2px solid rgba(255,255,255,0.6)",
+                border: "none",
               }}>
-                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em" }}>Anstoss</span>
+                <span style={{ color: "#1a1a1a", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em", mixBlendMode: "multiply", textShadow: "0 1px 2px rgba(0,0,0,0.45), 0 -1px 1px rgba(255,255,255,0.25)" }}>Anstoss</span>
               </div>
               <span style={{ color: resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[0].name}</span>
             </div>
@@ -1867,13 +1872,13 @@ export function App() {
             >
               <div className={anstossFlashing === 1 ? "anstoss-ball-flash" : undefined} style={{
                 width: "8vw", height: "8vw", borderRadius: "50%",
-                background: "radial-gradient(circle at 33% 33%, #ffffff 0%, #d8d8d8 60%, #aaaaaa 100%)",
+                background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
                 display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center",
                 boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
-                border: "2px solid rgba(255,255,255,0.6)",
+                border: "none",
               }}>
-                <span style={{ color: "#111", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em" }}>Anstoss</span>
+                <span style={{ color: "#1a1a1a", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em", mixBlendMode: "multiply", textShadow: "0 1px 2px rgba(0,0,0,0.45), 0 -1px 1px rgba(255,255,255,0.25)" }}>Anstoss</span>
               </div>
               <span style={{ color: resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[1].name}</span>
             </div>
