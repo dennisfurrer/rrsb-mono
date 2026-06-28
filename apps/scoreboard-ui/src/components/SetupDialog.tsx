@@ -196,6 +196,7 @@ export function SetupDialog({
   const [showBreakModeInfo, setShowBreakModeInfo] = useState(false);
   const [showMatchTypeInfo, setShowMatchTypeInfo] = useState(false);
   const [showPlayerInfo, setShowPlayerInfo] = useState(false);
+  const [showPlayer2Info, setShowPlayer2Info] = useState(false);
   const [showMatchTypePicker, setShowMatchTypePicker] = useState(false);
   const [hoveredMatchType, setHoveredMatchType] = useState<string | null>(null);
   const hoveredMatchTypeRef = useRef<string | null>(null);
@@ -364,8 +365,19 @@ export function SetupDialog({
             <div
               className={`setup-player-header ${isPractice2 ? "setup-practice-header" : "setup-player2-header"}`}
               onClick={handleP2LabelClick}
+              style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}
             >
               {isPractice2 ? "Modus:" : "Spieler 2:"}
+              {!isPractice2 && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowPlayer2Info(true); }}
+                  type="button"
+                  className="setup-info-btn"
+                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                >
+                  ?
+                </button>
+              )}
             </div>
             <div className="setup-player-btn-row">
               {name2 && <div style={{ width: "3.8vw", flexShrink: 0 }} />}
@@ -669,6 +681,31 @@ export function SetupDialog({
             </ul>
             <button
               onClick={() => setShowPlayerInfo(false)}
+              className="menu-btn-info"
+              style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      {showPlayer2Info && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={() => setShowPlayer2Info(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#1a1e2e", border: "1px solid #3366aa", borderRadius: "14px", padding: "4vh 3.5vw", width: "62vw", display: "flex", flexDirection: "column", gap: "2vh" }}
+          >
+            <div style={{ color: "#66aaff", fontSize: "2.2vw", fontWeight: "bold" }}>Wähle Spieler 2 oder SOLO-Training</div>
+            <ul style={{ color: "#ccc", fontSize: "1.65vw", lineHeight: 1.7, paddingLeft: "1.6em", margin: 0, display: "flex", flexDirection: "column", gap: "0.8vh" }}>
+              <li>Spielername 2 wählen oder</li>
+              <li><span style={{ color: "#ffcc00" }}>SOLO-Training</span> für eine Trainings-Übung alleine</li>
+              <li>Für ein SOLO-Training muss ein Spielername 1 gewählt sein!</li>
+            </ul>
+            <button
+              onClick={() => setShowPlayer2Info(false)}
               className="menu-btn-info"
               style={{ alignSelf: "center", padding: "1.2vh 4vw", fontSize: "1.7vw", fontWeight: "bold", border: "none", borderRadius: "8px", cursor: "pointer", background: "#1a3a6a", color: "#66aaff", fontFamily: "inherit", marginTop: "0.5vh" }}
             >
