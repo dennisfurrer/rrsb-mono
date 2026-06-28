@@ -114,7 +114,7 @@ div { font-weight: bold; }
 
 .sb-table-number {
   position: absolute;
-  top: 8%;
+  bottom: calc(1vh + 2.2vw);
   left: 50%;
   transform: translateX(-50%);
   color: #888;
