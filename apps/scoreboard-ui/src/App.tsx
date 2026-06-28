@@ -127,12 +127,43 @@ function withMeta(meta: EvtMeta): Pick<V3EventInput, "source" | "remotePlayerInd
     : { source: "DISPLAY" };
 }
 
-function CueSvg({ side }: { side: "left" | "right" }) {
+function NameExplosion({ color }: { color: string }) {
+  return (
+    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "visible" }}>
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+        const rad = (angle * Math.PI) / 180;
+        const dist = (3.5 + (i % 3) * 0.8) * 1.3;
+        const tx = `${(Math.cos(rad) * dist).toFixed(1)}vw`;
+        const ty = `${(Math.sin(rad) * dist * 0.6).toFixed(1)}vh`;
+        return (
+          <div
+            key={i}
+            className="explosion-particle"
+            style={{ background: color, "--tx": tx, "--ty": ty } as React.CSSProperties}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function CueSvg({ side, dur = "4s", mode = "idle" }: { side: "left" | "right"; dur?: string; mode?: "idle" | "strike" }) {
   const s = side;
+  const strikeRef = useRef<SVGAnimateTransformElement>(null);
+  const prevMode = useRef<"idle" | "strike">("idle");
+
+  useEffect(() => {
+    if (mode === "strike" && prevMode.current === "idle") {
+      (strikeRef.current as unknown as SVGAnimationElement)?.beginElement();
+    }
+    prevMode.current = mode;
+  }, [mode]);
+
   return (
     <svg
       viewBox="0 0 112 40"
-      style={{ width: "15vw", height: "5vw", display: "block", transform: s === "right" ? "scaleX(-1)" : undefined }}
+      style={{ width: "15vw", height: "5vw", display: "block", transform: s === "right" ? "scaleX(-1)" : undefined, overflow: "visible" }}
+      overflow="visible"
     >
       <defs>
         <linearGradient id={`cue-wood-${s}`} x1="0" y1="0" x2="0" y2="1">
@@ -140,16 +171,29 @@ function CueSvg({ side }: { side: "left" | "right" }) {
           <stop offset="40%" stopColor="#c8962a" />
           <stop offset="100%" stopColor="#7a5010" />
         </linearGradient>
+        <clipPath id={`cue-clip-${s}`} clipPathUnits="userSpaceOnUse">
+          <rect x="0" y="-10" width="9999" height="60" />
+        </clipPath>
       </defs>
-      {/* Cue (animated forward and back) */}
-      <g>
+      <g transform="translate(-20,0)" clipPath={`url(#cue-clip-${s})`}>
+        {/* Idle: kleine kontinuierliche Feathering-Bewegung nahe Ruheposition */}
         <animateTransform
           attributeName="transform" type="translate"
           values="-20,0; 0,0; -20,0"
-          keyTimes="0; 0.38; 1"
-          dur="1.8s" repeatCount="indefinite"
+          keyTimes="0; 0.5; 1"
+          dur={dur} repeatCount="indefinite" begin="0s"
           calcMode="spline"
-          keySplines="0.2 0 0.1 1; 0.7 0 0.9 1"
+          keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+        />
+        {/* Strike: 3× Feathering + Pause + Schlag — überschreibt Idle wenn aktiv */}
+        <animateTransform
+          ref={strikeRef}
+          attributeName="transform" type="translate"
+          values="-20,0; -8,0; -32,0; -8,0; -32,0; -8,0; -38,0; -38,0; 48,0"
+          keyTimes="0; 0.11; 0.26; 0.36; 0.51; 0.62; 0.71; 0.81; 1.0"
+          dur="3.5s" repeatCount="1" fill="freeze" begin="indefinite"
+          calcMode="spline"
+          keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0 0 1 1; 0.05 0 0.08 1"
         />
         {/* Cue body: slight taper, mostly rectangular */}
         <polygon points="-300,14 102,15 102,25 -300,26" fill={`url(#cue-wood-${s})`} />
@@ -222,7 +266,9 @@ export function App() {
   const [showStats, setShowStats] = useState(false);
   const [breaksPlayer, setBreaksPlayer] = useState<0 | 1 | null>(null);
   const [anstossInfoDismissedKey, setAnstossInfoDismissedKey] = useState<string | null>(null);
-  const [anstossFlashing, setAnstossFlashing] = useState<0 | 1 | null>(null);
+  const [anstossPhase, setAnstossPhase] = useState<null | { playerIndex: 0 | 1; step: "striking" | "ball-flying" | "name-exploding" }>(null);
+  const [ball0GleamKey, setBall0GleamKey] = useState(0);
+  const [ball1GleamKey, setBall1GleamKey] = useState(0);
   const [scoreboardConfig, setScoreboardConfig] =
     useState<ScoreboardConfig | null>(() => {
       const savedLocation = localStorage.getItem("scoreboardLocationName");
@@ -582,12 +628,26 @@ export function App() {
     });
   }, [match, pushHistory, playerColors]);
 
+  useEffect(() => {
+    let mounted = true;
+    const schedule = (setter: React.Dispatch<React.SetStateAction<number>>, initialDelay: number, minMs: number, maxMs: number) => {
+      const tid = setTimeout(function fire() {
+        if (!mounted) return;
+        setter(k => k + 1);
+        setTimeout(fire, minMs + Math.random() * (maxMs - minMs));
+      }, initialDelay);
+      return tid;
+    };
+    const t0 = schedule(setBall0GleamKey, 1000 + Math.random() * 3000, 1000, 3000);
+    const t1 = schedule(setBall1GleamKey, 1500 + Math.random() * 4000, 1000, 3000);
+    return () => { mounted = false; clearTimeout(t0); clearTimeout(t1); };
+  }, []);
+
   const handleAnstossClick = useCallback((playerIndex: 0 | 1) => {
-    setAnstossFlashing(playerIndex);
-    setTimeout(() => {
-      setAnstossFlashing(null);
-      recordAnstoss(playerIndex);
-    }, 750);
+    setAnstossPhase({ playerIndex, step: "striking" });
+    setTimeout(() => setAnstossPhase({ playerIndex, step: "ball-flying" }), 2900);
+    setTimeout(() => setAnstossPhase({ playerIndex, step: "name-exploding" }), 3250);
+    setTimeout(() => { setAnstossPhase(null); recordAnstoss(playerIndex); }, 4650);
   }, [recordAnstoss]);
 
   // ===== BALL BY BALL =====
@@ -1837,27 +1897,38 @@ export function App() {
                 cursor: "pointer", gap: "1vh",
               }}
             >
-              <div className={anstossFlashing === 0 ? "anstoss-ball-flash" : undefined} style={{
-                width: "8vw", height: "8vw", borderRadius: "50%",
-                background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
-                border: "none",
-              }}>
+              <div
+                className={anstossPhase?.playerIndex === 0 && (anstossPhase.step === "ball-flying" || anstossPhase.step === "name-exploding") ? "ball-fly-left" : undefined}
+                style={{
+                  width: "8vw", height: "8vw", borderRadius: "50%", position: "relative",
+                  background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
+                  border: "none",
+                }}>
+                {ball0GleamKey > 0 && <div key={ball0GleamKey} className="anstoss-ball-gleam" />}
                 <span style={{ color: "#1a1a1a", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em", mixBlendMode: "multiply", textShadow: "0 1px 2px rgba(0,0,0,0.45), 0 -1px 1px rgba(255,255,255,0.25)" }}>Anstoss</span>
               </div>
-              <span style={{ color: resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[0].name}</span>
+              <span
+                className={anstossPhase?.playerIndex === 0 && anstossPhase.step === "name-exploding" ? "name-explode" : undefined}
+                style={{ color: resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff", fontSize: "1.6vw", letterSpacing: "0.04em", position: "relative", display: "inline-block" }}
+              >
+                {match.players[0].name}
+                {anstossPhase?.playerIndex === 0 && anstossPhase.step === "name-exploding" && (
+                  <NameExplosion color={resolvePlayerColor(playerColors[0], playerColors[1], true) ?? "#5599ff"} />
+                )}
+              </span>
             </div>
 
             {/* Center */}
             <div style={{ flex: "0 0 24%", textAlign: "center", userSelect: "none", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ position: "absolute", right: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)" }}>
-                <CueSvg side="right" />
+              <div style={{ position: "absolute", right: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)", zIndex: 0, clipPath: "inset(0 -10vw 0 -300vw)" }}>
+                <CueSvg side="right" dur="2.0s" mode={anstossPhase?.playerIndex === 0 ? "strike" : "idle"} />
               </div>
-              <span style={{ color: "#ffee44", fontSize: "2.5vw", fontWeight: "bold", letterSpacing: "0.06em" }}>Wer macht den Anstoss?</span>
-              <div style={{ position: "absolute", left: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)" }}>
-                <CueSvg side="left" />
+              <span style={{ color: "#ffee44", fontSize: "2.5vw", fontWeight: "bold", letterSpacing: "0.06em", position: "relative", zIndex: 1 }}>Wer macht den Anstoss?</span>
+              <div style={{ position: "absolute", left: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)", zIndex: 0, clipPath: "inset(0 -300vw 0 -10vw)" }}>
+                <CueSvg side="left" dur="2.5s" mode={anstossPhase?.playerIndex === 1 ? "strike" : "idle"} />
               </div>
             </div>
 
@@ -1870,17 +1941,28 @@ export function App() {
                 cursor: "pointer", gap: "1vh",
               }}
             >
-              <div className={anstossFlashing === 1 ? "anstoss-ball-flash" : undefined} style={{
-                width: "8vw", height: "8vw", borderRadius: "50%",
-                background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
-                border: "none",
-              }}>
+              <div
+                className={anstossPhase?.playerIndex === 1 && (anstossPhase.step === "ball-flying" || anstossPhase.step === "name-exploding") ? "ball-fly-right" : undefined}
+                style={{
+                  width: "8vw", height: "8vw", borderRadius: "50%", position: "relative",
+                  background: "radial-gradient(circle at 32% 28%, #ffffff 0%, rgba(255,255,255,0.7) 18%, rgba(255,255,255,0) 42%), radial-gradient(circle at 62% 68%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 48%), radial-gradient(ellipse at 50% 105%, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 55%), radial-gradient(circle at 48% 42%, #f2f2f2 0%, #cccccc 40%, #999999 68%, #666666 100%)",
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center",
+                  boxShadow: "0 0 18px rgba(255,255,255,0.35), 0 4px 16px rgba(0,0,0,0.7)",
+                  border: "none",
+                }}>
+                {ball1GleamKey > 0 && <div key={ball1GleamKey} className="anstoss-ball-gleam" />}
                 <span style={{ color: "#1a1a1a", fontWeight: "bold", fontSize: "1.4vw", letterSpacing: "0.04em", mixBlendMode: "multiply", textShadow: "0 1px 2px rgba(0,0,0,0.45), 0 -1px 1px rgba(255,255,255,0.25)" }}>Anstoss</span>
               </div>
-              <span style={{ color: resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833", fontSize: "1.6vw", letterSpacing: "0.04em" }}>{match.players[1].name}</span>
+              <span
+                className={anstossPhase?.playerIndex === 1 && anstossPhase.step === "name-exploding" ? "name-explode" : undefined}
+                style={{ color: resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833", fontSize: "1.6vw", letterSpacing: "0.04em", position: "relative", display: "inline-block" }}
+              >
+                {match.players[1].name}
+                {anstossPhase?.playerIndex === 1 && anstossPhase.step === "name-exploding" && (
+                  <NameExplosion color={resolvePlayerColor(playerColors[1], playerColors[0], false) ?? "#ff8833"} />
+                )}
+              </span>
             </div>
           </div>
         </div>
