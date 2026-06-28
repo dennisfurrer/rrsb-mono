@@ -1654,7 +1654,14 @@ export function App() {
   }, [dispatchRemote]);
 
   const remote = useRemoteHost({ match, colors: effColors, redoAvailable: redoStack.length > 0, dispatchRef });
-  const [remoteModalPlayer, setRemoteModalPlayer] = useState<0 | 1 | null>(null);
+  const [remoteModalPlayer, setRemoteModalPlayer] = useState<0 | 1 | null>(() => {
+    const saved = sessionStorage.getItem("reloadToRemote");
+    if (saved === "0" || saved === "1") {
+      sessionStorage.removeItem("reloadToRemote");
+      return Number(saved) as 0 | 1;
+    }
+    return null;
+  });
 
   const isFrameStart =
     match.players[0].score === 0 && match.players[1].score === 0;
@@ -2305,6 +2312,7 @@ export function App() {
             url={remote.urlFor(rp)}
             connected={remote.connected[rp]}
             onRegenerate={() => remote.rotateSession(rp)}
+            onReload={() => { sessionStorage.setItem("reloadToRemote", String(rp)); window.location.reload(); }}
             onClose={() => setRemoteModalPlayer(null)}
           />
         );
