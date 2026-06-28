@@ -18,6 +18,7 @@ interface HistoryEntry {
   frameNumber?: number;
   snapshot: string;
   timestamp?: string;
+  breakBalls?: unknown[];
 }
 
 interface FrameStat {
@@ -446,22 +447,49 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           const fh = f.entries;
           const initHC0 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
           const initHC1 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
-          const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1 }> = [{ s: [initHC0, initHC1] }];
+          const scoreData: Array<{ s: [number, number]; b?: 0|1; f?: 0|1; lbl?: string }> = [{ s: [initHC0, initHC1] }];
           let acc0 = initHC0, acc1 = initHC1;
+          let runCount = 0, lastPotPi: 0|1|null = null;
           for (const e of fh) {
             if (e.kind === "handicap") continue;
+            if (e.kind === "break" && e.breakBalls !== undefined) {
+              if (runCount >= 1 && scoreData.length > 1)
+                scoreData[scoreData.length - 1].lbl = String(e.points ?? 0);
+              runCount = 0; lastPotPi = null;
+              continue;
+            }
+            const isFoul = e.kind === "foul";
+            if (isFoul) { runCount = 0; lastPotPi = null; }
+            else if (e.kind !== "break") { continue; }
+            const pi = e.playerIndex as 0|1;
+            const pts = e.points ?? 0;
             let n0 = acc0, n1 = acc1;
-            if (e.kind === "break") {
-              if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-              else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
-            } else if (e.kind === "foul") {
-              if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
-              else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-            } else { continue; }
+            if (!isFoul) {
+              if (pi === 0) n0 = Math.min(fs0, acc0 + pts);
+              else n1 = Math.min(fs1, acc1 + pts);
+            } else {
+              const opPi = (pi === 0 ? 1 : 0) as 0|1;
+              if (opPi === 0) n0 = Math.min(fs0, acc0 + pts);
+              else n1 = Math.min(fs1, acc1 + pts);
+            }
             if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
               acc0 = n0; acc1 = n1;
-              const isFoul = e.kind === "foul";
-              scoreData.push({ s: [acc0, acc1], b: !isFoul ? (e.playerIndex as 0 | 1) : undefined, f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined });
+              const newIdx = scoreData.length;
+              scoreData.push({
+                s: [acc0, acc1],
+                b: !isFoul ? pi : undefined,
+                f: isFoul ? (pi === 0 ? 1 : 0) : undefined,
+                lbl: isFoul ? `F${pts}` : undefined,
+              });
+              if (!isFoul) {
+                if (e.label === "") {
+                  if (lastPotPi !== null && lastPotPi !== pi) runCount = 0;
+                  lastPotPi = pi; runCount++;
+                } else {
+                  runCount = 0; lastPotPi = null;
+                  scoreData[newIdx].lbl = String(pts);
+                }
+              }
             }
           }
           const last = scoreData[scoreData.length - 1];
@@ -504,6 +532,15 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 <polyline points={pts1} fill="none" stroke={c2} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
                 {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c1} /> : null)}
                 {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c2} /> : null)}
+                {scoreData.map((pt, i) => {
+                  if (!pt.lbl) return null;
+                  const isF = pt.f !== undefined;
+                  const dotPi = (isF ? pt.f! : pt.b!) as 0|1;
+                  const cy = dotPi === 0 ? toY(pt.s[0]) : toY(pt.s[1]);
+                  const fc = isF ? (pt.f === 0 ? c2 : c1) : (pt.b === 0 ? c1 : c2);
+                  const below = pt.s[dotPi] < pt.s[1 - dotPi as 0|1];
+                  return <text key={`lbl-${i}`} x={toX(i)} y={below ? cy + 6 : cy - 6} textAnchor="middle" dominantBaseline={below ? "hanging" : "auto"} fontSize={10} fill={fc}>{pt.lbl}</text>;
+                })}
                 <circle cx={lastX} cy={lastY0} r={5} fill={c1} />
                 <circle cx={lastX} cy={lastY1} r={5} fill={c2} />
                 {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c2} /> : null)}

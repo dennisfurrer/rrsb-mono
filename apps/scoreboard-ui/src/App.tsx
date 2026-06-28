@@ -2171,28 +2171,54 @@ export function App() {
                     const eventsAfterRerack = lastRerackIdx >= 0 ? fh.slice(lastRerackIdx + 1) : fh;
                     const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
                     const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
-                    const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1 }> = [{ s: [initHC0, initHC1] }];
+                    const scoreData: Array<{ s: [number, number]; b?: 0|1; f?: 0|1; bp?: number; lbl?: string }> = [{ s: [initHC0, initHC1] }];
                     let acc0 = initHC0, acc1 = initHC1;
+                    // BBB run tracking: only count (≥2 pots → label), prev player (detect switch)
+                    let runCount = 0, lastPotPi: 0|1|null = null;
                     for (const e of eventsAfterRerack) {
                       if (e.kind === "handicap") continue;
-                      let n0 = acc0, n1 = acc1;
-                      if (e.kind === "break") {
-                        if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-                        else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
-                      } else if (e.kind === "foul") {
-                        if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
-                        else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-                      } else {
+                      // BBB break-end: e.points = breakTotal, place label on last dot
+                      if (e.kind === "break" && e.breakBalls !== undefined) {
+                        if (runCount >= 1 && scoreData.length > 1)
+                          scoreData[scoreData.length - 1].lbl = String(e.points ?? 0);
+                        runCount = 0; lastPotPi = null;
                         continue;
+                      }
+                      const isFoul = e.kind === "foul";
+                      if (isFoul) { runCount = 0; lastPotPi = null; }
+                      else if (e.kind !== "break") { continue; }
+                      const pi = e.playerIndex as 0|1;
+                      const pts = e.points ?? 0;
+                      let n0 = acc0, n1 = acc1;
+                      if (!isFoul) {
+                        if (pi === 0) n0 = Math.min(fs0, acc0 + pts);
+                        else n1 = Math.min(fs1, acc1 + pts);
+                      } else {
+                        const opPi = (pi === 0 ? 1 : 0) as 0|1;
+                        if (opPi === 0) n0 = Math.min(fs0, acc0 + pts);
+                        else n1 = Math.min(fs1, acc1 + pts);
                       }
                       if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
                         acc0 = n0; acc1 = n1;
-                        const isFoul = e.kind === "foul";
+                        const newIdx = scoreData.length;
                         scoreData.push({
                           s: [acc0, acc1],
-                          b: !isFoul ? (e.playerIndex as 0 | 1) : undefined,
-                          f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined,
+                          b: !isFoul ? pi : undefined,
+                          f: isFoul ? (pi === 0 ? 1 : 0) : undefined,
+                          bp: !isFoul ? pts : undefined,
+                          lbl: isFoul ? `F${pts}` : undefined,
                         });
+                        if (!isFoul) {
+                          if (e.label === "") {
+                            // BBB individual pot: count for ≥2 check
+                            if (lastPotPi !== null && lastPotPi !== pi) runCount = 0;
+                            lastPotPi = pi; runCount++;
+                          } else {
+                            // Regular mode: one entry = complete break, label it directly
+                            runCount = 0; lastPotPi = null;
+                            scoreData[newIdx].lbl = String(pts);
+                          }
+                        }
                       }
                     }
                     const last = scoreData[scoreData.length - 1];
@@ -2234,10 +2260,19 @@ export function App() {
                           {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col1}>0</text>}
                           {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col0 : col1}>0</text>}
                           {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col1 : col0}>0</text>}
-                          <polyline points={pts0} fill="none" stroke={col0} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-                          <polyline points={pts1} fill="none" stroke={col1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                          <polyline points={pts0} fill="none" stroke={col0} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
+                          <polyline points={pts1} fill="none" stroke={col1} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
                           {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col0} /> : null)}
                           {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col1} /> : null)}
+                          {scoreData.map((pt, i) => {
+                            if (!pt.lbl) return null;
+                            const isF = pt.f !== undefined;
+                            const dotPi = (isF ? pt.f! : pt.b!) as 0|1;
+                            const cy = dotPi === 0 ? toY(pt.s[0]) : toY(pt.s[1]);
+                            const fc = isF ? (pt.f === 0 ? col1 : col0) : (pt.b === 0 ? col0 : col1);
+                            const below = pt.s[dotPi] < pt.s[1 - dotPi as 0|1];
+                            return <text key={`lbl-${i}`} x={toX(i)} y={below ? cy + 6 : cy - 6} textAnchor="middle" dominantBaseline={below ? "hanging" : "auto"} fontSize={10} fill={fc}>{pt.lbl}</text>;
+                          })}
                           <circle cx={lastX} cy={lastY0} r={5} fill={col0} />
                           <circle cx={lastX} cy={lastY1} r={5} fill={col1} />
                           {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
