@@ -248,8 +248,9 @@ function BallByBallPad({
     onCommand({ t: "bb_pot", ball });
   };
 
-  const redEnabled = phase !== "colors_only" && redsRemaining > 0;
+  const redEnabled = !optBB.frameOver && phase !== "colors_only" && redsRemaining > 0;
   const colorEnabled = (c: BBBallColor) => {
+    if (optBB.frameOver) return false;
     if (phase === "color") return true;
     if (phase === "colors_only") return COLORS_ORDER[colorsOnlyIndex] === c;
     return false;
@@ -382,7 +383,7 @@ function BallByBallPad({
             </FlashButton>
           )}
 
-          {frameOver ? (
+          {(frameOver || optBB.frameOver) ? (
             <FlashButton className="rmt-btn rmt-btn--frame-end rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
               Frame beenden ▸
             </FlashButton>
