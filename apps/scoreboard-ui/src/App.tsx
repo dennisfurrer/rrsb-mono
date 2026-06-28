@@ -162,7 +162,10 @@ export function App() {
     }
     return [];
   });
-  const [playerColors, setPlayerColors] = useState<[string | null, string | null]>([null, null]);
+  const [playerColors, setPlayerColors] = useState<[string | null, string | null]>(() => [
+    localStorage.getItem("playerColor0") || null,
+    localStorage.getItem("playerColor1") || null,
+  ]);
   const [showSetup, setShowSetup] = useState(!match.matchId);
   const [lastPlayerNames, setLastPlayerNames] = useState<{ name1: string; name2: string } | null>(null);
   const [calcPlayer, setCalcPlayer] = useState<0 | 1 | null>(null);
@@ -829,6 +832,12 @@ export function App() {
   }, [match, history, pushHistory, activeAssignmentId]);
 
   useEffect(() => { endFrameRef.current = endFrame; }, [endFrame]);
+
+  // Spielerfarben in localStorage persistieren
+  useEffect(() => {
+    if (playerColors[0]) localStorage.setItem("playerColor0", playerColors[0]); else localStorage.removeItem("playerColor0");
+    if (playerColors[1]) localStorage.setItem("playerColor1", playerColors[1]); else localStorage.removeItem("playerColor1");
+  }, [playerColors]);
 
   // Reset anstoss info overlay whenever frame or rerack count changes (covers undo/redo navigation)
   const currentRerackCount = history.filter(e => e.kind === "rerack" && e.frameNumber === match.currentFrame).length;

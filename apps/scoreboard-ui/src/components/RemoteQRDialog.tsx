@@ -228,6 +228,7 @@ export function RemoteQRDialog({
 
             <div style={{ display: "flex", gap: "1vw", marginTop: "0.6vh" }}>
               <button className="bbb-btn-undo" onClick={onRegenerate} style={ghostBtnStyle}>Neuer Code</button>
+              <button onClick={() => window.location.reload()} style={{ padding: "1.2vh 2vw", fontSize: "1.1vw", borderRadius: "10px", border: "1px solid #7a5a20", background: "linear-gradient(165deg, #3a2a0a, #241a06)", color: "#fbbf24", cursor: "pointer", fontWeight: "bold" as const }}>↺ Neu laden</button>
               <button className="bbb-btn-ok" onClick={onClose} style={closeBtnStyle}>Schließen</button>
             </div>
           </>
