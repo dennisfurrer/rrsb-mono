@@ -354,7 +354,7 @@ function BallByBallPad({
             </FlashButton>
           </div>
 
-          {redsEditing ? (
+          {phase !== "colors_only" && !optBB.frameOver && breakBalls.length === 0 && (redsEditing ? (
             <div className="rmt-reds">
               <span style={{ color: "#aaa", fontSize: 14 }}>🔴 Reds:</span>
               <FlashButton className="rmt-step" onClick={() => setRedsDraft(Math.max(0, redsDraft - 1))}>−</FlashButton>
@@ -381,7 +381,7 @@ function BallByBallPad({
             >
               🔴 Reds korrigieren ({redsRemaining})
             </FlashButton>
-          )}
+          ))}
 
           {(frameOver || optBB.frameOver) ? (
             <FlashButton className="rmt-btn rmt-btn--frame-end rmt-btn--wide" onClick={() => onCommand({ t: "end_frame" })}>
