@@ -532,7 +532,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   const bw = Math.max(String(fs0).length, String(fs1).length) * 7 + 4;
                   const bx = lastX + 5; const fx = bx + bw / 2;
                   const ty = Math.min(rcFs0y, rcFs1y) - 7;
-                  return <><rect x={bx} y={ty} width={bw} height={Math.max(rcFs0y, rcFs1y) - ty + 7} rx={3} fill="#0d3d0d" opacity={0.9} /><line x1={fx - 4} y1={ty - 10} x2={fx - 4} y2={ty} stroke="#999" strokeWidth={1.5} strokeLinecap="round" /><text x={fx} y={ty - 10} textAnchor="middle" dominantBaseline="text-bottom" fontSize={9}>🏁</text></>;
+                  return <><rect x={bx} y={ty} width={bw} height={Math.max(rcFs0y, rcFs1y) - ty + 7} rx={3} fill="#0d3d0d" opacity={0.9} /><line x1={fx - 4} y1={ty - 10} x2={fx - 4} y2={ty} stroke="#999" strokeWidth={1.5} strokeLinecap="round" /><text x={fx} y={ty - 10} textAnchor="middle" dominantBaseline="text-after-edge" fontSize={9}>🏁</text></>;
                 })()}
                 <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
                 <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
