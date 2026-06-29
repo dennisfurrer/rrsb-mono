@@ -22,6 +22,8 @@ interface Props {
   onEditLastBreak?: () => void;
   onRemoteClick?: (playerIndex: 0 | 1) => void;
   remoteConnected?: [boolean, boolean];
+  onRespottedBlackPot?: (playerIndex: 0 | 1) => void;
+  onRespottedBlackFoul?: (playerIndex: 0 | 1) => void;
 }
 
 /** Small QR-glyph icon for the remote-scorer button. */
@@ -156,7 +158,7 @@ function DigitSlot({ value, animDuration = 5 }: { value: number; animDuration?: 
   );
 }
 
-export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak, onRemoteClick, remoteConnected }: Props) {
+export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, onCenterClick, history, centerName, matchStartTime, matchEndTime, matchFinished, playerColors, onColorChange, onEditLastBreak, onRemoteClick, remoteConnected, onRespottedBlackPot, onRespottedBlackFoul }: Props) {
   const apiStatus = useApiStatus();
   const [p1, p2] = match.players;
   const p1Active = match.activePlayerIndex === 0;
@@ -171,6 +173,7 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
   const [tick, setTick] = useState(0);
   const [secsAnimDelay, setSecsAnimDelay] = useState("0s");
   const [showFinishedHint, setShowFinishedHint] = useState(false);
+  const [respottedBlackConfirm, setRespottedBlackConfirm] = useState<{ action: "pot" | "foul"; playerIndex: 0 | 1 } | null>(null);
   const [colorPickerFor, setColorPickerFor] = useState<0 | 1 | null>(null);
 
   const [p1Raw, p2Raw] = playerColors ?? [null, null];
@@ -351,25 +354,115 @@ export function Scoreboard({ match, onPlayerClick, onMenuClick, onBreaksClick, o
         </div>
       )}
       {match.bbState?.respottedBlack && !match.bbState.frameOver && !match.finished && (
-        <div style={{
-          position: "fixed",
-          top: "0.6vh",
-          left: 0,
-          right: 0,
-          zIndex: 500,
-          textAlign: "center",
-          background: "#111",
-          borderTop: "2px solid #f0c040",
-          borderBottom: "2px solid #f0c040",
-          padding: "0.8vh 0",
-          fontSize: "2.2vw",
-          fontWeight: "bold",
-          color: "#f0c040",
-          letterSpacing: "0.12em",
-          pointerEvents: "none",
-        }}>
-          ⚫ RE-SPOTTED BLACK
-        </div>
+        <>
+          <style>{`
+            @keyframes respot-border-pulse {
+              0%,100% { box-shadow: 0 0 10px 2px #f0c04055, 0 0 28px 6px #f0c04018, inset 0 0 60px 0px #1a100000; }
+              50%      { box-shadow: 0 0 22px 5px #f0c04099, 0 0 55px 12px #f0c04033, inset 0 0 60px 0px #1a100022; }
+            }
+            @keyframes respot-text-shimmer {
+              0%,100% { text-shadow: 0 0 16px #f0c040cc, 0 0 40px #f0c04066; letter-spacing: 0.15em; }
+              50%      { text-shadow: 0 0 28px #fff8c0ff, 0 0 60px #f0c040cc, 0 0 100px #f0c04055; letter-spacing: 0.18em; }
+            }
+            @keyframes respot-sub-fade {
+              0%,100% { opacity: 0.55; }
+              50%      { opacity: 1; }
+            }
+            @keyframes respot-ball-breathe {
+              0%,100% { filter: drop-shadow(0 0 8px #f0c04066) drop-shadow(0 0 2px #000); transform: scale(1); }
+              50%      { filter: drop-shadow(0 0 20px #f0c040cc) drop-shadow(0 0 6px #f0c04077); transform: scale(1.07); }
+            }
+            .respot-ball { animation: respot-ball-breathe 4s ease-in-out infinite; }
+            .respot-ball:hover { filter: drop-shadow(0 0 28px #f0c040ff) drop-shadow(0 0 10px #fff8c066) !important; transform: scale(1.13) !important; transition: filter 0.15s, transform 0.15s; }
+            @keyframes respot-foul-pulse {
+              0%,100% { box-shadow: 0 0 6px 1px #cc000055; }
+              50%      { box-shadow: 0 0 20px 5px #ff0000bb, 0 0 36px 8px #cc000044; }
+            }
+            .respot-foul { animation: respot-foul-pulse 4s ease-in-out infinite; }
+            .respot-foul:hover { background: #bb0000 !important; border-color: #ff4444 !important; box-shadow: 0 0 22px #ff000099 !important; }
+            .respot-confirm-yes:active { box-shadow: 0 0 36px 10px #00ff6699, 0 0 70px 18px #00cc4466 !important; filter: brightness(1.4); }
+            .respot-confirm-cancel:active { box-shadow: 0 0 36px 10px #ff000099, 0 0 70px 18px #cc000066 !important; filter: brightness(1.4); }
+          `}</style>
+          {/* Dimming-Overlay hinter dem Banner */}
+          <div style={{ position: "fixed", inset: 0, zIndex: 499, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(1px)" }} />
+          {/* Bestätigungs-Dialog */}
+          {respottedBlackConfirm && (
+            <div onClick={() => setRespottedBlackConfirm(null)} style={{ position: "fixed", inset: 0, zIndex: 601, background: "rgba(0,0,0,0.88)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div onClick={e => e.stopPropagation()} style={{ background: "radial-gradient(ellipse at center, #1c1400 0%, #111 60%)", border: "2px solid #f0c040", borderRadius: "18px", padding: "4vh 5vw", textAlign: "center", boxShadow: "0 0 60px #f0c04077, 0 0 120px #f0c04033", minWidth: "36vw" }}>
+                <div style={{ color: "#f0c040", fontSize: "2.1vw", fontWeight: "bold", marginBottom: "1.2vh", letterSpacing: "0.06em" }}>
+                  {respottedBlackConfirm.action === "pot"
+                    ? `${match.players[respottedBlackConfirm.playerIndex].name} versenkt Schwarz?`
+                    : `${match.players[respottedBlackConfirm.playerIndex].name} macht Foul auf Schwarz?`}
+                </div>
+                <div style={{ color: "#888", fontSize: "1.35vw", marginBottom: "3.5vh", letterSpacing: "0.04em" }}>
+                  {respottedBlackConfirm.action === "pot"
+                    ? <><span style={{ color: "#ddd" }}>{match.players[respottedBlackConfirm.playerIndex].name}</span>{" gewinnt den Frame."}</>
+                    : <><span style={{ color: "#ddd" }}>{match.players[1 - respottedBlackConfirm.playerIndex].name}</span>{" erhält 7 Punkte und gewinnt den Frame."}</>}
+                </div>
+                <div style={{ display: "flex", gap: "2vw", justifyContent: "center" }}>
+                  <button onClick={() => { const { action, playerIndex } = respottedBlackConfirm; setRespottedBlackConfirm(null); action === "pot" ? onRespottedBlackPot?.(playerIndex) : onRespottedBlackFoul?.(playerIndex); }} className="respot-confirm-yes" style={{ background: "linear-gradient(180deg,#1e7a3a,#0f4d22)", border: "1.5px solid #3aaa5a", color: "#fff", fontWeight: "bold", fontSize: "1.6vw", borderRadius: "10px", padding: "1.2vh 3vw", cursor: "pointer", letterSpacing: "0.04em", boxShadow: "0 0 16px 3px #00cc4466, 0 0 32px 6px #00aa3333" }}>Ja, bestätigen</button>
+                  <button onClick={() => setRespottedBlackConfirm(null)} className="respot-confirm-cancel" style={{ background: "#6a0000", border: "1.5px solid #cc2222", color: "#fff", fontSize: "1.4vw", borderRadius: "10px", padding: "1.2vh 2.5vw", cursor: "pointer", boxShadow: "0 0 16px 3px #cc000066, 0 0 32px 6px #aa000033" }}>Nein, zurück</button>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Haupt-Banner */}
+          <div style={{ position: "fixed", top: "50%", transform: "translateY(-50%)", left: 0, right: 0, zIndex: 500, background: "radial-gradient(ellipse at 50% 50%, #1a1200 0%, #0a0a0a 55%, #000 100%)", borderTop: "3px solid #f0c040", borderBottom: "3px solid #f0c040", padding: "3vh 3vw", display: "flex", alignItems: "center", justifyContent: "space-between", animation: "respot-border-pulse 4s ease-in-out infinite" }}>
+            {/* Links: FOUL + Ball Spieler 1 */}
+            <div style={{ display: "flex", alignItems: "center", gap: "1.8vw" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6vh" }}>
+                <button className="respot-foul" onClick={() => setRespottedBlackConfirm({ action: "foul", playerIndex: 0 })} style={{ background: "#800000", border: "2px solid #cc1111", color: "#fff", fontWeight: "bold", fontSize: "1.4vw", borderRadius: "8px", padding: "0.7vh 1.4vw", cursor: "pointer", letterSpacing: "0.1em", transition: "background 0.15s, border-color 0.15s" }}>FOUL</button>
+                <span style={{ color: "#666", fontSize: "1vw", letterSpacing: "0.05em" }}>{p1.name}</span>
+              </div>
+              <div className="respot-ball" onClick={() => setRespottedBlackConfirm({ action: "pot", playerIndex: 0 })} style={{ cursor: "pointer" }}>
+                <svg viewBox="0 0 60 60" style={{ width: "7vw", height: "7vw", display: "block" }}>
+                  <defs>
+                    <radialGradient id="rbl0-main" cx="36%" cy="30%" r="65%"><stop offset="0%" stopColor="#484848" /><stop offset="35%" stopColor="#141414" /><stop offset="75%" stopColor="#040404" /><stop offset="100%" stopColor="#000" /></radialGradient>
+                    <radialGradient id="rbl0-rim" cx="50%" cy="50%" r="50%"><stop offset="78%" stopColor="transparent" stopOpacity="0" /><stop offset="100%" stopColor="#000" stopOpacity="0.7" /></radialGradient>
+                    <filter id="rbl-text-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.5" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                  </defs>
+                  <circle cx="30" cy="30" r="28" fill="url(#rbl0-main)" />
+                  <circle cx="30" cy="30" r="28" fill="url(#rbl0-rim)" />
+                  <ellipse cx="21" cy="18" rx="7" ry="4.5" fill="white" opacity="0.38" transform="rotate(-20,21,18)" />
+                  <circle cx="18" cy="15" r="2.5" fill="white" opacity="0.65" />
+                  <ellipse cx="36" cy="46" rx="5" ry="2.5" fill="white" opacity="0.07" />
+                  <text x="30" y="34" textAnchor="middle" dominantBaseline="middle" fontFamily="Impact, Arial Black, sans-serif" fontSize="15" fontWeight="bold" letterSpacing="2" fill="#f0c040" stroke="#7a5500" strokeWidth="0.6" paintOrder="stroke" filter="url(#rbl-text-glow)">POT</text>
+                </svg>
+              </div>
+            </div>
+            {/* Mitte: Titel + Untertitel */}
+            <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.8vh" }}>
+              <div style={{ color: "#f0c040", fontSize: "2.8vw", fontWeight: "bold", letterSpacing: "0.15em", animation: "respot-text-shimmer 4s ease-in-out infinite" }}>
+                RE-SPOTTED BLACK
+              </div>
+              <div style={{ color: "#c8a030", fontSize: "1.1vw", letterSpacing: "0.3em", textTransform: "uppercase", animation: "respot-sub-fade 4s ease-in-out infinite", animationDelay: "2s" }}>
+                Wer gewinnt den Frame?
+              </div>
+            </div>
+            {/* Rechts: Ball Spieler 2 + FOUL */}
+            <div style={{ display: "flex", alignItems: "center", gap: "1.8vw" }}>
+              <div className="respot-ball" onClick={() => setRespottedBlackConfirm({ action: "pot", playerIndex: 1 })} style={{ cursor: "pointer" }}>
+                <svg viewBox="0 0 60 60" style={{ width: "7vw", height: "7vw", display: "block" }}>
+                  <defs>
+                    <radialGradient id="rbl1-main" cx="36%" cy="30%" r="65%"><stop offset="0%" stopColor="#484848" /><stop offset="35%" stopColor="#141414" /><stop offset="75%" stopColor="#040404" /><stop offset="100%" stopColor="#000" /></radialGradient>
+                    <radialGradient id="rbl1-rim" cx="50%" cy="50%" r="50%"><stop offset="78%" stopColor="transparent" stopOpacity="0" /><stop offset="100%" stopColor="#000" stopOpacity="0.7" /></radialGradient>
+                    <filter id="rbl1-text-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.5" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+                  </defs>
+                  <circle cx="30" cy="30" r="28" fill="url(#rbl1-main)" />
+                  <circle cx="30" cy="30" r="28" fill="url(#rbl1-rim)" />
+                  <ellipse cx="21" cy="18" rx="7" ry="4.5" fill="white" opacity="0.38" transform="rotate(-20,21,18)" />
+                  <circle cx="18" cy="15" r="2.5" fill="white" opacity="0.65" />
+                  <ellipse cx="36" cy="46" rx="5" ry="2.5" fill="white" opacity="0.07" />
+                  <text x="30" y="34" textAnchor="middle" dominantBaseline="middle" fontFamily="Impact, Arial Black, sans-serif" fontSize="15" fontWeight="bold" letterSpacing="2" fill="#f0c040" stroke="#7a5500" strokeWidth="0.6" paintOrder="stroke" filter="url(#rbl1-text-glow)">POT</text>
+                </svg>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6vh" }}>
+                <button className="respot-foul" onClick={() => setRespottedBlackConfirm({ action: "foul", playerIndex: 1 })} style={{ background: "#800000", border: "2px solid #cc1111", color: "#fff", fontWeight: "bold", fontSize: "1.4vw", borderRadius: "8px", padding: "0.7vh 1.4vw", cursor: "pointer", letterSpacing: "0.1em", transition: "background 0.15s, border-color 0.15s" }}>FOUL</button>
+                <span style={{ color: "#666", fontSize: "1vw", letterSpacing: "0.05em" }}>{p2.name}</span>
+              </div>
+            </div>
+          </div>
+        </>
       )}
       {showFinishedHint && (
         <div className="overlay" onClick={() => setShowFinishedHint(false)}>

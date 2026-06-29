@@ -77,7 +77,7 @@ type HistoryEntry = {
   label: string;
   snapshot: string;
   color?: string;
-  kind?: "break" | "foul" | "handicap" | "frame_end" | "rerack" | "correction";
+  kind?: "break" | "foul" | "handicap" | "frame_end" | "rerack" | "correction" | "respot";
   playerIndex?: 0 | 1;
   points?: number;
   frameNumber?: number;
@@ -734,7 +734,7 @@ export function App() {
         pushHistory(
           "Gleichstand – Re-spotted Black",
           match, undefined,
-          { kind: "rerack", frameNumber: match.currentFrame }
+          { kind: "respot", frameNumber: match.currentFrame }
         );
         setMatch((prev) => {
           const next = structuredClone(prev);
@@ -818,6 +818,40 @@ export function App() {
     }
     setMatch(nextMatch);
     setShowBBDialog(false);
+  }, [match, pushHistory]);
+
+  // ===== RESPOTTED BLACK RESULT =====
+  const handleRespottedBlackPot = useCallback((playerIndex: 0 | 1) => {
+    const pts = 7;
+    pushHistory(
+      `${match.players[playerIndex].name} – Schwarz versenkt`,
+      match, undefined,
+      { kind: "break", playerIndex, points: pts, frameNumber: match.currentFrame }
+    );
+    setMatch(prev => {
+      const next = structuredClone(prev);
+      next.players[playerIndex].score += pts;
+      if (next.bbState) next.bbState = { ...next.bbState, frameOver: true, breakBalls: [], breakTotal: 0 };
+      return next;
+    });
+    setShowMenuFrameEndStats(true);
+  }, [match, pushHistory]);
+
+  const handleRespottedBlackFoul = useCallback((playerIndex: 0 | 1) => {
+    const pts = 7;
+    const opponentIdx = (1 - playerIndex) as 0 | 1;
+    pushHistory(
+      `${match.players[playerIndex].name} – Foul Schwarz`,
+      match, undefined,
+      { kind: "foul", playerIndex, points: pts, frameNumber: match.currentFrame }
+    );
+    setMatch(prev => {
+      const next = structuredClone(prev);
+      next.players[opponentIdx].score += pts;
+      if (next.bbState) next.bbState = { ...next.bbState, frameOver: true, breakBalls: [], breakTotal: 0 };
+      return next;
+    });
+    setShowMenuFrameEndStats(true);
   }, [match, pushHistory]);
 
   // ===== FRAME END =====
@@ -998,7 +1032,7 @@ export function App() {
         pushHistory(
           "Gleichstand – Re-spotted Black",
           match, undefined,
-          { kind: "rerack", frameNumber: match.currentFrame }
+          { kind: "respot", frameNumber: match.currentFrame }
         );
         setMatch((prev) => {
           const next = structuredClone(prev);
@@ -1868,6 +1902,8 @@ export function App() {
             setRemoteModalPlayer(idx as 0 | 1);
           }}
           remoteConnected={remote.connected}
+          onRespottedBlackPot={handleRespottedBlackPot}
+          onRespottedBlackFoul={handleRespottedBlackFoul}
         />
       )}
 
