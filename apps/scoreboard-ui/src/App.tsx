@@ -2413,6 +2413,12 @@ export function App() {
                           </div>
                         )}
                         <svg viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="none" style={{ width: "100%", height: "36vh", display: "block", overflow: "visible" }}>
+                          {(() => {
+                            const bw = Math.max(String(fs0).length, String(fs1).length) * 7 + 4;
+                            const bx = lastX + 5; const fx = bx + bw / 2;
+                            const ty = Math.min(rcFs0y, rcFs1y) - 7;
+                            return <><rect x={bx} y={ty} width={bw} height={Math.max(rcFs0y, rcFs1y) - ty + 7} rx={3} fill="#0d3d0d" opacity={0.9} /><line x1={fx - 4} y1={ty - 10} x2={fx - 4} y2={ty} stroke="#999" strokeWidth={1.5} strokeLinecap="round" /><text x={fx} y={ty - 10} textAnchor="middle" dominantBaseline="text-bottom" fontSize={9}>🏁</text></>;
+                          })()}
                           <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
                           <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
                           <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
@@ -2439,14 +2445,10 @@ export function App() {
                           <circle cx={lastX} cy={lastY1} r={5} fill={col1} />
                           {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
                           {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col0} /> : null)}
-                          <rect x={lastX + 5} y={Math.min(rcFs0y, rcFs1y) - 7} width={18} height={Math.max(rcFs0y, rcFs1y) - Math.min(rcFs0y, rcFs1y) + 14} rx={3} fill="#0d3d0d" opacity={0.9} />
-                          <line x1={lastX + 14} y1={Math.min(rcFs0y, rcFs1y) - 7} x2={lastX + 14} y2={Math.min(rcFs0y, rcFs1y) - 1} stroke="#999" strokeWidth={1.5} strokeLinecap="round" />
-                          <text x={lastX + 14} y={Math.min(rcFs0y, rcFs1y) - 7} textAnchor="middle" dominantBaseline="text-bottom" fontSize={9}>🏁</text>
-                          <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col0}>{fs0}</text>
-                          <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col1}>{fs1}</text>
                           <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
                           <text x={svgW + 8} y={midY} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.floor(Math.max(fs0, fs1) / 2)}</text>
                           <text x={svgW + 8} y={toY(Math.max(fs0, fs1))} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">{Math.max(fs0, fs1)}</text>
+                          {(() => { const bw = Math.max(String(fs0).length, String(fs1).length) * 7 + 4; const fx = lastX + 5 + bw / 2; const s0c = String(fs0).length < String(fs1).length; const s1c = String(fs1).length < String(fs0).length; return <><text x={s0c ? fx : lastX + 7} y={rcFs0y} textAnchor={s0c ? "middle" : "start"} dominantBaseline="middle" fontSize={12} fill={col0}>{fs0}</text><text x={s1c ? fx : lastX + 7} y={rcFs1y} textAnchor={s1c ? "middle" : "start"} dominantBaseline="middle" fontSize={12} fill={col1}>{fs1}</text></>; })()}
                         </svg>
                       </div>
                     );
