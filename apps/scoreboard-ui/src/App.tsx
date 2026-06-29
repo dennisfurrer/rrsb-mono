@@ -264,6 +264,7 @@ export function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showChartHelp, setShowChartHelp] = useState(false);
   const [breaksPlayer, setBreaksPlayer] = useState<0 | 1 | null>(null);
   const [anstossInfoDismissedKey, setAnstossInfoDismissedKey] = useState<string | null>(null);
   const [anstossPhase, setAnstossPhase] = useState<null | { playerIndex: 0 | 1; step: "striking" | "ball-flying" | "name-exploding" }>(null);
@@ -1922,14 +1923,15 @@ export function App() {
             </div>
 
             {/* Center */}
-            <div style={{ flex: "0 0 24%", textAlign: "center", userSelect: "none", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ flex: "0 0 24%", textAlign: "center", userSelect: "none", position: "relative", display: "flex", alignItems: "center", justifyContent: "center", isolation: "isolate" }}>
               <div style={{ position: "absolute", right: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)", zIndex: 0, clipPath: "inset(0 -10vw 0 -300vw)" }}>
                 <CueSvg side="right" dur="2.0s" mode={anstossPhase?.playerIndex === 0 ? "strike" : "idle"} />
               </div>
-              <span style={{ color: "#ffee44", fontSize: "2.5vw", fontWeight: "bold", letterSpacing: "0.06em", position: "relative", zIndex: 1 }}>Wer macht den Anstoss?</span>
               <div style={{ position: "absolute", left: "calc(100% - 1vw)", top: "50%", transform: "translateY(-50%)", zIndex: 0, clipPath: "inset(0 -300vw 0 -10vw)" }}>
                 <CueSvg side="left" dur="2.5s" mode={anstossPhase?.playerIndex === 1 ? "strike" : "idle"} />
               </div>
+              <div style={{ position: "absolute", inset: 0, background: "rgba(10,10,10,0.85)", zIndex: 1 }} />
+              <span style={{ color: "#ffee44", fontSize: "2.5vw", fontWeight: "bold", letterSpacing: "0.06em", position: "relative", zIndex: 2 }}>Wer macht den Anstoss?</span>
             </div>
 
             {/* Right: Spieler 1 */}
@@ -2256,42 +2258,30 @@ export function App() {
               const endTimeStr = fmtTime(Date.now());
               return (
                 <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "1.2vh", borderTop: "1px solid #333", paddingTop: "1.5vh" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto 1fr", columnGap: "0.6vw", rowGap: "0.35vh", fontSize: "1.35vw", alignItems: "baseline" }}>
-                    <div style={{ gridColumn: "1 / 3", color: effCol0, fontWeight: "bold", fontSize: "1.2vw", paddingBottom: "0.15vh" }}>{match.players[0].name}</div>
-                    <div style={{ gridColumn: "3 / 5", color: effCol1, fontWeight: "bold", fontSize: "1.2vw", paddingBottom: "0.15vh" }}>{match.players[1].name}</div>
-                    <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
-                    <div style={{ color: effCol0 }}>{hBreaks0.join(", ") || "—"}</div>
-                    <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
-                    <div style={{ color: effCol1 }}>{hBreaks1.join(", ") || "—"}</div>
-                    <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                    <div style={{ color: "#ff4444" }}>{fouls0 > 0 ? `${fouls0} Pkt (${foulCount0 === 1 ? "1 Foul" : `${foulCount0} Fouls`})` : "—"}</div>
-                    <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                    <div style={{ color: "#ff4444" }}>{fouls1 > 0 ? `${fouls1} Pkt (${foulCount1 === 1 ? "1 Foul" : `${foulCount1} Fouls`})` : "—"}</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", columnGap: "0.8vw", rowGap: "0.35vh", fontSize: "1.35vw", alignItems: "baseline" }}>
+                    <div style={{ color: effCol0, textAlign: "right" }}>{hBreaks0.length > 0 ? [...hBreaks0].sort((a,b)=>a-b).join(", ") : "—"}</div>
+                    <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Breaks &gt;7</div>
+                    <div style={{ color: effCol1, textAlign: "left" }}>{hBreaks1.length > 0 ? [...hBreaks1].sort((a,b)=>b-a).join(", ") : "—"}</div>
+                    <div style={{ color: "#ff4444", textAlign: "right" }}>{fouls0 > 0 ? <><span style={{ fontWeight: "normal" }}>({foulCount0 === 1 ? "1 Foul" : `${foulCount0} Fouls`})</span>{"   "}{fouls0}</> : "—"}</div>
+                    <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Foulpunkte</div>
+                    <div style={{ color: "#ff4444", textAlign: "left" }}>{fouls1 > 0 ? <>{fouls1}{"   "}<span style={{ fontWeight: "normal" }}>({foulCount1 === 1 ? "1 Foul" : `${foulCount1} Fouls`})</span></> : "—"}</div>
                     {showHandicap && (
                       <>
-                        <div style={{ color: "#ccc" }}>Handicap:</div>
-                        <div style={{ color: "#c87832" }}>{hc0}</div>
-                        <div style={{ color: "#ccc" }}>Handicap:</div>
-                        <div style={{ color: "#c87832" }}>{hc1}</div>
+                        <div style={{ color: "#c87832", textAlign: "right" }}>{hc0 > 0 ? `${hc0} Pkt` : "—"}</div>
+                        <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Handicap</div>
+                        <div style={{ color: "#c87832", textAlign: "left" }}>{hc1 > 0 ? `${hc1} Pkt` : "—"}</div>
                       </>
                     )}
-                    {(durationStr || reracks > 0) && (
-                      <>
-                        <div style={{ color: "#aaa" }}>{durationStr ? "⏱ Framedauer:" : ""}</div>
-                        <div style={{ color: "#fff" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
-                        <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
-                        <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
-                        {reracks > 0 && (
-                          <>
-                            <div /><div />
-                            <div style={{ color: "#ffa040" }}>🔴 Re-racks:</div>
-                            <div style={{ color: "#ffa040" }}>{reracks}</div>
-                          </>
-                        )}
-                      </>
-                    )}
+                    {(durationStr || reracks > 0) && <>
+                      <div style={{ color: "#fff", textAlign: "right" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
+                      <div style={{ color: "#aaa", textAlign: "center", whiteSpace: "nowrap" }}>⏱ Dauer · Zeit 🕐</div>
+                      <div style={{ color: "#ccc", textAlign: "left" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
+                      {reracks > 0 && (
+                        <div style={{ gridColumn: "1 / 4", color: "#ffa040" }}>🔴 Re-racks: {reracks}</div>
+                      )}
+                    </>}
                     {corrections.map((e, i) => (
-                      <div key={`corr-${i}`} style={{ gridColumn: "1 / 5", color: "#f0c040" }}>{e.label}</div>
+                      <div key={`corr-${i}`} style={{ gridColumn: "1 / 4", color: "#f0c040" }}>{e.label}</div>
                     ))}
                   </div>
                   {(() => {
@@ -2299,7 +2289,7 @@ export function App() {
                     const cW = svgW - 2 * px, cH = svgH - 2 * py;
                     const fs0 = match.players[0].score, fs1 = match.players[1].score;
                     if (fs0 === 0 && fs1 === 0) return null;
-                    const yMax = Math.max(fs0, fs1) + 5;
+                    const yMax = Math.max(fs0, fs1) + Math.max(1, Math.ceil(Math.max(fs0, fs1) * 0.1));
                     const lastRerackIdx = fh.reduce((idx, e, i) => e.kind === "rerack" ? i : idx, -1);
                     const eventsAfterRerack = lastRerackIdx >= 0 ? fh.slice(lastRerackIdx + 1) : fh;
                     const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
@@ -2381,9 +2371,17 @@ export function App() {
                     const rcFs0y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid - lcMin / 2 : rcMid + lcMin / 2) : lastY0;
                     const rcFs1y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid + lcMin / 2 : rcMid - lcMin / 2) : lastY1;
                     return (
-                      <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw" }}>
-                        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", display: "block", overflow: "visible" }}>
-                          <text x={svgW / 2} y={toY(Math.max(fs0, fs1)) / 2} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="#666">Frameverlauf</text>
+                      <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw", position: "relative" }}>
+                        <div style={{ position: "absolute", top: "1.5vh", left: "calc(6.4% - 5mm)", display: "flex", alignItems: "center", gap: "0.5vw", zIndex: 1 }}>
+                          <span style={{ color: "#666", fontSize: "1.5vw", fontWeight: "normal" }}>Frameverlauf</span>
+                          <button onClick={(e) => { e.stopPropagation(); setShowChartHelp(v => !v); }} style={{ width: "2.1vw", height: "2.1vw", minWidth: "24px", minHeight: "24px", borderRadius: "50%", background: "#1a6bc4", border: "none", color: "#fff", fontWeight: "bold", fontSize: "1.35vw", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>?</button>
+                        </div>
+                        {showChartHelp && (
+                          <div onClick={(e) => { e.stopPropagation(); setShowChartHelp(false); }} style={{ position: "absolute", top: "3.5vh", left: "1vw", right: "1vw", zIndex: 10, background: "#1a2535", border: "1px solid #1a6bc4", borderRadius: "10px", padding: "1.2vh 1.2vw", fontSize: "1.1vw", color: "#ddd", lineHeight: 1.6, cursor: "pointer", fontWeight: "normal" }}>
+                            Der <strong>Frameverlauf</strong>-Chart zeigt, wie sich die Punkte der beiden Spieler im Lauf des Frames aufgebaut haben. Die horizontale Achse stellt die zeitliche Abfolge der Breaks und Fouls dar, die vertikale die Punktzahl. Jede Linie gehört einem Spieler (in seiner Farbe) — steigt sie steil an, hat der Spieler in diesem Moment ein grösseres Break gespielt. Beschriftete Punkte auf der Linie zeigen die Grösse eines Breaks; Punkte mit «F» davor (z. B. «F6») markieren Fouls, deren Punkte dem Gegner gutgeschrieben wurden. Liegt eine Linie von Beginn weg höher als bei null, hat dieser Spieler ein Handicap erhalten.
+                          </div>
+                        )}
+                        <svg viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="none" style={{ width: "100%", height: "36vh", display: "block", overflow: "visible" }}>
                           <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
                           <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />
                           <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1.5" strokeDasharray="6,4" />

@@ -238,6 +238,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
   }, []);
 
   const [selectedFrame, setSelectedFrame] = useState<FrameStat | null>(null);
+  const [showChartHelp, setShowChartHelp] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -443,7 +444,7 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           if (fs0 === 0 && fs1 === 0) return null;
           const svgW = 500, svgH = 150, px = 32, py = 20;
           const cW = svgW - 2 * px, cH = svgH - 2 * py;
-          const yMax = Math.max(fs0, fs1) + 5;
+          const yMax = Math.max(fs0, fs1) + Math.max(1, Math.ceil(Math.max(fs0, fs1) * 0.1));
           const fh = f.entries;
           const initHC0 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
           const initHC1 = fh.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
@@ -516,9 +517,17 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
           const rcFs0y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid - lcMin / 2 : rcMid + lcMin / 2) : lastY0;
           const rcFs1y = rcGap < lcMin ? (lastY0 <= lastY1 ? rcMid + lcMin / 2 : rcMid - lcMin / 2) : lastY1;
           return (
-            <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw" }}>
-              <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", display: "block", overflow: "visible" }}>
-                <text x={svgW / 2} y={toY(Math.max(fs0, fs1)) / 2} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="#666">Frameverlauf</text>
+            <div style={{ width: "100%", background: "#111", borderRadius: "8px", padding: "0.5vh 0.3vw", position: "relative" }}>
+              <div style={{ position: "absolute", top: "1.5vh", left: "calc(6.4% - 5mm)", display: "flex", alignItems: "center", gap: "0.5vw", zIndex: 1 }}>
+                <span style={{ color: "#666", fontSize: "1.5vw", fontWeight: "normal" }}>Frameverlauf</span>
+                <button onClick={(e) => { e.stopPropagation(); setShowChartHelp(v => !v); }} style={{ width: "2.1vw", height: "2.1vw", minWidth: "24px", minHeight: "24px", borderRadius: "50%", background: "#1a6bc4", border: "none", color: "#fff", fontWeight: "bold", fontSize: "1.35vw", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>?</button>
+              </div>
+              {showChartHelp && (
+                <div onClick={(e) => { e.stopPropagation(); setShowChartHelp(false); }} style={{ position: "absolute", top: "3.5vh", left: "1vw", right: "1vw", zIndex: 10, background: "#1a2535", border: "1px solid #1a6bc4", borderRadius: "10px", padding: "1.2vh 1.2vw", fontSize: "1.1vw", color: "#ddd", lineHeight: 1.6, cursor: "pointer", fontWeight: "normal" }}>
+                  Der <strong>Frameverlauf</strong>-Chart zeigt, wie sich die Punkte der beiden Spieler im Lauf des Frames aufgebaut haben. Die horizontale Achse stellt die zeitliche Abfolge der Breaks und Fouls dar, die vertikale die Punktzahl. Jede Linie gehört einem Spieler (in seiner Farbe) — steigt sie steil an, hat der Spieler in diesem Moment ein grösseres Break gespielt. Beschriftete Punkte auf der Linie zeigen die Grösse eines Breaks; Punkte mit «F» davor (z. B. «F6») markieren Fouls, deren Punkte dem Gegner gutgeschrieben wurden. Liegt eine Linie von Beginn weg höher als bei null, hat dieser Spieler ein Handicap erhalten.
+                </div>
+              )}
+              <svg viewBox={`0 0 ${svgW} ${svgH}`} preserveAspectRatio="none" style={{ width: "100%", height: "36vh", display: "block", overflow: "visible" }}>
                 <line x1={4} y1={toY(Math.max(fs0, fs1))} x2={svgW - 4} y2={toY(Math.max(fs0, fs1))} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
                 <line x1={4} y1={midY} x2={svgW - 4} y2={midY} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
                 <line x1={4} y1={toY(0)} x2={svgW - 4} y2={toY(0)} stroke="#383838" strokeWidth="1" strokeDasharray="6,4" />
@@ -590,28 +599,22 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
               )}
 
               {/* Stats */}
-              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "auto 1fr auto 1fr", columnGap: "0.6vw", rowGap: "0.35vh", fontSize: "1.25vw", alignItems: "baseline" }}>
-                <div style={{ gridColumn: "1 / 3", color: c1, fontWeight: "bold", fontSize: "1.1vw", paddingBottom: "0.1vh" }}>{nameP1}</div>
-                <div style={{ gridColumn: "3 / 5", color: c2, fontWeight: "bold", fontSize: "1.1vw", paddingBottom: "0.1vh" }}>{nameP2}</div>
-                <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
-                <div style={{ color: c1 }}>{f.breaks[0].length > 0 ? [...f.breaks[0]].sort((a,b)=>b-a).join(", ") : "—"}</div>
-                <div style={{ color: "#ccc" }}>Breaks &gt;7:</div>
-                <div style={{ color: c2 }}>{f.breaks[1].length > 0 ? [...f.breaks[1]].sort((a,b)=>b-a).join(", ") : "—"}</div>
-                <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                <div style={{ color: "#ff4444" }}>{f.fouls[0] > 0 ? `${f.fouls[0]} Pkt (${f.foulCount[0] === 1 ? "1 Foul" : `${f.foulCount[0]} Fouls`})` : "—"}</div>
-                <div style={{ color: "#ccc" }}>Foulpunkte:</div>
-                <div style={{ color: "#ff4444" }}>{f.fouls[1] > 0 ? `${f.fouls[1]} Pkt (${f.foulCount[1] === 1 ? "1 Foul" : `${f.foulCount[1]} Fouls`})` : "—"}</div>
+              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr auto 1fr", columnGap: "0.8vw", rowGap: "0.35vh", fontSize: "1.25vw", alignItems: "baseline" }}>
+                <div style={{ color: c1, textAlign: "right" }}>{f.breaks[0].length > 0 ? [...f.breaks[0]].sort((a,b)=>a-b).join(", ") : "—"}</div>
+                <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Breaks &gt;7</div>
+                <div style={{ color: c2, textAlign: "left" }}>{f.breaks[1].length > 0 ? [...f.breaks[1]].sort((a,b)=>b-a).join(", ") : "—"}</div>
+                <div style={{ color: "#ff4444", textAlign: "right" }}>{f.fouls[0] > 0 ? <><span style={{ fontWeight: "normal" }}>({f.foulCount[0] === 1 ? "1 Foul" : `${f.foulCount[0]} Fouls`})</span>{"   "}{f.fouls[0]}</> : "—"}</div>
+                <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Foulpunkte</div>
+                <div style={{ color: "#ff4444", textAlign: "left" }}>{f.fouls[1] > 0 ? <>{f.fouls[1]}{"   "}<span style={{ fontWeight: "normal" }}>({f.foulCount[1] === 1 ? "1 Foul" : `${f.foulCount[1]} Fouls`})</span></> : "—"}</div>
                 {hasAnyHandicap && <>
-                  <div style={{ color: "#ccc" }}>Handicap:</div>
-                  <div style={{ color: "#c87832" }}>{f.handicap[0] > 0 ? `${f.handicap[0]} Pkt` : "—"}</div>
-                  <div style={{ color: "#ccc" }}>Handicap:</div>
-                  <div style={{ color: "#c87832" }}>{f.handicap[1] > 0 ? `${f.handicap[1]} Pkt` : "—"}</div>
+                  <div style={{ color: "#c87832", textAlign: "right" }}>{f.handicap[0] > 0 ? `${f.handicap[0]} Pkt` : "—"}</div>
+                  <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Handicap</div>
+                  <div style={{ color: "#c87832", textAlign: "left" }}>{f.handicap[1] > 0 ? `${f.handicap[1]} Pkt` : "—"}</div>
                 </>}
                 {durationStr && <>
-                  <div style={{ color: "#aaa" }}>⏱ Framedauer:</div>
-                  <div style={{ color: "#fff" }}><strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong></div>
-                  <div style={{ color: "#aaa" }}>{startTimeStr ? "🕐 Zeit:" : ""}</div>
-                  <div style={{ color: "#ccc" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
+                  <div style={{ color: "#fff", textAlign: "right" }}><strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong></div>
+                  <div style={{ color: "#aaa", textAlign: "center", whiteSpace: "nowrap" }}>⏱ Dauer · Zeit 🕐</div>
+                  <div style={{ color: "#ccc", textAlign: "left" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
                 </>}
               </div>
 
