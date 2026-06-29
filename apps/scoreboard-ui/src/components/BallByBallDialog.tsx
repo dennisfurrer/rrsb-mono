@@ -19,7 +19,6 @@ type FrameHistoryEntry = {
   points?: number;
   timestamp?: string;
   label?: string;
-  breakBalls?: Array<{ ball?: string; hex: string; points: number }>;
 };
 
 function formatFrameDuration(startIso: string): string {
@@ -88,7 +87,6 @@ export function BallByBallDialog({
   const [hcInput, setHcInput] = useState("");
   const redsMode = pendingReds !== null;
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
-  const [chartBreakPopup, setChartBreakPopup] = useState<{ balls: Array<{ ball?: string; hex: string; points: number }>; clickedBallIndex: number; x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef<{ ox: number; oy: number; sx: number; sy: number } | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -687,38 +685,25 @@ export function BallByBallDialog({
                   const eventsAfterRerack = lastRerackIdx >= 0 ? frameHistory.slice(lastRerackIdx + 1) : frameHistory;
                   const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
                   const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
-                  const scoreData: Array<{ s: [number, number]; b?: 0|1; f?: 0|1; ballInfo?: { balls: Array<{ ball?: string; hex: string; points: number }>; ballIndex: number } }> = [{ s: [initHC0, initHC1] }];
+                  const scoreData: Array<{ s: [number, number]; b?: 0|1; f?: 0|1 }> = [{ s: [initHC0, initHC1] }];
                   let acc0 = initHC0, acc1 = initHC1;
-                  const brkGroups: Array<{ sdIdxs: number[]; bballs: Array<{ ball?: string; hex: string; points: number }> | null }> = [];
-                  let activeGrp: { sdIdxs: number[] } | null = null;
                   for (const e of eventsAfterRerack) {
                     if (e.kind === "handicap") continue;
-                    if (e.kind === "break" && e.breakBalls) {
-                      if (activeGrp) { brkGroups.push({ sdIdxs: activeGrp.sdIdxs, bballs: e.breakBalls }); activeGrp = null; }
-                      continue;
-                    }
                     let n0 = acc0, n1 = acc1;
                     if (e.kind === "break") {
                       if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
                       else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
                     } else if (e.kind === "foul") {
-                      activeGrp = null;
                       if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
                       else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-                    } else { activeGrp = null; continue; }
+                    } else {
+                      continue;
+                    }
                     if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
                       acc0 = n0; acc1 = n1;
                       const isFoul = e.kind === "foul";
-                      const sdIdx = scoreData.length;
-                      if (!isFoul && (e.points ?? 0) > 0) { if (!activeGrp) activeGrp = { sdIdxs: [] }; activeGrp.sdIdxs.push(sdIdx); }
                       scoreData.push({ s: [acc0, acc1], b: !isFoul ? (e.playerIndex as 0|1) : undefined, f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined });
                     }
-                  }
-                  if (activeGrp && activeGrp.sdIdxs.length > 0 && breakBalls.length === activeGrp.sdIdxs.length)
-                    brkGroups.push({ sdIdxs: activeGrp.sdIdxs, bballs: breakBalls });
-                  for (const g of brkGroups) {
-                    if (g.bballs && g.sdIdxs.length === g.bballs.length)
-                      g.sdIdxs.forEach((si, bi) => { scoreData[si].ballInfo = { balls: g.bballs!, ballIndex: bi }; });
                   }
                   const last = scoreData[scoreData.length - 1];
                   if (last.s[0] !== fs0 || last.s[1] !== fs1) scoreData.push({ s: [fs0, fs1] });
@@ -775,8 +760,8 @@ export function BallByBallDialog({
                         {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col1 : col0}>0</text>}
                         <polyline points={pts0} fill="none" stroke={col0} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
                         <polyline points={pts1} fill="none" stroke={col1} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
-                        {scoreData.map((pt, i) => { if (pt.b !== 0) return null; const hi = !!pt.ballInfo; return <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={hi ? 5 : 3} fill={col0} style={{ cursor: hi ? "pointer" : "default" }} onClick={hi ? (ev) => { ev.stopPropagation(); setChartBreakPopup({ balls: pt.ballInfo!.balls, clickedBallIndex: pt.ballInfo!.ballIndex, x: ev.clientX, y: ev.clientY }); } : undefined} />; })}
-                        {scoreData.map((pt, i) => { if (pt.b !== 1) return null; const hi = !!pt.ballInfo; return <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={hi ? 5 : 3} fill={col1} style={{ cursor: hi ? "pointer" : "default" }} onClick={hi ? (ev) => { ev.stopPropagation(); setChartBreakPopup({ balls: pt.ballInfo!.balls, clickedBallIndex: pt.ballInfo!.ballIndex, x: ev.clientX, y: ev.clientY }); } : undefined} />; })}
+                        {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col0} /> : null)}
+                        {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col1} /> : null)}
                         {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
                         {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col0} /> : null)}
                         <circle cx={lastX} cy={lastY0} r={4} fill={col0} />
@@ -821,27 +806,6 @@ export function BallByBallDialog({
             >
               Frame beenden
             </button>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {chartBreakPopup && (
-      <div style={{ position: "fixed", inset: 0, zIndex: 850 }} onClick={(e) => { e.stopPropagation(); setChartBreakPopup(null); }}>
-        <div onClick={(e) => e.stopPropagation()} style={{ position: "fixed", top: chartBreakPopup.y - 14, left: chartBreakPopup.x, transform: "translate(-50%, -100%)", background: "#18182e", border: "1.5px solid #3a4a7a", borderRadius: "12px", padding: "1.2vh 1.2vw", display: "flex", flexDirection: "column", gap: "0.6vh", alignItems: "center", boxShadow: "0 4px 28px rgba(0,0,0,0.8)", zIndex: 851 }}>
-          <div style={{ color: "#888", fontSize: "0.95vw", whiteSpace: "nowrap" }}>
-            Break · {chartBreakPopup.balls.reduce((s, b) => s + b.points, 0)} Pkt.
-          </div>
-          <div style={{ display: "flex", gap: "0.55vw", alignItems: "flex-end" }}>
-            {chartBreakPopup.balls.map((ball, i) => {
-              const hl = i === chartBreakPopup.clickedBallIndex;
-              return (
-                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25vh" }}>
-                  <div style={{ width: hl ? "3.2vw" : "2.4vw", height: hl ? "3.2vw" : "2.4vw", minWidth: hl ? "36px" : "26px", minHeight: hl ? "36px" : "26px", borderRadius: "50%", background: ball.hex, border: hl ? "2.5px solid #fff" : "1.5px solid #444", boxShadow: hl ? "0 0 10px 3px rgba(255,255,255,0.45)" : "none", flexShrink: 0 }} />
-                  <span style={{ color: hl ? "#fff" : "#666", fontSize: hl ? "1vw" : "0.82vw", fontWeight: hl ? "bold" : "normal" }}>{ball.points}</span>
-                </div>
-              );
-            })}
           </div>
         </div>
       </div>
