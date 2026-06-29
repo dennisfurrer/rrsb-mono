@@ -537,8 +537,8 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={c2}>0</text>}
                 {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c1 : c2}>0</text>}
                 {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? c2 : c1}>0</text>}
-                <polyline points={pts0} fill="none" stroke={c1} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
-                <polyline points={pts1} fill="none" stroke={c2} strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
+                <polyline points={pts0} fill="none" stroke={c1} strokeWidth="0.7" strokeLinejoin="round" strokeLinecap="round" />
+                <polyline points={pts1} fill="none" stroke={c2} strokeWidth="0.7" strokeLinejoin="round" strokeLinecap="round" />
                 {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c1} /> : null)}
                 {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c2} /> : null)}
                 {scoreData.map((pt, i) => {
@@ -554,6 +554,9 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                 <circle cx={lastX} cy={lastY1} r={5} fill={c2} />
                 {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={c2} /> : null)}
                 {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={c1} /> : null)}
+                <rect x={lastX + 5} y={Math.min(rcFs0y, rcFs1y) - 7} width={18} height={Math.max(rcFs0y, rcFs1y) - Math.min(rcFs0y, rcFs1y) + 14} rx={3} fill="#0d3d0d" opacity={0.9} />
+                <line x1={lastX + 14} y1={Math.min(rcFs0y, rcFs1y) - 7} x2={lastX + 14} y2={Math.min(rcFs0y, rcFs1y) - 1} stroke="#999" strokeWidth={1.5} strokeLinecap="round" />
+                <text x={lastX + 14} y={Math.min(rcFs0y, rcFs1y) - 7} textAnchor="middle" dominantBaseline="text-bottom" fontSize={9}>🏁</text>
                 <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c1}>{fs0}</text>
                 <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={c2}>{fs1}</text>
                 <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
@@ -611,15 +614,36 @@ export function MatchStatsDialog({ history, matchStartedAt, nameP1, nameP2, iocP
                   <div style={{ color: "#ccc", textAlign: "center", whiteSpace: "nowrap" }}>Handicap</div>
                   <div style={{ color: "#c87832", textAlign: "left" }}>{f.handicap[1] > 0 ? `${f.handicap[1]} Pkt` : "—"}</div>
                 </>}
-                {durationStr && <>
-                  <div style={{ color: "#fff", textAlign: "right" }}><strong>{durationStr}{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</strong></div>
-                  <div style={{ color: "#aaa", textAlign: "center", whiteSpace: "nowrap" }}>⏱ Dauer · Zeit 🕐</div>
-                  <div style={{ color: "#ccc", textAlign: "left" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
-                </>}
               </div>
 
               {/* Chart */}
               {chartNode}
+
+              {/* Start/Dauer · Framedauer */}
+              {durationStr && f.startTime && (
+                <div style={{ display: "flex", gap: "4vw", fontSize: "1.25vw", color: "#aaa" }}>
+                  {isLive ? (
+                    <span>Start:{" "}<span style={{ color: "#ccc" }}>{(() => {
+                      const d = new Date(f.startTime!);
+                      const today = new Date();
+                      const prefix = d.toDateString() !== today.toDateString()
+                        ? `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()} `
+                        : "";
+                      return prefix + (startTimeStr ?? "");
+                    })()}</span></span>
+                  ) : (
+                    <span>Dauer:{" "}<span style={{ color: "#ccc" }}>{(() => {
+                      const d = new Date(f.startTime!);
+                      const today = new Date();
+                      const datePrefix = d.toDateString() !== today.toDateString()
+                        ? `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()} `
+                        : "";
+                      return `${datePrefix}${startTimeStr} – ${endTimeStr}`;
+                    })()}</span></span>
+                  )}
+                  <span>Framedauer:{" "}<span style={{ color: "#fff", fontWeight: "bold" }}>{Math.floor(((f.endTime ? new Date(f.endTime).getTime() : Date.now()) - new Date(f.startTime!).getTime()) / 60000)} min{isLive && <span style={{ color: "#44cc44", opacity: tick % 2 === 0 ? 1 : 0 }}> ●</span>}</span></span>
+                </div>
+              )}
 
               {/* Close */}
               <button

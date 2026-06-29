@@ -668,14 +668,9 @@ export function BallByBallDialog({
                       <div style={{ color: "#c87832", textAlign: "left" }}>{hc1 > 0 ? hc1 : "—"}</div>
                     </>
                   )}
-                  {(durationStr || reracks > 0) && <>
-                    <div style={{ color: "#fff", textAlign: "right" }}>{durationStr ? <strong>{durationStr}</strong> : ""}</div>
-                    <div style={{ color: "#aaa", textAlign: "center", whiteSpace: "nowrap" }}>⏱ Dauer · Zeit 🕐</div>
-                    <div style={{ color: "#ccc", textAlign: "left" }}>{startTimeStr ? `${startTimeStr} – ${endTimeStr}` : ""}</div>
-                    {reracks > 0 && (
-                      <div style={{ gridColumn: "1 / 4", color: "#ffa040" }}>🔴 Re-racks: {reracks}</div>
-                    )}
-                  </>}
+                  {reracks > 0 && (
+                    <div style={{ gridColumn: "1 / 4", color: "#ffa040" }}>🔴 Re-racks: {reracks}</div>
+                  )}
                   {corrections.map((e, i) => (
                     <div key={`corr-${i}`} style={{ gridColumn: "1 / 4", color: "#f0c040" }}>{e.label}</div>
                   ))}
@@ -761,14 +756,17 @@ export function BallByBallDialog({
                         {initHC1 === 0 && initHC0 > 0 && <text x={px - 4} y={lcZ1y} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={col1}>0</text>}
                         {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) - lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col0 : col1}>0</text>}
                         {initHC0 === 0 && initHC1 === 0 && <text x={px - 4} y={toY(0) + lcMin / 2} textAnchor="end" dominantBaseline="middle" fontSize={12} fill={p0First ? col1 : col0}>0</text>}
-                        <polyline points={pts0} fill="none" stroke={col0} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-                        <polyline points={pts1} fill="none" stroke={col1} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                        <polyline points={pts0} fill="none" stroke={col0} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+                        <polyline points={pts1} fill="none" stroke={col1} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
                         {scoreData.map((pt, i) => pt.b === 0 ? <circle key={`b0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col0} /> : null)}
                         {scoreData.map((pt, i) => pt.b === 1 ? <circle key={`b1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col1} /> : null)}
                         {scoreData.map((pt, i) => pt.f === 0 ? <circle key={`f0-${i}`} cx={toX(i)} cy={toY(pt.s[0])} r={3} fill={col1} /> : null)}
                         {scoreData.map((pt, i) => pt.f === 1 ? <circle key={`f1-${i}`} cx={toX(i)} cy={toY(pt.s[1])} r={3} fill={col0} /> : null)}
                         <circle cx={lastX} cy={lastY0} r={4} fill={col0} />
                         <circle cx={lastX} cy={lastY1} r={4} fill={col1} />
+                        <rect x={lastX + 5} y={Math.min(rcFs0y, rcFs1y) - 7} width={18} height={Math.max(rcFs0y, rcFs1y) - Math.min(rcFs0y, rcFs1y) + 14} rx={3} fill="#0d3d0d" opacity={0.9} />
+                        <line x1={lastX + 14} y1={Math.min(rcFs0y, rcFs1y) - 7} x2={lastX + 14} y2={Math.min(rcFs0y, rcFs1y) - 1} stroke="#999" strokeWidth={1.5} strokeLinecap="round" />
+                        <text x={lastX + 14} y={Math.min(rcFs0y, rcFs1y) - 7} textAnchor="middle" dominantBaseline="text-bottom" fontSize={9}>🏁</text>
                         <text x={lastX + 7} y={rcFs0y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col0}>{fs0}</text>
                         <text x={lastX + 7} y={rcFs1y} textAnchor="start" dominantBaseline="middle" fontSize={12} fill={col1}>{fs1}</text>
                         <text x={svgW + 8} y={svgH - py} textAnchor="start" dominantBaseline="middle" fontSize={14} fill="#666">0</text>
@@ -778,6 +776,19 @@ export function BallByBallDialog({
                     </div>
                   );
                 })()}
+                {durationStr && startTs && (
+                  <div style={{ display: "flex", gap: "4vw", fontSize: "1.3vw", color: "#aaa" }}>
+                    <span>Start:{" "}<span style={{ color: "#ccc" }}>{(() => {
+                      const d = new Date(startTs);
+                      const today = new Date();
+                      const prefix = d.toDateString() !== today.toDateString()
+                        ? `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()} `
+                        : "";
+                      return prefix + (startTimeStr ?? "");
+                    })()}</span></span>
+                    <span>Framedauer:{" "}<span style={{ color: "#fff", fontWeight: "bold" }}>{Math.floor((Date.now() - new Date(startTs).getTime()) / 60000)} min</span></span>
+                  </div>
+                )}
               </div>
             );
           })()}
