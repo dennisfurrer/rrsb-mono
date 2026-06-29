@@ -687,28 +687,38 @@ export function BallByBallDialog({
                   const eventsAfterRerack = lastRerackIdx >= 0 ? frameHistory.slice(lastRerackIdx + 1) : frameHistory;
                   const initHC0 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 0).reduce((s, e) => s + (e.points ?? 0), 0);
                   const initHC1 = eventsAfterRerack.filter(e => e.kind === "handicap" && e.playerIndex === 1).reduce((s, e) => s + (e.points ?? 0), 0);
-                  const ballInfoLookup = new Map<number, { balls: Array<{ ball?: string; hex: string; points: number }>; ballIndex: number }>();
-                  { let grp: number[] = []; eventsAfterRerack.forEach((e, i) => { if (e.kind === "break" && !e.breakBalls) { grp.push(i); } else if (e.kind === "break" && e.breakBalls) { grp.forEach((hi, bi) => ballInfoLookup.set(hi, { balls: e.breakBalls!, ballIndex: bi })); grp = []; } else if (e.kind === "foul" || e.kind === "rerack") { grp = []; } }); }
-                  const scoreData: Array<{ s: [number, number]; b?: 0 | 1; f?: 0 | 1; ballInfo?: { balls: Array<{ ball?: string; hex: string; points: number }>; ballIndex: number } }> = [{ s: [initHC0, initHC1] }];
+                  const scoreData: Array<{ s: [number, number]; b?: 0|1; f?: 0|1; ballInfo?: { balls: Array<{ ball?: string; hex: string; points: number }>; ballIndex: number } }> = [{ s: [initHC0, initHC1] }];
                   let acc0 = initHC0, acc1 = initHC1;
-                  for (let ei = 0; ei < eventsAfterRerack.length; ei++) {
-                    const e = eventsAfterRerack[ei];
+                  const brkGroups: Array<{ sdIdxs: number[]; bballs: Array<{ ball?: string; hex: string; points: number }> | null }> = [];
+                  let activeGrp: { sdIdxs: number[] } | null = null;
+                  for (const e of eventsAfterRerack) {
                     if (e.kind === "handicap") continue;
+                    if (e.kind === "break" && e.breakBalls) {
+                      if (activeGrp) { brkGroups.push({ sdIdxs: activeGrp.sdIdxs, bballs: e.breakBalls }); activeGrp = null; }
+                      continue;
+                    }
                     let n0 = acc0, n1 = acc1;
                     if (e.kind === "break") {
                       if (e.playerIndex === 0) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
                       else if (e.playerIndex === 1) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
                     } else if (e.kind === "foul") {
+                      activeGrp = null;
                       if (e.playerIndex === 0) n1 = Math.min(fs1, acc1 + (e.points ?? 0));
                       else if (e.playerIndex === 1) n0 = Math.min(fs0, acc0 + (e.points ?? 0));
-                    } else {
-                      continue;
-                    }
+                    } else { activeGrp = null; continue; }
                     if (n0 >= acc0 && n1 >= acc1 && (n0 !== acc0 || n1 !== acc1)) {
                       acc0 = n0; acc1 = n1;
                       const isFoul = e.kind === "foul";
-                      scoreData.push({ s: [acc0, acc1], b: !isFoul ? (e.playerIndex as 0 | 1) : undefined, f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined, ballInfo: ballInfoLookup.get(ei) });
+                      const sdIdx = scoreData.length;
+                      if (!isFoul && (e.points ?? 0) > 0) { if (!activeGrp) activeGrp = { sdIdxs: [] }; activeGrp.sdIdxs.push(sdIdx); }
+                      scoreData.push({ s: [acc0, acc1], b: !isFoul ? (e.playerIndex as 0|1) : undefined, f: isFoul ? (e.playerIndex === 0 ? 1 : 0) : undefined });
                     }
+                  }
+                  if (activeGrp && activeGrp.sdIdxs.length > 0 && breakBalls.length === activeGrp.sdIdxs.length)
+                    brkGroups.push({ sdIdxs: activeGrp.sdIdxs, bballs: breakBalls });
+                  for (const g of brkGroups) {
+                    if (g.bballs && g.sdIdxs.length === g.bballs.length)
+                      g.sdIdxs.forEach((si, bi) => { scoreData[si].ballInfo = { balls: g.bballs!, ballIndex: bi }; });
                   }
                   const last = scoreData[scoreData.length - 1];
                   if (last.s[0] !== fs0 || last.s[1] !== fs1) scoreData.push({ s: [fs0, fs1] });
