@@ -265,7 +265,7 @@ export function MultiEntryDialog({
                   onClick={() => setShowConfirm(false)}
                   type="button"
                 >
-                  Nein
+                  Nein, zurück
                 </button>
                 <button
                   className="multi-entry-confirm-yes"
@@ -299,7 +299,7 @@ export function MultiEntryDialog({
                     onClick={() => setConfirmRemoveIdx(null)}
                     type="button"
                   >
-                    Nein
+                    Nein, zurück
                   </button>
                   <button
                     className="multi-entry-confirm-yes"
@@ -368,7 +368,7 @@ export function MultiEntryDialog({
                       onClick={() => setShowNewSessionConfirm(false)}
                       type="button"
                     >
-                      Nein
+                      Nein, zurück
                     </button>
                     <button
                       className="multi-entry-confirm-yes"

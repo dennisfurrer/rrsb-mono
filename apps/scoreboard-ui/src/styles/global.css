@@ -2594,9 +2594,9 @@ div { font-weight: bold; }
 
 .multi-entry-confirm-no {
   flex: 1;
-  background: linear-gradient(165deg, #4a4a4a, #333);
-  color: #fff;
-  border: 1.5px solid #666;
+  background: linear-gradient(165deg, #1a4a1a, #0d2e0d);
+  color: #66ff66;
+  border: 1.5px solid #3a8a3a;
   font-family: inherit;
   font-size: 1.5vw;
   font-weight: bold;
@@ -2608,19 +2608,19 @@ div { font-weight: bold; }
 }
 
 .multi-entry-confirm-no:hover {
-  background: linear-gradient(165deg, #545454, #3a3a3a);
-  border-color: #5599ff;
-  box-shadow: 0 0 14px rgba(85,153,255,0.35), 0 2px 6px rgba(0,0,0,0.35);
+  background: linear-gradient(165deg, #205420, #103410);
+  border-color: #66ff66;
+  box-shadow: 0 0 14px rgba(102,255,102,0.35), 0 2px 6px rgba(0,0,0,0.35);
 }
 
 .multi-entry-confirm-no:active {
-  background: linear-gradient(165deg, #5a5a5a, #404040);
-  box-shadow: 0 0 22px rgba(85,153,255,0.6), 0 0 38px rgba(85,153,255,0.3);
+  background: linear-gradient(165deg, #245e24, #143814);
+  box-shadow: 0 0 22px rgba(102,255,102,0.6), 0 0 38px rgba(102,255,102,0.3);
   filter: brightness(1.25);
 }
 
 .multi-entry-confirm-yes {
-  flex: 2;
+  flex: 1;
   background: linear-gradient(165deg, #3a1414, #240d0d);
   color: #ff9999;
   border: 1.5px solid #774040;
@@ -3293,6 +3293,76 @@ div { font-weight: bold; }
 
 .break-pill-foul.selected:active {
   box-shadow: 0 0 26px rgba(255,68,68,0.75), 0 0 44px rgba(255,68,68,0.35);
+}
+
+.break-ball-select {
+  margin-top: 0.4vh;
+  align-self: flex-start;
+  width: 20vw;
+  background: #1a1a2a;
+  border: 1.5px solid #6688cc;
+  border-radius: 6px;
+  color: #aabbff;
+  font-weight: bold;
+  font-size: 1.4vw;
+  letter-spacing: 0.03em;
+  padding: 1.1vh 1vw;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: box-shadow 0.15s, filter 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.break-ball-select:hover {
+  background: #1e2040;
+  border-color: #88aaff;
+  box-shadow: 0 0 14px rgba(100,140,255,0.35), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.break-ball-select:focus {
+  outline: none;
+  border-color: #88aaff;
+  color: #ccdaff;
+  box-shadow: 0 0 18px rgba(100,140,255,0.5), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.break-ball-select option {
+  background: #1a1a2a;
+  color: #aabbff;
+}
+
+.break-long-select {
+  margin-top: 0.4vh;
+  align-self: flex-start;
+  width: 20vw;
+  background: #141f14;
+  border: 1.5px solid #448844;
+  border-radius: 6px;
+  color: #88cc88;
+  font-weight: bold;
+  font-size: 1.4vw;
+  letter-spacing: 0.03em;
+  padding: 1.1vh 1vw;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: box-shadow 0.15s, filter 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.break-long-select:hover {
+  background: #1a341a;
+  border-color: #44ff44;
+  box-shadow: 0 0 14px rgba(68,255,68,0.35), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.break-long-select:focus {
+  outline: none;
+  border-color: #44ff44;
+  color: #aaffaa;
+  box-shadow: 0 0 18px rgba(68,255,68,0.5), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.break-long-select option {
+  background: #141f14;
+  color: #88cc88;
 }
 
 .break-foul-select {
