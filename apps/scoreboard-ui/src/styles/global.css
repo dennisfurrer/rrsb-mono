@@ -875,6 +875,17 @@ div { font-weight: bold; }
   transition: box-shadow 0.2s, filter 0.2s, background 0.15s;
 }
 
+.setup-ok-ready {
+  animation: setup-ok-pulse 2s ease-in-out infinite;
+}
+.setup-ok-ready:active {
+  animation: none;
+}
+@keyframes setup-ok-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(74,222,128,0.3); border-color: #2a5a2a; }
+  50%       { box-shadow: 0 0 26px rgba(74,222,128,0.8), 0 0 48px rgba(74,222,128,0.3); border-color: #4ade80; }
+}
+
 .setup-ok:not(:disabled):hover {
   background: #1f4a1f;
   box-shadow: 0 0 20px rgba(74,222,128,0.65), 0 0 38px rgba(74,222,128,0.25);
@@ -891,6 +902,24 @@ div { font-weight: bold; }
   color: #ff5555;
   border-color: #6a2020;
   cursor: not-allowed;
+}
+
+.setup-ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0.4vh 0;
+}
+.setup-ticker-text {
+  display: inline-block;
+  color: #ffee44;
+  font-size: 1.6vw;
+  font-weight: 600;
+  animation: setup-ticker 18s linear infinite;
+}
+@keyframes setup-ticker {
+  0%   { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
 }
 
 .setup-info-btn {

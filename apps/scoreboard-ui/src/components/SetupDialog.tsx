@@ -628,9 +628,16 @@ export function SetupDialog({
             Beide Spieler haben denselben Namen!
           </div>
         )}
-        <button className="setup-ok" onClick={handleOk} disabled={!isReady}>
+        <button className={`setup-ok${isReady ? " setup-ok-ready" : ""}`} onClick={handleOk} disabled={!isReady}>
           {okLabel}
         </button>
+        {isReady && (
+          <div className="setup-ticker-wrap">
+            <span className="setup-ticker-text">
+              Bitte gebt keine Fake-Breaks ein, da alle Eingaben in der Datenbank gespeichert werden! Vielen Dank und viel Spass!
+            </span>
+          </div>
+        )}
       </div>
 
       {showBestOfInfo && (

@@ -205,7 +205,7 @@ export function BreakDetailsDialog({
               <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleBall}>Ball</button>
               <div style={{ display: "flex", gap: "0.5vw" }}>
                 {BALL_COLORS.map((b) => (
-                  <button key={b.id} onClick={() => { if (!ballOn) setBallOn(true); setBall((c) => toggle(c, b.id)); }} style={{
+                  <button key={b.id} onClick={() => { const next = ball === b.id ? null : b.id; setBall(next); setBallOn(next !== null); }} style={{
                     background: ball === b.id ? b.bg : "transparent",
                     border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
                     borderRadius: "50%",
