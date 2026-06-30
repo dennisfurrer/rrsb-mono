@@ -766,31 +766,36 @@ div { font-weight: bold; }
 
 .setup-bestof-buttons {
   flex: 0 0 auto;
-  min-height: 11vh;
+  min-height: 7vh;
   display: flex;
+  border: 2px solid #1a4a6a;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0a1520;
 }
 
 .setup-bestof-buttons button {
   flex: 18;
-  background: #252525;
-  color: #aaa;
-  border: 1px solid #333;
+  background: #0d1e30;
+  color: #44aadd;
+  border: none;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 3.5vw;
-  transition: box-shadow 0.2s, filter 0.2s;
+  font-weight: 900;
+  font-size: 3vw;
+  transition: background 0.15s, filter 0.15s;
 }
 
 .setup-bestof-buttons button:hover {
-  box-shadow: 0 0 12px rgba(200,200,200,0.45), 0 0 22px rgba(200,200,200,0.15);
-  filter: brightness(1.18);
+  background: #162840;
+  filter: brightness(1.3);
 }
 
-.setup-bestof-buttons button.bestof-single { background: #252525; }
-.setup-bestof-buttons button.bestof-double { background: #1e1e1e; }
+.setup-bestof-buttons button.bestof-single { background: #0d1e30; }
+.setup-bestof-buttons button.bestof-double { background: #0d1e30; }
 
 .setup-bestof-buttons button:active {
-  background: #383838;
+  background: #1a3a55;
+  filter: brightness(1.5);
 }
 
 .setup-bestof-value {
@@ -798,12 +803,14 @@ div { font-weight: bold; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: #fff;
-  background: #2a2a2a;
-  border: 1px solid #333;
-  cursor: default;
-  font-size: 4.5vw;
+  font-weight: 900;
+  color: #44aadd;
+  background: #0a1520;
+  border-left: 1px solid #1a4a6a;
+  border-right: 1px solid #1a4a6a;
+  cursor: pointer;
+  font-size: 4vw;
+  text-shadow: 0 0 14px rgba(68,170,221,0.6);
 }
 
 .setup-assignment-banner {
@@ -864,57 +871,76 @@ div { font-weight: bold; }
 
 .setup-ok {
   flex: 0 0 auto;
-  min-height: 11vh;
+  min-height: 10vh;
   width: 100%;
-  background: #1a3a1a;
+  background: linear-gradient(135deg, #0d2a0d 0%, #1a3a1a 50%, #0d2a0d 100%);
   color: #4ade80;
-  border: 1px solid #2a5a2a;
+  border: 2px solid #2a5a2a;
+  border-radius: 14px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 3.5vw;
-  transition: box-shadow 0.2s, filter 0.2s, background 0.15s;
+  font-weight: 900;
+  font-size: 3.2vw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: box-shadow 0.2s, filter 0.2s;
 }
 
 .setup-ok-ready {
-  animation: setup-ok-pulse 2s ease-in-out infinite;
+  background: linear-gradient(135deg, #0a2a0a 0%, #1a5a1a 30%, #33aa55 50%, #1a5a1a 70%, #0a2a0a 100%);
+  background-size: 250% 100%;
+  color: #7dffa8;
+  border-color: #4ade80;
+  box-shadow: 0 0 18px rgba(74,222,128,0.4);
+  text-shadow: 0 0 18px rgba(74,222,128,0.6);
+  animation: setup-ok-shimmer 4s linear infinite;
 }
 .setup-ok-ready:active {
   animation: none;
 }
-@keyframes setup-ok-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(74,222,128,0.3); border-color: #2a5a2a; }
-  50%       { box-shadow: 0 0 26px rgba(74,222,128,0.8), 0 0 48px rgba(74,222,128,0.3); border-color: #4ade80; }
+@keyframes setup-ok-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
 .setup-ok:not(:disabled):hover {
-  background: #1f4a1f;
-  box-shadow: 0 0 20px rgba(74,222,128,0.65), 0 0 38px rgba(74,222,128,0.25);
-  filter: brightness(1.18);
+  box-shadow: 0 0 25px rgba(74,222,128,0.7), 0 0 45px rgba(74,222,128,0.3);
+  filter: brightness(1.2);
 }
 
 .setup-ok:not(:disabled):active {
-  box-shadow: 0 0 32px rgba(74,222,128,0.9), 0 0 56px rgba(74,222,128,0.4);
-  filter: brightness(1.35);
+  box-shadow: 0 0 40px rgba(74,222,128,1), 0 0 70px rgba(74,222,128,0.45);
+  filter: brightness(1.4);
 }
 
 .setup-ok:disabled {
-  background: #3a1010;
+  background: linear-gradient(135deg, #2a0a0a, #3a1010);
   color: #ff5555;
-  border-color: #6a2020;
+  border-color: #5a1818;
+  border-radius: 14px;
   cursor: not-allowed;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .setup-ticker-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  padding: 0.4vh 0;
+  padding: 0.5vh 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 10;
 }
 .setup-ticker-text {
   display: inline-block;
-  color: #ffee44;
   font-size: 1.6vw;
   font-weight: 600;
+  background: linear-gradient(to bottom, #ffee44, #ff8800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   animation: setup-ticker 18s linear infinite;
 }
 @keyframes setup-ticker {

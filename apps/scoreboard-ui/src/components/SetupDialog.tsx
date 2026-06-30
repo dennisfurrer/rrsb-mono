@@ -292,13 +292,13 @@ export function SetupDialog({
   const isPractice2 = name2 === PRACTICE_MODE_VALUE;
 
   const groupBox: React.CSSProperties = {
-    background: "#161616",
-    border: "1px solid #555",
-    borderRadius: "10px",
-    padding: "1.4vh 1.4vw",
+    background: "linear-gradient(160deg, #1a1a1a 0%, #131313 100%)",
+    border: "1px solid #2e2e2e",
+    borderRadius: "12px",
+    padding: "1.1vh 1.3vw",
     display: "flex",
     flexDirection: "column",
-    gap: "0.9vh",
+    gap: "0.7vh",
   };
 
   const groupLabel: React.CSSProperties = {
@@ -306,6 +306,10 @@ export function SetupDialog({
     marginTop: 0,
     paddingTop: 0,
   };
+
+  const sectionLabel = (text: string, color: string): React.ReactNode => (
+    <span style={{ color, fontSize: "0.95vw", fontWeight: "bold", letterSpacing: "0.1em", textTransform: "uppercase" }}>{text}</span>
+  );
 
   return (
     <div className="setup-overlay">
@@ -336,57 +340,96 @@ export function SetupDialog({
           </div>
         )}
 
-        {/* Group 1: Spieler nebeneinander */}
-        <div style={{ ...groupBox, flexDirection: "row", gap: "1.5vw" }}>
-          {/* Spieler 1 */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.9vh" }}>
-            <div className="setup-player-header setup-player1-header" style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
-              Spieler 1:
-              <button
-                onClick={(e) => { e.stopPropagation(); setShowPlayerInfo(true); }}
-                type="button"
-                className="setup-info-btn"
-                style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-              >
-                ?
-              </button>
+        {/* Group 1: Spielerkarten */}
+        <div style={{ display: "flex", gap: "1vw", alignItems: "stretch" }}>
+
+          {/* Spieler 1 – Blau */}
+          <div style={{
+            flex: 1,
+            background: "linear-gradient(160deg, #0d1a30 0%, #0a1220 100%)",
+            border: `2px solid ${name1 ? "#2255cc" : "#1a2a4a"}`,
+            borderRadius: "14px",
+            padding: "1.4vh 1.3vw",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1vh",
+            transition: "border-color 0.2s",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+              <span style={{ color: "#4488ff", fontSize: "1vw", fontWeight: "bold", letterSpacing: "0.12em", textTransform: "uppercase", flex: 1 }}>Spieler 1</span>
+              <button onClick={(e) => { e.stopPropagation(); setShowPlayerInfo(true); }} type="button" style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2vw", height: "2vw", fontSize: "1.1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}>?</button>
             </div>
-            <div className="setup-player-btn-row">
-              {name1 && <div style={{ width: "3.8vw", flexShrink: 0 }} />}
-              <button className="setup-player-pick-btn" onClick={() => setPicking(1)}>
-                {name1 || "Spieler wählen…"}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", flex: 1, minHeight: "6.5vh" }}>
+              {(() => {
+                if (!name1) return null;
+                const p = players.find(x => x.name === name1);
+                if (p?.ioc?.toUpperCase() === "NIR") return <NorthernIrelandFlagIcon style={{ width: "3vw", height: "2.25vw", flexShrink: 0 }} />;
+                const f = p?.ioc ? iocToFlag(p.ioc) : "";
+                return f
+                  ? <span style={{ fontSize: "3.5vw", lineHeight: 1, flexShrink: 0 }}>{f}</span>
+                  : <span style={{ width: "3.5vw", display: "inline-block", flexShrink: 0, textAlign: "center", color: "#e0a030", fontWeight: "bold", fontSize: "2vw" }}>?</span>;
+              })()}
+              <span style={{ fontSize: name1 ? "1.9vw" : "1.4vw", fontWeight: "bold", color: name1 ? "#cce0ff" : "#2a3a4a", lineHeight: 1.2 }}>
+                {name1 || "Noch kein Spieler"}
+              </span>
+            </div>
+            <div style={{ display: "flex", gap: "0.5vw" }}>
+              <button className="setup-player-pick-btn" onClick={() => setPicking(1)} style={{ flex: 1, fontSize: "1.2vw", minHeight: "4.5vh", padding: "0.5vh 0.5vw", background: "#1a2a50", borderColor: "#2255aa", color: "#88aaff" }}>
+                {name1 ? "Ändern" : "Spieler wählen…"}
               </button>
               {name1 && <button className="setup-player-clear-btn" onClick={() => setName1("")}>✕</button>}
             </div>
           </div>
 
-          {/* Spieler 2 */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.9vh" }}>
-            <div
-              className={`setup-player-header ${isPractice2 ? "setup-practice-header" : "setup-player2-header"}`}
-              onClick={handleP2LabelClick}
-              style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}
-            >
-              {isPractice2 ? "Modus:" : "Spieler 2:"}
+          {/* VS */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "3.5vw", flexShrink: 0 }}>
+            <span style={{ color: "#444", fontSize: "1.8vw", fontWeight: "900", letterSpacing: "0.05em" }}>VS</span>
+          </div>
+
+          {/* Spieler 2 – Gold / Grün (Practice) */}
+          <div style={{
+            flex: 1,
+            background: isPractice2
+              ? "linear-gradient(160deg, #0d2010 0%, #091508 100%)"
+              : "linear-gradient(160deg, #201600 0%, #160e00 100%)",
+            border: `2px solid ${name2 ? (isPractice2 ? "#2a7a2a" : "#886600") : "#221800"}`,
+            borderRadius: "14px",
+            padding: "1.4vh 1.3vw",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1vh",
+            transition: "border-color 0.2s, background 0.3s",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }} onClick={handleP2LabelClick}>
+              <span style={{ color: isPractice2 ? "#4ade80" : "#ffcc00", fontSize: "1vw", fontWeight: "bold", letterSpacing: "0.12em", textTransform: "uppercase", flex: 1 }}>
+                {isPractice2 ? "Modus" : "Spieler 2"}
+              </span>
               {!isPractice2 && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowPlayer2Info(true); }}
-                  type="button"
-                  className="setup-info-btn"
-                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-                >
-                  ?
-                </button>
+                <button onClick={(e) => { e.stopPropagation(); setShowPlayer2Info(true); }} type="button" style={{ background: "#3a2a00", color: "#ffcc00", border: "1.5px solid #886600", borderRadius: "50%", width: "2vw", height: "2vw", fontSize: "1.1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}>?</button>
               )}
             </div>
-            <div className="setup-player-btn-row">
-              {name2 && <div style={{ width: "3.8vw", flexShrink: 0 }} />}
-              <button className="setup-player-pick-btn" onClick={() => setPicking(2)}>
-                {isPractice2 ? "SOLO TRAINING" : (name2 || "Spieler wählen…")}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.8vw", flex: 1, minHeight: "6.5vh" }}>
+              {(() => {
+                if (!name2 || isPractice2) return null;
+                const p = players.find(x => x.name === name2);
+                if (p?.ioc?.toUpperCase() === "NIR") return <NorthernIrelandFlagIcon style={{ width: "3vw", height: "2.25vw", flexShrink: 0 }} />;
+                const f = p?.ioc ? iocToFlag(p.ioc) : "";
+                return f
+                  ? <span style={{ fontSize: "3.5vw", lineHeight: 1, flexShrink: 0 }}>{f}</span>
+                  : <span style={{ width: "3.5vw", display: "inline-block", flexShrink: 0, textAlign: "center", color: "#e0a030", fontWeight: "bold", fontSize: "2vw" }}>?</span>;
+              })()}
+              <span style={{ fontSize: (name2 || isPractice2) ? "1.9vw" : "1.4vw", fontWeight: "bold", color: isPractice2 ? "#4ade80" : (name2 ? "#fff4cc" : "#2a2000"), lineHeight: 1.2 }}>
+                {isPractice2 ? "SOLO TRAINING" : (name2 || "Noch kein Spieler")}
+              </span>
+            </div>
+            <div style={{ display: "flex", gap: "0.5vw" }}>
+              <button className="setup-player-pick-btn" onClick={() => setPicking(2)} style={{ flex: 1, fontSize: "1.2vw", minHeight: "4.5vh", padding: "0.5vh 0.5vw", background: isPractice2 ? "#0d2a10" : "#302000", borderColor: isPractice2 ? "#2a7a2a" : "#886600", color: isPractice2 ? "#4ade80" : "#ffcc00" }}>
+                {name2 ? "Ändern" : "Spieler wählen…"}
               </button>
               {name2 && <button className="setup-player-clear-btn" onClick={() => setName2("")}>✕</button>}
             </div>
           </div>
+
         </div>
 
         {isPractice && (
@@ -403,17 +446,15 @@ export function SetupDialog({
           <>
             {/* Group 2: Matchart (links, immer) + Rote zu Beginn (rechts, nur ballbyball) */}
             <div style={{ ...groupBox, flexDirection: "row", gap: "1.5vw" }}>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.9vh" }}>
-                <div className="setup-bestof-label" style={{ ...groupLabel, flexDirection: "row", gap: "0.8vw" }}>
-                  <span>Matchart:</span>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.6vh" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                  {sectionLabel("Matchart", "#ffaa44")}
                   <button
                     onClick={(e) => { e.stopPropagation(); setShowMatchTypeInfo(true); }}
                     type="button"
                     className="setup-info-btn"
-                    style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-                  >
-                    ?
-                  </button>
+                    style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "1.8vw", height: "1.8vw", fontSize: "1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                  >?</button>
                 </div>
                 <div style={{ position: "relative", flex: 1 }}>
                   <button
@@ -422,13 +463,13 @@ export function SetupDialog({
                     className="setup-matchtype-btn"
                     style={{
                       width: "100%",
-                      minHeight: "9vh",
-                      fontSize: "1.55vw",
+                      minHeight: "7vh",
+                      fontSize: "1.45vw",
                       fontWeight: "bold",
                       background: "#1e1e1e",
-                      color: "#ddd",
-                      border: "1px solid #555",
-                      borderRadius: "4px",
+                      color: "#ffaa44",
+                      border: "1px solid #443322",
+                      borderRadius: "8px",
                       cursor: "pointer",
                       fontFamily: "inherit",
                       textAlign: "center",
@@ -439,7 +480,7 @@ export function SetupDialog({
                     }}
                   >
                     <span>{matchType}</span>
-                    <span style={{ fontSize: "1vw", color: "#666" }}>▼</span>
+                    <span style={{ fontSize: "0.9vw", color: "#886633" }}>▼</span>
                   </button>
                   {showMatchTypePicker && (
                     <div
@@ -506,19 +547,17 @@ export function SetupDialog({
                   )}
                 </div>
               </div>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.9vh" }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.6vh" }}>
                 {inputMode === "ballbyball" && (
                   <>
-                    <div className="setup-bestof-label" style={{ ...groupLabel, flexDirection: "row", gap: "0.8vw" }}>
-                      <span>Rote zu Beginn:</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                      {sectionLabel("Rote zu Beginn", "#dd4444")}
                       <button
                         onClick={(e) => { e.stopPropagation(); setShowRedsInfo(true); }}
                         type="button"
                         className="setup-info-btn"
-                    style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-                      >
-                        ?
-                      </button>
+                        style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "1.8vw", height: "1.8vw", fontSize: "1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                      >?</button>
                     </div>
                     <div style={{ display: "flex", gap: "0.5vw", flex: 1 }}>
                       {REDS_OPTIONS.map((n) => (
@@ -528,13 +567,15 @@ export function SetupDialog({
                           className="setup-reds-btn"
                           style={{
                             flex: 1,
-                            fontSize: "2vw",
+                            fontSize: "1.8vw",
                             fontWeight: "bold",
-                            minHeight: "9vh",
-                            border: "1px solid " + (redsCount === n ? "#4a3010" : "#2a2a2a"),
+                            minHeight: "7vh",
+                            border: "1px solid " + (redsCount === n ? "#662222" : "#222"),
+                            borderBottom: redsCount === n ? "2.5px solid #dd4444" : "1px solid #222",
+                            borderRadius: "8px",
                             cursor: "pointer",
-                            background: redsCount === n ? "#2a1e0a" : "#1e1e1e",
-                            color: redsCount === n ? "#ffaa44" : "#555",
+                            background: redsCount === n ? "#2a0e0e" : "#1a1a1a",
+                            color: redsCount === n ? "#ff6655" : "#444",
                             transition: "all 0.15s",
                           }}
                         >
@@ -549,16 +590,14 @@ export function SetupDialog({
 
             {/* Group 3: Break-Eingabe */}
             <div style={groupBox}>
-              <div className="setup-bestof-label" style={{ ...groupLabel, flexDirection: "row", gap: "0.8vw" }}>
-                <span>Break-Eingabe:</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                {sectionLabel("Break-Eingabe", "#aa88ff")}
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowBreakModeInfo(true); }}
                   type="button"
                   className="setup-info-btn"
-                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-                >
-                  ?
-                </button>
+                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "1.8vw", height: "1.8vw", fontSize: "1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                >?</button>
               </div>
               <div style={{ display: "flex", gap: "0.5vw" }}>
                 {(["break", "ballbyball"] as const).map((mode) => (
@@ -568,13 +607,15 @@ export function SetupDialog({
                     className="setup-mode-btn"
                     style={{
                       flex: 1,
-                      fontSize: "1.8vw",
+                      fontSize: "1.6vw",
                       fontWeight: "bold",
-                      minHeight: "9vh",
-                      border: "1px solid " + (inputMode === mode ? "#2a5a2a" : "#2a2a2a"),
+                      minHeight: "7vh",
+                      border: "1px solid " + (inputMode === mode ? "#3a2a66" : "#222"),
+                      borderBottom: inputMode === mode ? "2.5px solid #aa88ff" : "1px solid #222",
+                      borderRadius: "8px",
                       cursor: "pointer",
-                      background: inputMode === mode ? "#1a3a1a" : "#1e1e1e",
-                      color: inputMode === mode ? "#4ade80" : "#555",
+                      background: inputMode === mode ? "#1a1230" : "#1a1a1a",
+                      color: inputMode === mode ? "#aa88ff" : "#444",
                       transition: "all 0.15s",
                     }}
                   >
@@ -586,16 +627,14 @@ export function SetupDialog({
 
             {/* Group 4: Best of frames */}
             <div style={groupBox}>
-              <div className="setup-bestof-label" style={{ ...groupLabel, flexDirection: "row", gap: "0.8vw" }}>
-                <span>Best of frames:</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                {sectionLabel("Best of Frames", "#44aadd")}
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowBestOfInfo(true); }}
                   type="button"
                   className="setup-info-btn"
-                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "2.2vw", height: "2.2vw", fontSize: "1.2vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
-                >
-                  ?
-                </button>
+                  style={{ background: "#1a3a6a", color: "#66aaff", border: "1.5px solid #3366aa", borderRadius: "50%", width: "1.8vw", height: "1.8vw", fontSize: "1vw", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, lineHeight: 1 }}
+                >?</button>
               </div>
               <div className="setup-bestof-buttons">
                 <button
@@ -606,7 +645,7 @@ export function SetupDialog({
                 </button>
                 <div
                   className="setup-bestof-value"
-                  style={{ cursor: "pointer", textDecoration: "underline dotted #555" }}
+                  style={{ cursor: "pointer" }}
                   onClick={() => { setNumpadDisplay(""); setShowBestOfNumpad(true); }}
                   title="Direkt eingeben"
                 >
@@ -631,13 +670,12 @@ export function SetupDialog({
         <button className={`setup-ok${isReady ? " setup-ok-ready" : ""}`} onClick={handleOk} disabled={!isReady}>
           {okLabel}
         </button>
-        {isReady && (
-          <div className="setup-ticker-wrap">
-            <span className="setup-ticker-text">
-              Bitte gebt keine Fake-Breaks ein, da alle Eingaben in der Datenbank gespeichert werden! Vielen Dank und viel Spass!
-            </span>
-          </div>
-        )}
+      </div>
+
+      <div className="setup-ticker-wrap">
+        <span className="setup-ticker-text">
+          Fair Play bitte – <span style={{ color: "#ff4444", WebkitTextFillColor: "#ff4444" }}>keine Fake-Breaks</span> eingeben! Alle Eingaben werden gespeichert. Guet Stoss!
+        </span>
       </div>
 
       {showBestOfInfo && (
