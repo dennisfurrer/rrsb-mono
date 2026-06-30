@@ -38,7 +38,7 @@ function SnookerTablePicker({ pocket, onToggle, pocketLabel }: { pocket: Pocket 
       <div style={{ textAlign: "center", color: "#ffcc00", fontSize: "1.1vw", minHeight: "1.6vw" }}>
         {pocketLabel ?? ""}
       </div>
-      <svg viewBox="-14 -14 468 218" preserveAspectRatio="xMidYMid meet" style={{ width: "100%", maxHeight: "18.2vh", display: "block" }}>
+      <svg viewBox="-14 -14 468 218" preserveAspectRatio="xMidYMid meet" style={{ width: "100%", maxHeight: "30vh", display: "block" }}>
         <rect x={0} y={0} width={440} height={190} rx={8} fill="#5a3010" />
         <rect x={14} y={14} width={412} height={162} fill="#1e7828" />
         <line x1={baulkX} y1={14} x2={baulkX} y2={176} stroke="rgba(255,255,255,0.4)" strokeWidth={2.25} />
@@ -175,93 +175,97 @@ export function BreakDetailsDialog({
           <span className="break-details-header-player">— {playerName}</span>
         </div>
 
-        <div className="break-details-section" style={{ position: "relative", zIndex: 10 }}>
-          <div className="break-details-section-label">
-            Fehlerursache</div>
-          <div style={{ position: "relative" }}>
-            <div className="break-details-pills">
-              <button
-                className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`}
-                onClick={toggleDistanz}
-              >Distanz</button>
-              <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", position: "relative" }}>
-                <button
-                  className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`}
-                  style={{ flex: "none", width: ballButtonWidth ?? "100%" }}
-                  onClick={toggleBall}
-                >Ball</button>
-                {/* Unsichtbarer Platzhalter — erzwingt Wrapper-Breite = Ball-Reihe */}
-                <div ref={ballSizerRef} style={{ height: 0, overflow: "visible", visibility: "hidden", pointerEvents: "none", display: "flex", gap: "0.5vw", flexShrink: 0 }}>
+        <div className="break-details-section" style={{ flex: "0 0 auto" }}>
+          <div className="break-details-section-label">Fehlerursache</div>
+          <div style={{ display: "flex", gap: "0.8vw", alignItems: "flex-start" }}>
+
+            {/* Distanz-Karte */}
+            <div style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.6vh",
+              border: `1.5px solid ${distanzOn ? "#55cc33" : "#333"}`,
+              borderRadius: "8px",
+              padding: "0.5vh 0.7vw",
+              background: distanzOn ? "rgba(40,80,15,0.35)" : "transparent",
+              transition: "border-color 0.15s, background 0.15s",
+            }}>
+              <button className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleDistanz}>Distanz</button>
+              {distanzOn && (
+                <select ref={longSelectRef} className="break-long-select" style={{ margin: 0, width: "100%", alignSelf: "auto" }} value={longType ?? ""} onChange={(e) => setLongType((e.target.value || null) as LongType | null)}>
+                  {LONG_TYPES.map((l) => (<option key={l.id} value={l.id}>{l.label}</option>))}
+                </select>
+              )}
+            </div>
+
+            {/* Ball-Karte */}
+            <div style={{
+              flex: "0 0 auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.6vh",
+              border: `1.5px solid ${ballOn ? "#55cc33" : "#333"}`,
+              borderRadius: "8px",
+              padding: "0.5vh 0.7vw",
+              background: ballOn ? "rgba(40,80,15,0.35)" : "transparent",
+              transition: "border-color 0.15s, background 0.15s",
+            }}>
+              <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: ballButtonWidth ?? "100%" }} onClick={toggleBall}>Ball</button>
+              {/* Unsichtbarer Breitenplatzhalter */}
+              <div ref={ballSizerRef} style={{ height: 0, overflow: "hidden", display: "flex", gap: "0.5vw", flexShrink: 0 }}>
+                {BALL_COLORS.map((b) => (
+                  <div key={b.id} style={{ padding: "0.25vw", border: "2px solid transparent", borderRadius: "50%", flexShrink: 0, display: "flex" }}>
+                    <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
+                  </div>
+                ))}
+              </div>
+              {ballOn && (
+                <div style={{ display: "flex", gap: "0.5vw" }}>
                   {BALL_COLORS.map((b) => (
-                    <div key={b.id} style={{ padding: "0.25vw", border: "2px solid transparent", borderRadius: "50%", flexShrink: 0, display: "flex" }}>
+                    <button key={b.id} onClick={() => setBall((c) => toggle(c, b.id))} style={{
+                      background: ball === b.id ? b.bg : "transparent",
+                      border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
+                      borderRadius: "50%",
+                      padding: "0.25vw",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: ball === b.id ? `0 0 8px ${b.fg}88` : "none",
+                      flexShrink: 0,
+                    }}>
                       <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
-                    </div>
+                    </button>
                   ))}
                 </div>
-                {ballOn && (
-                  <div style={{ position: "absolute", top: "100%", left: 0, zIndex: 20, marginTop: "0.5vh", display: "flex", gap: "0.5vw" }}>
-                    {BALL_COLORS.map((b) => (
-                      <button
-                        key={b.id}
-                        onClick={() => setBall((c) => toggle(c, b.id))}
-                        style={{
-                          background: ball === b.id ? b.bg : "transparent",
-                          border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
-                          borderRadius: "50%",
-                          padding: "0.25vw",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          boxShadow: ball === b.id ? `0 0 8px ${b.fg}88` : "none",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <button
-                className={`break-pill break-pill-miss break-pill-foul ${foulOn ? "selected" : ""}`}
-                onClick={toggleFoul}
-              >Foul</button>
+              )}
             </div>
-            {distanzOn && (
-              <div style={{ position: "absolute", top: "100%", left: 0, zIndex: 20, marginTop: "0.4vh" }}>
-                <select
-                  ref={longSelectRef}
-                  className="break-long-select"
-                  style={{ margin: 0 }}
-                  value={longType ?? ""}
-                  onChange={(e) => setLongType((e.target.value || null) as LongType | null)}
-                >
-                  {LONG_TYPES.map((l) => (
-                    <option key={l.id} value={l.id}>{l.label}</option>
-                  ))}
+
+            {/* Foul-Karte */}
+            <div style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.6vh",
+              border: `1.5px solid ${foulOn ? "#cc3333" : "#333"}`,
+              borderRadius: "8px",
+              padding: "0.5vh 0.7vw",
+              background: foulOn ? "rgba(80,15,15,0.4)" : "transparent",
+              transition: "border-color 0.15s, background 0.15s",
+            }}>
+              <button className={`break-pill break-pill-miss break-pill-foul ${foulOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleFoul}>Foul</button>
+              {foulOn && (
+                <select ref={foulSelectRef} className="break-foul-select" style={{ margin: 0, width: "100%", alignSelf: "auto" }} value={foulType ?? ""} onChange={(e) => setFoulType((e.target.value || null) as FoulType | null)}>
+                  {FOUL_TYPES.map((f) => (<option key={f.id} value={f.id}>{f.label}</option>))}
                 </select>
-              </div>
-            )}
-            {foulOn && (
-              <div style={{ position: "absolute", top: "100%", right: 0, zIndex: 20, marginTop: "0.4vh" }}>
-                <select
-                  ref={foulSelectRef}
-                  className="break-foul-select"
-                  style={{ margin: 0, alignSelf: "auto" }}
-                  value={foulType ?? ""}
-                  onChange={(e) => setFoulType((e.target.value || null) as FoulType | null)}
-                >
-                  {FOUL_TYPES.map((f) => (
-                    <option key={f.id} value={f.id}>{f.label}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+              )}
+            </div>
+
           </div>
         </div>
 
-        <div className="break-details-section" style={{ flex: 2 }}>
+        <div className="break-details-section" style={{ flex: 1 }}>
           <div className="break-details-section-label">Welches Loch?</div>
           <SnookerTablePicker
             pocket={pocket}

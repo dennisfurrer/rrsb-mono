@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import {
   BALL_COLORS,
   FOUL_TYPES,
+  LONG_TYPES,
   MISS_TYPES,
   POCKETS,
   routineById,
   type BallColor,
   type BreakAttempt,
   type FoulType,
+  type LongType,
   type MissType,
   type Pocket,
   type SoloRoutineId,
@@ -84,7 +86,7 @@ export function MultiEntryDialog({
 
   const addBreak = (
     value: number,
-    details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket }
   ) => {
     setPending((p) => [
       ...p,
@@ -93,6 +95,7 @@ export function MultiEntryDialog({
         value,
         missType: details?.missType,
         foulType: details?.foulType,
+        longType: details?.longType,
         ball: details?.ball,
         pocket: details?.pocket,
         timestamp: Date.now(),
@@ -517,11 +520,9 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
     count: breaks.filter((b) => b.ball === bc.id).length,
   })).filter((x) => x.count > 0);
 
-  const pocketCounts: { label: string; side: "yellow" | "green"; blackSpot: boolean; hasS: boolean; count: number }[] = POCKETS.map((p) => ({
-    label: p.label,
-    side: p.side,
-    blackSpot: p.blackSpot,
-    hasS: p.blackSpot || p.id.startsWith("middle"),
+  const pocketCounts: { num: number; fullLabel: string; count: number }[] = POCKETS.map((p) => ({
+    num: p.num,
+    fullLabel: p.fullLabel,
     count: breaks.filter((b) => b.pocket === p.id).length,
   })).filter((x) => x.count > 0);
 
@@ -631,12 +632,7 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
                   <div className="stats-detail-group-label">Loch</div>
                   {pocketCounts.map((x, i) => (
                     <div className="stats-detail-row" key={i}>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.3em" }}>
-                        {x.label}
-                        {x.blackSpot && <BallDot color={BALL_ICON_COLOR.black} label="Schwarz" />}
-                        {x.hasS && <span>s.</span>}
-                        <BallDot color={BALL_ICON_COLOR[x.side]} label={x.side === "yellow" ? "Gelb" : "Grün"} />
-                      </span>
+                      <span>{x.num} – {x.fullLabel}</span>
                       <span>{x.count}</span>
                     </div>
                   ))}
@@ -687,13 +683,16 @@ function PendingRow({ attempt, index, isClearanceCandidate, seriesMode, onCleara
     );
   }
   const tags: string[] = [];
-  if (attempt.missType) {
+  if (attempt.missType === "foul") {
+    const f = attempt.foulType ? FOUL_TYPES.find((x) => x.id === attempt.foulType) : null;
+    tags.push(f ? `Foul – ${f.label}` : "Foul");
+  } else if (attempt.missType) {
     const m = MISS_TYPES.find((x) => x.id === attempt.missType);
     if (m) tags.push(m.label);
   }
-  if (attempt.foulType) {
-    const f = FOUL_TYPES.find((x) => x.id === attempt.foulType);
-    if (f) tags.push(f.label);
+  if (attempt.longType) {
+    const l = LONG_TYPES.find((x) => x.id === attempt.longType);
+    if (l) tags.push(l.label);
   }
   if (attempt.ball) {
     const b = BALL_COLORS.find((x) => x.id === attempt.ball);
@@ -701,7 +700,7 @@ function PendingRow({ attempt, index, isClearanceCandidate, seriesMode, onCleara
   }
   if (attempt.pocket) {
     const p = POCKETS.find((x) => x.id === attempt.pocket);
-    if (p) tags.push(p.fullLabel);
+    if (p) tags.push(`${p.num} – ${p.fullLabel}`);
   }
   return (
     <div className="multi-entry-row-content">
@@ -710,7 +709,11 @@ function PendingRow({ attempt, index, isClearanceCandidate, seriesMode, onCleara
       <span className="me-row-label" style={{ color: "#4ade80" }}>{seriesMode ? "Serie" : "Break"}</span>
       <span className="me-row-value">{attempt.value}</span>
       {tags.length > 0 && (
-        <span className="me-row-tags">({tags.join(", ")})</span>
+        <span className="me-row-tags">
+          ({tags.map((tag, i) => (
+            <span key={i}>{i > 0 && <span style={{ margin: "0 0.4em" }}>•</span>}{tag}</span>
+          ))})
+        </span>
       )}
       {attempt.clearance ? (
         <span className="me-row-clearance-tag">★ Clearance</span>

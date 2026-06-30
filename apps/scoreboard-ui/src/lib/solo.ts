@@ -59,6 +59,7 @@ export const SOLO_ROUTINES: SoloRoutine[] = [
     name: "Farben endlos",
     description: "Farben auf Spots von gelb bis schwarz abräumen und von schwarz wieder auf gelb stellen und weiter abräumen.",
     mode: "break",
+    explanation: "• Alle Farben auf die Spots\n• Weiss zu Beginn 1x frei setzen\n• Farben ab Gelb der Reihe nach abräumen\n• Von Schwarz die Weisse wieder auf Gelb stellen\n• Weiss bleibt dort liegen\n• Alle Farben wieder aufsetzen und ab Gelb weiter abräumen\n• Alle Punkte entsprechend ihrer Farbe werden gezählt\n• Wird verschossen, Break aufschreiben & Übung neu starten",
   },
   {
     id: "zigzak",
@@ -90,13 +91,26 @@ export type BallColor =
 
 export type MissType = "long" | "easy" | "difficult" | "position" | "foul";
 
+export type LongType =
+  | "ball-easy-long"
+  | "ball-easy-medium"
+  | "ball-easy-short"
+  | "ball-difficult-long"
+  | "ball-difficult-medium"
+  | "ball-difficult-short";
+
 export type FoulType =
   | "white-potted"
+  | "white-potted-unlucky"
   | "wrong-ball-hit"
+  | "wrong-ball-potted"
   | "no-ball-hit"
   | "white-off-table"
   | "clothing-foul"
-  | "cue-foul";
+  | "cue-foul"
+  | "miscue"
+  | "from-snooker"
+  | "equipment-foul";
 
 export type Pocket =
   | "corner-yellow"
@@ -116,30 +130,42 @@ export const BALL_COLORS: { id: BallColor; label: string; bg: string; fg: string
   { id: "black", label: "Schwarz", bg: "#1a1a1a", fg: "#cccccc" },
 ];
 
+export const LONG_TYPES: { id: LongType; label: string }[] = [
+  { id: "ball-easy-long",      label: "Ball einfach lang" },
+  { id: "ball-easy-medium",    label: "Ball einfach halblang" },
+  { id: "ball-easy-short",     label: "Ball einfach kurz" },
+  { id: "ball-difficult-long",   label: "Ball schwierig lang" },
+  { id: "ball-difficult-medium", label: "Ball schwierig halblang" },
+  { id: "ball-difficult-short",  label: "Ball schwierig kurz" },
+];
+
 export const MISS_TYPES: { id: MissType; label: string }[] = [
-  { id: "long", label: "Lange" },
-  { id: "easy", label: "Einfache" },
-  { id: "difficult", label: "Schwierige" },
-  { id: "position", label: "Position" },
+  { id: "long", label: "Distanz" },
+  { id: "easy", label: "Ball" },
   { id: "foul", label: "Foul" },
 ];
 
 export const FOUL_TYPES: { id: FoulType; label: string }[] = [
-  { id: "white-off-table", label: "Ball vom Tisch" },
-  { id: "cue-foul", label: "Cue-Foul" },
-  { id: "wrong-ball-hit", label: "Falscher Ball berührt" },
-  { id: "no-ball-hit", label: "Kein Ball getroffen" },
-  { id: "clothing-foul", label: "Kleiderfoul" },
-  { id: "white-potted", label: "Weiss gelocht" },
+  { id: "from-snooker",         label: "aus Snooker" },
+  { id: "white-off-table",      label: "Ball vom Tisch" },
+  { id: "cue-foul",             label: "Cue-Foul" },
+  { id: "wrong-ball-hit",       label: "Falscher Ball getroffen" },
+  { id: "wrong-ball-potted",    label: "Falscher Ball fiel" },
+  { id: "equipment-foul",       label: "Hilfsgeräte-Foul" },
+  { id: "no-ball-hit",          label: "Kein Ball getroffen" },
+  { id: "clothing-foul",        label: "Kleiderfoul" },
+  { id: "miscue",               label: "Miscue" },
+  { id: "white-potted",         label: "Weiss fiel (direkt)" },
+  { id: "white-potted-unlucky", label: "Weiss fiel (indirekt)" },
 ];
 
-export const POCKETS: { id: Pocket; label: string; side: "yellow" | "green"; blackSpot: boolean; fullLabel: string }[] = [
-  { id: "corner-yellow", label: "Ecke", side: "yellow", blackSpot: false, fullLabel: "Ecke gelb" },
-  { id: "corner-green", label: "Ecke", side: "green", blackSpot: false, fullLabel: "Ecke grün" },
-  { id: "middle-yellow", label: "Mitte", side: "yellow", blackSpot: false, fullLabel: "Mitte s. gelb" },
-  { id: "middle-green", label: "Mitte", side: "green", blackSpot: false, fullLabel: "Mitte s. grün" },
-  { id: "corner-black-yellow", label: "Ecke", side: "yellow", blackSpot: true, fullLabel: "Ecke schwarz s. gelb" },
-  { id: "corner-black-green", label: "Ecke", side: "green", blackSpot: true, fullLabel: "Ecke schwarz s. grün" },
+export const POCKETS: { id: Pocket; num: number; label: string; side: "yellow" | "green"; blackSpot: boolean; fullLabel: string }[] = [
+  { id: "corner-green",        num: 1, label: "Ecke",  side: "green",  blackSpot: false, fullLabel: "Ecke grün" },
+  { id: "middle-green",        num: 2, label: "Mitte", side: "green",  blackSpot: false, fullLabel: "Mitte s. grün" },
+  { id: "corner-black-green",  num: 3, label: "Ecke",  side: "green",  blackSpot: true,  fullLabel: "Ecke schwarz s. grün" },
+  { id: "corner-black-yellow", num: 4, label: "Ecke",  side: "yellow", blackSpot: true,  fullLabel: "Ecke schwarz s. gelb" },
+  { id: "middle-yellow",       num: 5, label: "Mitte", side: "yellow", blackSpot: false, fullLabel: "Mitte s. gelb" },
+  { id: "corner-yellow",       num: 6, label: "Ecke",  side: "yellow", blackSpot: false, fullLabel: "Ecke gelb" },
 ];
 
 export type BreakAttempt =
@@ -149,6 +175,7 @@ export type BreakAttempt =
       clearance?: boolean;
       missType?: MissType;
       foulType?: FoulType;
+      longType?: LongType;
       ball?: BallColor;
       pocket?: Pocket;
       timestamp: number;
