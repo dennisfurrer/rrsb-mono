@@ -1,14 +1,16 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import {
   BALL_COLORS,
   FOUL_TYPES,
-  MISS_TYPES,
+  LONG_TYPES,
   POCKETS,
   type BallColor,
   type FoulType,
+  type LongType,
   type MissType,
   type Pocket,
 } from "../lib/solo";
+
 
 const BALL_ICON_COLOR: Record<BallColor, string> = {
   red: "#dd2222",
@@ -19,6 +21,47 @@ const BALL_ICON_COLOR: Record<BallColor, string> = {
   pink: "#ff77b3",
   black: "#161616",
 };
+
+const TABLE_POCKETS: { id: Pocket; num: number; cx: number; cy: number }[] = [
+  { id: "corner-green",        num: 1, cx: 14,  cy: 14  },
+  { id: "middle-green",        num: 2, cx: 220, cy: 14  },
+  { id: "corner-black-green",  num: 3, cx: 426, cy: 14  },
+  { id: "corner-black-yellow", num: 4, cx: 426, cy: 176 },
+  { id: "middle-yellow",       num: 5, cx: 220, cy: 176 },
+  { id: "corner-yellow",       num: 6, cx: 14,  cy: 176 },
+];
+
+function SnookerTablePicker({ pocket, onToggle, pocketLabel }: { pocket: Pocket | null; onToggle: (p: Pocket) => void; pocketLabel?: string }) {
+  const baulkX = 117, midY = 95, dR = 25;
+  return (
+    <div style={{ width: "100%" }}>
+      <div style={{ textAlign: "center", color: "#ffcc00", fontSize: "1.1vw", minHeight: "1.6vw" }}>
+        {pocketLabel ?? ""}
+      </div>
+      <svg viewBox="-14 -14 468 218" preserveAspectRatio="xMidYMid meet" style={{ width: "100%", maxHeight: "18.2vh", display: "block" }}>
+        <rect x={0} y={0} width={440} height={190} rx={8} fill="#5a3010" />
+        <rect x={14} y={14} width={412} height={162} fill="#1e7828" />
+        <line x1={baulkX} y1={14} x2={baulkX} y2={176} stroke="rgba(255,255,255,0.4)" strokeWidth={2.25} />
+        <path d={`M ${baulkX} ${midY - dR} A ${dR} ${dR} 0 0 0 ${baulkX} ${midY + dR}`} fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth={2.25} />
+        <circle cx={baulkX} cy={midY - dR} r={6} fill="#27a84a" />
+        <circle cx={baulkX} cy={midY}       r={6} fill="#8b5e3c" />
+        <circle cx={baulkX} cy={midY + dR}  r={6} fill="#f0c020" />
+        <circle cx={220}    cy={midY}       r={6} fill="#2255cc" />
+        <circle cx={324}    cy={midY}       r={6} fill="#e060a0" />
+        <circle cx={393}    cy={midY}       r={6} fill="#222" stroke="#88888844" strokeWidth={1} />
+        {TABLE_POCKETS.map(({ id, num, cx, cy }) => {
+          const sel = pocket === id;
+          return (
+            <g key={id} onClick={() => onToggle(id)} style={{ cursor: "pointer" }}>
+              <circle cx={cx} cy={cy} r={28} fill={sel ? "#ffcc00" : "#0c0c0c"} stroke={sel ? "#ffcc00" : "#555"} strokeWidth={1.5} />
+              <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle" fontSize={22} fontWeight="bold" fill={sel ? "#000" : "#ddd"}>{num}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
 
 function BallDot({ color, label, size = "2.8vw" }: { color: string; label: string; size?: string }) {
   return (
@@ -36,6 +79,7 @@ interface Props {
   onSave: (details: {
     missType?: MissType;
     foulType?: FoulType;
+    longType?: LongType;
     ball?: BallColor;
     pocket?: Pocket;
   }) => void;
@@ -49,36 +93,69 @@ export function BreakDetailsDialog({
   onSave,
   onBack,
 }: Props) {
-  const [missType, setMissTypeRaw] = useState<MissType | null>(null);
-  const [foulType, setFoulType] = useState<FoulType | null>(null);
+  const [distanzOn, setDistanzOn] = useState(false);
+  const [longType, setLongType] = useState<LongType | null>(null);
+  const [ballOn, setBallOn] = useState(false);
   const [ball, setBall] = useState<BallColor | null>(null);
+  const [foulOn, setFoulOn] = useState(false);
+  const [foulType, setFoulType] = useState<FoulType | null>(null);
   const [pocket, setPocket] = useState<Pocket | null>(null);
   const foulSelectRef = useRef<HTMLSelectElement>(null);
+  const longSelectRef = useRef<HTMLSelectElement>(null);
+  const ballSizerRef = useRef<HTMLDivElement>(null);
+  const [ballButtonWidth, setBallButtonWidth] = useState<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    if (ballSizerRef.current) {
+      const w = ballSizerRef.current.getBoundingClientRect().width;
+      if (w > 0) setBallButtonWidth(`${w}px`);
+    }
+  });
 
   const toggle = <T,>(current: T | null, value: T): T | null =>
     current === value ? null : value;
 
-  const setMissType = (value: MissType) => {
-    setMissTypeRaw((c) => {
-      const next = toggle(c, value);
-      setFoulType(next === "foul" ? "white-potted" : null);
-      if (next === "foul") {
-        requestAnimationFrame(() => {
-          const el = foulSelectRef.current;
-          if (el && "showPicker" in el) {
-            try { (el as HTMLSelectElement & { showPicker: () => void }).showPicker(); } catch { /* unsupported */ }
-          }
-        });
-      }
-      return next;
-    });
+  const toggleDistanz = () => {
+    if (distanzOn) {
+      setDistanzOn(false);
+    } else {
+      setDistanzOn(true);
+      if (longType === null) setLongType("ball-easy-long");
+      requestAnimationFrame(() => {
+        const el = longSelectRef.current;
+        if (el && "showPicker" in el) {
+          try { (el as HTMLSelectElement & { showPicker: () => void }).showPicker(); } catch { /* unsupported */ }
+        }
+      });
+    }
+  };
+
+  const toggleBall = () => {
+    setBallOn((prev) => !prev);
+  };
+
+  const toggleFoul = () => {
+    if (foulOn) {
+      setFoulOn(false);
+    } else {
+      setFoulOn(true);
+      if (foulType === null) setFoulType("white-potted");
+      requestAnimationFrame(() => {
+        const el = foulSelectRef.current;
+        if (el && "showPicker" in el) {
+          try { (el as HTMLSelectElement & { showPicker: () => void }).showPicker(); } catch { /* unsupported */ }
+        }
+      });
+    }
   };
 
   const handleSave = () => {
+    const missType = foulOn ? "foul" : distanzOn ? "long" : ballOn ? "easy" : undefined;
     onSave({
-      missType: missType ?? undefined,
-      foulType: missType === "foul" ? foulType ?? undefined : undefined,
-      ball: ball ?? undefined,
+      missType,
+      foulType: foulOn ? foulType ?? undefined : undefined,
+      longType: distanzOn ? longType ?? undefined : undefined,
+      ball: ballOn ? ball ?? undefined : undefined,
       pocket: pocket ?? undefined,
     });
   };
@@ -98,83 +175,108 @@ export function BreakDetailsDialog({
           <span className="break-details-header-player">— {playerName}</span>
         </div>
 
-        <div className="break-details-section">
+        <div className="break-details-section" style={{ position: "relative", zIndex: 10 }}>
           <div className="break-details-section-label">
-            Wo war der Fehler?          </div>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <div className="break-details-pills" style={{ flex: "0 0 auto" }}>
-              {MISS_TYPES.map((m) => (
+            Fehlerursache</div>
+          <div style={{ position: "relative" }}>
+            <div className="break-details-pills">
+              <button
+                className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`}
+                onClick={toggleDistanz}
+              >Distanz</button>
+              <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", position: "relative" }}>
                 <button
-                  key={m.id}
-                  className={`break-pill break-pill-miss ${m.id === "foul" ? "break-pill-foul" : ""} ${missType === m.id ? "selected" : ""}`}
-                  onClick={() => setMissType(m.id)}
-                >
-                  {m.label}
-                </button>
-              ))}
+                  className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`}
+                  style={{ flex: "none", width: ballButtonWidth ?? "100%" }}
+                  onClick={toggleBall}
+                >Ball</button>
+                {/* Unsichtbarer Platzhalter — erzwingt Wrapper-Breite = Ball-Reihe */}
+                <div ref={ballSizerRef} style={{ height: 0, overflow: "visible", visibility: "hidden", pointerEvents: "none", display: "flex", gap: "0.5vw", flexShrink: 0 }}>
+                  {BALL_COLORS.map((b) => (
+                    <div key={b.id} style={{ padding: "0.25vw", border: "2px solid transparent", borderRadius: "50%", flexShrink: 0, display: "flex" }}>
+                      <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
+                    </div>
+                  ))}
+                </div>
+                {ballOn && (
+                  <div style={{ position: "absolute", top: "100%", left: 0, zIndex: 20, marginTop: "0.5vh", display: "flex", gap: "0.5vw" }}>
+                    {BALL_COLORS.map((b) => (
+                      <button
+                        key={b.id}
+                        onClick={() => setBall((c) => toggle(c, b.id))}
+                        style={{
+                          background: ball === b.id ? b.bg : "transparent",
+                          border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
+                          borderRadius: "50%",
+                          padding: "0.25vw",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: ball === b.id ? `0 0 8px ${b.fg}88` : "none",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                className={`break-pill break-pill-miss break-pill-foul ${foulOn ? "selected" : ""}`}
+                onClick={toggleFoul}
+              >Foul</button>
             </div>
-            {missType === "foul" && (
-              <select
-                ref={foulSelectRef}
-                className="break-foul-select"
-                value={foulType ?? ""}
-                onChange={(e) => setFoulType((e.target.value || null) as FoulType | null)}
-              >
-                {FOUL_TYPES.map((f) => (
-                  <option key={f.id} value={f.id}>{f.label}</option>
-                ))}
-              </select>
+            {distanzOn && (
+              <div style={{ position: "absolute", top: "100%", left: 0, zIndex: 20, marginTop: "0.4vh" }}>
+                <select
+                  ref={longSelectRef}
+                  className="break-long-select"
+                  style={{ margin: 0 }}
+                  value={longType ?? ""}
+                  onChange={(e) => setLongType((e.target.value || null) as LongType | null)}
+                >
+                  {LONG_TYPES.map((l) => (
+                    <option key={l.id} value={l.id}>{l.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {foulOn && (
+              <div style={{ position: "absolute", top: "100%", right: 0, zIndex: 20, marginTop: "0.4vh" }}>
+                <select
+                  ref={foulSelectRef}
+                  className="break-foul-select"
+                  style={{ margin: 0, alignSelf: "auto" }}
+                  value={foulType ?? ""}
+                  onChange={(e) => setFoulType((e.target.value || null) as FoulType | null)}
+                >
+                  {FOUL_TYPES.map((f) => (
+                    <option key={f.id} value={f.id}>{f.label}</option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
         </div>
 
-        <div className="break-details-section">
-          <div className="break-details-section-label">
-            Welcher Ball?          </div>
-          <div className="break-details-pills">
-            {BALL_COLORS.map((b) => (
-              <button
-                key={b.id}
-                className={`break-pill break-pill-ball ${ball === b.id ? "selected" : ""}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  ...(ball === b.id ? { background: b.bg, borderColor: b.fg } : {}),
-                }}
-                onClick={() => setBall((c) => toggle(c, b.id))}
-              >
-                <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} />
-              </button>
-            ))}
-          </div>
+        <div className="break-details-section" style={{ flex: 2 }}>
+          <div className="break-details-section-label">Welches Loch?</div>
+          <SnookerTablePicker
+            pocket={pocket}
+            onToggle={(p) => setPocket((c) => toggle(c, p))}
+            pocketLabel={pocket ? (() => { const p = POCKETS.find(x => x.id === pocket); return p ? `${p.num} – ${p.fullLabel}` : undefined; })() : undefined}
+          />
         </div>
 
-        <div className="break-details-section">
-          <div className="break-details-section-label">
-            Welches Loch?          </div>
-          <div className="break-details-pills">
-            {POCKETS.map((p) => (
-              <button
-                key={p.id}
-                className={`break-pill break-pill-pocket ${pocket === p.id ? "selected" : ""}`}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.3em" }}
-                onClick={() => setPocket((c) => toggle(c, p.id))}
-              >
-                {p.label}
-                {p.blackSpot && <BallDot color={BALL_ICON_COLOR.black} label="Schwarz" size="1.7vw" />}
-                <BallDot color={BALL_ICON_COLOR[p.side]} label={p.side === "yellow" ? "Gelb" : "Grün"} size="1.7vw" />
-              </button>
-            ))}
-          </div>
-        </div>
 
         <div className="break-details-actions">
           <button className="break-details-back" onClick={onBack}>
             Zurück
           </button>
           <button
-            className={`break-details-save ${missType || ball || pocket ? "frame-end-btn-glow" : ""}`}
+            className={`break-details-save ${distanzOn || ballOn || foulOn || ball || pocket ? "frame-end-btn-glow" : ""}`}
             onClick={handleSave}
           >
             Speichern
