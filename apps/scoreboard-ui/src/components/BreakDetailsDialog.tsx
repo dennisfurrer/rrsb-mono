@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState } from "react";
 import {
   BALL_COLORS,
   FOUL_TYPES,
@@ -102,15 +102,6 @@ export function BreakDetailsDialog({
   const [pocket, setPocket] = useState<Pocket | null>(null);
   const foulSelectRef = useRef<HTMLSelectElement>(null);
   const longSelectRef = useRef<HTMLSelectElement>(null);
-  const ballSizerRef = useRef<HTMLDivElement>(null);
-  const [ballButtonWidth, setBallButtonWidth] = useState<string | undefined>(undefined);
-
-  useLayoutEffect(() => {
-    if (ballSizerRef.current) {
-      const w = ballSizerRef.current.getBoundingClientRect().width;
-      if (w > 0) setBallButtonWidth(`${w}px`);
-    }
-  });
 
   const toggle = <T,>(current: T | null, value: T): T | null =>
     current === value ? null : value;
@@ -191,7 +182,7 @@ export function BreakDetailsDialog({
               background: distanzOn ? "rgba(40,80,15,0.35)" : "transparent",
               transition: "border-color 0.15s, background 0.15s",
             }}>
-              <button className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleDistanz}>Distanz</button>
+              <button className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleDistanz}>Ball-Distanz</button>
               {distanzOn && (
                 <select ref={longSelectRef} className="break-long-select" style={{ margin: 0, width: "100%", alignSelf: "auto" }} value={longType ?? ""} onChange={(e) => setLongType((e.target.value || null) as LongType | null)}>
                   {LONG_TYPES.map((l) => (<option key={l.id} value={l.id}>{l.label}</option>))}
@@ -211,35 +202,25 @@ export function BreakDetailsDialog({
               background: ballOn ? "rgba(40,80,15,0.35)" : "transparent",
               transition: "border-color 0.15s, background 0.15s",
             }}>
-              <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: ballButtonWidth ?? "100%" }} onClick={toggleBall}>Ball</button>
-              {/* Unsichtbarer Breitenplatzhalter */}
-              <div ref={ballSizerRef} style={{ height: 0, overflow: "hidden", display: "flex", gap: "0.5vw", flexShrink: 0 }}>
+              <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleBall}>Ball</button>
+              <div style={{ display: "flex", gap: "0.5vw" }}>
                 {BALL_COLORS.map((b) => (
-                  <div key={b.id} style={{ padding: "0.25vw", border: "2px solid transparent", borderRadius: "50%", flexShrink: 0, display: "flex" }}>
+                  <button key={b.id} onClick={() => { if (!ballOn) setBallOn(true); setBall((c) => toggle(c, b.id)); }} style={{
+                    background: ball === b.id ? b.bg : "transparent",
+                    border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
+                    borderRadius: "50%",
+                    padding: "0.25vw",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: ball === b.id ? `0 0 8px ${b.fg}88` : "none",
+                    flexShrink: 0,
+                  }}>
                     <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
-                  </div>
+                  </button>
                 ))}
               </div>
-              {ballOn && (
-                <div style={{ display: "flex", gap: "0.5vw" }}>
-                  {BALL_COLORS.map((b) => (
-                    <button key={b.id} onClick={() => setBall((c) => toggle(c, b.id))} style={{
-                      background: ball === b.id ? b.bg : "transparent",
-                      border: `2px solid ${ball === b.id ? b.fg : "#555"}`,
-                      borderRadius: "50%",
-                      padding: "0.25vw",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: ball === b.id ? `0 0 8px ${b.fg}88` : "none",
-                      flexShrink: 0,
-                    }}>
-                      <BallDot color={BALL_ICON_COLOR[b.id]} label={b.label} size="2.4vw" />
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
             {/* Foul-Karte */}
@@ -283,7 +264,7 @@ export function BreakDetailsDialog({
             className={`break-details-save ${distanzOn || ballOn || foulOn || ball || pocket ? "frame-end-btn-glow" : ""}`}
             onClick={handleSave}
           >
-            Speichern
+            Eintragen
           </button>
         </div>
       </div>

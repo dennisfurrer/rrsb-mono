@@ -66,6 +66,7 @@ import {
   type BallColor,
   type BreakAttempt,
   type FoulType,
+  type LongType,
   type MissType,
   type Pocket,
   type SoloRoutineId,
@@ -1516,7 +1517,7 @@ export function App() {
   const handleBreakSubmit = useCallback(
     (
       value: number,
-      details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
+      details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket }
     ) => {
       if (!soloSession || soloSession.mode !== "break") return;
       const attempt: BreakAttempt = {
@@ -1524,6 +1525,7 @@ export function App() {
         value,
         missType: details?.missType,
         foulType: details?.foulType,
+        longType: details?.longType,
         ball: details?.ball,
         pocket: details?.pocket,
         timestamp: Date.now(),

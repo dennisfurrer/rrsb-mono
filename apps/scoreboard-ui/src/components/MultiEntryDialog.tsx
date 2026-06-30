@@ -257,7 +257,7 @@ export function MultiEntryDialog({
           <div className="multi-entry-confirm">
             <div className="multi-entry-confirm-inner">
               <div className="multi-entry-confirm-text">
-                Einträge verwerfen und abbrechen?
+                Einträge verwerfen und ohne speichern abbrechen?
               </div>
               <div className="multi-entry-confirm-buttons">
                 <button
@@ -502,16 +502,18 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
         { label: "100+",     count: values.filter((v) => v >= 100).length },
       ];
 
-  const missTypeCounts: { label: string; count: number }[] = MISS_TYPES.filter((m) => m.id !== "foul").map((m) => ({
-    label: m.label,
-    count: breaks.filter((b) => b.missType === m.id).length,
-  })).filter((x) => x.count > 0);
-
   const foulTotal = breaks.filter((b) => b.missType === "foul").length;
 
   const foulTypeCounts: { label: string; count: number }[] = FOUL_TYPES.map((f) => ({
     label: f.label,
     count: breaks.filter((b) => b.foulType === f.id).length,
+  })).filter((x) => x.count > 0);
+
+  const distanzTotal = breaks.filter((b) => b.longType).length;
+
+  const longTypeCounts: { label: string; count: number }[] = LONG_TYPES.map((l) => ({
+    label: l.label,
+    count: breaks.filter((b) => b.longType === l.id).length,
   })).filter((x) => x.count > 0);
 
   const ballCounts: { id: BallColor; label: string; count: number }[] = BALL_COLORS.map((bc) => ({
@@ -526,7 +528,7 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
     count: breaks.filter((b) => b.pocket === p.id).length,
   })).filter((x) => x.count > 0);
 
-  const hasMissDetails = missTypeCounts.length > 0 || foulTotal > 0 || ballCounts.length > 0 || pocketCounts.length > 0;
+  const hasMissDetails = foulTotal > 0 || distanzTotal > 0 || ballCounts.length > 0 || pocketCounts.length > 0;
 
   return (
     <div className="stats-overlay" onClick={onClose}>
@@ -596,59 +598,85 @@ function SessionStatsPopup({ pending, seriesMode, redsCount, routineName, onClos
           <div className="stats-section">
             <div className="stats-section-title">Fehler-Details</div>
 
-            {foulTotal > 0 && (
-              <div className="stats-fouls-group">
-                <div className="stats-fouls-group-label">
-                  Fouls <span className="stats-fouls-group-total">{foulTotal}</span>
-                </div>
-                {foulTypeCounts.length > 0 && (
-                  <div className="stats-detail-grid">
-                    <div className="stats-detail-group">
-                      {foulTypeCounts.map((x) => (
-                        <div className="stats-detail-row" key={x.label}>
-                          <span>{x.label}</span><span>{x.count}</span>
-                        </div>
-                      ))}
+            {(foulTotal > 0 || distanzTotal > 0) && (
+              <div style={{ display: "flex", gap: "1vw", alignItems: "flex-start" }}>
+                {foulTotal > 0 && (
+                  <div className="stats-fouls-group" style={{ flex: 1, minWidth: 0 }}>
+                    <div className="stats-fouls-group-label">
+                      Fouls <span className="stats-fouls-group-total">{foulTotal}</span>
                     </div>
+                    {foulTypeCounts.length > 0 && (
+                      <div className="stats-detail-grid">
+                        <div className="stats-detail-group">
+                          {foulTypeCounts.map((x) => (
+                            <div className="stats-detail-row" key={x.label}>
+                              <span>{x.label}</span><span>{x.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {distanzTotal > 0 && (
+                  <div className="stats-fouls-group" style={{ flex: 1, minWidth: 0 }}>
+                    <div className="stats-fouls-group-label">
+                      Distanz <span className="stats-fouls-group-total">{distanzTotal}</span>
+                    </div>
+                    {longTypeCounts.length > 0 && (
+                      <div className="stats-detail-grid">
+                        <div className="stats-detail-group">
+                          {longTypeCounts.map((x) => (
+                            <div className="stats-detail-row" key={x.label}>
+                              <span>{x.label}</span><span>{x.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             )}
 
-            <div className="stats-detail-grid">
-              {ballCounts.length > 0 && (
-                <div className="stats-detail-group">
-                  <div className="stats-detail-group-label">Ball</div>
-                  {ballCounts.map((x) => (
-                    <div className="stats-detail-row" key={x.label} style={{ justifyContent: "flex-start", gap: "0.5em" }}>
-                      <BallDot color={BALL_ICON_COLOR[x.id]} label={x.label} />
-                      <span>{x.count}</span>
+            {(ballCounts.length > 0 || pocketCounts.length > 0) && (
+              <div style={{ display: "flex", gap: "1vw", alignItems: "flex-start" }}>
+                {ballCounts.length > 0 && (
+                  <div className="stats-fouls-group" style={{ flex: 1, minWidth: 0 }}>
+                    <div className="stats-fouls-group-label">
+                      Ball <span className="stats-fouls-group-total">{ballCounts.reduce((s, x) => s + x.count, 0)}</span>
                     </div>
-                  ))}
-                </div>
-              )}
-              {pocketCounts.length > 0 && (
-                <div className="stats-detail-group" style={{ marginLeft: "-5.5vw" }}>
-                  <div className="stats-detail-group-label">Loch</div>
-                  {pocketCounts.map((x, i) => (
-                    <div className="stats-detail-row" key={i}>
-                      <span>{x.num} – {x.fullLabel}</span>
-                      <span>{x.count}</span>
+                    <div className="stats-detail-grid">
+                      <div className="stats-detail-group">
+                        {ballCounts.map((x) => (
+                          <div className="stats-detail-row" key={x.label} style={{ justifyContent: "flex-start", gap: "0.5em" }}>
+                            <BallDot color={BALL_ICON_COLOR[x.id]} label={x.label} />
+                            <span>{x.count}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              )}
-              {missTypeCounts.length > 0 && (
-                <div className="stats-detail-group">
-                  <div className="stats-detail-group-label">Fehlerart</div>
-                  {missTypeCounts.map((x) => (
-                    <div className="stats-detail-row" key={x.label}>
-                      <span>{x.label}</span><span>{x.count}</span>
+                  </div>
+                )}
+                {pocketCounts.length > 0 && (
+                  <div className="stats-fouls-group" style={{ flex: 1, minWidth: 0 }}>
+                    <div className="stats-fouls-group-label">
+                      Loch <span className="stats-fouls-group-total">{pocketCounts.reduce((s, x) => s + x.count, 0)}</span>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    <div className="stats-detail-grid">
+                      <div className="stats-detail-group">
+                        {pocketCounts.map((x, i) => (
+                          <div className="stats-detail-row" key={i}>
+                            <span>{x.num} – {x.fullLabel}</span>
+                            <span>{x.count}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

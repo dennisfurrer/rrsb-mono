@@ -37,13 +37,15 @@ const SPOT_COLORS: {
 function renderExplanation(text: string, colorName?: string, colorHex?: string) {
   const keywords = ["Ziel", "Trainingseffekt", "Spielart", "Aufsetzart"];
   const pattern = new RegExp(
-    `(${[...(colorName ? [colorName] : []), "Weiss", ...keywords].join("|")})`,
+    `(${[...(colorName ? [colorName] : []), "Weisse", "Weiss", "Gelb", "Schwarz", ...keywords].join("|")})`,
     "g"
   );
   const parts = text.split(pattern);
   return parts.map((part, i) => {
     if (colorName && part === colorName) return <span key={i} style={{ color: colorHex, fontWeight: "bold" }}>{part}</span>;
-    if (part === "Weiss") return <span key={i} style={{ color: "#fff", fontWeight: "bold" }}>{part}</span>;
+    if (part === "Weiss" || part === "Weisse") return <span key={i} style={{ color: "#fff", fontWeight: "bold" }}>{part}</span>;
+    if (part === "Gelb") return <span key={i} style={{ color: "#d4b800", fontWeight: "bold" }}>{part}</span>;
+    if (part === "Schwarz") return <span key={i} style={{ color: "#aaa", fontWeight: "bold" }}>{part}</span>;
     if (part === "Ziel") return <span key={i} style={{ color: "#4ade80", fontWeight: "bold" }}>{part}</span>;
     if (part === "Trainingseffekt") return <span key={i} style={{ color: "#facc15", fontWeight: "bold" }}>{part}</span>;
     if (part === "Spielart") return <span key={i} style={{ color: "#aaa", fontWeight: "bold" }}>{part}</span>;

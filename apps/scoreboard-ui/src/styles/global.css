@@ -2390,13 +2390,20 @@ div { font-weight: bold; }
 }
 
 .me-add-break {
-  background: #3a2800;
-  border-color: #664400;
-  color: #ffcc00;
+  background: #0d2e0d;
+  border-color: #3a8a3a;
+  color: #66ff66;
+  animation: me-break-pulse 2s ease-in-out infinite;
+}
+
+@keyframes me-break-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(102,255,102,0.3); border-color: #3a8a3a; }
+  50%       { box-shadow: 0 0 22px rgba(102,255,102,0.75), 0 0 40px rgba(102,255,102,0.3); border-color: #66ff66; }
 }
 
 .me-add-break:active {
-  background: #4a3500;
+  background: #143814;
+  animation: none;
 }
 
 .me-add-missed {

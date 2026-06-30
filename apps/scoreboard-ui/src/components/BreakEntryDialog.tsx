@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { BallColor, FoulType, MissType, Pocket } from "../lib/solo";
+import type { BallColor, FoulType, LongType, MissType, Pocket } from "../lib/solo";
 import { BreakDetailsDialog } from "./BreakDetailsDialog";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   maxBreak?: number;
   onSubmit: (
     value: number,
-    details?: { missType?: MissType; foulType?: FoulType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket }
   ) => void;
   onClose: () => void;
 }
@@ -52,6 +52,7 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
   const submitWithDetails = (details: {
     missType?: MissType;
     foulType?: FoulType;
+    longType?: LongType;
     ball?: BallColor;
     pocket?: Pocket;
   }) => {
