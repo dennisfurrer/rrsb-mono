@@ -1517,7 +1517,7 @@ export function App() {
   const handleBreakSubmit = useCallback(
     (
       value: number,
-      details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket }
+      details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket; effectX?: number; effectY?: number; ballDistance?: number; shotStrength?: number }
     ) => {
       if (!soloSession || soloSession.mode !== "break") return;
       const attempt: BreakAttempt = {
@@ -1528,6 +1528,10 @@ export function App() {
         longType: details?.longType,
         ball: details?.ball,
         pocket: details?.pocket,
+        effectX: details?.effectX,
+        effectY: details?.effectY,
+        ballDistance: details?.ballDistance,
+        shotStrength: details?.shotStrength,
         timestamp: Date.now(),
       };
       setSoloSession((prev) =>

@@ -60,6 +60,10 @@ const attemptInputSchema = z.object({
   foulType: foulTypeEnum.optional(),
   ball: ballEnum.optional(),
   pocket: pocketEnum.optional(),
+  effectX: z.number().int().min(0).max(12).optional(),
+  effectY: z.number().int().min(0).max(12).optional(),
+  ballDistance: z.number().int().min(0).max(12).optional(),
+  shotStrength: z.number().int().min(0).max(12).optional(),
 });
 
 const addAttemptsSchema = z.object({
@@ -76,6 +80,10 @@ function mapPrismaAttempt(a: {
   foulType: string | null;
   ball: string | null;
   pocket: string | null;
+  effectX: number | null;
+  effectY: number | null;
+  ballDistance: number | null;
+  shotStrength: number | null;
   timestamp: Date;
 }) {
   return {
@@ -87,6 +95,10 @@ function mapPrismaAttempt(a: {
     foulType: a.foulType ? a.foulType.toLowerCase() : null,
     ball: a.ball ? a.ball.toLowerCase() : null,
     pocket: a.pocket ? a.pocket.toLowerCase() : null,
+    effectX: a.effectX,
+    effectY: a.effectY,
+    ballDistance: a.ballDistance,
+    shotStrength: a.shotStrength,
     timestamp: a.timestamp.toISOString(),
   };
 }
@@ -211,6 +223,10 @@ practiceRouter.post("/:id/attempts", async (req: Request, res: Response) => {
         foulType: a.foulType ?? null,
         ball: a.ball ?? null,
         pocket: a.pocket ?? null,
+        effectX: a.effectX ?? null,
+        effectY: a.effectY ?? null,
+        ballDistance: a.ballDistance ?? null,
+        shotStrength: a.shotStrength ?? null,
       })),
     });
 

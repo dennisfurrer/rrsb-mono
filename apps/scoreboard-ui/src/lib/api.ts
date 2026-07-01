@@ -223,6 +223,10 @@ export interface PracticeAttemptInput {
     | "MIDDLE_GREEN"
     | "CORNER_BLACK_YELLOW"
     | "CORNER_BLACK_GREEN";
+  effectX?: number;
+  effectY?: number;
+  ballDistance?: number;
+  shotStrength?: number;
 }
 
 export async function createPracticeSession(

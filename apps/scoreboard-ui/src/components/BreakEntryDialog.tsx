@@ -9,7 +9,7 @@ interface Props {
   maxBreak?: number;
   onSubmit: (
     value: number,
-    details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket }
+    details?: { missType?: MissType; foulType?: FoulType; longType?: LongType; ball?: BallColor; pocket?: Pocket; effectX?: number; effectY?: number; ballDistance?: number; shotStrength?: number }
   ) => void;
   onClose: () => void;
 }
@@ -55,6 +55,10 @@ export function BreakEntryDialog({ playerName, seriesMode, routineName, maxBreak
     longType?: LongType;
     ball?: BallColor;
     pocket?: Pocket;
+    effectX?: number;
+    effectY?: number;
+    ballDistance?: number;
+    shotStrength?: number;
   }) => {
     onSubmit(value, details);
   };

@@ -178,6 +178,10 @@ export type BreakAttempt =
       longType?: LongType;
       ball?: BallColor;
       pocket?: Pocket;
+      effectX?: number;
+      effectY?: number;
+      ballDistance?: number;
+      shotStrength?: number;
       timestamp: number;
     }
   | {
@@ -253,6 +257,10 @@ export function breakAttemptToApi(a: BreakAttempt): {
     | "MIDDLE_GREEN"
     | "CORNER_BLACK_YELLOW"
     | "CORNER_BLACK_GREEN";
+  effectX?: number;
+  effectY?: number;
+  ballDistance?: number;
+  shotStrength?: number;
 } {
   if (a.kind === "missed") {
     return { kind: "MISSED" };
@@ -291,6 +299,10 @@ export function breakAttemptToApi(a: BreakAttempt): {
           | "CORNER_BLACK_YELLOW"
           | "CORNER_BLACK_GREEN")
       : undefined,
+    effectX: a.effectX,
+    effectY: a.effectY,
+    ballDistance: a.ballDistance,
+    shotStrength: a.shotStrength,
   };
 }
 

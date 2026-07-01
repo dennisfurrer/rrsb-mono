@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BALL_COLORS,
   FOUL_TYPES,
@@ -82,6 +82,10 @@ interface Props {
     longType?: LongType;
     ball?: BallColor;
     pocket?: Pocket;
+    effectX?: number;
+    effectY?: number;
+    ballDistance?: number;
+    shotStrength?: number;
   }) => void;
   onBack: () => void;
 }
@@ -100,8 +104,57 @@ export function BreakDetailsDialog({
   const [foulOn, setFoulOn] = useState(false);
   const [foulType, setFoulType] = useState<FoulType | null>(null);
   const [pocket, setPocket] = useState<Pocket | null>(null);
+  const [effectX, setEffectX] = useState<number>(6);
+  const [effectY, setEffectY] = useState<number>(6);
+  const [ballDistance, setBallDistance] = useState<number>(6);
+  const [shotStrength, setShotStrength] = useState<number>(6);
   const foulSelectRef = useRef<HTMLSelectElement>(null);
   const longSelectRef = useRef<HTMLSelectElement>(null);
+
+  const dotCx = 50 + ((effectX - 6) / 6) * 32.9;
+  const dotCy = 50 - ((effectY - 6) / 6) * 32.9;
+
+  const isDragging = useRef(false);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const isDraggingDist = useRef(false);
+  const distBarRef = useRef<HTMLDivElement>(null);
+  const isDraggingStrength = useRef(false);
+  const strengthBarRef = useRef<HTMLDivElement>(null);
+
+  const updateFromPointer = (clientX: number, clientY: number) => {
+    if (!svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const x = (clientX - rect.left) / rect.width * 100;
+    const y = (clientY - rect.top) / rect.height * 100;
+    const LIMIT = 32.9;
+    let dx = x - 50;
+    let dy = y - 50;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > LIMIT) { dx = dx / dist * LIMIT; dy = dy / dist * LIMIT; }
+    setEffectX(Math.round((dx / LIMIT + 1) / 2 * 12));
+    setEffectY(Math.round((-dy / LIMIT + 1) / 2 * 12));
+  };
+
+  useEffect(() => {
+    const onUp = () => {
+      isDragging.current = false;
+      isDraggingDist.current = false;
+      isDraggingStrength.current = false;
+    };
+    const onMove = (e: MouseEvent) => {
+      if (isDraggingDist.current && distBarRef.current) {
+        const rect = distBarRef.current.getBoundingClientRect();
+        setBallDistance(Math.round(Math.max(0, Math.min(12, (e.clientX - rect.left) / rect.width * 12))));
+      }
+      if (isDraggingStrength.current && strengthBarRef.current) {
+        const rect = strengthBarRef.current.getBoundingClientRect();
+        setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.clientY - rect.top) / rect.height) * 12))));
+      }
+    };
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("mousemove", onMove);
+    return () => { window.removeEventListener("mouseup", onUp); window.removeEventListener("mousemove", onMove); };
+  }, []);
 
   const toggle = <T,>(current: T | null, value: T): T | null =>
     current === value ? null : value;
@@ -148,6 +201,10 @@ export function BreakDetailsDialog({
       longType: distanzOn ? longType ?? undefined : undefined,
       ball: ballOn ? ball ?? undefined : undefined,
       pocket: pocket ?? undefined,
+      effectX,
+      effectY,
+      ballDistance,
+      shotStrength,
     });
   };
 
@@ -246,13 +303,83 @@ export function BreakDetailsDialog({
           </div>
         </div>
 
-        <div className="break-details-section" style={{ flex: 1 }}>
-          <div className="break-details-section-label">Welches Loch?</div>
-          <SnookerTablePicker
-            pocket={pocket}
-            onToggle={(p) => setPocket((c) => toggle(c, p))}
-            pocketLabel={pocket ? (() => { const p = POCKETS.find(x => x.id === pocket); return p ? `${p.num} – ${p.fullLabel}` : undefined; })() : undefined}
-          />
+        <div className="break-details-section" style={{ flex: 1, display: "flex", flexDirection: "row", alignItems: "flex-start", gap: "1vw" }}>
+          <div style={{ width: "55%" }}>
+            <div className="break-details-section-label">Welches Loch?</div>
+            <SnookerTablePicker
+              pocket={pocket}
+              onToggle={(p) => setPocket((c) => toggle(c, p))}
+              pocketLabel={pocket ? (() => { const p = POCKETS.find(x => x.id === pocket); return p ? `${p.num} – ${p.fullLabel}` : undefined; })() : undefined}
+            />
+          </div>
+          <div style={{ width: "25%", flexShrink: 0, display: "flex", flexDirection: "column", gap: "0.5vh", marginLeft: "auto", marginRight: "1vw", marginTop: "-3.5vh" }}>
+            <div style={{ color: "#88aacc", fontSize: "1.6vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "left", paddingLeft: "1.5vw" }}>
+              Stoss-Daten
+            </div>
+
+            {/* Weisser Ball + Stoss-Stärke */}
+            {/* Ball + Stoss-Stärke nebeneinander, gleiche Höhe */}
+            <div style={{ display: "flex", flex: 1, gap: "0.4vw", alignItems: "stretch", minHeight: 0 }}>
+              <svg
+                ref={svgRef}
+                viewBox="0 0 100 100"
+                style={{ flex: 1, cursor: "crosshair", display: "block", userSelect: "none" }}
+                onMouseDown={(e) => { isDragging.current = true; updateFromPointer(e.clientX, e.clientY); }}
+                onMouseMove={(e) => { if (isDragging.current) updateFromPointer(e.clientX, e.clientY); }}
+                onMouseUp={() => { isDragging.current = false; }}
+                onTouchStart={(e) => { isDragging.current = true; updateFromPointer(e.touches[0].clientX, e.touches[0].clientY); }}
+                onTouchMove={(e) => { updateFromPointer(e.touches[0].clientX, e.touches[0].clientY); }}
+                onTouchEnd={() => { isDragging.current = false; }}
+              >
+                <circle cx={52} cy={52} r={46} fill="rgba(0,0,0,0.18)" />
+                <circle cx={50} cy={50} r={46} fill="#f8f8f8" stroke="#ccc" strokeWidth={0.5} />
+                <ellipse cx={37} cy={33} rx={9} ry={6} fill="rgba(255,255,255,0.55)" transform="rotate(-20 37 33)" />
+                <line x1={50} y1={7} x2={50} y2={93} stroke="rgba(180,180,180,0.25)" strokeWidth={0.5} />
+                <line x1={7} y1={50} x2={93} y2={50} stroke="rgba(180,180,180,0.25)" strokeWidth={0.5} />
+                <circle cx={dotCx} cy={dotCy} r={8} fill="#1a1a1a" />
+              </svg>
+
+              {/* Stoss-Stärke: Pfeile + Balken auf Ballhöhe, Wert darunter */}
+              <div style={{ width: "2.3vw", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2vh" }}>
+                <button onClick={() => setShotStrength(prev => Math.min(12, prev + 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▲</button>
+                <div
+                  ref={strengthBarRef}
+                  style={{ flex: 1, width: "100%", background: "#ffee44", borderRadius: "3px", overflow: "hidden", position: "relative", cursor: "ns-resize" }}
+                  onMouseDown={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.clientY - rect.top) / rect.height) * 12)))); }}
+                  onTouchStart={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.touches[0].clientY - rect.top) / rect.height) * 12)))); }}
+                  onTouchMove={(e) => { if (!strengthBarRef.current) return; const rect = strengthBarRef.current.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.touches[0].clientY - rect.top) / rect.height) * 12)))); }}
+                  onTouchEnd={() => { isDraggingStrength.current = false; }}
+                >
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: `${(shotStrength / 12) * 100}%`, background: "rgba(200,140,0,0.45)", transition: "height 0.15s" }} />
+                  <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "1.4vw", fontWeight: "bold", color: "#333", userSelect: "none", pointerEvents: "none" }}>Stoss-Stärke</span>
+                </div>
+                <button onClick={() => setShotStrength(prev => Math.max(0, prev - 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▼</button>
+              </div>
+            </div>
+
+            {/* Ball-Distanz + Stoss-Wert unterhalb */}
+            <div style={{ display: "flex", gap: "0.4vw", alignItems: "center" }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.15vh" }}>
+                <div style={{ display: "flex", alignItems: "stretch", gap: "0.2vw" }}>
+                  <button onClick={() => setBallDistance(prev => Math.max(0, prev - 1))} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>◀</button>
+                  <div
+                    ref={distBarRef}
+                    style={{ flex: 1, background: "#ffee44", borderRadius: "3px", overflow: "hidden", position: "relative", padding: "0.4vh", cursor: "ew-resize" }}
+                    onMouseDown={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.clientX - rect.left) / rect.width * 12)))); }}
+                    onTouchStart={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.touches[0].clientX - rect.left) / rect.width * 12)))); }}
+                    onTouchMove={(e) => { if (!distBarRef.current) return; const rect = distBarRef.current.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.touches[0].clientX - rect.left) / rect.width * 12)))); }}
+                    onTouchEnd={() => { isDraggingDist.current = false; }}
+                  >
+                    <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: `${(ballDistance / 12) * 100}%`, background: "rgba(200,140,0,0.45)", transition: "width 0.15s" }} />
+                    <span style={{ position: "relative", zIndex: 1, fontWeight: "bold", color: "#333", fontSize: "1.4vw", display: "block", textAlign: "center", pointerEvents: "none" }}>Ball-Distanz</span>
+                  </div>
+                  <button onClick={() => setBallDistance(prev => Math.min(12, prev + 1))} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>▶</button>
+                </div>
+                <div style={{ textAlign: "center", color: "#bbb", fontSize: "1.4vw" }}>~{(ballDistance + 1) * 30} cm</div>
+              </div>
+              <span style={{ width: "2.3vw", flexShrink: 0, textAlign: "center", color: "#ffee44", fontSize: "1.4vw", fontWeight: "bold", alignSelf: "flex-start", marginTop: "0.2vh" }}>{shotStrength}</span>
+            </div>
+          </div>
         </div>
 
 

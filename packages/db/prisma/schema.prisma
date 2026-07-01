@@ -230,9 +230,13 @@ model PracticeAttempt {
   value       Int?
   missType    MissType?
   foulType    FoulType?
-  ball        BallColor?
-  pocket      Pocket?
-  timestamp   DateTime            @default(now())
+  ball         BallColor?
+  pocket       Pocket?
+  effectX      Int?
+  effectY      Int?
+  ballDistance Int?
+  shotStrength Int?
+  timestamp    DateTime            @default(now())
 
   @@unique([sessionId, orderIndex])
   @@index([sessionId])
