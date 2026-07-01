@@ -227,26 +227,6 @@ export function BreakDetailsDialog({
           <div className="break-details-section-label">Fehlerursache</div>
           <div style={{ display: "flex", gap: "0.8vw", alignItems: "flex-start" }}>
 
-            {/* Distanz-Karte */}
-            <div style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.6vh",
-              border: `1.5px solid ${distanzOn ? "#55cc33" : "#333"}`,
-              borderRadius: "8px",
-              padding: "0.5vh 0.7vw",
-              background: distanzOn ? "rgba(40,80,15,0.35)" : "transparent",
-              transition: "border-color 0.15s, background 0.15s",
-            }}>
-              <button className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleDistanz}>Ball-Distanz</button>
-              {distanzOn && (
-                <select ref={longSelectRef} className="break-long-select" style={{ margin: 0, width: "100%", alignSelf: "auto" }} value={longType ?? ""} onChange={(e) => setLongType((e.target.value || null) as LongType | null)}>
-                  {LONG_TYPES.map((l) => (<option key={l.id} value={l.id}>{l.label}</option>))}
-                </select>
-              )}
-            </div>
-
             {/* Ball-Karte */}
             <div style={{
               flex: "0 0 auto",
@@ -259,7 +239,7 @@ export function BreakDetailsDialog({
               background: ballOn ? "rgba(40,80,15,0.35)" : "transparent",
               transition: "border-color 0.15s, background 0.15s",
             }}>
-              <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleBall}>Ball</button>
+              <button className={`break-pill break-pill-miss ${ballOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleBall}>Verfehlter Ball</button>
               <div style={{ display: "flex", gap: "0.5vw" }}>
                 {BALL_COLORS.map((b) => (
                   <button key={b.id} onClick={() => { const next = ball === b.id ? null : b.id; setBall(next); setBallOn(next !== null); }} style={{
@@ -278,6 +258,21 @@ export function BreakDetailsDialog({
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Distanz-Karte */}
+            <div style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.6vh",
+              border: `1.5px solid ${distanzOn ? "#55cc33" : "#333"}`,
+              borderRadius: "8px",
+              padding: "0.5vh 0.7vw",
+              background: distanzOn ? "rgba(40,80,15,0.35)" : "transparent",
+              transition: "border-color 0.15s, background 0.15s",
+            }}>
+              <button className={`break-pill break-pill-miss ${distanzOn ? "selected" : ""}`} style={{ flex: "none", width: "100%" }} onClick={toggleDistanz}>Ball-Winkel</button>
             </div>
 
             {/* Foul-Karte */}
@@ -312,9 +307,9 @@ export function BreakDetailsDialog({
               pocketLabel={pocket ? (() => { const p = POCKETS.find(x => x.id === pocket); return p ? `${p.num} – ${p.fullLabel}` : undefined; })() : undefined}
             />
           </div>
-          <div style={{ width: "25%", flexShrink: 0, display: "flex", flexDirection: "column", gap: "0.5vh", marginLeft: "auto", marginRight: "0.5vw", marginTop: "-3.5vh" }}>
+          <div style={{ width: "25%", flexShrink: 0, display: "flex", flexDirection: "column", gap: "0.5vh", marginLeft: "auto", marginRight: "0.5vw", marginTop: "-3.5vh", border: "1.5px solid #334466", borderRadius: "10px", padding: "0.7vh 0.7vw", background: "rgba(20,30,55,0.45)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.4vw", paddingLeft: "1.5vw" }}>
-              <span style={{ color: "#88aacc", fontSize: "1.6vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase" }}>Stoss-Daten</span>
+              <span style={{ color: "#88aacc", fontSize: "1.2vw", fontWeight: "bold", letterSpacing: "0.05em", textTransform: "uppercase" }}>Stoss-Daten</span>
               <button onClick={() => setShowStossHelp(true)} style={{ background: "none", border: "2px solid #3399ff", borderRadius: "50%", cursor: "pointer", color: "#3399ff", fontSize: "1.1vw", fontWeight: "900", lineHeight: 1, width: "1.8vw", height: "1.8vw", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>?</button>
             </div>
 
@@ -362,7 +357,7 @@ export function BreakDetailsDialog({
               </div>
 
               {/* Stoss-Stärke: 5 Stufen + Label rechts */}
-              <div style={{ flexShrink: 0, display: "flex", flexDirection: "row", alignItems: "stretch", position: "relative" }}>
+              <div style={{ flexShrink: 0, display: "flex", flexDirection: "row", alignItems: "stretch", gap: "0.3vw" }}>
                 <div style={{ width: "2.3vw", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2vh" }}>
                   <button onClick={() => setShotStrength(prev => Math.min(5, (prev ?? 0) + 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▲</button>
                   <div
@@ -378,8 +373,8 @@ export function BreakDetailsDialog({
                   </div>
                   <button onClick={() => setShotStrength(prev => prev === null ? null : prev <= 1 ? null : prev - 1)} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▼</button>
                 </div>
-                {/* Vertikales Label */}
-                <div style={{ position: "absolute", left: "calc(100% + 0.3vw)", top: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {/* Vertikales Label – feste Breite damit das Grid nicht springt */}
+                <div style={{ width: "1.6vw", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {shotStrength && (() => { const lvl = STRENGTH_LEVELS.find(l => l.value === shotStrength); return lvl ? <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", color: lvl.color, fontSize: "1.4vw", fontWeight: "bold", whiteSpace: "nowrap" }}>{lvl.label}</span> : null; })()}
                 </div>
               </div>
