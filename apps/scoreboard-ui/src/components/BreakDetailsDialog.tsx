@@ -57,7 +57,7 @@ function SnookerTablePicker({ pocket, onToggle, pocketLabel }: { pocket: Pocket 
       <div style={{ textAlign: "center", color: "#ffcc00", fontSize: "1.1vw", minHeight: "1.6vw" }}>
         {pocketLabel ?? ""}
       </div>
-      <svg viewBox="-14 -14 468 218" preserveAspectRatio="xMidYMid meet" style={{ width: "100%", maxHeight: "30vh", display: "block" }}>
+      <svg viewBox="-14 -14 468 218" preserveAspectRatio="xMinYMid meet" style={{ width: "100%", maxHeight: "30vh", display: "block" }}>
         <rect x={0} y={0} width={440} height={190} rx={8} fill="#5a3010" />
         <rect x={14} y={14} width={412} height={162} fill="#1e7828" />
         <line x1={baulkX} y1={14} x2={baulkX} y2={176} stroke="rgba(255,255,255,0.4)" strokeWidth={2.25} />
@@ -322,16 +322,23 @@ export function BreakDetailsDialog({
             {/* Ball + Stoss-Stärke nebeneinander, gleiche Höhe */}
             <div style={{ display: "flex", flex: 1, gap: "0.4vw", alignItems: "stretch", minHeight: 0 }}>
               {/* 5×5 Effet-Grid */}
-              <div style={{ flex: 1, aspectRatio: "1", position: "relative", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gridTemplateRows: "repeat(5, 1fr)", background: "#c8c8c8", borderRadius: "6px", border: "1px solid #333", padding: "5%", gap: "12%" }}>
-                <div style={{ position: "absolute", top: "50%", left: "5%", right: "5%", height: "2px", background: "#22aa44", transform: "translateY(-50%)", zIndex: 0 }} />
-                <div style={{ position: "absolute", left: "50%", top: "5%", bottom: "5%", width: "2px", background: "#22aa44", transform: "translateX(-50%)", zIndex: 0 }} />
+              <div style={{ flex: 1, aspectRatio: "1", position: "relative", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gridTemplateRows: "repeat(5, 1fr)", background: "radial-gradient(ellipse at 38% 32%, #e8e8e8 0%, #cccccc 35%, #929292 65%, #5a5a5a 100%)", borderRadius: "50%", border: "1px solid #555", padding: "9%", gap: "10%", overflow: "hidden", boxShadow: "3px 4px 16px rgba(0,0,0,0.7), inset -3px -3px 10px rgba(0,0,0,0.25), inset 2px 2px 6px rgba(255,255,255,0.15)" }}>
+                {/* Licht-Highlight oben links */}
+                <div style={{ position: "absolute", top: "6%", left: "8%", width: "38%", height: "32%", background: "radial-gradient(ellipse, rgba(255,255,255,0.55) 0%, transparent 70%)", borderRadius: "50%", pointerEvents: "none", zIndex: 3 }} />
+                <div style={{ position: "absolute", top: "50%", left: "9%", right: "9%", height: "2px", background: "#22aa44", transform: "translateY(-50%)", zIndex: 0 }} />
+                <div style={{ position: "absolute", left: "50%", top: "9%", bottom: "9%", width: "2px", background: "#22aa44", transform: "translateX(-50%)", zIndex: 0 }} />
                 {Array.from({ length: 25 }, (_, i) => {
                   const row = Math.floor(i / 5);
                   const col = i % 5;
                   const gx = col + 1;
                   const gy = 5 - row;
+                  const isCorner = (row === 0 || row === 4) && (col === 0 || col === 4);
+                  if (isCorner) return <div key={i} />;
                   const isSelected = effectX === gx && effectY === gy;
                   const isCenter = col === 2 && row === 2;
+                  const dx = col - 2; const dy = row - 2;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  const scale = 1 - (dist / 2.83) * 0.28;
                   return (
                     <div
                       key={i}
@@ -341,12 +348,13 @@ export function BreakDetailsDialog({
                       }}
                       style={{
                         borderRadius: "50%",
-                        background: isSelected ? "#ffee44" : isCenter ? "#3a3a4a" : "#252530",
-                        border: isSelected ? "2px solid #ffaa00" : isCenter ? "1px solid #555" : "1px solid #2e2e3a",
+                        background: isSelected ? "#ffee44" : isCenter ? "#2a2a3a" : "#2e2e40",
+                        border: isSelected ? "2px solid #ffaa00" : "1px solid rgba(0,0,0,0.5)",
                         cursor: "pointer",
-                        boxShadow: isSelected ? "0 0 6px rgba(255,238,68,0.6)" : "none",
+                        boxShadow: isSelected ? "0 0 8px rgba(255,238,68,0.9)" : "inset 0 1px 2px rgba(255,255,255,0.12)",
                         position: "relative",
                         zIndex: 1,
+                        transform: `scale(${scale})`,
                       }}
                     />
                   );
@@ -417,7 +425,7 @@ export function BreakDetailsDialog({
 
       {showStossHelp && (
         <div className="overlay" onClick={(e) => { e.stopPropagation(); setShowStossHelp(false); }} style={{ zIndex: 200 }}>
-          <div onClick={(e) => e.stopPropagation()} style={{ background: "linear-gradient(160deg, #1a1a2a 0%, #12121e 100%)", border: "1px solid #334", borderRadius: "16px", padding: "2vh 2vw", maxWidth: "38vw", display: "flex", flexDirection: "column", gap: "1.5vh" }}>
+          <div style={{ background: "linear-gradient(160deg, #1a1a2a 0%, #12121e 100%)", border: "1px solid #334", borderRadius: "16px", padding: "2vh 2vw", maxWidth: "52vw", display: "flex", flexDirection: "column", gap: "1.5vh" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ color: "#88aacc", fontSize: "1.4vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase" }}>Stoss-Daten – Erklärung</span>
               <button onClick={() => setShowStossHelp(false)} style={{ background: "none", border: "none", color: "#888", fontSize: "1.4vw", cursor: "pointer", lineHeight: 1 }}>✕</button>
@@ -425,20 +433,32 @@ export function BreakDetailsDialog({
             <div style={{ display: "flex", flexDirection: "column", gap: "1vh" }}>
               <div>
                 <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Effet (5×5 Gitter)</div>
-                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Zeigt die Treffposition auf dem Queue-Ball. Die Mitte bedeutet kein Effet. Links/Rechts = Seiteneffet (links dreht den Ball nach links, rechts nach rechts). Oben = Topspin (Ball rollt vorwärts), Unten = Rücklaufer (Ball dreht zurück).</div>
+                <div style={{ color: "#ccc", fontSize: "1.35vw", lineHeight: 1.5 }}>
+                  Markiere deine Cue-Treffposition auf dem weissen Spielball.<br />
+                  • Die Mitte bedeutet kein Effet.<br />
+                  • Links/Rechts = Seiteneffet (je weiter links/rechts, je stärker der Effet).<br />
+                  • Oben = Topspin (Mitläufer – Weiss rollt nach Ballkontakt weiter vorwärts).<br />
+                  • Unten = Backspin (Rücklaufer – Weiss rollt nach Kontakt zurück).
+                </div>
               </div>
               <div style={{ borderTop: "1px solid #2a2a3a", paddingTop: "1vh" }}>
                 <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Ball-Distanz</div>
-                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Geschätzter Abstand zwischen Queue-Ball und Zielball im Moment des Anstosses. Mit ◀/▶ oder Ziehen auf dem Balken wählen.</div>
+                <div style={{ color: "#ccc", fontSize: "1.35vw", lineHeight: 1.5 }}>
+                  Geschätzter Abstand zwischen Weiss und Objektball beim Stoss.<br />
+                  Mit ◀/▶ oder Ziehen auf dem Balken Distanz wählen.
+                </div>
               </div>
               <div style={{ borderTop: "1px solid #2a2a3a", paddingTop: "1vh" }}>
                 <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Stoss-Stärke</div>
-                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Eingeschätzte Kraft des Stosses in fünf Stufen:</div>
+                <div style={{ color: "#ccc", fontSize: "1.35vw", lineHeight: 1.5 }}>
+                  Aufgewendete Stärke in den Stoss.<br />
+                  Es gibt fünf Stufen:
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.2vh", marginTop: "0.4vh" }}>
                   {STRENGTH_LEVELS.slice().reverse().map(lvl => (
                     <div key={lvl.value} style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
                       <div style={{ width: "0.7vw", height: "0.7vw", borderRadius: "50%", background: lvl.color, flexShrink: 0 }} />
-                      <span style={{ color: lvl.color, fontSize: "0.9vw", fontWeight: "bold" }}>{lvl.label}</span>
+                      <span style={{ color: lvl.color, fontSize: "1.3vw", fontWeight: "bold" }}>{lvl.label}</span>
                     </div>
                   ))}
                 </div>
