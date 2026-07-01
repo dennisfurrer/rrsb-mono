@@ -12,6 +12,25 @@ import {
 } from "../lib/solo";
 
 
+const DISTANCE_LEVELS = [
+  { value: 1, label: "<10 cm" },
+  { value: 2, label: "10-30 cm" },
+  { value: 3, label: "30-60 cm" },
+  { value: 4, label: "60-100 cm" },
+  { value: 5, label: "100-150 cm" },
+  { value: 6, label: "150-200 cm" },
+  { value: 7, label: "200-300 cm" },
+  { value: 8, label: ">300 cm" },
+];
+
+const STRENGTH_LEVELS = [
+  { value: 5, label: "Sehr stark",   color: "#e67e22" },
+  { value: 4, label: "Stark",        color: "#f1c40f" },
+  { value: 3, label: "Normal",       color: "#2ecc71" },
+  { value: 2, label: "Schwach",      color: "#3498db" },
+  { value: 1, label: "Sehr schwach", color: "#9b59b6" },
+];
+
 const BALL_ICON_COLOR: Record<BallColor, string> = {
   red: "#dd2222",
   yellow: "#f0c020",
@@ -97,6 +116,7 @@ export function BreakDetailsDialog({
   onSave,
   onBack,
 }: Props) {
+  const [showStossHelp, setShowStossHelp] = useState(false);
   const [distanzOn, setDistanzOn] = useState(false);
   const [longType, setLongType] = useState<LongType | null>(null);
   const [ballOn, setBallOn] = useState(false);
@@ -104,40 +124,20 @@ export function BreakDetailsDialog({
   const [foulOn, setFoulOn] = useState(false);
   const [foulType, setFoulType] = useState<FoulType | null>(null);
   const [pocket, setPocket] = useState<Pocket | null>(null);
-  const [effectX, setEffectX] = useState<number>(6);
-  const [effectY, setEffectY] = useState<number>(6);
-  const [ballDistance, setBallDistance] = useState<number>(6);
-  const [shotStrength, setShotStrength] = useState<number>(6);
+  const [effectX, setEffectX] = useState<number | null>(null);
+  const [effectY, setEffectY] = useState<number | null>(null);
+  const [ballDistance, setBallDistance] = useState<number | null>(null);
+  const [shotStrength, setShotStrength] = useState<number | null>(null);
   const foulSelectRef = useRef<HTMLSelectElement>(null);
   const longSelectRef = useRef<HTMLSelectElement>(null);
 
-  const dotCx = 50 + ((effectX - 6) / 6) * 32.9;
-  const dotCy = 50 - ((effectY - 6) / 6) * 32.9;
-
-  const isDragging = useRef(false);
-  const svgRef = useRef<SVGSVGElement>(null);
   const isDraggingDist = useRef(false);
   const distBarRef = useRef<HTMLDivElement>(null);
   const isDraggingStrength = useRef(false);
   const strengthBarRef = useRef<HTMLDivElement>(null);
 
-  const updateFromPointer = (clientX: number, clientY: number) => {
-    if (!svgRef.current) return;
-    const rect = svgRef.current.getBoundingClientRect();
-    const x = (clientX - rect.left) / rect.width * 100;
-    const y = (clientY - rect.top) / rect.height * 100;
-    const LIMIT = 32.9;
-    let dx = x - 50;
-    let dy = y - 50;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist > LIMIT) { dx = dx / dist * LIMIT; dy = dy / dist * LIMIT; }
-    setEffectX(Math.round((dx / LIMIT + 1) / 2 * 12));
-    setEffectY(Math.round((-dy / LIMIT + 1) / 2 * 12));
-  };
-
   useEffect(() => {
     const onUp = () => {
-      isDragging.current = false;
       isDraggingDist.current = false;
       isDraggingStrength.current = false;
     };
@@ -201,10 +201,10 @@ export function BreakDetailsDialog({
       longType: distanzOn ? longType ?? undefined : undefined,
       ball: ballOn ? ball ?? undefined : undefined,
       pocket: pocket ?? undefined,
-      effectX,
-      effectY,
-      ballDistance,
-      shotStrength,
+      effectX: effectX ?? undefined,
+      effectY: effectY ?? undefined,
+      ballDistance: ballDistance ?? undefined,
+      shotStrength: shotStrength ?? undefined,
     });
   };
 
@@ -312,48 +312,68 @@ export function BreakDetailsDialog({
               pocketLabel={pocket ? (() => { const p = POCKETS.find(x => x.id === pocket); return p ? `${p.num} – ${p.fullLabel}` : undefined; })() : undefined}
             />
           </div>
-          <div style={{ width: "25%", flexShrink: 0, display: "flex", flexDirection: "column", gap: "0.5vh", marginLeft: "auto", marginRight: "1vw", marginTop: "-3.5vh" }}>
-            <div style={{ color: "#88aacc", fontSize: "1.6vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "left", paddingLeft: "1.5vw" }}>
-              Stoss-Daten
+          <div style={{ width: "25%", flexShrink: 0, display: "flex", flexDirection: "column", gap: "0.5vh", marginLeft: "auto", marginRight: "0.5vw", marginTop: "-3.5vh" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4vw", paddingLeft: "1.5vw" }}>
+              <span style={{ color: "#88aacc", fontSize: "1.6vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase" }}>Stoss-Daten</span>
+              <button onClick={() => setShowStossHelp(true)} style={{ background: "none", border: "2px solid #3399ff", borderRadius: "50%", cursor: "pointer", color: "#3399ff", fontSize: "1.1vw", fontWeight: "900", lineHeight: 1, width: "1.8vw", height: "1.8vw", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>?</button>
             </div>
 
             {/* Weisser Ball + Stoss-Stärke */}
             {/* Ball + Stoss-Stärke nebeneinander, gleiche Höhe */}
             <div style={{ display: "flex", flex: 1, gap: "0.4vw", alignItems: "stretch", minHeight: 0 }}>
-              <svg
-                ref={svgRef}
-                viewBox="0 0 100 100"
-                style={{ flex: 1, cursor: "crosshair", display: "block", userSelect: "none" }}
-                onMouseDown={(e) => { isDragging.current = true; updateFromPointer(e.clientX, e.clientY); }}
-                onMouseMove={(e) => { if (isDragging.current) updateFromPointer(e.clientX, e.clientY); }}
-                onMouseUp={() => { isDragging.current = false; }}
-                onTouchStart={(e) => { isDragging.current = true; updateFromPointer(e.touches[0].clientX, e.touches[0].clientY); }}
-                onTouchMove={(e) => { updateFromPointer(e.touches[0].clientX, e.touches[0].clientY); }}
-                onTouchEnd={() => { isDragging.current = false; }}
-              >
-                <circle cx={52} cy={52} r={46} fill="rgba(0,0,0,0.18)" />
-                <circle cx={50} cy={50} r={46} fill="#f8f8f8" stroke="#ccc" strokeWidth={0.5} />
-                <ellipse cx={37} cy={33} rx={9} ry={6} fill="rgba(255,255,255,0.55)" transform="rotate(-20 37 33)" />
-                <line x1={50} y1={7} x2={50} y2={93} stroke="rgba(180,180,180,0.25)" strokeWidth={0.5} />
-                <line x1={7} y1={50} x2={93} y2={50} stroke="rgba(180,180,180,0.25)" strokeWidth={0.5} />
-                <circle cx={dotCx} cy={dotCy} r={8} fill="#1a1a1a" />
-              </svg>
+              {/* 5×5 Effet-Grid */}
+              <div style={{ flex: 1, aspectRatio: "1", position: "relative", display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gridTemplateRows: "repeat(5, 1fr)", background: "#c8c8c8", borderRadius: "6px", border: "1px solid #333", padding: "5%", gap: "12%" }}>
+                <div style={{ position: "absolute", top: "50%", left: "5%", right: "5%", height: "2px", background: "#22aa44", transform: "translateY(-50%)", zIndex: 0 }} />
+                <div style={{ position: "absolute", left: "50%", top: "5%", bottom: "5%", width: "2px", background: "#22aa44", transform: "translateX(-50%)", zIndex: 0 }} />
+                {Array.from({ length: 25 }, (_, i) => {
+                  const row = Math.floor(i / 5);
+                  const col = i % 5;
+                  const gx = col + 1;
+                  const gy = 5 - row;
+                  const isSelected = effectX === gx && effectY === gy;
+                  const isCenter = col === 2 && row === 2;
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        if (isSelected) { setEffectX(null); setEffectY(null); }
+                        else { setEffectX(gx); setEffectY(gy); }
+                      }}
+                      style={{
+                        borderRadius: "50%",
+                        background: isSelected ? "#ffee44" : isCenter ? "#3a3a4a" : "#252530",
+                        border: isSelected ? "2px solid #ffaa00" : isCenter ? "1px solid #555" : "1px solid #2e2e3a",
+                        cursor: "pointer",
+                        boxShadow: isSelected ? "0 0 6px rgba(255,238,68,0.6)" : "none",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    />
+                  );
+                })}
+              </div>
 
-              {/* Stoss-Stärke: Pfeile + Balken auf Ballhöhe, Wert darunter */}
-              <div style={{ width: "2.3vw", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2vh" }}>
-                <button onClick={() => setShotStrength(prev => Math.min(12, prev + 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▲</button>
-                <div
-                  ref={strengthBarRef}
-                  style={{ flex: 1, width: "100%", background: "#ffee44", borderRadius: "3px", overflow: "hidden", position: "relative", cursor: "ns-resize" }}
-                  onMouseDown={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.clientY - rect.top) / rect.height) * 12)))); }}
-                  onTouchStart={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.touches[0].clientY - rect.top) / rect.height) * 12)))); }}
-                  onTouchMove={(e) => { if (!strengthBarRef.current) return; const rect = strengthBarRef.current.getBoundingClientRect(); setShotStrength(Math.round(Math.max(0, Math.min(12, (1 - (e.touches[0].clientY - rect.top) / rect.height) * 12)))); }}
-                  onTouchEnd={() => { isDraggingStrength.current = false; }}
-                >
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: `${(shotStrength / 12) * 100}%`, background: "rgba(200,140,0,0.45)", transition: "height 0.15s" }} />
-                  <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "1.4vw", fontWeight: "bold", color: "#333", userSelect: "none", pointerEvents: "none" }}>Stoss-Stärke</span>
+              {/* Stoss-Stärke: 5 Stufen + Label rechts */}
+              <div style={{ flexShrink: 0, display: "flex", flexDirection: "row", alignItems: "stretch", position: "relative" }}>
+                <div style={{ width: "2.3vw", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2vh" }}>
+                  <button onClick={() => setShotStrength(prev => Math.min(5, (prev ?? 0) + 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▲</button>
+                  <div
+                    ref={strengthBarRef}
+                    style={{ flex: 1, width: "100%", background: "#ffee44", borderRadius: "3px", overflow: "hidden", position: "relative", cursor: "ns-resize" }}
+                    onMouseDown={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); const lvl = 5 - Math.floor(((e.clientY - rect.top) / rect.height) * 5); setShotStrength(Math.max(1, Math.min(5, lvl))); }}
+                    onTouchStart={(e) => { isDraggingStrength.current = true; const rect = e.currentTarget.getBoundingClientRect(); const lvl = 5 - Math.floor(((e.touches[0].clientY - rect.top) / rect.height) * 5); setShotStrength(Math.max(1, Math.min(5, lvl))); }}
+                    onTouchMove={(e) => { if (!strengthBarRef.current) return; const rect = strengthBarRef.current.getBoundingClientRect(); const lvl = 5 - Math.floor(((e.touches[0].clientY - rect.top) / rect.height) * 5); setShotStrength(Math.max(1, Math.min(5, lvl))); }}
+                    onTouchEnd={() => { isDraggingStrength.current = false; }}
+                  >
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: `${shotStrength ? (shotStrength * 2 - 1) * 10 : 0}%`, background: STRENGTH_LEVELS.find(l => l.value === shotStrength)?.color ?? "transparent", transition: "height 0.15s, background 0.15s" }} />
+                    <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "1.4vw", fontWeight: "bold", color: "#333", userSelect: "none", pointerEvents: "none" }}>Stoss-Stärke</span>
+                  </div>
+                  <button onClick={() => setShotStrength(prev => prev === null ? null : prev <= 1 ? null : prev - 1)} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▼</button>
                 </div>
-                <button onClick={() => setShotStrength(prev => Math.max(0, prev - 1))} style={{ width: "100%", background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0.2vh 0", fontSize: "0.9vw", cursor: "pointer", lineHeight: 1 }}>▼</button>
+                {/* Vertikales Label */}
+                <div style={{ position: "absolute", left: "calc(100% + 0.3vw)", top: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {shotStrength && (() => { const lvl = STRENGTH_LEVELS.find(l => l.value === shotStrength); return lvl ? <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", color: lvl.color, fontSize: "1.4vw", fontWeight: "bold", whiteSpace: "nowrap" }}>{lvl.label}</span> : null; })()}
+                </div>
               </div>
             </div>
 
@@ -361,23 +381,22 @@ export function BreakDetailsDialog({
             <div style={{ display: "flex", gap: "0.4vw", alignItems: "center" }}>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.15vh" }}>
                 <div style={{ display: "flex", alignItems: "stretch", gap: "0.2vw" }}>
-                  <button onClick={() => setBallDistance(prev => Math.max(0, prev - 1))} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>◀</button>
+                  <button onClick={() => setBallDistance(prev => prev === null ? null : prev <= 1 ? null : prev - 1)} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>◀</button>
                   <div
                     ref={distBarRef}
                     style={{ flex: 1, background: "#ffee44", borderRadius: "3px", overflow: "hidden", position: "relative", padding: "0.4vh", cursor: "ew-resize" }}
-                    onMouseDown={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.clientX - rect.left) / rect.width * 12)))); }}
-                    onTouchStart={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.touches[0].clientX - rect.left) / rect.width * 12)))); }}
-                    onTouchMove={(e) => { if (!distBarRef.current) return; const rect = distBarRef.current.getBoundingClientRect(); setBallDistance(Math.round(Math.max(0, Math.min(12, (e.touches[0].clientX - rect.left) / rect.width * 12)))); }}
+                    onMouseDown={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.max(1, Math.min(8, Math.ceil((e.clientX - rect.left) / rect.width * 8)))); }}
+                    onTouchStart={(e) => { isDraggingDist.current = true; const rect = e.currentTarget.getBoundingClientRect(); setBallDistance(Math.max(1, Math.min(8, Math.ceil((e.touches[0].clientX - rect.left) / rect.width * 8)))); }}
+                    onTouchMove={(e) => { if (!distBarRef.current) return; const rect = distBarRef.current.getBoundingClientRect(); setBallDistance(Math.max(1, Math.min(8, Math.ceil((e.touches[0].clientX - rect.left) / rect.width * 8)))); }}
                     onTouchEnd={() => { isDraggingDist.current = false; }}
                   >
-                    <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: `${(ballDistance / 12) * 100}%`, background: "rgba(200,140,0,0.45)", transition: "width 0.15s" }} />
+                    <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: `${ballDistance ? (ballDistance / 8) * 100 : 0}%`, background: "rgba(200,140,0,0.45)", transition: "width 0.15s" }} />
                     <span style={{ position: "relative", zIndex: 1, fontWeight: "bold", color: "#333", fontSize: "1.4vw", display: "block", textAlign: "center", pointerEvents: "none" }}>Ball-Distanz</span>
                   </div>
-                  <button onClick={() => setBallDistance(prev => Math.min(12, prev + 1))} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>▶</button>
+                  <button onClick={() => setBallDistance(prev => Math.min(8, (prev ?? 0) + 1))} style={{ background: "#2a2a2a", color: "#ffee44", border: "1px solid #555", borderRadius: "3px", padding: "0 0.4vw", fontSize: "0.9vw", cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>▶</button>
                 </div>
-                <div style={{ textAlign: "center", color: "#bbb", fontSize: "1.4vw" }}>~{(ballDistance + 1) * 30} cm</div>
+                <div style={{ textAlign: "center", color: "#bbb", fontSize: "1.4vw" }}>{ballDistance ? DISTANCE_LEVELS[ballDistance - 1].label : ""}</div>
               </div>
-              <span style={{ width: "2.3vw", flexShrink: 0, textAlign: "center", color: "#ffee44", fontSize: "1.4vw", fontWeight: "bold", alignSelf: "flex-start", marginTop: "0.2vh" }}>{shotStrength}</span>
             </div>
           </div>
         </div>
@@ -395,6 +414,39 @@ export function BreakDetailsDialog({
           </button>
         </div>
       </div>
+
+      {showStossHelp && (
+        <div className="overlay" onClick={(e) => { e.stopPropagation(); setShowStossHelp(false); }} style={{ zIndex: 200 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "linear-gradient(160deg, #1a1a2a 0%, #12121e 100%)", border: "1px solid #334", borderRadius: "16px", padding: "2vh 2vw", maxWidth: "38vw", display: "flex", flexDirection: "column", gap: "1.5vh" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ color: "#88aacc", fontSize: "1.4vw", fontWeight: "bold", letterSpacing: "0.08em", textTransform: "uppercase" }}>Stoss-Daten – Erklärung</span>
+              <button onClick={() => setShowStossHelp(false)} style={{ background: "none", border: "none", color: "#888", fontSize: "1.4vw", cursor: "pointer", lineHeight: 1 }}>✕</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1vh" }}>
+              <div>
+                <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Effet (5×5 Gitter)</div>
+                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Zeigt die Treffposition auf dem Queue-Ball. Die Mitte bedeutet kein Effet. Links/Rechts = Seiteneffet (links dreht den Ball nach links, rechts nach rechts). Oben = Topspin (Ball rollt vorwärts), Unten = Rücklaufer (Ball dreht zurück).</div>
+              </div>
+              <div style={{ borderTop: "1px solid #2a2a3a", paddingTop: "1vh" }}>
+                <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Ball-Distanz</div>
+                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Geschätzter Abstand zwischen Queue-Ball und Zielball im Moment des Anstosses. Mit ◀/▶ oder Ziehen auf dem Balken wählen.</div>
+              </div>
+              <div style={{ borderTop: "1px solid #2a2a3a", paddingTop: "1vh" }}>
+                <div style={{ color: "#ffee44", fontSize: "1.1vw", fontWeight: "bold", marginBottom: "0.3vh" }}>Stoss-Stärke</div>
+                <div style={{ color: "#ccc", fontSize: "1.15vw", lineHeight: 1.5 }}>Eingeschätzte Kraft des Stosses in fünf Stufen:</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.2vh", marginTop: "0.4vh" }}>
+                  {STRENGTH_LEVELS.slice().reverse().map(lvl => (
+                    <div key={lvl.value} style={{ display: "flex", alignItems: "center", gap: "0.5vw" }}>
+                      <div style={{ width: "0.7vw", height: "0.7vw", borderRadius: "50%", background: lvl.color, flexShrink: 0 }} />
+                      <span style={{ color: lvl.color, fontSize: "0.9vw", fontWeight: "bold" }}>{lvl.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
